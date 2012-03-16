@@ -1,0 +1,45 @@
+name: WirelessRedstone
+main: net.licks92.WirelessRedstone.WirelessRedstone
+website: http://dev.bukkit.org/server-mods/wireless-redstone/
+author: licks92
+version: 1.4.0b
+description: >
+             A plugin for Bukkit that makes Wireless Redstone Connections! Updated by licks92. All credits go to WMisiedjan.
+commands:
+  wrhelp:
+    aliases: [wirelessredstone]
+    description: WirelessRedstone help menu
+    usage: |
+           /<command>
+           Example: /<command>
+  wrt:
+    description: Creates a transmitter sign with given channel
+    usage: |
+           /<command> <channelname>
+           Example: /<command> Channel1
+  wrr:
+    aliases: [wirelessredstone]
+    description: Creates a receiver sign with given channel
+    usage: |
+           /<command> <channelname>
+           Example: /<command> Channel1
+  wri:
+    description: Channel informations
+    usage: |
+           /<command>
+           Example: /<command> Channel1
+  wrc:
+    description: Channel admin commands
+    usage: |
+           /<command>
+           Example: /<command> subcommand
+  wrremove:
+    description: Remove a channel with all its signs!
+    usage: |
+           /<command>
+           Example: /<command> subcommand
+  wrlist:
+    description: Lists all channels!
+    usage: |
+           /<command>
+           Example: /<command> page
