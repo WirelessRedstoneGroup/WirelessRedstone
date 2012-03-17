@@ -202,7 +202,7 @@ public class WirelessListener implements Listener
 	{
 		if ((event.getBlock().getState() instanceof Sign))
 		{
-			Sign signObject = (Sign) event.getBlock();
+			Sign signObject = (Sign) event.getBlock().getState();
 			if (plugin.WireBox.isReceiver(signObject.getLine(0)))
 			{
 				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1)))
