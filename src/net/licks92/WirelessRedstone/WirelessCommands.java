@@ -57,26 +57,23 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else if (commandName.equals("wrlist"))
 		{
-			return performWRlist(sender, args, player);
+			player.sendMessage(ChatColor.RED + "Function not implemented yet !");
+			return true;
+			//return performWRlist(sender, args, player);
 		}
 		else if (commandName.equals("wri"))
 		{
 			return performShowInfo(sender,args,player);
 		}
+		/*else if (commandName.equals("wr") || commandName.equals("wirelessredstone") || commandName.equals("wstone"))
+		{
+			
+		}*/
 		return true;
 	}
 	public ArrayList<String> generateCommandList(Player player)
 	{
-		ArrayList<String> commands = new ArrayList<String>();
-
-		/*
-		 * if (!plugin.permissionsHandler.hasPermission(player,
-		 * "WirelessRedstone.basics") ||
-		 * !plugin.permissionsHandler.hasPermission(player,
-		 * "WirelessRedstone.commands.wrhelp")) {
-		 * player.sendMessage("you don't have the permissions to use this");
-		 * return true; }
-		 */
+		ArrayList<String> commands = new ArrayList<String>(); 
 
 		if (plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.commands.wrt") || plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.basics"))
 		{
@@ -117,21 +114,34 @@ public class WirelessCommands implements CommandExecutor
 		return commands;
 	}
 
+	@SuppressWarnings("unused")
 	private boolean performWRlist(CommandSender sender, String[] args, Player player)
 	{
-		ArrayList<String> list = new ArrayList<String>();
-		for (WirelessChannel channel : plugin.WireBox.getChannels())
+		if (!plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics")
+				|| !plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.list"))
 		{
-			if(channel != null)
+			player.sendMessage("You don't have the permissions to use this command.");
+			return true;
+		}
+		ArrayList<String> list = new ArrayList<String>();
+		try
+		{
+			for (WirelessChannel channel : plugin.WireBox.getChannels())
 			{
-				String item = channel.getName() + " : ";
-				for (String owner : channel.getOwners())
+				if(channel != null)
 				{
-					item += owner + ", ";
+					String item = channel.getName() + " : ";
+					for (String owner : channel.getOwners())
+					{
+						item += owner + ", ";
+					}
+					list.add(item);
 				}
-				list.add(item);
+				list.add("Receivers: " + channel.getReceivers().size() + " | Transmitters: " + channel.getTransmitters().size()); //Bug NullPointerExcetion
 			}
-			//list.add("Receivers: " + channel.getReceivers().size() + " | Transmitters: " + channel.getTransmitters().size()); //Bug NullPointerExcetion
+		} catch(NullPointerException ex) {
+			WirelessRedstone.getStackableLogger().severe("Unable to get the list of channels ! Stack trace ==>");
+			ex.printStackTrace();
 		}
 
 		if (args.length == 1)
@@ -157,6 +167,11 @@ public class WirelessCommands implements CommandExecutor
 			ShowList(list, 1, player);
 			player.sendMessage("\n/wrlist pagenumber for next page!");
 			return true;
+		}
+		else if(args.length > 1)
+		{
+			player.sendMessage("Too Many Arguments !");
+			return false;
 		}
 		else
 		{
@@ -231,14 +246,14 @@ public class WirelessCommands implements CommandExecutor
 				player.sendMessage("This page number is not an number!");
 				return true;
 			}
-			player.sendMessage("WirelessRedstone User Commands:");
+			player.sendMessage(ChatColor.AQUA + "WirelessRedstone User Commands:");
 			ShowList(commands, pagenumber, player);
 			player.sendMessage("/WRhelp " + Integer.toString(pagenumber + 1) + " for next page!");
 			return true;
 		}
 		else
 		{
-			player.sendMessage("WirelessRedstone User Commands:");
+			player.sendMessage(ChatColor.AQUA + "WirelessRedstone User Commands:");
 			ShowList(commands, 1, player);
 			player.sendMessage("/WRhelp 2 for next page!");
 		}
@@ -320,6 +335,12 @@ public class WirelessCommands implements CommandExecutor
 		 * This method shows the status of a WirelessChannel.
 		 * At the moment, it only shows if the channel is active or not...
 		 */
+		if (!plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics")
+				|| !plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.info"))
+		{
+			player.sendMessage("You don't have the permissions to use this command.");
+			return true;
+		}
 		if(args.length == 0)
 		{
 			player.sendMessage("Too few arguments !");

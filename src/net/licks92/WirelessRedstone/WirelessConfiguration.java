@@ -13,7 +13,6 @@ import java.util.logging.Level;
 
 import javax.naming.ConfigurationException;
 
-
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.yaml.snakeyaml.DumperOptions;
@@ -29,14 +28,16 @@ public class WirelessConfiguration extends FileConfiguration
 	private StackableLogger logger;
 	private File dataFolder;
 	private File configFile;
+	private WirelessRedstone plugin;
 	public Yaml yaml;
 	protected HashMap<String, Object> root;
 	private String header = "#This is the configuration of the Wireless Redstone Plugin, Please don't edit it if you don't know what to do...";
 
-	public WirelessConfiguration(File dataFolder)
+	public WirelessConfiguration(WirelessRedstone r_plugin, File dataFolder)
 	{
 		this.configFile = new File(dataFolder, "settings.yml");
 		this.dataFolder = dataFolder;
+		this.plugin = r_plugin;
 		logger = WirelessRedstone.getStackableLogger();
 		root = new HashMap<String, Object>();
 
@@ -200,11 +201,7 @@ public class WirelessConfiguration extends FileConfiguration
         }
         finally
         {
-        	//Remove null channels
-        	for(int i = 0; i < root.size(); i++)
-        	{
-        		
-        	}
+        	
             try
             {
                 if (stream != null)
@@ -349,7 +346,8 @@ public class WirelessConfiguration extends FileConfiguration
      * 
      * @param headerLines header lines to prepend
      */
-    public void setHeader(String ... headerLines)  {
+    public void setHeader(String ... headerLines)
+    {
         StringBuilder header = new StringBuilder();
         
         for (String line : headerLines) {

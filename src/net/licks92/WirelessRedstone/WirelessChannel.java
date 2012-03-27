@@ -2,19 +2,24 @@ package net.licks92.WirelessRedstone;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 
 import com.avaje.ebean.validation.NotNull;
 
 @Entity()
 @Table(name="wirelesschannels")
-public class WirelessChannel implements Serializable
+@SerializableAs("WirelessChannel")
+public class WirelessChannel implements ConfigurationSerializable, Serializable
 {
 	private static final long serialVersionUID = -3322590857684087871L;
 	@Id
@@ -29,6 +34,16 @@ public class WirelessChannel implements Serializable
 	public WirelessChannel()
 	{
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public WirelessChannel(Map<String, Object> map)
+	{
+		id = (Integer) map.get("id");
+		name = (String) map.get("name");
+		owners = (List<String>) map.get("owners");
+		transmitters = (List<WirelessTransmitter>) map.get("transmitters");
+		receivers = (List<WirelessReceiver>) map.get("receivers");
 	}
 	
 	public void removeReceiverAt(Location loc)
@@ -133,5 +148,27 @@ public class WirelessChannel implements Serializable
 	public void setId(int id)
 	{
 		this.id = id;
+	}
+
+	@Override
+	public Map<String, Object> serialize()
+	{
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", getId());
+		map.put("name", getName());
+		map.put("owners", getOwners());
+		map.put("receivers", getReceivers());
+		map.put("transmitters", getTransmitters());
+		return map;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void deserialize(Map<String,Object> map)
+	{
+		this.setId((Integer) map.get("id"));
+		this.setName((String) map.get("name"));
+		this.setOwners((List<String>) map.get("owners"));
+		this.setReceivers((List<WirelessReceiver>) map.get("receivers"));
+		this.setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
 	}
 }

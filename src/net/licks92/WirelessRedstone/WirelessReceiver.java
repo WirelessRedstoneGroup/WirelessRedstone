@@ -1,12 +1,15 @@
 package net.licks92.WirelessRedstone;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-public class WirelessReceiver implements Serializable, IWirelessPoint {
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 
-	/**
-	 * 
-	 */
+@SerializableAs("WirelessReceiver")
+public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoint, Serializable
+{
 	private static final long serialVersionUID = -7291500732787558150L;
 	private String owner;
 	private int x;
@@ -16,26 +19,43 @@ public class WirelessReceiver implements Serializable, IWirelessPoint {
 	private int direction = 0;
 	private boolean iswallsign = false;
 
-	public WirelessReceiver() {
+	public WirelessReceiver()
+	{
+		
+	}
+	
+	public WirelessReceiver(Map<String, Object> map)
+	{
+		owner = (String) map.get("owner");
+		world = (String) map.get("world");
+		direction = (Integer) map.get("direction");
+		iswallsign = (Boolean) map.get("isWallSign");
+		x = (Integer) map.get("x");
+		y = (Integer) map.get("y");
+		z = (Integer) map.get("z");
 	}
 
 	@Override
-	public String getOwner() {
+	public String getOwner()
+	{
 		return this.owner;
 	}
 
 	@Override
-	public int getX() {
+	public int getX()
+	{
 		return this.x;
 	}
 
 	@Override
-	public int getY() {
+	public int getY()
+	{
 		return this.y;
 	}
 
 	@Override
-	public int getZ() {
+	public int getZ()
+	{
 		return this.z;
 	}
 
@@ -85,7 +105,33 @@ public class WirelessReceiver implements Serializable, IWirelessPoint {
 	}
 
 	@Override
-	public void setisWallSign(boolean iswallsign) {
+	public void setisWallSign(boolean iswallsign)
+	{
 		this.iswallsign = iswallsign;
+	}
+
+	@Override
+	public Map<String, Object> serialize()
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("direction", getDirection());
+		map.put("isWallSign", getisWallSign());
+		map.put("owner", getOwner());
+		map.put("world", getWorld());
+		map.put("x", getX());
+		map.put("y", getY());
+		map.put("z", getZ());
+		return map;
+	}
+	
+	public void deserialize(Map<String,Object> map)
+	{
+		this.setDirection((Integer) map.get("direction"));
+		this.setisWallSign((Boolean) map.get("isWallSign"));
+		this.setOwner((String) map.get("owner"));
+		this.setWorld((String) map.get("world"));
+		this.setX((Integer) map.get("x"));
+		this.setY((Integer) map.get("y"));
+		this.setZ((Integer) map.get("z"));
 	}
 }

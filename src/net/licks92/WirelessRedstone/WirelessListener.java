@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -15,6 +16,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -76,6 +78,16 @@ public class WirelessListener implements Listener
 		if (event.getChangedType() == Material.REDSTONE_TORCH_ON)
 		{
 			
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		Player player = event.getPlayer();
+		if(this.plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.admin"))
+		{
+			player.sendMessage("[WARNING] Null Channels Exist in the config! Please remove them in the settings.yml file!");
 		}
 	}
 
@@ -318,6 +330,7 @@ public class WirelessListener implements Listener
 
 	// Method borrowed from MinecraftMania! Credits to Afforess!
 	// https://github.com/Afforess/MinecartMania/blob/master/src/com/afforess/minecartmaniacore/api/MinecartManiaCoreWorldListener.java
+	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent event)
 	{
 		if (!event.isCancelled())

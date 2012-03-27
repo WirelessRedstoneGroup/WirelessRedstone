@@ -50,11 +50,24 @@ public class WireBox
 		return null;
 	}
 
-	public boolean hasAccessToChannel(Player player, String channelname) {
-		if (getChannel(channelname) != null) {
-			return getChannel(channelname).getOwners().contains(
-					player.getName());
+	public boolean hasAccessToChannel(Player player, String channelname)
+	{
+		if (getChannel(channelname) != null)
+		{
+			if(this.plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.admin"))
+			{
+				return true;
+			}
+			else if(getChannel(channelname).getOwners().contains(player.getName()))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
+		
 
 		return true;
 	}
@@ -88,8 +101,7 @@ public class WireBox
 			receiver.setDirection(cblock.getData());
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
-			WirelessRedstone.config.set("WirelessChannels." + cname,
-					channel);
+			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
 			WirelessRedstone.config.save();
 			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Transmitter to complete! typ /wrhelp for more info!");
 			this.UpdateCache();
@@ -120,7 +132,8 @@ public class WireBox
 		return false;
 	}
 
-	public boolean isValidLocation(Location loc) {
+	public boolean isValidLocation(Location loc)
+	{
 		if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR
 				|| loc.getBlock().getRelative(BlockFace.EAST).getType() == Material.AIR
 				|| loc.getBlock().getRelative(BlockFace.NORTH).getType() == Material.AIR
@@ -130,7 +143,8 @@ public class WireBox
 				|| loc.getBlock().getRelative(BlockFace.EAST).getType() == Material.AIR
 				|| loc.getBlock().getRelative(BlockFace.NORTH).getType() == Material.AIR
 				|| loc.getBlock().getRelative(BlockFace.WEST).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.AIR) {
+				|| loc.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.AIR)
+		{
 
 		}
 		return false;
@@ -153,32 +167,34 @@ public class WireBox
 		return returnlist;
 	}
 
-	public void removeReceiverAt(final Location loc, final boolean byplayer) {
-		plugin.getServer().getScheduler()
-				.scheduleAsyncDelayedTask(plugin, new Runnable() {
-					public void run() {
-						for (WirelessChannel channel : plugin.WireBox
-								.getChannels()) {
-							for (WirelessReceiver receiver : channel
-									.getReceivers()) {
+	public void removeReceiverAt(final Location loc, final boolean byplayer)
+	{
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		{
+					public void run()
+					{
+						for (WirelessChannel channel : getChannels())
+						{
+							for (WirelessReceiver receiver : channel.getReceivers())
+							{
 								if (receiver.getX() == loc.getBlockX()
 										&& receiver.getY() == loc.getBlockY()
-										&& receiver.getZ() == loc.getBlockZ()) {
+										&& receiver.getZ() == loc.getBlockZ())
+								{
 									channel.removeReceiverAt(loc);
 									SaveChannel(channel);
-									if (!byplayer) {
-										for (String owner : channel.getOwners()) {
-											try {
-												if (plugin.getServer()
-														.getPlayer(owner)
-														.isOnline()) {
-													plugin.getServer()
-															.getPlayer(owner)
-															.sendMessage(
-																	"One of your signs on channel: "
-																			+ channel
-																					.getName()
-																			+ " is broken by nature.");
+									if (!byplayer)
+									{
+										for (String owner : channel.getOwners())
+										{
+											try
+											{
+												if (plugin.getServer().getPlayer(owner).isOnline())
+												{
+													plugin.getServer().getPlayer(owner)
+															.sendMessage("One of your signs on channel: "
+														    + channel.getName()
+															+ " is broken by nature.");
 												}
 											} catch (Exception ex) {
 												// NA
@@ -255,7 +271,6 @@ public class WireBox
 			return Channels.values();
 		}
 		return null;
-
 	}
 
 	private void removeSigns(WirelessChannel channel)
@@ -421,15 +436,20 @@ public class WireBox
 				point.getX(), point.getY(), point.getZ());
 	}
 
-	public void UpdateChacheNoThread() {
+	public void UpdateChacheNoThread()
+	{
 		ArrayList<Location> returnlist = new ArrayList<Location>();
 		Object tmpO = WirelessRedstone.config.get("WirelessChannels");
-		if (tmpO instanceof Map<?, ?>) {
+		if (tmpO instanceof Map<?, ?>)
+		{
 			@SuppressWarnings("unchecked")
 			Map<String, WirelessChannel> Channels = (Map<String, WirelessChannel>) tmpO;
-			for (WirelessChannel channel : Channels.values()) {
-				try {
-					for (WirelessReceiver point : channel.getReceivers()) {
+			for (WirelessChannel channel : Channels.values())
+			{
+				try
+				{
+					for (WirelessReceiver point : channel.getReceivers())
+					{
 						Location floc = getPointLocation(point);
 						returnlist.add(floc);
 					}

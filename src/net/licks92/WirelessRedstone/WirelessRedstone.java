@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -15,7 +14,7 @@ import net.milkbowl.vault.permission.Permission;
 
 public class WirelessRedstone extends JavaPlugin
 {
-	public static WirelessConfiguration config;
+	public static NewWirelessConfiguration config;
 	private static StackableLogger logger = new StackableLogger("WirelessRedstone");
 	public WireBox WireBox = new WireBox(this);
 	public IPermissions permissionsHandler;
@@ -38,24 +37,36 @@ public class WirelessRedstone extends JavaPlugin
 	public void onEnable()
 	{
 		PluginDescriptionFile pdfFile = getDescription();
-		config = new WirelessConfiguration(this.getDataFolder());
+		config = new NewWirelessConfiguration(this);
 		listener = new WirelessListener(this);
 		PluginManager pm = getServer().getPluginManager();
 		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
 		WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		WirelessRedstone.logger.fine("Loading Permissions...");
 		Plugin vaultPlugin = pm.getPlugin("Vault");
+		Plugin permissionsEx = pm.getPlugin("PermissionsEx");
+		Plugin bPermissions = pm.getPlugin("bPermissions");
 
 		// Choosing Permissions it need to be used. Stolen from Essentials.
 		// Credits to Essentials Team
-		if (vaultPlugin != null)
+		if (vaultPlugin != null && config.getVaultUsage())
 		{
-			this.permissionsHandler = new VaultPermissions(this);
-			WirelessRedstone.logger.info("Using Vault");
+			this.permissionsHandler = new Vault(this);
+			WirelessRedstone.logger.info("Using Vault !");
 		}
+		/*else if(PermissionsEX != null)
+		{
+			this.permissionsHandler = new PermissionsEX(this);
+			WirelessRedstone.logger.info("Using PermissionsEx !");
+		}
+		else if(bPermissions != null)
+		{
+			this.permissionsHandler = new bPermsPermissions(this);
+			WirelessRedstone.logger.info("Using bPermissions !");
+		}*/
 		else
 		{
-			WirelessRedstone.logger.info("Vault hasn't been detected! Defaulting to OP/Config files!.");
+			WirelessRedstone.logger.info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!.");
 			this.permissionsHandler = new opPermissions(this);
 		}
 
@@ -63,20 +74,6 @@ public class WirelessRedstone extends JavaPlugin
 		config.save();
 
 		this.WireBox.UpdateChacheNoThread();
-
-		/* Deprecated since CB 1.1-R5
-		WirelessRedstone.logger.info("Registering Events...");
-		pm.registerEvent(Event.Type.SIGN_CHANGE, this.blockListener, Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.REDSTONE_CHANGE, this.blockListener,
-				Event.Priority.High, this);
-		pm.registerEvent(Event.Type.BLOCK_BREAK, this.blockListener,
-				Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.CHUNK_UNLOAD, this.worldListener,
-				Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_FROMTO, this.blockListener,
-				Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_PHYSICS, this.blockListener,
-				Event.Priority.Normal, this);*/
 
 		WirelessRedstone.logger.fine("Registering commands...");
 		getCommand("wrhelp").setExecutor(new WirelessCommands(this));
@@ -86,6 +83,7 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wrc").setExecutor(new WirelessCommands(this));
 		getCommand("wrlist").setExecutor(new WirelessCommands(this));
 		getCommand("wri").setExecutor(new WirelessCommands(this));
+		//getCommand("wr").setExecutor(new WirelessCommands(this));
 
 		WirelessRedstone.logger.fine("Loading Chunks");
 		LoadChunks();
