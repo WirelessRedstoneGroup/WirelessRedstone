@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>InfChests</name>
-	<comment></comment>
+	<name>WirelessRedstone</name>
+	<comment>WirelessRedstone plugin for Bukkit</comment>
 	<projects>
 	</projects>
 	<buildSpec>
