@@ -84,11 +84,12 @@ public class WirelessListener implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		Player player = event.getPlayer();
+		// Can't happen
+		/*Player player = event.getPlayer();
 		if(this.plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.admin"))
 		{
 			player.sendMessage("[WARNING] Null Channels Exist in the config! Please remove them in the settings.yml file!");
-		}
+		}*/
 	}
 
 	@EventHandler
@@ -234,7 +235,7 @@ public class WirelessListener implements Listener
 					}
 					else
 					{
-						event.getPlayer().sendMessage("[WirelessRedstone] Something went wrong!");
+						WirelessRedstone.getStackableLogger().fine("Receiver wasn't found in the config, but the sign has been successfuly removed !");
 					}
 				}
 				else
@@ -287,7 +288,7 @@ public class WirelessListener implements Listener
 					}
 					else 
 					{
-						event.getPlayer().sendMessage("[WirelessRedstone] Something went wrong!");
+						WirelessRedstone.getStackableLogger().fine("Transmitter wasn't found in the config, but the sign has been successfuly removed !");
 					}
 				}
 				else

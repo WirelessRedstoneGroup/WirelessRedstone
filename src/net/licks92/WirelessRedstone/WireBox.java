@@ -212,7 +212,7 @@ public class WireBox
 	public boolean RemoveWirelessReceiver(String cname, Location loc)
 	{
 		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
-			return true;
+			return false;
 
 		Object tempObject = WirelessRedstone.config.get("WirelessChannels." + cname);
 		if (tempObject instanceof WirelessChannel)
@@ -231,7 +231,7 @@ public class WireBox
 	public boolean RemoveWirelessTransmitter(String cname, Location loc)
 	{
 		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
-			return true;
+			return false;
 
 		Object tempObject = WirelessRedstone.config.get("WirelessChannels." + cname);
 		if (tempObject instanceof WirelessChannel)
