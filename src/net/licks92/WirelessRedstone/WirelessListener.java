@@ -132,8 +132,7 @@ public class WirelessListener implements Listener
 							}
 							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
 						}
-						else if
-						(receiver.getBlock().getData() == 0x3)
+						else if (receiver.getBlock().getData() == 0x3)
 						{
 							if (receiver.getBlock().getRelative(BlockFace.EAST).getType() == Material.AIR)
 							{

@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone;
 
-
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -10,6 +9,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.licks92.WirelessRedstone.Permissions.*;
+import net.licks92.WirelessRedstone.utils.Metrics;
 import net.milkbowl.vault.permission.Permission;
 
 public class WirelessRedstone extends JavaPlugin
@@ -18,8 +18,9 @@ public class WirelessRedstone extends JavaPlugin
 	private static StackableLogger logger = new StackableLogger("WirelessRedstone");
 	public WireBox WireBox = new WireBox(this);
 	public IPermissions permissionsHandler;
-	public static Permission perms = null;
-	public WirelessListener listener = null;
+	public static Permission perms;
+	public WirelessListener listener;
+	private static Metrics metrics;
 
 	public static StackableLogger getStackableLogger()
 	{
@@ -84,6 +85,14 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wrlist").setExecutor(new WirelessCommands(this));
 		getCommand("wri").setExecutor(new WirelessCommands(this));
 		//getCommand("wr").setExecutor(new WirelessCommands(this));
+		
+		//Metrics
+				try
+				{
+					metrics = new Metrics(this);
+					metrics.start();
+				}
+				catch(Exception e){ e.printStackTrace(); }
 
 		WirelessRedstone.logger.fine("Loading Chunks");
 		LoadChunks();
