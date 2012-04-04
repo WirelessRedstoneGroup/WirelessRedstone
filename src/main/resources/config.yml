@@ -1,0 +1,6 @@
+#This is the configuration of the Wireless Redstone Plugin, Please don't edit it if you don't know what to do...
+
+LogLevel: INFO
+cancelChunkUnloads: true
+cancelChunkUnloadRange: 4
+UseVault: true
