@@ -36,8 +36,16 @@ public class NewWirelessConfiguration
 		File oldConfig = new File(plugin.getDataFolder(), "settings.yml");
 		if(oldConfig.exists())
 		{
-			r_plugin.getLogger().warning("Very old config present. Converting is no longer possible. Sorry :(");
+			convertOldConfigToNew(oldConfig);
 		}
+	}
+	
+	public void convertOldConfigToNew(File file)
+	{
+		WirelessConfiguration oldConfiguration = new WirelessConfiguration(plugin, plugin.getDataFolder());
+		getConfig().set("WirelessChannels", oldConfiguration.get("WirelessChannels"));
+		
+		file.delete();
 	}
 
 	public void reloadConfig()
@@ -115,7 +123,6 @@ public class NewWirelessConfiguration
 			else
 				plugin.getLogger().warning("Channel "+channel+" is not of type WirelessChannel.");
 		}
-		return channels;
-		
+		return channels;	
 	}
 }

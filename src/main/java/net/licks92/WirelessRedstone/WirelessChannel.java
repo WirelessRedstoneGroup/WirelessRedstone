@@ -29,8 +29,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	private String name;
 	
 	private List<String> owners;
-	private List<WirelessTransmitter> transmitters;
-	private List<WirelessReceiver> receivers;
+	private List<WirelessTransmitter> transmitters = new LinkedList<WirelessTransmitter>();
+	private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
 
 	public WirelessChannel()
 	{

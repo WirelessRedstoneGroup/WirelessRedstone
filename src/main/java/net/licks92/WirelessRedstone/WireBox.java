@@ -150,6 +150,9 @@ public class WireBox
 
 	public ArrayList<Location> getReceiverLocations(String channelname) {
 		WirelessChannel channel = this.plugin.WireBox.getChannel(channelname);
+		if(channel == null)
+			return new ArrayList<Location>();
+		
 		ArrayList<Location> returnlist = new ArrayList<Location>();
 		for (WirelessReceiver receiver : channel.getReceivers()) {
 			returnlist.add(this.getPointLocation(receiver));
