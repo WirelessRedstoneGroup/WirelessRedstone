@@ -1,125 +1,128 @@
 package net.licks92.WirelessRedstone;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 public class NewWirelessConfiguration
 {
+	private static final String CHANNEL_SECTION = "WirelessChannels";
 	private WirelessRedstone plugin;
-	private File configFile;
-	private FileConfiguration config;
-	private StackableLogger logger;
+	
+	private FileConfiguration getConfig()
+	{
+		return plugin.getConfig();
+	}
 	
 	public NewWirelessConfiguration(WirelessRedstone r_plugin)
 	{
 		plugin = r_plugin;
-		logger = WirelessRedstone.getStackableLogger();
-		
-		configFile = new File(plugin.getDataFolder(), "config.yml");
 		
 		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
 		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
 		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
+
+		getConfig().options().copyDefaults(true);
+		plugin.saveConfig();
 		reloadConfig();
+		
 		File oldConfig = new File(plugin.getDataFolder(), "settings.yml");
 		if(oldConfig.exists())
 		{
-			ConvertToNewConfig(oldConfig);
+			convertOldConfigToNew(oldConfig);
 		}
 	}
 	
-	private void ConvertToNewConfig(File file)
+	public void convertOldConfigToNew(File file)
 	{
-		WirelessConfiguration oldConfig = new WirelessConfiguration(plugin, plugin.getDataFolder());
-		
-		logger.info("Converted old config !");
-		
-		config.set("WirelessChannels", oldConfig.get("WirelessChannels"));
+		WirelessConfiguration oldConfiguration = new WirelessConfiguration(plugin, plugin.getDataFolder());
+		getConfig().set("WirelessChannels", oldConfiguration.get("WirelessChannels"));
 		
 		file.delete();
 	}
 
 	public void reloadConfig()
 	{
-		if(!(configFile.exists()))
-		{
-			try
-			{
-				if(!(configFile.getParentFile().exists()))
-					configFile.getParentFile().mkdirs();
-				configFile.createNewFile();
-				config = YamlConfiguration.loadConfiguration(configFile);
-				GenerateDefaults();
-				return;
-			}
-			catch (IOException ex)
-			{
-				logger.severe("Failed to create the config file !");
-				ex.printStackTrace();
-			}
-		}
-		config = YamlConfiguration.loadConfiguration(configFile);
-		if(config.toString() == null)
-			GenerateDefaults();
-	}
-	
-	private void GenerateDefaults()
-	{
-		config.set("LogLevel", Level.INFO.getName().toUpperCase());
-		config.set("cancelChunkUnloads", true);
-		config.set("cancelChunkUnloadRange", 4);
-		config.set("UseVault", true);
-		logger.info("Generated new configuration !");
-		save();
+		plugin.reloadConfig();
 	}
 
 	public Level getLogLevel()
 	{
-		return Level.parse(config.getString("LogLevel"));
+		return Level.parse(getConfig().getString("LogLevel"));
 	}
 
 	public boolean getVaultUsage()
 	{
-		return config.getBoolean("UseVault");
+		return getConfig().getBoolean("UseVault");
 	}
 
 	public void save()
 	{
-		try
-		{
-			config.save(configFile);
-		}
-		catch (NullPointerException ex)
-		{
-			ex.printStackTrace();
-		}
-		catch (IOException ex)
-		{
-			ex.printStackTrace();
-		}
+		plugin.saveConfig();
 	}
 
 	public boolean isCancelChunkUnloads()
 	{
-		return config.getBoolean("cancelChunkUnloads", true);
+		return getConfig().getBoolean("cancelChunkUnloads", true);
 	}
 
 	public int getChunkUnloadRange()
 	{
-		return config.getInt("cancelChunkUnloadRange", 4);
+		return getConfig().getInt("cancelChunkUnloadRange", 4);
 	}
-
-	public Object get(String path)
+	
+	public WirelessChannel getWirelessChannel(String channelName)
 	{
-		return config.get(path);
+		ConfigurationSection section = getConfig().getConfigurationSection(CHANNEL_SECTION);
+		if(section == null)
+			return null; // section not found.
+		
+		Object channel = section.get(channelName);
+		if(channel == null)
+			return null; // channel not found
+		else if(!(channel instanceof WirelessChannel))
+		{
+			plugin.getLogger().warning("Channel "+channelName+" does not seem to be of type WirelessChannel.");
+			return null;
+		}
+		else
+			return (WirelessChannel)channel;
 	}
-	public void set(String path, Object channel)
+	
+	public void setWirelessChannel(String channelName, WirelessChannel channel)
 	{
-		config.set(path, channel);
+		ConfigurationSection section = getConfig().getConfigurationSection(CHANNEL_SECTION);
+		if(section == null)
+			return;
+		
+		section.set(channelName, channel);
+	}
+	
+	public Collection<WirelessChannel> getAllChannels()
+	{
+		ConfigurationSection section = getConfig().getConfigurationSection(CHANNEL_SECTION);
+		if(section == null)
+			return new ArrayList<WirelessChannel>(0);
+		
+		Map<String, Object> values = section.getValues(true);
+		List<WirelessChannel> channels = new ArrayList<WirelessChannel>();
+		for(String cname : values.keySet())
+		{
+			Object channel = section.get(cname);
+			if(channel instanceof WirelessChannel)
+			{
+				channels.add((WirelessChannel)channel);
+			}
+			else
+				plugin.getLogger().warning("Channel "+channel+" is not of type WirelessChannel.");
+		}
+		return channels;	
 	}
 }

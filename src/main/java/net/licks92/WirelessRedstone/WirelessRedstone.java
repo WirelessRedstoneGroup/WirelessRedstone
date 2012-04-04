@@ -1,5 +1,11 @@
 package net.licks92.WirelessRedstone;
 
+import net.licks92.WirelessRedstone.Permissions.IPermissions;
+import net.licks92.WirelessRedstone.Permissions.Vault;
+import net.licks92.WirelessRedstone.Permissions.opPermissions;
+import net.licks92.WirelessRedstone.utils.Metrics;
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,10 +13,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import net.licks92.WirelessRedstone.Permissions.*;
-import net.licks92.WirelessRedstone.utils.Metrics;
-import net.milkbowl.vault.permission.Permission;
 
 public class WirelessRedstone extends JavaPlugin
 {
@@ -45,8 +47,8 @@ public class WirelessRedstone extends JavaPlugin
 		WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		WirelessRedstone.logger.fine("Loading Permissions...");
 		Plugin vaultPlugin = pm.getPlugin("Vault");
-		Plugin permissionsEx = pm.getPlugin("PermissionsEx");
-		Plugin bPermissions = pm.getPlugin("bPermissions");
+		//Plugin permissionsEx = pm.getPlugin("PermissionsEx");
+		//Plugin bPermissions = pm.getPlugin("bPermissions");
 
 		// Choosing Permissions it need to be used. Stolen from Essentials.
 		// Credits to Essentials Team
@@ -105,6 +107,9 @@ public class WirelessRedstone extends JavaPlugin
 		if (WirelessRedstone.config.isCancelChunkUnloads()) {
 			for (IWirelessPoint loc : this.WireBox.getAllSigns()) {
 				Location location = WireBox.getPointLocation(loc);
+				if(location.getWorld() == null)
+					continue; // world currently not loaded.
+				
 				Chunk center = location.getBlock().getChunk();
 				World world = center.getWorld();
 				int range = WirelessRedstone.config.getChunkUnloadRange();

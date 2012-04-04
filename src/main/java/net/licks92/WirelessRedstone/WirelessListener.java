@@ -2,13 +2,11 @@ package net.licks92.WirelessRedstone;
 
 import java.util.List;
 
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -114,6 +112,9 @@ public class WirelessListener implements Listener
 			{
 				for (Location receiver : plugin.WireBox.getReceiverLocations(signObject.getLine(1)))
 				{
+					if(receiver.getWorld() == null)
+						continue; // World currently not loaded
+					
 					if (receiver.getBlock().getType() == Material.SIGN_POST)
 					{
 						if (receiver.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
@@ -164,9 +165,9 @@ public class WirelessListener implements Listener
 
 				}
 			}
-			catch (Exception e) 
+			catch (RuntimeException e) 
 			{
-				WirelessRedstone.getStackableLogger().severe(e.getMessage());
+				WirelessRedstone.getStackableLogger().severe("Error while updating redstone event :"+e.getClass()+":"+e.getMessage());
 				return;
 			}
 		}
@@ -174,36 +175,43 @@ public class WirelessListener implements Listener
 		{
 			try
 			{
-				for (WirelessReceiver receiver : plugin.WireBox.getChannel(signObject.getLine(1)).getReceivers())
+				WirelessChannel channel = plugin.WireBox.getChannel(signObject.getLine(1));
+				if(channel != null)
 				{
-					Location rloc = plugin.WireBox.getPointLocation(receiver);
-					Block othersign = rloc.getBlock();
-
-					othersign.setType(Material.AIR);
-
-					if (receiver.getisWallSign())
+					for (WirelessReceiver receiver : channel.getReceivers())
 					{
-						othersign.setType(Material.WALL_SIGN);
-						othersign.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) receiver.getDirection(), true);
-					}
-					else
-					{
-						othersign.setType(Material.SIGN_POST);
-						othersign.setTypeIdAndData(Material.SIGN_POST.getId(),
-								(byte) receiver.getDirection(), true);
-					}
-
-					if (othersign.getState() instanceof Sign) {
-						Sign signtemp = (Sign) othersign.getState();
-						signtemp.setLine(0, "[WRr]");
-						signtemp.setLine(1, signObject.getLine(1));
-						signtemp.update(true);
+						if(receiver.getWorld() == null)
+							continue; // World currently not loaded
+						
+						Location rloc = plugin.WireBox.getPointLocation(receiver);
+						Block othersign = rloc.getBlock();
+	
+						othersign.setType(Material.AIR);
+	
+						if (receiver.getisWallSign())
+						{
+							othersign.setType(Material.WALL_SIGN);
+							othersign.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) receiver.getDirection(), true);
+						}
+						else
+						{
+							othersign.setType(Material.SIGN_POST);
+							othersign.setTypeIdAndData(Material.SIGN_POST.getId(),
+									(byte) receiver.getDirection(), true);
+						}
+	
+						if (othersign.getState() instanceof Sign) {
+							Sign signtemp = (Sign) othersign.getState();
+							signtemp.setLine(0, "[WRr]");
+							signtemp.setLine(1, signObject.getLine(1));
+							signtemp.update(true);
+						}
 					}
 				}
 			}
-			catch (Exception e)
+			catch (RuntimeException e)
 			{
-				WirelessRedstone.getStackableLogger().severe(e.getMessage());
+				WirelessRedstone.getStackableLogger().severe("Error while updating redstone event2 :"+e.getClass()+":"+e.getMessage());
 				return;
 			}
 		}

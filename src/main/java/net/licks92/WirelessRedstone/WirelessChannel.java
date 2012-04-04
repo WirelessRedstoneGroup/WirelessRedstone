@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +29,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	private String name;
 	
 	private List<String> owners;
-	private List<WirelessTransmitter> transmitters;
-	private List<WirelessReceiver> receivers;
+	private List<WirelessTransmitter> transmitters = new LinkedList<WirelessTransmitter>();
+	private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
 
 	public WirelessChannel()
 	{
@@ -42,8 +43,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		id = (Integer) map.get("id");
 		name = (String) map.get("name");
 		owners = (List<String>) map.get("owners");
-		transmitters = (List<WirelessTransmitter>) map.get("transmitters");
-		receivers = (List<WirelessReceiver>) map.get("receivers");
+		setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
+		setReceivers((List<WirelessReceiver>) map.get("receivers"));
 	}
 	
 	public void removeReceiverAt(Location loc)
@@ -112,12 +113,18 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 
 	public void setTransmitters(List<WirelessTransmitter> transmitters)
 	{
-		this.transmitters = transmitters;
+		if(transmitters != null)
+			this.transmitters = transmitters;
+		else
+			this.transmitters = new LinkedList<WirelessTransmitter>();
 	}
 
 	public void setReceivers(List<WirelessReceiver> receivers)
 	{
-		this.receivers = receivers;
+		if(receivers != null)
+			this.receivers = receivers;
+		else
+			this.receivers = new LinkedList<WirelessReceiver>();
 	}
 
 	public String getName()
