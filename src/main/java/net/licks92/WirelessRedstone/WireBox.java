@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,13 +40,7 @@ public class WireBox
 
 	public WirelessChannel getChannel(String channel)
 	{
-		Object tempObject = WirelessRedstone.config.get("WirelessChannels." + channel);
-		if (tempObject instanceof WirelessChannel)
-		{
-			return (WirelessChannel) tempObject;
-		}
-
-		return null;
+		return WirelessRedstone.config.getWirelessChannel(channel);
 	}
 
 	public boolean hasAccessToChannel(Player player, String channelname)
@@ -74,7 +67,7 @@ public class WireBox
 
 	public boolean SaveChannel(WirelessChannel channel)
 	{
-		WirelessRedstone.config.set("WirelessChannels." + channel.getName(), channel);
+		WirelessRedstone.config.setWirelessChannel(channel.getName(), channel);
 		WirelessRedstone.config.save();
 		return true;
 	}
@@ -87,9 +80,12 @@ public class WireBox
 		{
 			isWallSign = true;
 		}
-		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
+		
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
+		
+		if (channel == null)
 		{
-			WirelessChannel channel = new WirelessChannel();
+			channel = new WirelessChannel();
 			channel.addOwner(player.getName());
 			channel.setName(cname);
 			WirelessReceiver receiver = new WirelessReceiver();
@@ -101,7 +97,7 @@ public class WireBox
 			receiver.setDirection(cblock.getData());
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
-			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
 			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Transmitter to complete! typ /wrhelp for more info!");
 			this.UpdateCache();
@@ -109,27 +105,21 @@ public class WireBox
 		}
 		else
 		{
-			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
-			if (tempobject instanceof WirelessChannel)
-			{
-				WirelessChannel channel = (WirelessChannel) tempobject;
-				WirelessReceiver receiver = new WirelessReceiver();
-				receiver.setOwner(player.getName());
-				receiver.setWorld(loc.getWorld().getName());
-				receiver.setX(loc.getBlockX());
-				receiver.setY(loc.getBlockY());
-				receiver.setZ(loc.getBlockZ());
-				receiver.setDirection(cblock.getData());
-				receiver.setisWallSign(isWallSign);
-				channel.addReceiver(receiver);
-				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
-				WirelessRedstone.config.save();
-				player.sendMessage("[WirelessRedstone] You just extended a channel!");
-				this.UpdateCache();
-				return true;
-			}
+			WirelessReceiver receiver = new WirelessReceiver();
+			receiver.setOwner(player.getName());
+			receiver.setWorld(loc.getWorld().getName());
+			receiver.setX(loc.getBlockX());
+			receiver.setY(loc.getBlockY());
+			receiver.setZ(loc.getBlockZ());
+			receiver.setDirection(cblock.getData());
+			receiver.setisWallSign(isWallSign);
+			channel.addReceiver(receiver);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
+			WirelessRedstone.config.save();
+			player.sendMessage("[WirelessRedstone] You just extended a channel!");
+			this.UpdateCache();
+			return true;
 		}
-		return false;
 	}
 
 	public boolean isValidLocation(Location loc)
@@ -211,16 +201,11 @@ public class WireBox
 
 	public boolean RemoveWirelessReceiver(String cname, Location loc)
 	{
-		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
-			return false;
-
-		Object tempObject = WirelessRedstone.config.get("WirelessChannels." + cname);
-		if (tempObject instanceof WirelessChannel)
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
+		if(channel != null)
 		{
-			WirelessChannel channel = (WirelessChannel) tempObject;
 			channel.removeReceiverAt(loc);
-			WirelessRedstone.config.set("WirelessChannels." + cname,
-					channel);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
 			this.UpdateCache();
 			return true;
@@ -230,15 +215,11 @@ public class WireBox
 
 	public boolean RemoveWirelessTransmitter(String cname, Location loc)
 	{
-		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
-			return false;
-
-		Object tempObject = WirelessRedstone.config.get("WirelessChannels." + cname);
-		if (tempObject instanceof WirelessChannel)
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
+		if (channel != null)
 		{
-			WirelessChannel channel = (WirelessChannel) tempObject;
 			channel.removeTransmitterAt(loc);
-			WirelessRedstone.config.set("WirelessChannels." + cname, channel);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
 			this.UpdateCache();
 			return true;
@@ -248,12 +229,11 @@ public class WireBox
 
 	public boolean removeChannel(String cname)
 	{
-		Object tempObject = WirelessRedstone.config.get("WirelessChannels." + cname);
-		if (tempObject instanceof WirelessChannel)
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
+		if (channel != null)
 		{
-			WirelessChannel ccopy = (WirelessChannel) tempObject;
-			this.removeSigns(ccopy);
-			WirelessRedstone.config.set("WirelessChannels." + cname, null);
+			this.removeSigns(channel);
+			WirelessRedstone.config.setWirelessChannel(cname, null);
 			WirelessRedstone.config.save();
 			this.UpdateCache();
 			return true;
@@ -263,14 +243,7 @@ public class WireBox
 
 	public Collection<WirelessChannel> getChannels()
 	{
-		Object tmpO = WirelessRedstone.config.get("WirelessChannels");
-		if (tmpO instanceof Map<?, ?>)
-		{
-			@SuppressWarnings("unchecked")
-			Map<String, WirelessChannel> Channels = (Map<String, WirelessChannel>) tmpO;
-			return Channels.values();
-		}
-		return null;
+		return WirelessRedstone.config.getAllChannels();
 	}
 
 	private void removeSigns(WirelessChannel channel)
@@ -307,9 +280,11 @@ public class WireBox
 		if (cblock.getType() == Material.WALL_SIGN) {
 			isWallSign = true;
 		}
-		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
+		
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
+		if (channel == null)
 		{
-			WirelessChannel channel = new WirelessChannel();
+			channel = new WirelessChannel();
 			channel.addOwner(player.getName());
 			channel.setName(cname);
 			WirelessTransmitter transmitter = new WirelessTransmitter();
@@ -321,7 +296,7 @@ public class WireBox
 			transmitter.setDirection(cblock.getData());
 			transmitter.setisWallSign(isWallSign);
 			channel.addTransmitter(transmitter);
-			WirelessRedstone.config.set("WirelessChannels." + cname, channel);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
 
 			WirelessRedstone.config.save();
 			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Receiver to complete! typ /wrhelp for more info!");
@@ -330,30 +305,25 @@ public class WireBox
 		}
 		else
 		{
-			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
-			if (tempobject instanceof WirelessChannel) {
-				WirelessChannel channel = (WirelessChannel) tempobject;
-				WirelessTransmitter transmitter = new WirelessTransmitter();
-				transmitter.setOwner(player.getName());
-				transmitter.setWorld(loc.getWorld().getName());
-				transmitter.setX(loc.getBlockX());
-				transmitter.setY(loc.getBlockY());
-				transmitter.setZ(loc.getBlockZ());
-				transmitter.setDirection(cblock.getData());
-				transmitter.setisWallSign(isWallSign);
-				channel.addTransmitter(transmitter);
-				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
-				WirelessRedstone.config.save();
-				player.sendMessage("[WirelessRedstone] You just extended a channel!");
-				this.UpdateCache();
-				return true;
-			}
+			WirelessTransmitter transmitter = new WirelessTransmitter();
+			transmitter.setOwner(player.getName());
+			transmitter.setWorld(loc.getWorld().getName());
+			transmitter.setX(loc.getBlockX());
+			transmitter.setY(loc.getBlockY());
+			transmitter.setZ(loc.getBlockZ());
+			transmitter.setDirection(cblock.getData());
+			transmitter.setisWallSign(isWallSign);
+			channel.addTransmitter(transmitter);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
+			WirelessRedstone.config.save();
+			player.sendMessage("[WirelessRedstone] You just extended a channel!");
+			this.UpdateCache();
+			return true;
 		}
-		return false;
 	}
 
 	public boolean containsChannel(String name) {
-		return (WirelessRedstone.config.get("WirelessChannels." + name) != null);
+		return (WirelessRedstone.config.getWirelessChannel(name) != null);
 	}
 
 	public List<IWirelessPoint> getAllSigns() {
@@ -366,11 +336,7 @@ public class WireBox
 
 					public void run() {
 						ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
-						Object tmpO = WirelessRedstone.config.get("WirelessChannels");
-						if (tmpO instanceof Map<?, ?>) {
-							@SuppressWarnings("unchecked")
-							Map<String, WirelessChannel> Channels = (Map<String, WirelessChannel>) tmpO;
-							for (WirelessChannel channel : Channels.values()) {
+							for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
 								try {
 									for (IWirelessPoint point : channel
 											.getReceivers()) {
@@ -385,7 +351,6 @@ public class WireBox
 
 								}
 							}
-						}
 						allPointsListCache = returnlist;
 					}
 				}, 0L);
@@ -403,11 +368,7 @@ public class WireBox
 					public void run()
 					{
 						List<Location> returnlist = new ArrayList<Location>();
-						Object tmpO = WirelessRedstone.config.get("WirelessChannels");
-						if (tmpO instanceof Map<?, ?>) {
-							@SuppressWarnings("unchecked")
-							Map<String, WirelessChannel> Channels = (Map<String, WirelessChannel>) tmpO;
-							for (WirelessChannel channel : Channels.values()) {
+							for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
 								try {
 									for (WirelessReceiver point : channel
 											.getReceivers()) {
@@ -417,9 +378,6 @@ public class WireBox
 								} catch (Exception e) {
 								}
 							}
-						} else {
-
-						}
 						receiverlistcachelocation = returnlist;
 					}
 				}, 0L);
@@ -439,41 +397,30 @@ public class WireBox
 	public void UpdateChacheNoThread()
 	{
 		ArrayList<Location> returnlist = new ArrayList<Location>();
-		Object tmpO = WirelessRedstone.config.get("WirelessChannels");
-		if (tmpO instanceof Map<?, ?>)
+		for (WirelessChannel channel : WirelessRedstone.config.getAllChannels())
 		{
-			@SuppressWarnings("unchecked")
-			Map<String, WirelessChannel> Channels = (Map<String, WirelessChannel>) tmpO;
-			for (WirelessChannel channel : Channels.values())
+			try
 			{
-				try
+				for (WirelessReceiver point : channel.getReceivers())
 				{
-					for (WirelessReceiver point : channel.getReceivers())
-					{
-						Location floc = getPointLocation(point);
-						returnlist.add(floc);
-					}
-				} catch (Exception e) {
-
+					Location floc = getPointLocation(point);
+					returnlist.add(floc);
 				}
+			} catch (Exception e) {
+
 			}
 		}
 
 		receiverlistcachelocation = returnlist;
 
 		ArrayList<IWirelessPoint> returnlist2 = new ArrayList<IWirelessPoint>();
-		Object tmpO2 = WirelessRedstone.config.get("WirelessChannels");
-		if (tmpO2 instanceof List<?>) {
-			@SuppressWarnings("unchecked")
-			Map<String, WirelessChannel> Channels = (Map<String, WirelessChannel>) tmpO2;
-			for (WirelessChannel channel : Channels.values()) {
-				for (IWirelessPoint point : channel.getReceivers()) {
-					returnlist2.add(point);
-				}
+		for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
+			for (IWirelessPoint point : channel.getReceivers()) {
+				returnlist2.add(point);
+			}
 
-				for (IWirelessPoint point : channel.getTransmitters()) {
-					returnlist2.add(point);
-				}
+			for (IWirelessPoint point : channel.getTransmitters()) {
+				returnlist2.add(point);
 			}
 		}
 		allPointsListCache = returnlist2;
