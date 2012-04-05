@@ -125,4 +125,14 @@ public class NewWirelessConfiguration
 		}
 		return channels;	
 	}
+	
+	public Object get(String path)
+	{
+		return getConfig().get(path);
+	}
+	
+	public void set(String path, Object channel)
+	{
+		getConfig().set(path, channel);
+	}
 }

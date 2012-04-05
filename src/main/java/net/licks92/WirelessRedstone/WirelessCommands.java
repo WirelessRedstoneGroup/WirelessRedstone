@@ -318,7 +318,7 @@ public class WirelessCommands implements CommandExecutor
 					sign.setLine(0, "[WRr]");
 					sign.setLine(1, channelname);
 					sign.update(true);
-					plugin.WireBox.AddWirelessReceiver(channelname, player.getLocation().getBlock(), player);
+					plugin.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player);
 				}
 			}
 			else

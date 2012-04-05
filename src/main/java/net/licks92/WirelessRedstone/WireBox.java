@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 public class WireBox
@@ -72,20 +73,30 @@ public class WireBox
 		return true;
 	}
 
-	public boolean AddWirelessReceiver(String cname, Block cblock, Player player)
+	public boolean addWirelessReceiver(String cname, Block cblock, Player player)
 	{
 		Location loc = cblock.getLocation();
 		Boolean isWallSign = false;
 		if (cblock.getType() == Material.WALL_SIGN)
 		{
 			isWallSign = true;
+			if(!isValidWallLocation(cblock))
+			{
+				player.sendMessage("[WirelessRedstone] You cannot create a wireless receiver on this block !");
+				return false;
+			}
 		}
-		
-		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
-		
-		if (channel == null)
+		else
 		{
-			channel = new WirelessChannel();
+			if(!isValidLocation(cblock))
+			{
+				player.sendMessage("[WirelessRedstone] You cannot create a wireless receiver on this block !");
+				return false;
+			}
+		}
+		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
+		{
+			WirelessChannel channel = new WirelessChannel();
 			channel.addOwner(player.getName());
 			channel.setName(cname);
 			WirelessReceiver receiver = new WirelessReceiver();
@@ -97,7 +108,7 @@ public class WireBox
 			receiver.setDirection(cblock.getData());
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
-			WirelessRedstone.config.setWirelessChannel(cname, channel);
+			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
 			WirelessRedstone.config.save();
 			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Transmitter to complete! typ /wrhelp for more info!");
 			this.UpdateCache();
@@ -105,39 +116,92 @@ public class WireBox
 		}
 		else
 		{
-			WirelessReceiver receiver = new WirelessReceiver();
-			receiver.setOwner(player.getName());
-			receiver.setWorld(loc.getWorld().getName());
-			receiver.setX(loc.getBlockX());
-			receiver.setY(loc.getBlockY());
-			receiver.setZ(loc.getBlockZ());
-			receiver.setDirection(cblock.getData());
-			receiver.setisWallSign(isWallSign);
-			channel.addReceiver(receiver);
-			WirelessRedstone.config.setWirelessChannel(cname, channel);
-			WirelessRedstone.config.save();
-			player.sendMessage("[WirelessRedstone] You just extended a channel!");
-			this.UpdateCache();
+			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
+			if (tempobject instanceof WirelessChannel)
+			{
+				WirelessChannel channel = (WirelessChannel) tempobject;
+				WirelessReceiver receiver = new WirelessReceiver();
+				receiver.setOwner(player.getName());
+				receiver.setWorld(loc.getWorld().getName());
+				receiver.setX(loc.getBlockX());
+				receiver.setY(loc.getBlockY());
+				receiver.setZ(loc.getBlockZ());
+				receiver.setDirection(cblock.getData());
+				receiver.setisWallSign(isWallSign);
+				channel.addReceiver(receiver);
+				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
+				WirelessRedstone.config.save();
+				player.sendMessage("[WirelessRedstone] You just extended a channel!");
+				this.UpdateCache();
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isValidWallLocation(Block block)
+	{
+		BlockFace face = BlockFace.DOWN;
+		switch(block.getData())
+		{
+		case 0x2: //South
+			face = BlockFace.WEST;
+			break;
+			
+		case 0x3: //North
+			face = BlockFace.EAST;
+			break;
+			
+		case 0x4: //east
+			face = BlockFace.SOUTH;
+			break;
+			
+		case 0x5: //West
+			face = BlockFace.NORTH;
+			break;
+		}
+		Block tempBlock = block.getRelative(face);
+		
+		if (tempBlock.getType() == Material.AIR
+				|| tempBlock.getType() == Material.PISTON_BASE
+				|| tempBlock.getType() == Material.PISTON_EXTENSION
+				|| tempBlock.getType() == Material.PISTON_MOVING_PIECE
+				|| tempBlock.getType() == Material.PISTON_STICKY_BASE
+				|| tempBlock.getType() == Material.GLOWSTONE
+				|| tempBlock.getType() == Material.REDSTONE_LAMP_ON
+				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF)
+		{
+			WirelessRedstone.getStackableLogger().info("Block is " + tempBlock.getType() + " with face =  " + block.getFace(tempBlock) +
+					" and other face is " + tempBlock.getFace(block));
+			return false;
+		}
+		else
+		{
 			return true;
 		}
 	}
 
-	public boolean isValidLocation(Location loc)
+	public boolean isValidLocation(Block block)
 	{
-		if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.EAST).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.NORTH).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.WEST).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.EAST).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.NORTH).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.WEST).getType() == Material.AIR
-				|| loc.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.AIR)
+		if(block == null)
+			return false;
+		
+		Block tempBlock = block.getRelative(BlockFace.DOWN);
+		
+		if (tempBlock.getType() == Material.AIR
+				|| tempBlock.getType() == Material.PISTON_BASE
+				|| tempBlock.getType() == Material.PISTON_EXTENSION
+				|| tempBlock.getType() == Material.PISTON_MOVING_PIECE
+				|| tempBlock.getType() == Material.PISTON_STICKY_BASE
+				|| tempBlock.getType() == Material.GLOWSTONE
+				|| tempBlock.getType() == Material.REDSTONE_LAMP_ON
+				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF)
 		{
-
+			WirelessRedstone.getStackableLogger().info("Block is " + tempBlock.getType());
+			return false;
 		}
-		return false;
+		else
+			return true;
 	}
 
 	public ArrayList<Location> getReceiverLocations(WirelessChannel channel) {
@@ -427,6 +491,20 @@ public class WireBox
 			}
 		}
 		allPointsListCache = returnlist2;
+	}
+
+	public void signWarning(Sign sign, int code)
+	{
+		switch(code)
+		{
+		case 1:
+			sign.setLine(3, "ERROR !");
+			sign.setLine(4, "Code 1");
+			break;
+			
+		default:
+			break;
+		}
 	}
 
 }

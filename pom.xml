@@ -50,4 +50,6 @@
   		</dependency>
    	</dependencies>
   </dependencyManagement>
+  <url>http://dev.bukkit.org/server-mods/wireless-redstone/</url>
+  <description>Wireless Redstone plugin for bukkit.</description>
 </project>

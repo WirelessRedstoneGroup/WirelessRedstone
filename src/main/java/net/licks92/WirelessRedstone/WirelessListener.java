@@ -62,10 +62,19 @@ public class WirelessListener implements Listener
 
 			if (plugin.WireBox.isReceiver(event.getLine(0)))
 			{
-				plugin.WireBox.AddWirelessReceiver(cname, event.getBlock(), event.getPlayer());
-			} else {
-				plugin.WireBox.addWirelessTransmitter(cname, event.getBlock(),
-						event.getPlayer());
+				if(!plugin.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer()))
+				{
+					event.setCancelled(true);
+					event.getBlock().breakNaturally();
+				}
+			}
+			else
+			{
+				if(!plugin.WireBox.addWirelessTransmitter(cname, event.getBlock(), event.getPlayer()))
+				{
+					event.setCancelled(true);
+					event.getBlock().breakNaturally();
+				}
 			}
 		}
 	}
@@ -117,52 +126,67 @@ public class WirelessListener implements Listener
 					
 					if (receiver.getBlock().getType() == Material.SIGN_POST)
 					{
-						if (receiver.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
+						if (!plugin.WireBox.isValidLocation(receiver.getBlock()))
 						{
-							this.plugin.WireBox.removeReceiverAt(receiver,false);
-						}
-						receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(), (byte) 0x5,true);
-					}
-					else if (receiver.getBlock().getType() == Material.WALL_SIGN)
-					{
-						if (receiver.getBlock().getData() == 0x2)
-						{
-							if (receiver.getBlock().getRelative(BlockFace.WEST).getType() == Material.AIR)
-							{
-								this.plugin.WireBox.removeReceiverAt(receiver,false);
-							}
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
-						}
-						else if (receiver.getBlock().getData() == 0x3)
-						{
-							if (receiver.getBlock().getRelative(BlockFace.EAST).getType() == Material.AIR)
-							{
-								this.plugin.WireBox.removeReceiverAt(receiver,false);
-							}
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x3, true);
-						}
-						else if (receiver.getBlock().getData() == 0x4)
-						{
-							if (receiver.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.AIR)
-							{
-								this.plugin.WireBox.removeReceiverAt(receiver,false);
-							}
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x2, true);
-						}
-						else if (receiver.getBlock().getData() == 0x5)
-						{
-							if (receiver.getBlock().getRelative(BlockFace.NORTH).getType() == Material.AIR)
-							{
-								this.plugin.WireBox.removeReceiverAt(receiver,false);
-							}
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x1, true);
+							plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
 						}
 						else
 						{
-							WirelessRedstone.getStackableLogger().info("Weirdest sign Efar!");
+							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(), (byte) 0x5,true);
 						}
 					}
-
+					else if (receiver.getBlock().getType() == Material.WALL_SIGN)
+					{
+						byte data = receiver.getBlock().getData(); // Correspond to the direction of the wall sign
+						if (data == 0x2) //South
+						{
+							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							{
+								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+							}
+							else
+							{
+								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
+							}
+						}
+						else if (data == 0x3) //North
+						{
+							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							{
+								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+							}
+							else
+							{
+								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x3, true);
+							}
+						}
+						else if (data == 0x4) //East
+						{
+							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							{
+								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+							}
+							else
+							{
+								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x2, true);
+							}
+						}
+						else if (data == 0x5) //West
+						{
+							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							{
+								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+							}
+							else
+							{
+								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x1, true);
+							}
+						}
+						else // Not West East North South ...
+						{
+							WirelessRedstone.getStackableLogger().info("Strange Data !");
+						}
+					}
 				}
 			}
 			catch (RuntimeException e) 
