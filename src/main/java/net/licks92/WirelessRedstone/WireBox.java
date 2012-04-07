@@ -171,8 +171,6 @@ public class WireBox
 				|| tempBlock.getType() == Material.REDSTONE_LAMP_ON
 				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF)
 		{
-			WirelessRedstone.getStackableLogger().info("Block is " + tempBlock.getType() + " with face =  " + block.getFace(tempBlock) +
-					" and other face is " + tempBlock.getFace(block));
 			return false;
 		}
 		else
@@ -197,28 +195,31 @@ public class WireBox
 				|| tempBlock.getType() == Material.REDSTONE_LAMP_ON
 				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF)
 		{
-			WirelessRedstone.getStackableLogger().info("Block is " + tempBlock.getType());
 			return false;
 		}
 		else
 			return true;
 	}
 
-	public ArrayList<Location> getReceiverLocations(WirelessChannel channel) {
+	public ArrayList<Location> getReceiverLocations(WirelessChannel channel)
+	{
 		ArrayList<Location> returnlist = new ArrayList<Location>();
-		for (WirelessReceiver receiver : channel.getReceivers()) {
+		for (WirelessReceiver receiver : channel.getReceivers())
+		{
 			returnlist.add(this.getPointLocation(receiver));
 		}
 		return returnlist;
 	}
 
-	public ArrayList<Location> getReceiverLocations(String channelname) {
+	public ArrayList<Location> getReceiverLocations(String channelname)
+	{
 		WirelessChannel channel = this.plugin.WireBox.getChannel(channelname);
 		if(channel == null)
 			return new ArrayList<Location>();
 		
 		ArrayList<Location> returnlist = new ArrayList<Location>();
-		for (WirelessReceiver receiver : channel.getReceivers()) {
+		for (WirelessReceiver receiver : channel.getReceivers())
+		{
 			returnlist.add(this.getPointLocation(receiver));
 		}
 		return returnlist;
@@ -493,13 +494,15 @@ public class WireBox
 		allPointsListCache = returnlist2;
 	}
 
-	public void signWarning(Sign sign, int code)
+	public void signWarning(Block block, int code)
 	{
+		Sign sign = (Sign) block.getState();
 		switch(code)
 		{
 		case 1:
-			sign.setLine(3, "ERROR !");
-			sign.setLine(4, "Code 1");
+			sign.setLine(2, "Bad block");
+			sign.setLine(3, "Behind sign");
+			sign.update();
 			break;
 			
 		default:

@@ -128,7 +128,7 @@ public class WirelessListener implements Listener
 					{
 						if (!plugin.WireBox.isValidLocation(receiver.getBlock()))
 						{
-							plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+							plugin.WireBox.signWarning(receiver.getBlock(), 1);
 						}
 						else
 						{
@@ -140,9 +140,9 @@ public class WirelessListener implements Listener
 						byte data = receiver.getBlock().getData(); // Correspond to the direction of the wall sign
 						if (data == 0x2) //South
 						{
-							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							if (!plugin.WireBox.isValidWallLocation(receiver.getBlock()))
 							{
-								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+								plugin.WireBox.signWarning(receiver.getBlock(), 1);
 							}
 							else
 							{
@@ -151,9 +151,9 @@ public class WirelessListener implements Listener
 						}
 						else if (data == 0x3) //North
 						{
-							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							if (!plugin.WireBox.isValidWallLocation(receiver.getBlock()))
 							{
-								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+								plugin.WireBox.signWarning(receiver.getBlock(), 1);
 							}
 							else
 							{
@@ -162,9 +162,9 @@ public class WirelessListener implements Listener
 						}
 						else if (data == 0x4) //East
 						{
-							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							if (!plugin.WireBox.isValidWallLocation(receiver.getBlock()))
 							{
-								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+								plugin.WireBox.signWarning(receiver.getBlock(), 1);
 							}
 							else
 							{
@@ -173,9 +173,9 @@ public class WirelessListener implements Listener
 						}
 						else if (data == 0x5) //West
 						{
-							if (plugin.WireBox.isValidWallLocation(receiver.getBlock()))
+							if (!plugin.WireBox.isValidWallLocation(receiver.getBlock()))
 							{
-								plugin.WireBox.signWarning((Sign) receiver.getBlock().getState(), 1);
+								plugin.WireBox.signWarning(receiver.getBlock(), 1);
 							}
 							else
 							{
@@ -192,6 +192,7 @@ public class WirelessListener implements Listener
 			catch (RuntimeException e) 
 			{
 				WirelessRedstone.getStackableLogger().severe("Error while updating redstone event :"+e.getClass()+":"+e.getMessage());
+				e.printStackTrace();
 				return;
 			}
 		}
