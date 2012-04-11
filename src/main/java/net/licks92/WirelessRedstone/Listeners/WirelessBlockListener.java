@@ -302,6 +302,13 @@ public class WirelessBlockListener implements Listener
 					if (plugin.WireBox.removeWirelessTransmitter(signObject.getLine(1), event.getBlock().getLocation()))
 					{
 						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign!");
+						if (plugin.WireBox.getChannel(signObject.getLine(1)).getTransmitters().size() == 0
+								&& plugin.WireBox.getChannel(signObject.getLine(1)).getReceivers().size() == 0)
+						{
+							plugin.WireBox.removeChannel(signObject.getLine(1));
+							event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign! Channel removed, no more signs in the worlds.");
+						}
+						
 						if (plugin.WireBox.getChannel(signObject.getLine(1)).getTransmitters().size() == 0)
 						{
 							event.getPlayer().sendMessage("[WirelessRedstone] No other Transmitters found, Resettings Power data on receivers to sign.");
@@ -357,6 +364,12 @@ public class WirelessBlockListener implements Listener
 						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign!");
 					}
 					
+					if (plugin.WireBox.getChannel(signObject.getLine(1)).getTransmitters().size() == 0
+							&& plugin.WireBox.getChannel(signObject.getLine(1)).getReceivers().size() == 0)
+					{
+						plugin.WireBox.removeChannel(signObject.getLine(1));
+						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign! Channel removed, no more signs in the worlds.");
+					}
 				}
 			}
 		}
