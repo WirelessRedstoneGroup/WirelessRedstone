@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.licks92.WirelessRedstone.channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.channel.WirelessChannel;
+import net.licks92.WirelessRedstone.channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.channel.WirelessScreen;
+import net.licks92.WirelessRedstone.channel.WirelessTransmitter;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -34,6 +40,14 @@ public class WireBox
 	public boolean isReceiver(String data)
 	{
 		if (data.toLowerCase().equalsIgnoreCase("[receiver]")|| data.toLowerCase().equalsIgnoreCase("[WRr]"))
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean isScreen(String data)
+	{
+		if(data.toLowerCase().equalsIgnoreCase("[screen]") || data.toLowerCase().equalsIgnoreCase("[WRs]"))
 			return true;
 		else
 			return false;
@@ -139,6 +153,59 @@ public class WireBox
 		return false;
 	}
 	
+	public boolean addWirelessScreen(String cname, Block cblock, Player player)
+	{
+		Location loc = cblock.getLocation();
+		Boolean isWallSign = false;
+		if (cblock.getType() == Material.WALL_SIGN)
+		{
+			isWallSign = true;
+		}
+		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
+		{
+			WirelessChannel channel = new WirelessChannel();
+			channel.addOwner(player.getName());
+			channel.setName(cname);
+			WirelessScreen screen = new WirelessScreen();
+			screen.setOwner(player.getName());
+			screen.setWorld(loc.getWorld().getName());
+			screen.setX(loc.getBlockX());
+			screen.setY(loc.getBlockY());
+			screen.setZ(loc.getBlockZ());
+			screen.setDirection(cblock.getData());
+			screen.setisWallSign(isWallSign);
+			channel.addScreen(screen);
+			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
+			WirelessRedstone.config.save();
+			player.sendMessage("[WirelessRedstone] You just created a new channel but it has no transmitter or receiver. Why create a screen?");
+			this.UpdateCache();
+			return true;
+		}
+		else
+		{
+			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
+			if (tempobject instanceof WirelessChannel)
+			{
+				WirelessChannel channel = (WirelessChannel) tempobject;
+				WirelessScreen screen = new WirelessScreen();
+				screen.setOwner(player.getName());
+				screen.setWorld(loc.getWorld().getName());
+				screen.setX(loc.getBlockX());
+				screen.setY(loc.getBlockY());
+				screen.setZ(loc.getBlockZ());
+				screen.setDirection(cblock.getData());
+				screen.setisWallSign(isWallSign);
+				channel.addScreen(screen);
+				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
+				WirelessRedstone.config.save();
+				player.sendMessage("[WirelessRedstone] You just added a screen to this channel! It will show its status.");
+				this.UpdateCache();
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean isValidWallLocation(Block block)
 	{
 		BlockFace face = BlockFace.DOWN;
@@ -210,19 +277,49 @@ public class WireBox
 		}
 		return returnlist;
 	}
-
+	
 	public ArrayList<Location> getReceiverLocations(String channelname)
 	{
 		WirelessChannel channel = this.plugin.WireBox.getChannel(channelname);
 		if(channel == null)
 			return new ArrayList<Location>();
 		
+		return getReceiverLocations(channel);
+	}
+	
+	public ArrayList<Location> getScreenLocations(WirelessChannel channel)
+	{
 		ArrayList<Location> returnlist = new ArrayList<Location>();
-		for (WirelessReceiver receiver : channel.getReceivers())
+		for(WirelessScreen screen : channel.getScreens())
 		{
-			returnlist.add(this.getPointLocation(receiver));
+			returnlist.add(this.getPointLocation(screen));
 		}
 		return returnlist;
+	}
+	
+	public ArrayList<Location> getScreenLocations(String channelname)
+	{
+		WirelessChannel channel = this.plugin.WireBox.getChannel(channelname);
+		if(channel == null)
+			return new ArrayList<Location>();
+		
+		return getScreenLocations(channel);
+	}
+	
+	public boolean isActive(WirelessChannel channel)
+	{
+		for(WirelessTransmitter transmitter : channel.getTransmitters())
+		{
+			Location tempLoc = new Location(plugin.getServer().getWorld(transmitter.getWorld()),
+					transmitter.getX(),
+					transmitter.getY(),
+					transmitter.getZ());
+			if(tempLoc.getBlock().isBlockIndirectlyPowered() || tempLoc.getBlock().isBlockPowered())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void removeReceiverAt(final Location loc, final boolean byplayer)
@@ -267,7 +364,7 @@ public class WireBox
 				});
 	}
 
-	public boolean RemoveWirelessReceiver(String cname, Location loc)
+	public boolean removeWirelessReceiver(String cname, Location loc)
 	{
 		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
 		if(channel != null)
@@ -281,12 +378,26 @@ public class WireBox
 		return true;
 	}
 
-	public boolean RemoveWirelessTransmitter(String cname, Location loc)
+	public boolean removeWirelessTransmitter(String cname, Location loc)
 	{
 		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
 		if (channel != null)
 		{
 			channel.removeTransmitterAt(loc);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
+			WirelessRedstone.config.save();
+			this.UpdateCache();
+			return true;
+		}
+		return true;
+	}
+	
+	public boolean removeWirelessScreen(String cname, Location loc)
+	{
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
+		if (channel != null)
+		{
+			channel.removeScreenAt(loc);
 			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
 			this.UpdateCache();
@@ -390,38 +501,50 @@ public class WireBox
 		}
 	}
 
-	public boolean containsChannel(String name) {
+	public boolean containsChannel(String name)
+	{
 		return (WirelessRedstone.config.getWirelessChannel(name) != null);
 	}
 
-	public List<IWirelessPoint> getAllSigns() {
+	public List<IWirelessPoint> getAllSigns()
+	{
 		return allPointsListCache;
 	}
 
-	public void UpdateAllSignsList() {
-		plugin.getServer().getScheduler()
-				.scheduleAsyncDelayedTask(plugin, new Runnable() {
+	public void UpdateAllSignsList()
+	{
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		{
+			public void run()
+			{
+				ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
+				for (WirelessChannel channel : WirelessRedstone.config.getAllChannels())
+				{
+					try
+					{
+						for (IWirelessPoint point : channel.getReceivers())
+						{
+							returnlist.add(point);
+						}
 
-					public void run() {
-						ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
-							for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
-								try {
-									for (IWirelessPoint point : channel
-											.getReceivers()) {
-										returnlist.add(point);
-									}
-
-									for (IWirelessPoint point : channel
-											.getTransmitters()) {
-										returnlist.add(point);
-									}
-								} catch (Exception e) {
-
-								}
-							}
-						allPointsListCache = returnlist;
+						for (IWirelessPoint point : channel.getTransmitters())
+						{
+							returnlist.add(point);
+						}
+						
+						for (IWirelessPoint point : channel.getScreens())
+						{
+							returnlist.add(point);
+						}
 					}
-				}, 0L);
+					catch (Exception e)
+					{
+
+					}
+				}
+				allPointsListCache = returnlist;
+			}
+		}, 0L);
 	}
 
 	public List<Location> getAllReceiverLocations() {
@@ -430,25 +553,29 @@ public class WireBox
 
 	public void UpdateReceiverLocations()
 	{
-		plugin.getServer().getScheduler()
-				.scheduleAsyncDelayedTask(plugin, new Runnable()
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		{
+			public void run()
+			{
+				List<Location> returnlist = new ArrayList<Location>();
+				for (WirelessChannel channel : WirelessRedstone.config.getAllChannels())
 				{
-					public void run()
+					try
 					{
-						List<Location> returnlist = new ArrayList<Location>();
-							for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
-								try {
-									for (WirelessReceiver point : channel
-											.getReceivers()) {
-										Location floc = getPointLocation(point);
-										returnlist.add(floc);
-									}
-								} catch (Exception e) {
-								}
-							}
-						receiverlistcachelocation = returnlist;
+						for (WirelessReceiver point : channel.getReceivers())
+						{
+							Location floc = getPointLocation(point);
+							returnlist.add(floc);
+						}
 					}
-				}, 0L);
+					catch (Exception e)
+					{
+						
+					}
+				}
+				receiverlistcachelocation = returnlist;
+			}
+		}, 0L);
 	}
 
 	public void UpdateCache()

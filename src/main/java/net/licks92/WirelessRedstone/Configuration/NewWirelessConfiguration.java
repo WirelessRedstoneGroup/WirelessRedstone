@@ -1,4 +1,4 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,6 +6,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
+import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.channel.WirelessChannel;
+import net.licks92.WirelessRedstone.channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.channel.WirelessScreen;
+import net.licks92.WirelessRedstone.channel.WirelessTransmitter;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,6 +34,7 @@ public class NewWirelessConfiguration
 		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
 		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
 		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
+		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
 
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
@@ -42,7 +49,7 @@ public class NewWirelessConfiguration
 	
 	public void convertOldConfigToNew(File file)
 	{
-		WirelessConfiguration oldConfiguration = new WirelessConfiguration(plugin, plugin.getDataFolder());
+		OldWirelessConfiguration oldConfiguration = new OldWirelessConfiguration(plugin.getDataFolder());
 		getConfig().set("WirelessChannels", oldConfiguration.get("WirelessChannels"));
 		
 		file.delete();

@@ -1,10 +1,10 @@
 package net.licks92.WirelessRedstone;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import net.licks92.WirelessRedstone.channel.WirelessChannel;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
@@ -355,23 +355,17 @@ public class WirelessCommands implements CommandExecutor
 			}
 			WirelessChannel tempChannel = plugin.WireBox.getChannel(args[0]);
 			player.sendMessage("STATUS OF " + tempChannel.getName());
-			List<WirelessTransmitter> transmitters = tempChannel.getTransmitters();
 			/*
 			 * Checking for active transmitters
 			 */
-			for(int i = 0; i < transmitters.size(); i++)
+			if(plugin.WireBox.isActive(tempChannel))
 			{
-				Location tempLoc = new Location(plugin.getServer().getWorld(transmitters.get(i).getWorld()),
-						transmitters.get(i).getX(),
-						transmitters.get(i).getY(),
-						transmitters.get(i).getZ());
-				if(tempLoc.getBlock().isBlockIndirectlyPowered() || tempLoc.getBlock().isBlockPowered())
-				{
-					player.sendMessage("Is Activated : " + ChatColor.GREEN + "YES");
-					return true;
-				}
+				player.sendMessage("Is Activated : " + ChatColor.GREEN + "YES");
 			}
-			player.sendMessage("Is Activated : " + ChatColor.RED + "NO");
+			else
+			{
+				player.sendMessage("Is Activated : " + ChatColor.RED + "NO");
+			}
 			/*
 			 * Send the final message
 			 */

@@ -1,8 +1,13 @@
 package net.licks92.WirelessRedstone;
 
+import net.licks92.WirelessRedstone.Configuration.NewWirelessConfiguration;
+import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
+import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
+import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.IPermissions;
 import net.licks92.WirelessRedstone.Permissions.Vault;
 import net.licks92.WirelessRedstone.Permissions.opPermissions;
+import net.licks92.WirelessRedstone.channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.utils.Metrics;
 import net.milkbowl.vault.permission.Permission;
 
@@ -21,7 +26,9 @@ public class WirelessRedstone extends JavaPlugin
 	public WireBox WireBox = new WireBox(this);
 	public IPermissions permissionsHandler;
 	public static Permission perms;
-	public WirelessListener listener;
+	public WirelessWorldListener worldlistener;
+	public WirelessBlockListener blocklistener;
+	public WirelessPlayerListener playerlistener;
 	private static Metrics metrics;
 
 	public static StackableLogger getStackableLogger()
@@ -40,15 +47,20 @@ public class WirelessRedstone extends JavaPlugin
 	public void onEnable()
 	{
 		PluginDescriptionFile pdfFile = getDescription();
+		
+		//Load config
 		config = new NewWirelessConfiguration(this);
-		listener = new WirelessListener(this);
+		
+		//Load listeners
+		worldlistener = new WirelessWorldListener(this);
+		blocklistener = new WirelessBlockListener(this);
+		playerlistener = new WirelessPlayerListener(this);
+		
 		PluginManager pm = getServer().getPluginManager();
 		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
 		WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		WirelessRedstone.logger.fine("Loading Permissions...");
 		Plugin vaultPlugin = pm.getPlugin("Vault");
-		//Plugin permissionsEx = pm.getPlugin("PermissionsEx");
-		//Plugin bPermissions = pm.getPlugin("bPermissions");
 
 		// Choosing Permissions it need to be used. Stolen from Essentials.
 		// Credits to Essentials Team
@@ -57,16 +69,6 @@ public class WirelessRedstone extends JavaPlugin
 			this.permissionsHandler = new Vault(this);
 			WirelessRedstone.logger.info("Using Vault !");
 		}
-		/*else if(PermissionsEX != null)
-		{
-			this.permissionsHandler = new PermissionsEX(this);
-			WirelessRedstone.logger.info("Using PermissionsEx !");
-		}
-		else if(bPermissions != null)
-		{
-			this.permissionsHandler = new bPermsPermissions(this);
-			WirelessRedstone.logger.info("Using bPermissions !");
-		}*/
 		else
 		{
 			WirelessRedstone.logger.info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!.");
@@ -89,23 +91,28 @@ public class WirelessRedstone extends JavaPlugin
 		//getCommand("wr").setExecutor(new WirelessCommands(this));
 		
 		//Metrics
-				try
-				{
-					metrics = new Metrics(this);
-					metrics.start();
-				}
-				catch(Exception e){ e.printStackTrace(); }
+		try
+		{
+			metrics = new Metrics(this);
+			metrics.start();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 
 		WirelessRedstone.logger.fine("Loading Chunks");
 		LoadChunks();
 
-		System.out.println(pdfFile.getName() + " version "
-				+ pdfFile.getVersion() + " is enabled!");
+		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
 
-	public void LoadChunks() {
-		if (WirelessRedstone.config.isCancelChunkUnloads()) {
-			for (IWirelessPoint loc : this.WireBox.getAllSigns()) {
+	public void LoadChunks()
+	{
+		if (WirelessRedstone.config.isCancelChunkUnloads())
+		{
+			for (IWirelessPoint loc : this.WireBox.getAllSigns())
+			{
 				Location location = WireBox.getPointLocation(loc);
 				if(location.getWorld() == null)
 					continue; // world currently not loaded.

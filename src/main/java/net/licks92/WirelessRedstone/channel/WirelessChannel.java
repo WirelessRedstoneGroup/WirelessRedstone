@@ -1,4 +1,4 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.channel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -31,6 +32,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	private List<String> owners;
 	private List<WirelessTransmitter> transmitters = new LinkedList<WirelessTransmitter>();
 	private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
+	private List<WirelessScreen> screens = new LinkedList<WirelessScreen>();
 
 	public WirelessChannel()
 	{
@@ -45,6 +47,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		owners = (List<String>) map.get("owners");
 		setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
 		setReceivers((List<WirelessReceiver>) map.get("receivers"));
+		setScreens((List<WirelessScreen>) map.get("screens"));
 	}
 	
 	public void removeReceiverAt(Location loc)
@@ -62,11 +65,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		}
 	}
 	
-	public boolean removeOwner(String username)
-	{
-		return this.owners.remove(username);
-	}
-	
 	public void removeTransmitterAt(Location loc)
 	{
 		int i = 0;
@@ -80,19 +78,48 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			i++;
 		}
 	}
+	
+	public void removeScreenAt(Location loc)
+	{
+		int i = 0;
+		for(WirelessScreen screen : screens)
+		{
+			if(screen.getX() == loc.getBlockX() && screen.getZ() == loc.getBlockZ() && screen.getY() == loc.getBlockY())
+			{
+				screens.remove(i);
+				return;
+			}
+			i++;
+		}
+	}
+	
+	public boolean removeOwner(String username)
+	{
+		return this.owners.remove(username);
+	}
 
-	public void addTransmitter(WirelessTransmitter transmitter) {
+	public void addTransmitter(WirelessTransmitter transmitter)
+	{
 		if (transmitters == null)
 			transmitters = new ArrayList<WirelessTransmitter>();
 
 		transmitters.add(transmitter);
 	}
 
-	public void addReceiver(WirelessReceiver receiver) {
+	public void addReceiver(WirelessReceiver receiver)
+	{
 		if (receivers == null)
 			receivers = new ArrayList<WirelessReceiver>();
 
 		receivers.add(receiver);
+	}
+	
+	public void addScreen(WirelessScreen screen)
+	{
+		if (screens == null)
+			screens = new ArrayList<WirelessScreen>();
+		
+		screens.add(screen);
 	}
 
 	public void addOwner(String username) {
@@ -126,6 +153,14 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		else
 			this.receivers = new LinkedList<WirelessReceiver>();
 	}
+	
+	public void setScreens(List<WirelessScreen> screens)
+	{
+		if(screens != null)
+			this.screens = screens;
+		else
+			this.screens = new LinkedList<WirelessScreen>();
+	}
 
 	public String getName()
 	{
@@ -140,6 +175,11 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	public List<WirelessReceiver> getReceivers()
 	{
 		return this.receivers;
+	}
+	
+	public List<WirelessScreen> getScreens()
+	{
+		return this.screens;
 	}
 
 	public List<String> getOwners()
@@ -166,6 +206,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		map.put("owners", getOwners());
 		map.put("receivers", getReceivers());
 		map.put("transmitters", getTransmitters());
+		map.put("screens", getScreens());
 		return map;
 	}
 	
@@ -177,5 +218,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		this.setOwners((List<String>) map.get("owners"));
 		this.setReceivers((List<WirelessReceiver>) map.get("receivers"));
 		this.setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
+		this.setScreens((List<WirelessScreen>) map.get("screens"));
 	}
 }

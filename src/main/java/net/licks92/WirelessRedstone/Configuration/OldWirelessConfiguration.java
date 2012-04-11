@@ -1,4 +1,4 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +13,12 @@ import java.util.logging.Level;
 
 import javax.naming.ConfigurationException;
 
+import net.licks92.WirelessRedstone.StackableLogger;
+import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.channel.WirelessChannel;
+import net.licks92.WirelessRedstone.channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.channel.WirelessTransmitter;
+
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.yaml.snakeyaml.DumperOptions;
@@ -23,21 +29,19 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 import org.yaml.snakeyaml.representer.Representer;
 
-public class WirelessConfiguration extends FileConfiguration
+public class OldWirelessConfiguration extends FileConfiguration
 {
 	private StackableLogger logger;
 	private File dataFolder;
 	private File configFile;
-	private WirelessRedstone plugin;
 	public Yaml yaml;
 	protected HashMap<String, Object> root;
 	private String header = "#This is the configuration of the Wireless Redstone Plugin, Please don't edit it if you don't know what to do...";
 
-	public WirelessConfiguration(WirelessRedstone r_plugin, File dataFolder)
+	public OldWirelessConfiguration(File dataFolder)
 	{
 		this.configFile = new File(dataFolder, "settings.yml");
 		this.dataFolder = dataFolder;
-		this.plugin = r_plugin;
 		logger = WirelessRedstone.getStackableLogger();
 		root = new HashMap<String, Object>();
 
@@ -45,7 +49,7 @@ public class WirelessConfiguration extends FileConfiguration
 		Tag taggy = new Tag("!WirelessChannel");
 		constructor.addTypeDescription(new TypeDescription(WirelessChannel.class, taggy));
 		Representer representer = new Representer();
-		representer.addClassTag(net.licks92.WirelessRedstone.WirelessChannel.class, taggy);
+		representer.addClassTag(net.licks92.WirelessRedstone.channel.WirelessChannel.class, taggy);
 		DumperOptions options = new DumperOptions();
 		options.setIndent(4);
 		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
@@ -53,6 +57,7 @@ public class WirelessConfiguration extends FileConfiguration
 		load();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Object get(String path)
 	{
 		if (!path.contains("."))
@@ -91,6 +96,7 @@ public class WirelessConfiguration extends FileConfiguration
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void set(String path, Object value)
 	{
 		/**
@@ -216,6 +222,7 @@ public class WirelessConfiguration extends FileConfiguration
         }
 	}
 
+	@SuppressWarnings("unchecked")
 	private boolean ConvertOldToNew()
 	{
 		this.logger.info("Converting old configuration to new configuration...");
@@ -428,7 +435,8 @@ public class WirelessConfiguration extends FileConfiguration
         return false;
     }
     
-    private void read(Object input) throws ConfigurationException
+    @SuppressWarnings("unchecked")
+	private void read(Object input) throws ConfigurationException
     {
         try
         {

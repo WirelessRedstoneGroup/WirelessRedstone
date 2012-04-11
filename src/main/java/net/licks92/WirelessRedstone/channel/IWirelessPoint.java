@@ -1,4 +1,4 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.channel;
 
 public interface IWirelessPoint {
 	String getOwner();

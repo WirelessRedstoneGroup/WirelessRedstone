@@ -1,4 +1,4 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.channel;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -7,10 +7,10 @@ import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
-@SerializableAs("WirelessReceiver")
-public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoint, Serializable
+@SerializableAs("WirelessTransmitter")
+public class WirelessTransmitter implements ConfigurationSerializable, IWirelessPoint, Serializable
 {
-	private static final long serialVersionUID = -7291500732787558150L;
+	private static final long serialVersionUID = 7054486521728647260L;
 	private String owner;
 	private int x;
 	private int y;
@@ -19,12 +19,12 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 	private int direction = 0;
 	private boolean iswallsign = false;
 
-	public WirelessReceiver()
+	public WirelessTransmitter()
 	{
 		
 	}
 	
-	public WirelessReceiver(Map<String, Object> map)
+	public WirelessTransmitter(Map<String, Object> map)
 	{
 		owner = (String) map.get("owner");
 		world = (String) map.get("world");
@@ -42,20 +42,17 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 	}
 
 	@Override
-	public int getX()
-	{
+	public int getX() {
 		return this.x;
 	}
 
 	@Override
-	public int getY()
-	{
+	public int getY() {
 		return this.y;
 	}
 
 	@Override
-	public int getZ()
-	{
+	public int getZ() {
 		return this.z;
 	}
 
@@ -91,7 +88,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 
 	@Override
 	public int getDirection() {
-		return this.direction;
+		return direction;
 	}
 
 	@Override
@@ -105,8 +102,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 	}
 
 	@Override
-	public void setisWallSign(boolean iswallsign)
-	{
+	public void setisWallSign(boolean iswallsign) {
 		this.iswallsign = iswallsign;
 	}
 

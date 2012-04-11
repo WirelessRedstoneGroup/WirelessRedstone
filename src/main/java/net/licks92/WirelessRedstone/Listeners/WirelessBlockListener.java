@@ -1,11 +1,9 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.Listeners;
 
-import java.util.List;
-
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,25 +12,29 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class WirelessListener implements Listener
+import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.channel.WirelessChannel;
+import net.licks92.WirelessRedstone.channel.WirelessReceiver;
+
+public class WirelessBlockListener implements Listener
 {
 	private final WirelessRedstone plugin;
 
-	public WirelessListener(WirelessRedstone r_plugin)
+	public WirelessBlockListener(WirelessRedstone r_plugin)
 	{
 		plugin = r_plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
-
+	
 	@EventHandler
-	public void onSignChange(SignChangeEvent event)
+	public void onSignChange(SignChangeEvent event) //Called when a sign is created, and the text edited
 	{
-		if (plugin.WireBox.isReceiver(event.getLine(0)) || plugin.WireBox.isTransmitter(event.getLine(0)))
+		if (plugin.WireBox.isReceiver(event.getLine(0))
+				|| plugin.WireBox.isTransmitter(event.getLine(0))
+				|| plugin.WireBox.isScreen(event.getLine(0)))
 		{
 			if (!plugin.permissionsHandler.hasPermission(event.getPlayer(),"WirelessRedstone.createsign"))
 			{
@@ -68,7 +70,7 @@ public class WirelessListener implements Listener
 					event.getBlock().breakNaturally();
 				}
 			}
-			else
+			else if(plugin.WireBox.isTransmitter(event.getLine(0)))
 			{
 				if(!plugin.WireBox.addWirelessTransmitter(cname, event.getBlock(), event.getPlayer()))
 				{
@@ -76,29 +78,26 @@ public class WirelessListener implements Listener
 					event.getBlock().breakNaturally();
 				}
 			}
+			else if(plugin.WireBox.isScreen(event.getLine(0)))
+			{
+				if(!plugin.WireBox.addWirelessScreen(cname, event.getBlock(), event.getPlayer()))
+				{
+					event.setCancelled(true);
+					event.getBlock().breakNaturally();
+				}
+			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onBlockPhysics(BlockPhysicsEvent event)
 	{
 		if (event.getChangedType() == Material.REDSTONE_TORCH_ON)
 		{
-			
+			// Why is this event here? :p
 		}
 	}
 	
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event)
-	{
-		// Can't happen
-		/*Player player = event.getPlayer();
-		if(this.plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.admin"))
-		{
-			player.sendMessage("[WARNING] Null Channels Exist in the config! Please remove them in the settings.yml file!");
-		}*/
-	}
-
 	@EventHandler
 	public void onBlockRedstoneChange(BlockRedstoneEvent event)
 	{
@@ -119,6 +118,7 @@ public class WirelessListener implements Listener
 		{
 			try
 			{
+				//Change receivers
 				for (Location receiver : plugin.WireBox.getReceiverLocations(signObject.getLine(1)))
 				{
 					if(receiver.getWorld() == null)
@@ -188,11 +188,19 @@ public class WirelessListener implements Listener
 						}
 					}
 				}
+				
+				//Change screens
+				for(Location screen : plugin.WireBox.getScreenLocations(signObject.getLine(1)))
+				{
+					String str = "Active : " + ChatColor.GREEN + "YES";
+					Sign sign = (Sign) screen.getBlock().getState();
+					sign.setLine(2, str);
+					sign.update();
+				}
 			}
 			catch (RuntimeException e) 
 			{
-				WirelessRedstone.getStackableLogger().severe("Error while updating redstone event :"+e.getClass()+":"+e.getMessage());
-				e.printStackTrace();
+				WirelessRedstone.getStackableLogger().severe("Error while updating redstone event onBlockRedstoneChange 1 :"+e.getClass()+":"+e.getMessage());
 				return;
 			}
 		}
@@ -203,6 +211,7 @@ public class WirelessListener implements Listener
 				WirelessChannel channel = plugin.WireBox.getChannel(signObject.getLine(1));
 				if(channel != null)
 				{
+					//Change receivers
 					for (WirelessReceiver receiver : channel.getReceivers())
 					{
 						if(receiver.getWorld() == null)
@@ -232,11 +241,20 @@ public class WirelessListener implements Listener
 							signtemp.update(true);
 						}
 					}
+					
+					//Change screens
+					for(Location screen : plugin.WireBox.getScreenLocations(signObject.getLine(1)))
+					{
+						String str = "Active : " + ChatColor.RED + "NO";
+						Sign sign = (Sign) screen.getBlock().getState();
+						sign.setLine(2, str);
+						sign.update();
+					}
 				}
 			}
 			catch (RuntimeException e)
 			{
-				WirelessRedstone.getStackableLogger().severe("Error while updating redstone event2 :"+e.getClass()+":"+e.getMessage());
+				WirelessRedstone.getStackableLogger().severe("Error while updating redstone onBlockRedstoneChange 2 :"+e.getClass()+":"+e.getMessage());
 				return;
 			}
 		}
@@ -252,7 +270,7 @@ public class WirelessListener implements Listener
 			{
 				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1)))
 				{
-					if (plugin.WireBox.RemoveWirelessReceiver(signObject.getLine(1), event.getBlock().getLocation()))
+					if (plugin.WireBox.removeWirelessReceiver(signObject.getLine(1), event.getBlock().getLocation()))
 					{
 						if (plugin.WireBox.getChannel(signObject.getLine(1)).getTransmitters().size() == 0
 								&& plugin.WireBox.getChannel(signObject.getLine(1)).getReceivers().size() == 0)
@@ -281,7 +299,7 @@ public class WirelessListener implements Listener
 			{
 				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1)))
 				{
-					if (plugin.WireBox.RemoveWirelessTransmitter(signObject.getLine(1), event.getBlock().getLocation()))
+					if (plugin.WireBox.removeWirelessTransmitter(signObject.getLine(1), event.getBlock().getLocation()))
 					{
 						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign!");
 						if (plugin.WireBox.getChannel(signObject.getLine(1)).getTransmitters().size() == 0)
@@ -330,6 +348,17 @@ public class WirelessListener implements Listener
 				}
 				return;
 			}
+			else if(plugin.WireBox.isScreen(signObject.getLine(0)))
+			{
+				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1)))
+				{
+					if (plugin.WireBox.removeWirelessScreen(signObject.getLine(1), event.getBlock().getLocation()))
+					{
+						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign!");
+					}
+					
+				}
+			}
 		}
 		else if(event.getBlock().getType().equals(Material.REDSTONE_TORCH_ON)) 
 		{
@@ -344,7 +373,7 @@ public class WirelessListener implements Listener
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onBlockFromTo(BlockFromToEvent event)
 	{
@@ -355,40 +384,6 @@ public class WirelessListener implements Listener
 				if (loc.getBlockX() == event.getToBlock().getLocation().getBlockX() || loc.getBlockY() == event.getToBlock().getLocation().getBlockY() || loc.getBlockZ() == event.getToBlock().getLocation().getBlockZ())
 				{
 					plugin.WireBox.removeReceiverAt(loc, false);
-					return;
-				}
-			}
-		}
-	}
-
-	// Method borrowed from MinecraftMania! Credits to Afforess!
-	// https://github.com/Afforess/MinecartMania/blob/master/src/com/afforess/minecartmaniacore/api/MinecartManiaCoreWorldListener.java
-	@EventHandler
-	public void onChunkUnload(ChunkUnloadEvent event)
-	{
-		if (!event.isCancelled())
-		{
-			if (WirelessRedstone.config.isCancelChunkUnloads())
-			{
-				try
-				{
-					List<IWirelessPoint> points = plugin.WireBox.getAllSigns();
-					for (IWirelessPoint point : points)
-					{
-						if (Math.abs(event.getChunk().getX() - plugin.WireBox.getPointLocation(point).getBlock().getChunk().getX()) > WirelessRedstone.config.getChunkUnloadRange())
-						{
-							continue;
-						}
-						if (Math.abs(event.getChunk().getZ() - plugin.WireBox.getPointLocation(point).getBlock().getChunk().getZ()) > WirelessRedstone.config.getChunkUnloadRange())
-						{
-							continue;
-						}
-
-						WirelessRedstone.getStackableLogger().finer("Chunk prevented from unloading!");
-						event.setCancelled(true);
-						return;
-					}
-				} catch (Exception e) {
 					return;
 				}
 			}
