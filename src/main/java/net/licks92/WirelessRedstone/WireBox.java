@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.licks92.WirelessRedstone.channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.channel.WirelessChannel;
-import net.licks92.WirelessRedstone.channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.channel.WirelessScreen;
-import net.licks92.WirelessRedstone.channel.WirelessTransmitter;
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

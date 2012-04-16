@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone;
 
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Configuration.NewWirelessConfiguration;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
@@ -7,8 +8,7 @@ import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.IPermissions;
 import net.licks92.WirelessRedstone.Permissions.Vault;
 import net.licks92.WirelessRedstone.Permissions.opPermissions;
-import net.licks92.WirelessRedstone.channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.utils.Metrics;
+import net.licks92.WirelessRedstone.Utils.Metrics;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Chunk;
@@ -71,7 +71,7 @@ public class WirelessRedstone extends JavaPlugin
 		}
 		else
 		{
-			WirelessRedstone.logger.info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!.");
+			WirelessRedstone.logger.info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
 			this.permissionsHandler = new opPermissions(this);
 		}
 

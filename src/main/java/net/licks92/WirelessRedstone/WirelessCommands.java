@@ -2,7 +2,7 @@ package net.licks92.WirelessRedstone;
 
 import java.util.ArrayList;
 
-import net.licks92.WirelessRedstone.channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -3,7 +3,7 @@ package net.licks92.WirelessRedstone.Listeners;
 import java.util.List;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

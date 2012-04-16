@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.channel.WirelessChannel;
-import net.licks92.WirelessRedstone.channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.channel.WirelessScreen;
-import net.licks92.WirelessRedstone.channel.WirelessTransmitter;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

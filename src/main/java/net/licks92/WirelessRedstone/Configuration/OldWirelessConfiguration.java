@@ -15,9 +15,9 @@ import javax.naming.ConfigurationException;
 
 import net.licks92.WirelessRedstone.StackableLogger;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.channel.WirelessChannel;
-import net.licks92.WirelessRedstone.channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.channel.WirelessTransmitter;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -49,7 +49,7 @@ public class OldWirelessConfiguration extends FileConfiguration
 		Tag taggy = new Tag("!WirelessChannel");
 		constructor.addTypeDescription(new TypeDescription(WirelessChannel.class, taggy));
 		Representer representer = new Representer();
-		representer.addClassTag(net.licks92.WirelessRedstone.channel.WirelessChannel.class, taggy);
+		representer.addClassTag(net.licks92.WirelessRedstone.Channel.WirelessChannel.class, taggy);
 		DumperOptions options = new DumperOptions();
 		options.setIndent(4);
 		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
