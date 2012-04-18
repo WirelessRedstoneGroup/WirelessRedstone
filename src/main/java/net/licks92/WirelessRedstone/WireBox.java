@@ -10,6 +10,7 @@ import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -90,13 +91,13 @@ public class WireBox
 	public boolean addWirelessReceiver(String cname, Block cblock, Player player)
 	{
 		Location loc = cblock.getLocation();
-		Boolean isWallSign = false;
-		if (cblock.getType() == Material.WALL_SIGN)
+		Boolean isWallSign = (cblock.getType() == Material.WALL_SIGN) ? true : false;
+		if (isWallSign)
 		{
 			isWallSign = true;
 			if(!isValidWallLocation(cblock))
 			{
-				player.sendMessage("[WirelessRedstone] You cannot create a wireless receiver on this block !");
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a wireless receiver on this block !");
 				return false;
 			}
 		}
@@ -104,12 +105,17 @@ public class WireBox
 		{
 			if(!isValidLocation(cblock))
 			{
-				player.sendMessage("[WirelessRedstone] You cannot create a wireless receiver on this block !");
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a wireless receiver on this block !");
 				return false;
 			}
 		}
 		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
 		{
+			if(cname.contains("."))
+			{
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a channel : Name contains invalid caracters !");
+				return true;
+			}
 			WirelessChannel channel = new WirelessChannel();
 			channel.addOwner(player.getName());
 			channel.setName(cname);
@@ -130,6 +136,11 @@ public class WireBox
 		}
 		else
 		{
+			if(cname.contains("."))
+			{
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should destroy it my friend!");
+				return true;
+			}
 			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
 			if (tempobject instanceof WirelessChannel)
 			{
