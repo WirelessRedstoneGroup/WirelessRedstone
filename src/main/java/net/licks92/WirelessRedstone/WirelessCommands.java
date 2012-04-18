@@ -51,6 +51,14 @@ public class WirelessCommands implements CommandExecutor
 		{
 			return performCreateReceiver(sender, args, player);
 		}
+		else if (commandName.equals("wrs"))
+		{
+			return performCreateScreen(sender, args, player);
+		}
+		else if (commandName.equals("wri"))
+		{
+			return performShowInfo(sender,args,player);
+		}
 		else if(commandName.equals("wra"))
 		{
 			return performChannelAdmin(sender, args, player);
@@ -64,10 +72,6 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage(ChatColor.RED + "Function not implemented yet !");
 			return true;
 			//return performWRlist(sender, args, player);
-		}
-		else if (commandName.equals("wri"))
-		{
-			return performShowInfo(sender,args,player);
 		}
 		return true;
 	}
@@ -144,6 +148,11 @@ public class WirelessCommands implements CommandExecutor
 					||commandName.equals("r"))
 			{
 				return performCreateReceiver(sender, args, player);
+			}
+			else if(commandName.equals("screen")
+					||commandName.equals("s"))
+			{
+				return performCreateScreen(sender, args, player);
 			}
 			else if(commandName.equals("admin"))
 			{
@@ -348,6 +357,11 @@ public class WirelessCommands implements CommandExecutor
 				return true;
 			}
 		}
+		else
+		{
+			player.sendMessage(ChatColor.RED + "You don't have permission to do that !");
+			return true;
+		}
 		return true;
 	}
 
@@ -360,13 +374,16 @@ public class WirelessCommands implements CommandExecutor
 				String channelname = args[0];
 				if (plugin.WireBox.hasAccessToChannel(player, channelname))
 				{
-					player.getLocation().getBlock();
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
 					sign.setLine(0, "[WRr]");
 					sign.setLine(1, channelname);
 					sign.update(true);
-					plugin.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player);
+					if(!plugin.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player))
+					{
+						sign.getBlock().breakNaturally();
+					}
+					return true;
 				}
 			}
 			else if(args.length == 0)
@@ -374,6 +391,44 @@ public class WirelessCommands implements CommandExecutor
 				player.sendMessage("[WirelessRedstone]" + ChatColor.RED + "Too few arguments ! Use /wr r channel");
 				return true;
 			}
+		}
+		else
+		{
+			player.sendMessage(ChatColor.RED + "You don't have permission to do that !");
+			return true;
+		}
+		return true;
+	}
+	
+	public boolean performCreateScreen(CommandSender sender, String[] args, Player player)
+	{
+		if (plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.wrs")
+				|| plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics"))
+		{
+			if (args.length >= 1)
+			{
+				String channelname = args[0];
+				if (plugin.WireBox.hasAccessToChannel(player, channelname))
+				{
+					player.getLocation().getBlock();
+					player.getLocation().getBlock().setType(Material.SIGN_POST);
+					Sign sign = (Sign) player.getLocation().getBlock().getState();
+					sign.setLine(0, "[wrs]");
+					sign.setLine(1, channelname);
+					sign.update(true);
+					plugin.WireBox.addWirelessScreen(channelname, player.getLocation().getBlock(), player);
+				}
+			}
+			else if(args.length == 0)
+			{
+				player.sendMessage("[WirelessRedstone]" + ChatColor.RED + "Too few arguments ! Use /wr t channel");
+				return true;
+			}
+		}
+		else
+		{
+			player.sendMessage(ChatColor.RED + "You don't have permission to do that !");
+			return true;
 		}
 		return true;
 	}
@@ -388,6 +443,7 @@ public class WirelessCommands implements CommandExecutor
 				if (plugin.WireBox.hasAccessToChannel(player, args[0]))
 				{
 					plugin.WireBox.removeChannel(args[0]);
+					player.sendMessage("Channel has been removed !");
 				}
 			}
 			else if(args.length == 0)
@@ -396,7 +452,11 @@ public class WirelessCommands implements CommandExecutor
 				return true;
 			}
 		}
-		player.sendMessage("Channel has been removed !");
+		else
+		{
+			player.sendMessage(ChatColor.RED + "You don't have permission to do that !");
+			return true;
+		}
 		return true;
 	}
 
@@ -409,7 +469,7 @@ public class WirelessCommands implements CommandExecutor
 		if (!plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics")
 				|| !plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.info"))
 		{
-			player.sendMessage("You don't have the permissions to use this command.");
+			player.sendMessage("You don't have permission to do that !");
 			return true;
 		}
 		if(args.length == 0)

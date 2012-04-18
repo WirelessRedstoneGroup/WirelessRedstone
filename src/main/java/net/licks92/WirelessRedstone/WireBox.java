@@ -114,7 +114,7 @@ public class WireBox
 			if(cname.contains("."))
 			{
 				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a channel : Name contains invalid caracters !");
-				return true;
+				return false;
 			}
 			WirelessChannel channel = new WirelessChannel();
 			channel.addOwner(player.getName());
@@ -139,7 +139,7 @@ public class WireBox
 			if(cname.contains("."))
 			{
 				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should destroy it my friend!");
-				return true;
+				return false;
 			}
 			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
 			if (tempobject instanceof WirelessChannel)
@@ -164,6 +164,64 @@ public class WireBox
 		return false;
 	}
 	
+	public boolean addWirelessTransmitter(String cname, Block cblock, Player player)
+	{
+		Location loc = cblock.getLocation();
+		Boolean isWallSign = false;
+		if (cblock.getType() == Material.WALL_SIGN) {
+			isWallSign = true;
+		}
+		
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
+		if (channel == null)
+		{
+			if(cname.contains("."))
+			{
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a channel : Name contains invalid caracters !");
+				return false;
+			}
+			channel = new WirelessChannel();
+			channel.addOwner(player.getName());
+			channel.setName(cname);
+			WirelessTransmitter transmitter = new WirelessTransmitter();
+			transmitter.setOwner(player.getName());
+			transmitter.setWorld(loc.getWorld().getName());
+			transmitter.setX(loc.getBlockX());
+			transmitter.setY(loc.getBlockY());
+			transmitter.setZ(loc.getBlockZ());
+			transmitter.setDirection(cblock.getData());
+			transmitter.setisWallSign(isWallSign);
+			channel.addTransmitter(transmitter);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
+			WirelessRedstone.config.save();
+			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Receiver to complete! typ /wrhelp for more info!");
+			this.UpdateCache();
+			return true;
+		}
+		else
+		{
+			if(cname.contains("."))
+			{
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should destroy it my friend!");
+				return false;
+			}
+			WirelessTransmitter transmitter = new WirelessTransmitter();
+			transmitter.setOwner(player.getName());
+			transmitter.setWorld(loc.getWorld().getName());
+			transmitter.setX(loc.getBlockX());
+			transmitter.setY(loc.getBlockY());
+			transmitter.setZ(loc.getBlockZ());
+			transmitter.setDirection(cblock.getData());
+			transmitter.setisWallSign(isWallSign);
+			channel.addTransmitter(transmitter);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
+			WirelessRedstone.config.save();
+			player.sendMessage("[WirelessRedstone] You just extended a channel!");
+			this.UpdateCache();
+			return true;
+		}
+	}
+	
 	public boolean addWirelessScreen(String cname, Block cblock, Player player)
 	{
 		Location loc = cblock.getLocation();
@@ -174,6 +232,11 @@ public class WireBox
 		}
 		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
 		{
+			if(cname.contains("."))
+			{
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a channel : Name contains invalid caracters !");
+				return false;
+			}
 			WirelessChannel channel = new WirelessChannel();
 			channel.addOwner(player.getName());
 			channel.setName(cname);
@@ -194,6 +257,11 @@ public class WireBox
 		}
 		else
 		{
+			if(cname.contains("."))
+			{
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should destroy it my friend!");
+				return false;
+			}
 			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
 			if (tempobject instanceof WirelessChannel)
 			{
@@ -460,55 +528,6 @@ public class WireBox
 		catch(NullPointerException ex)
 		{
 			//When there isn't any receiver, it'll throw this exception.
-		}
-	}
-
-	public boolean addWirelessTransmitter(String cname, Block cblock, Player player)
-	{
-		Location loc = cblock.getLocation();
-		Boolean isWallSign = false;
-		if (cblock.getType() == Material.WALL_SIGN) {
-			isWallSign = true;
-		}
-		
-		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
-		if (channel == null)
-		{
-			channel = new WirelessChannel();
-			channel.addOwner(player.getName());
-			channel.setName(cname);
-			WirelessTransmitter transmitter = new WirelessTransmitter();
-			transmitter.setOwner(player.getName());
-			transmitter.setWorld(loc.getWorld().getName());
-			transmitter.setX(loc.getBlockX());
-			transmitter.setY(loc.getBlockY());
-			transmitter.setZ(loc.getBlockZ());
-			transmitter.setDirection(cblock.getData());
-			transmitter.setisWallSign(isWallSign);
-			channel.addTransmitter(transmitter);
-			WirelessRedstone.config.setWirelessChannel(cname, channel);
-
-			WirelessRedstone.config.save();
-			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Receiver to complete! typ /wrhelp for more info!");
-			this.UpdateCache();
-			return true;
-		}
-		else
-		{
-			WirelessTransmitter transmitter = new WirelessTransmitter();
-			transmitter.setOwner(player.getName());
-			transmitter.setWorld(loc.getWorld().getName());
-			transmitter.setX(loc.getBlockX());
-			transmitter.setY(loc.getBlockY());
-			transmitter.setZ(loc.getBlockZ());
-			transmitter.setDirection(cblock.getData());
-			transmitter.setisWallSign(isWallSign);
-			channel.addTransmitter(transmitter);
-			WirelessRedstone.config.setWirelessChannel(cname, channel);
-			WirelessRedstone.config.save();
-			player.sendMessage("[WirelessRedstone] You just extended a channel!");
-			this.UpdateCache();
-			return true;
 		}
 	}
 
