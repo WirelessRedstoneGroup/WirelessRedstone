@@ -31,20 +31,26 @@ public class NewWirelessConfiguration
 	{
 		plugin = r_plugin;
 		
+		//Initialize the serialization
 		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
 		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
 		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
 		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
-
+		
+		//Loading and saving
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		reloadConfig();
 		
+		//Try to know if the config is an OldConfiguration, and convert it
 		File oldConfig = new File(plugin.getDataFolder(), "settings.yml");
 		if(oldConfig.exists())
 		{
 			convertOldConfigToNew(oldConfig);
 		}
+		
+		//Language selection
+		
 	}
 	
 	public void convertOldConfigToNew(File file)

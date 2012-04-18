@@ -1,6 +1,19 @@
 #This is the configuration of the Wireless Redstone Plugin, Please don't edit it if you don't know what to do...
 
+#The level correspond on the rate of informations you will receive about the plugin. It can be FINEST, FINER, FINE, INFO, WARNING or SEVERE
 LogLevel: INFO
+
+#If you want to this plugin work, you should not set this value to false
 cancelChunkUnloads: true
+
+#Correspond to the radius where the chunk won't be unloaded around the wireless sign
 cancelChunkUnloadRange: 4
+
+#You have Vault but for any reason you don't want to use it? Set this value to false
 UseVault: true
+
+#True if you want to use your system language, false if not
+UseSystemLanguage: true
+
+#If UseSystemLanguage false, this value correspond to language file that will be used, in the language folder
+Language: english

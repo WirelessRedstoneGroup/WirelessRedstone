@@ -81,14 +81,14 @@ public class WirelessRedstone extends JavaPlugin
 		this.WireBox.UpdateChacheNoThread();
 
 		WirelessRedstone.logger.fine("Registering commands...");
+		getCommand("wirelessredstone").setExecutor(new WirelessCommands(this));
 		getCommand("wrhelp").setExecutor(new WirelessCommands(this));
 		getCommand("wrr").setExecutor(new WirelessCommands(this));
 		getCommand("wrt").setExecutor(new WirelessCommands(this));
 		getCommand("wrremove").setExecutor(new WirelessCommands(this));
-		getCommand("wrc").setExecutor(new WirelessCommands(this));
+		getCommand("wra").setExecutor(new WirelessCommands(this));
 		getCommand("wrlist").setExecutor(new WirelessCommands(this));
 		getCommand("wri").setExecutor(new WirelessCommands(this));
-		//getCommand("wr").setExecutor(new WirelessCommands(this));
 		
 		//Metrics
 		try
