@@ -10,6 +10,8 @@ import net.licks92.WirelessRedstone.Permissions.IPermissions;
 import net.licks92.WirelessRedstone.Permissions.Vault;
 import net.licks92.WirelessRedstone.Permissions.opPermissions;
 import net.licks92.WirelessRedstone.Utils.Metrics;
+import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
+import net.licks92.WirelessRedstone.Utils.Metrics.Plotter;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Chunk;
@@ -100,6 +102,23 @@ public class WirelessRedstone extends JavaPlugin
 		try
 		{
 			metrics = new Metrics(this);
+			final Graph channelGraph = metrics.createGraph("Channel metrics");
+			channelGraph.addPlotter(new Plotter("Total channels")
+			{
+				@Override
+				public int getValue()
+				{
+					return config.getAllChannels().size();
+				}
+			});
+			channelGraph.addPlotter(new Plotter("Total signs")
+			{
+				@Override
+				public int getValue()
+				{
+					return WireBox.getAllSigns().size();
+				}
+			});
 			metrics.start();
 		}
 		catch(Exception e)
