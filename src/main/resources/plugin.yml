@@ -11,7 +11,7 @@ commands:
       aliases: [wr, wredstone, wifi]
       description: WirelessRedstone menu
       usage: |
-             Example: /<command>
+             Example: /<command> help
    wrhelp:
       description: WirelessRedstone help menu
       usage: |
@@ -20,27 +20,27 @@ commands:
       aliases: [wrtransmitter, createtransmitter, ct]
       description: Creates a transmitter sign with given channel
       usage: |
-             Example: /<command> Channel1
+             Example: /<command> channel
    wrr:
       aliases: [wrreceiver, createreceiver, cr]
       description: Creates a receiver sign with given channel
       usage: |
-             Example: /<command> Channel1
+             Example: /<command> channel
    wrs:
       aliases: [wrscreen, createscreen, cs]
       description: Creates a screen sign with given channel
       usage: |
-             Example: /<command> Channel1
+             Example: /<command> channel
    wrr:
       aliases: [wrreceiver, createreceiver, cr]
       description: Creates a receiver sign with given channel
       usage: |
-             Example: /<command> Channel1
+             Example: /<command> channel
    wri:
       aliases: [wrinfo, channelinfo]
       description: Channel informations
       usage: |
-             Example: /<command> Channel1
+             Example: /<command> channel
    wra:
       aliases: [wradmin]
       description: Channel admin commands
@@ -50,7 +50,7 @@ commands:
       aliases: [wrdelete]
       description: Remove a channel with all its signs!
       usage: |
-             Example: /<command> subcommand
+             Example: /<command> channel
    wrlist:
       aliases: [channellist]
       description: Lists all channels!

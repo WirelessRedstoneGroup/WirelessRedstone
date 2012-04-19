@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 public class WireBox
 {
 	private final WirelessRedstone plugin;
-	//private Location tempLoc;
 	private List<Location> receiverlistcachelocation;
 	private List<IWirelessPoint> allPointsListCache;
 
@@ -32,26 +31,41 @@ public class WireBox
 
 	public boolean isTransmitter(String data)
 	{
-		if (data.toLowerCase().equalsIgnoreCase("[transmitter]")|| data.toLowerCase().equalsIgnoreCase("[WRt]"))
-			return true;
-		else
-			return false;
+		List<String> tags = WirelessRedstone.strings.tagsTransmitter;
+		for (int i = 0; i < tags.size(); i++)
+		{
+			if(data == tags.get(i))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isReceiver(String data)
 	{
-		if (data.toLowerCase().equalsIgnoreCase("[receiver]")|| data.toLowerCase().equalsIgnoreCase("[WRr]"))
-			return true;
-		else
-			return false;
+		List<String> tags = WirelessRedstone.strings.tagsReceiver;
+		for (int i = 0; i < tags.size(); i++)
+		{
+			if(data == tags.get(i))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean isScreen(String data)
 	{
-		if(data.toLowerCase().equalsIgnoreCase("[screen]") || data.toLowerCase().equalsIgnoreCase("[WRs]"))
-			return true;
-		else
-			return false;
+		List<String> tags = WirelessRedstone.strings.tagsScreen;
+		for (int i = 0; i < tags.size(); i++)
+		{
+			if(data == tags.get(i))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public WirelessChannel getChannel(String channel)
@@ -76,8 +90,6 @@ public class WireBox
 				return false;
 			}
 		}
-		
-
 		return true;
 	}
 
@@ -97,7 +109,7 @@ public class WireBox
 			isWallSign = true;
 			if(!isValidWallLocation(cblock))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a wireless receiver on this block !");
+				player.sendMessage(WirelessRedstone.strings.playerCannotCreateReceiverOnBlock);
 				return false;
 			}
 		}
@@ -105,7 +117,7 @@ public class WireBox
 		{
 			if(!isValidLocation(cblock))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a wireless receiver on this block !");
+				player.sendMessage(WirelessRedstone.strings.playerCannotCreateReceiverOnBlock);
 				return false;
 			}
 		}
@@ -113,7 +125,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a channel : Name contains invalid caracters !");
+				player.sendMessage(WirelessRedstone.strings.playerCannotCreateChannel + " : Name contains invalid caracters !");
 				return false;
 			}
 			WirelessChannel channel = new WirelessChannel();
@@ -130,7 +142,7 @@ public class WireBox
 			channel.addReceiver(receiver);
 			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
 			WirelessRedstone.config.save();
-			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Transmitter to complete! typ /wrhelp for more info!");
+			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
 			return true;
 		}
@@ -138,7 +150,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should destroy it my friend!");
+				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should remove it my friend!");
 				return false;
 			}
 			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
@@ -156,7 +168,7 @@ public class WireBox
 				channel.addReceiver(receiver);
 				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
 				WirelessRedstone.config.save();
-				player.sendMessage("[WirelessRedstone] You just extended a channel!");
+				player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
 				this.UpdateCache();
 				return true;
 			}
@@ -177,7 +189,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a channel : Name contains invalid caracters !");
+				player.sendMessage(WirelessRedstone.strings.playerCannotCreateChannel + " : Name contains invalid caracters !");
 				return false;
 			}
 			channel = new WirelessChannel();
@@ -194,7 +206,7 @@ public class WireBox
 			channel.addTransmitter(transmitter);
 			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
-			player.sendMessage("[WirelessRedstone] You just created a new channel! Place a Receiver to complete! typ /wrhelp for more info!");
+			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
 			return true;
 		}
@@ -216,7 +228,7 @@ public class WireBox
 			channel.addTransmitter(transmitter);
 			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
-			player.sendMessage("[WirelessRedstone] You just extended a channel!");
+			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
 			this.UpdateCache();
 			return true;
 		}
@@ -234,7 +246,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] You cannot create a channel : Name contains invalid caracters !");
+				player.sendMessage(WirelessRedstone.strings.playerCannotCreateChannel + " : Name contains invalid caracters !");
 				return false;
 			}
 			WirelessChannel channel = new WirelessChannel();
@@ -251,7 +263,7 @@ public class WireBox
 			channel.addScreen(screen);
 			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
 			WirelessRedstone.config.save();
-			player.sendMessage("[WirelessRedstone] You just created a new channel but it has no transmitter or receiver. Why create a screen?");
+			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
 			return true;
 		}
@@ -277,7 +289,7 @@ public class WireBox
 				channel.addScreen(screen);
 				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
 				WirelessRedstone.config.save();
-				player.sendMessage("[WirelessRedstone] You just added a screen to this channel! It will show its status.");
+				player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
 				this.UpdateCache();
 				return true;
 			}
@@ -405,42 +417,43 @@ public class WireBox
 	{
 		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
 		{
-					public void run()
+			public void run()
+			{
+				for (WirelessChannel channel : getChannels())
+				{
+					for (WirelessReceiver receiver : channel.getReceivers())
 					{
-						for (WirelessChannel channel : getChannels())
+						if (receiver.getX() == loc.getBlockX()
+								&& receiver.getY() == loc.getBlockY()
+								&& receiver.getZ() == loc.getBlockZ())
 						{
-							for (WirelessReceiver receiver : channel.getReceivers())
+							channel.removeReceiverAt(loc);
+							SaveChannel(channel);
+							if (!byplayer)
 							{
-								if (receiver.getX() == loc.getBlockX()
-										&& receiver.getY() == loc.getBlockY()
-										&& receiver.getZ() == loc.getBlockZ())
+								for (String owner : channel.getOwners())
 								{
-									channel.removeReceiverAt(loc);
-									SaveChannel(channel);
-									if (!byplayer)
+									try
 									{
-										for (String owner : channel.getOwners())
+										if (plugin.getServer().getPlayer(owner).isOnline())
 										{
-											try
-											{
-												if (plugin.getServer().getPlayer(owner).isOnline())
-												{
-													plugin.getServer().getPlayer(owner)
-															.sendMessage("One of your signs on channel: "
-														    + channel.getName()
-															+ " is broken by nature.");
-												}
-											} catch (Exception ex) {
-												// NA
-											}
+											plugin.getServer().getPlayer(owner).sendMessage("One of your signs on channel: "
+												    + channel.getName()
+													+ " is broken by nature.");
 										}
 									}
-									return;
+									catch (Exception ex)
+									{
+										// NA
+									}
 								}
 							}
+							return;
 						}
 					}
-				});
+				}
+			}
+		});
 	}
 
 	public boolean removeWirelessReceiver(String cname, Location loc)
@@ -527,7 +540,7 @@ public class WireBox
 		}
 		catch(NullPointerException ex)
 		{
-			//When there isn't any receiver, it'll throw this exception.
+			//When there isn't any transmitter, it'll throw this exception.
 		}
 	}
 
@@ -577,7 +590,8 @@ public class WireBox
 		}, 0L);
 	}
 
-	public List<Location> getAllReceiverLocations() {
+	public List<Location> getAllReceiverLocations()
+	{
 		return receiverlistcachelocation;
 	}
 
@@ -614,7 +628,8 @@ public class WireBox
 		UpdateAllSignsList();
 	}
 
-	public Location getPointLocation(IWirelessPoint point) {
+	public Location getPointLocation(IWirelessPoint point)
+	{
 		return new Location(plugin.getServer().getWorld(point.getWorld()),
 				point.getX(), point.getY(), point.getZ());
 	}
@@ -631,8 +646,10 @@ public class WireBox
 					Location floc = getPointLocation(point);
 					returnlist.add(floc);
 				}
-			} catch (Exception e) {
-
+			}
+			catch (Exception e)
+			{
+				
 			}
 		}
 
@@ -666,5 +683,4 @@ public class WireBox
 			break;
 		}
 	}
-
 }

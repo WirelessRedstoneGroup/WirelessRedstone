@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Configuration.NewWirelessConfiguration;
+import net.licks92.WirelessRedstone.Configuration.WirelessStringProvider;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
@@ -22,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class WirelessRedstone extends JavaPlugin
 {
 	public static NewWirelessConfiguration config;
+	public static WirelessStringProvider strings;
 	private static StackableLogger logger = new StackableLogger("WirelessRedstone");
 	public WireBox WireBox = new WireBox(this);
 	public IPermissions permissionsHandler;
@@ -48,8 +50,9 @@ public class WirelessRedstone extends JavaPlugin
 	{
 		PluginDescriptionFile pdfFile = getDescription();
 		
-		//Load config
+		//Load config and strings
 		config = new NewWirelessConfiguration(this);
+		strings = new WirelessStringProvider(this);
 		
 		//Load listeners
 		worldlistener = new WirelessWorldListener(this);
@@ -89,6 +92,9 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wra").setExecutor(new WirelessCommands(this));
 		getCommand("wrlist").setExecutor(new WirelessCommands(this));
 		getCommand("wri").setExecutor(new WirelessCommands(this));
+
+		WirelessRedstone.logger.fine("Loading Chunks");
+		LoadChunks();
 		
 		//Metrics
 		try
@@ -100,10 +106,7 @@ public class WirelessRedstone extends JavaPlugin
 		{
 			e.printStackTrace();
 		}
-
-		WirelessRedstone.logger.fine("Loading Chunks");
-		LoadChunks();
-
+		
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
 
