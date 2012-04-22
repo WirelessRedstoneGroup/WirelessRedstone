@@ -91,6 +91,11 @@ public class NewWirelessConfiguration
 		return getConfig().getInt("cancelChunkUnloadRange", 4);
 	}
 	
+	public boolean getDebugMode()
+	{
+		return getConfig().getBoolean("DebugMode", false);
+	}
+	
 	public WirelessChannel getWirelessChannel(String channelName)
 	{
 		ConfigurationSection section = getConfig().getConfigurationSection(CHANNEL_SECTION);

@@ -10,7 +10,6 @@ import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,10 +30,9 @@ public class WireBox
 
 	public boolean isTransmitter(String data)
 	{
-		List<String> tags = WirelessRedstone.strings.tagsTransmitter;
-		for (int i = 0; i < tags.size(); i++)
+		for (String tag : WirelessRedstone.strings.tagsTransmitter)
 		{
-			if(data == tags.get(i))
+			if(data.equals(tag))
 			{
 				return true;
 			}
@@ -44,10 +42,9 @@ public class WireBox
 
 	public boolean isReceiver(String data)
 	{
-		List<String> tags = WirelessRedstone.strings.tagsReceiver;
-		for (int i = 0; i < tags.size(); i++)
+		for (String tag : WirelessRedstone.strings.tagsReceiver)
 		{
-			if(data == tags.get(i))
+			if(data.equals(tag))
 			{
 				return true;
 			}
@@ -57,10 +54,9 @@ public class WireBox
 	
 	public boolean isScreen(String data)
 	{
-		List<String> tags = WirelessRedstone.strings.tagsScreen;
-		for (int i = 0; i < tags.size(); i++)
+		for (String tag : WirelessRedstone.strings.tagsScreen)
 		{
-			if(data == tags.get(i))
+			if(data.equals(tag))
 			{
 				return true;
 			}
@@ -125,7 +121,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(WirelessRedstone.strings.playerCannotCreateChannel + " : Name contains invalid caracters !");
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			WirelessChannel channel = new WirelessChannel();
@@ -150,7 +146,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should remove it my friend!");
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
@@ -180,7 +176,8 @@ public class WireBox
 	{
 		Location loc = cblock.getLocation();
 		Boolean isWallSign = false;
-		if (cblock.getType() == Material.WALL_SIGN) {
+		if (cblock.getType() == Material.WALL_SIGN)
+		{
 			isWallSign = true;
 		}
 		
@@ -189,7 +186,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(WirelessRedstone.strings.playerCannotCreateChannel + " : Name contains invalid caracters !");
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			channel = new WirelessChannel();
@@ -214,7 +211,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should destroy it my friend!");
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			WirelessTransmitter transmitter = new WirelessTransmitter();
@@ -246,7 +243,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(WirelessRedstone.strings.playerCannotCreateChannel + " : Name contains invalid caracters !");
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			WirelessChannel channel = new WirelessChannel();
@@ -271,7 +268,7 @@ public class WireBox
 		{
 			if(cname.contains("."))
 			{
-				player.sendMessage(ChatColor.RED + "[WirelessRedstone] It's not recommended to have a channel that the name contains an invalid caracter, you should destroy it my friend!");
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);

@@ -17,11 +17,12 @@ public class WirelessStringProvider
 	public String playerCannotCreateReceiverOnBlock;
 	public String playerHaveNotPermission;
 	public String playerHaveNotAccessToChannel;
+	public String channelNameContainsInvalidCaracters;
 	public String noItemOnList;
 	public String tooFewArguments;
-	public List<String> tagsTransmitter;
-	public List<String> tagsReceiver;
-	public List<String> tagsScreen;
+	public List<String> tagsTransmitter = new ArrayList<String>();
+	public List<String> tagsReceiver = new ArrayList<String>();
+	public List<String> tagsScreen = new ArrayList<String>();
 	
 	public WirelessStringProvider(WirelessRedstone r_plugin)
 	{
@@ -42,21 +43,21 @@ public class WirelessStringProvider
 			playerCannotCreateReceiverOnBlock = ChatColor.RED + "[WirelessRedstone] You cannot create a wireless receiver on this block !";
 			playerHaveNotPermission = ChatColor.RED + "You don't have the permissions to use this command.";
 			playerHaveNotAccessToChannel = ChatColor.RED + "[WirelessRedstone] You don't have access to this channel.";
-			tooFewArguments = ChatColor.RED +  "[WirelessRedstone] Too few arguments !";
-			noItemOnList = "There are no items on this list!";
-			tagsTransmitter = new ArrayList<String>();
+			channelNameContainsInvalidCaracters = playerCannotCreateChannel + " : Name contains invalid caracters !";
+			tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
+			noItemOnList = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
 			tagsTransmitter.add("[transmitter]");
 			tagsTransmitter.add("[wrt]");
-			tagsReceiver = new ArrayList<String>();
 			tagsReceiver.add("[receiver]");
 			tagsReceiver.add("[wrr]");
-			tagsScreen = new ArrayList<String>();
 			tagsScreen.add("[screen]");
 			tagsScreen.add("[wrs]");
 		}
 		catch (Exception ex)
 		{
 			WirelessRedstone.getStackableLogger().severe("Could not load strings !");
+			WirelessRedstone.getStackableLogger().severe("Exception stacktrace : ");
+			ex.printStackTrace();
 			return false;
 		}
 		return true;

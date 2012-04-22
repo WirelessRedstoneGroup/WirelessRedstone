@@ -36,6 +36,7 @@ public class WirelessBlockListener implements Listener
 				|| plugin.WireBox.isTransmitter(event.getLine(0))
 				|| plugin.WireBox.isScreen(event.getLine(0)))
 		{
+			
 			if (!plugin.permissionsHandler.hasPermission(event.getPlayer(),"WirelessRedstone.createsign"))
 			{
 				event.getBlock().setType(Material.AIR);
@@ -43,7 +44,6 @@ public class WirelessBlockListener implements Listener
 				event.getPlayer().sendMessage("[WirelessRedstone] You don't have the permission to create this sign!");
 				return;
 			}
-
 			if (event.getLine(1) == null)
 			{
 				event.getBlock().setType(Material.AIR);
@@ -51,7 +51,7 @@ public class WirelessBlockListener implements Listener
 				event.getPlayer().sendMessage("[WirelessRedstone] No Channelname given!");
 				return;
 			}
-
+			
 			String cname = event.getLine(1);
 
 			if (!plugin.WireBox.hasAccessToChannel(event.getPlayer(), cname))
@@ -61,7 +61,7 @@ public class WirelessBlockListener implements Listener
 				event.getPlayer().sendMessage("[WirelessRedstone] You don't have the permission to create this sign!");
 				return;
 			}
-
+			
 			if (plugin.WireBox.isReceiver(event.getLine(0)))
 			{
 				if(!plugin.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer()))
@@ -78,6 +78,7 @@ public class WirelessBlockListener implements Listener
 					event.getBlock().breakNaturally();
 				}
 			}
+			
 			else if(plugin.WireBox.isScreen(event.getLine(0)))
 			{
 				if(!plugin.WireBox.addWirelessScreen(cname, event.getBlock(), event.getPlayer()))

@@ -72,15 +72,19 @@ public class WirelessRedstone extends JavaPlugin
 		if (vaultPlugin != null && config.getVaultUsage())
 		{
 			this.permissionsHandler = new Vault(this);
-			WirelessRedstone.logger.info("Using Vault !");
+			logger.info("Using Vault !");
 		}
 		else
 		{
-			WirelessRedstone.logger.info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
+			logger.info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
 			this.permissionsHandler = new opPermissions(this);
 		}
 
-		WirelessRedstone.logger.fine("Loaded Permissions...");
+		logger.fine("Loaded Permissions...");
+		if(config.getDebugMode())
+		{
+			logger.info("Debug Mode activated !");
+		}
 		config.save();
 
 		this.WireBox.UpdateChacheNoThread();
@@ -90,6 +94,7 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wrhelp").setExecutor(new WirelessCommands(this));
 		getCommand("wrr").setExecutor(new WirelessCommands(this));
 		getCommand("wrt").setExecutor(new WirelessCommands(this));
+		getCommand("wrs").setExecutor(new WirelessCommands(this));
 		getCommand("wrremove").setExecutor(new WirelessCommands(this));
 		getCommand("wra").setExecutor(new WirelessCommands(this));
 		getCommand("wrlist").setExecutor(new WirelessCommands(this));
