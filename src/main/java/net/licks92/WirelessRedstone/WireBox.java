@@ -32,7 +32,7 @@ public class WireBox
 	{
 		for (String tag : WirelessRedstone.strings.tagsTransmitter)
 		{
-			if(data.equals(tag))
+			if(data.toLowerCase().equals(tag.toLowerCase()))
 			{
 				return true;
 			}
@@ -44,7 +44,7 @@ public class WireBox
 	{
 		for (String tag : WirelessRedstone.strings.tagsReceiver)
 		{
-			if(data.equals(tag))
+			if(data.toLowerCase().equals(tag.toLowerCase()))
 			{
 				return true;
 			}
@@ -56,7 +56,7 @@ public class WireBox
 	{
 		for (String tag : WirelessRedstone.strings.tagsScreen)
 		{
-			if(data.equals(tag))
+			if(data.toLowerCase().equals(tag.toLowerCase()))
 			{
 				return true;
 			}
