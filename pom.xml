@@ -29,7 +29,7 @@
 			<artifactId>Vault</artifactId>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/Vault.jar</systemPath>
-			<version>1.2.15-SNAPSHOT</version>
+			<version>1.2.16-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
   
@@ -46,7 +46,7 @@
   		<dependency>
   			<groupId>org.bukkit</groupId>
   			<artifactId>bukkit</artifactId>
-  			<version>1.2.5-R2.0</version>
+  			<version>1.3.1-R1.0</version>
   		</dependency>
    	</dependencies>
   </dependencyManagement>
