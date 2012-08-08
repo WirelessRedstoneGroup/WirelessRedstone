@@ -73,7 +73,7 @@ public class WireBox
 	{
 		if (getChannel(channelname) != null)
 		{
-			if(this.plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.admin"))
+			if(this.plugin.permissions.isWirelessAdmin(player))
 			{
 				return true;
 			}

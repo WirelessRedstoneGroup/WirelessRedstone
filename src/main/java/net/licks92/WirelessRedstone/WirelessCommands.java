@@ -80,40 +80,34 @@ public class WirelessCommands implements CommandExecutor
 	{
 		ArrayList<String> commands = new ArrayList<String>(); 
 
-		if (plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.commands.wrt") || plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.basics"))
+		if (plugin.permissions.canCreateTransmitter(player))
 		{
 			commands.add("/wr transmitter channelname - Creates transmitter sign.");
 		}
 
-		if (plugin.permissionsHandler.hasPermission(player,
-				"WirelessRedstone.commands.wrr")
-				|| plugin.permissionsHandler.hasPermission(player,
-						"WirelessRedstone.basics")) {
+		if (plugin.permissions.canCreateReceiver(player))
+		{
 			commands.add("/wr receiver channelname - Creates receiver sign.");
 		}
+		
+		if (plugin.permissions.canCreateScreen(player))
+		{
+			commands.add("/wr screen channelname - Creates screen sign.");
+		}
 
-		if (plugin.permissionsHandler.hasPermission(player,
-				"WirelessRedstone.commands.wrremove")
-				|| plugin.permissionsHandler.hasPermission(player,
-						"WirelessRedstone.basics")) {
+		if (plugin.permissions.canRemoveChannel(player))
+		{
 			commands.add("/wr remove channel - Removes a channel.");
 		}
 
-		if (plugin.permissionsHandler.hasPermission(player,
-				"WirelessRedstone.commands.wrc")
-				|| plugin.permissionsHandler.hasPermission(player,
-						"WirelessRedstone.basics")) {
+		if (plugin.permissions.isWirelessAdmin(player))
+		{
 			commands.add("/wr admin - Channel admin commands. Execute for more info.");
 		}
 
-		if (plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.wrlist"))
+		if (plugin.permissions.canUseListCommand(player))
 		{
 			commands.add("/wr list - Lists all the channels with the owners.");
-		}
-
-		if (plugin.permissionsHandler.hasPermission(player,
-				"WirelessRedstone.commands.wrcleanup")) {
-			commands.add("/wr cleanup - cleansup the database for errors and other things.");
 		}
 
 		return commands;
@@ -154,7 +148,8 @@ public class WirelessCommands implements CommandExecutor
 			{
 				return performCreateScreen(sender, args, player);
 			}
-			else if(commandName.equals("admin"))
+			else if(commandName.equals("admin")
+					||commandName.equals("a"))
 			{
 				return performChannelAdmin(sender, args, player);
 			}
@@ -188,8 +183,7 @@ public class WirelessCommands implements CommandExecutor
 	@SuppressWarnings("unused")
  	private boolean performWRlist(CommandSender sender, String[] args, Player player)
 	{
-		if (!plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics")
-				|| !plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.list"))
+		if (!plugin.permissions.canUseListCommand(player))
 		{
 			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
 			return true;
@@ -252,6 +246,11 @@ public class WirelessCommands implements CommandExecutor
 
 	private boolean performChannelAdmin(CommandSender sender, String[] args,Player player)
 	{
+		if(!plugin.permissions.isWirelessAdmin(player))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			return true;
+		}
 		if (args.length >= 3)
 		{
 			String channelname = args[0];
@@ -303,8 +302,7 @@ public class WirelessCommands implements CommandExecutor
 
 	private boolean performHelp(CommandSender sender, String[] args, Player player)
 	{
-		if (!plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics")
-				|| !plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.help"))
+		if (!plugin.permissions.canSeeHelp(player))
 		{
 			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
 			return true;
@@ -340,8 +338,7 @@ public class WirelessCommands implements CommandExecutor
 
 	public boolean performCreateTransmitter(CommandSender sender, String[] args, Player player)
 	{
-		if (plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.wrt")
-				|| plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics"))
+		if (plugin.permissions.canCreateTransmitter(player))
 		{
 			if (args.length >= 1)
 			{
@@ -377,8 +374,7 @@ public class WirelessCommands implements CommandExecutor
 
 	public boolean performCreateReceiver(CommandSender sender, String[] args,Player player)
 	{
-		if (plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.commands.wrr")
-				|| plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics"))
+		if (plugin.permissions.canCreateReceiver(player))
 		{
 			if (args.length >= 1)
 			{
@@ -417,8 +413,7 @@ public class WirelessCommands implements CommandExecutor
 	
 	public boolean performCreateScreen(CommandSender sender, String[] args, Player player)
 	{
-		if (plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.wrs")
-				|| plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics"))
+		if (plugin.permissions.canCreateScreen(player))
 		{
 			if (args.length >= 1)
 			{
@@ -454,8 +449,7 @@ public class WirelessCommands implements CommandExecutor
 	
 	public boolean performRemoveChannel(CommandSender sender, String[] args, Player player)
 	{
-		if (plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.wrremove")
-				|| plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics"))
+		if (plugin.permissions.canRemoveChannel(player))
 		{
 			if (args.length >= 1)
 			{
@@ -489,8 +483,7 @@ public class WirelessCommands implements CommandExecutor
 		 * This method shows the status of a WirelessChannel.
 		 * At the moment, it only shows if the channel is active or not...
 		 */
-		if (!plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.basics")
-				|| !plugin.permissionsHandler.hasPermission(player,"WirelessRedstone.commands.info"))
+		if (!plugin.permissions.canSeeChannelInfo(player))
 		{
 			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
 			return true;

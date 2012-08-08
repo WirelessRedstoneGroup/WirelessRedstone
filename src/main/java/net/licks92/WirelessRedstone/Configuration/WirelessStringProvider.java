@@ -17,6 +17,7 @@ public class WirelessStringProvider
 	public String playerCannotCreateReceiverOnBlock;
 	public String playerHaveNotPermission;
 	public String playerHaveNotAccessToChannel;
+	public String playerCannotCreateSign;
 	public String signDestroyed;
 	public String channelRemovedCauseNoSign;
 	public String channelNameContainsInvalidCaracters;
@@ -45,6 +46,7 @@ public class WirelessStringProvider
 			playerCannotCreateReceiverOnBlock = ChatColor.RED + "[WirelessRedstone] You cannot create a wireless receiver on this block !";
 			playerHaveNotPermission = ChatColor.RED + "You don't have the permissions to use this command.";
 			playerHaveNotAccessToChannel = ChatColor.RED + "[WirelessRedstone] You don't have access to this channel.";
+			playerCannotCreateSign = ChatColor.RED + "[WirelessRedstone] You don't have the permission to create this sign!";
 			signDestroyed = ChatColor.GREEN + "[WirelessRedstone] Succesfully removed this sign !";
 			channelRemovedCauseNoSign = ChatColor.GREEN + "[WirelessRedstone] Channel removed, no more signs in the worlds.";
 			channelNameContainsInvalidCaracters = "[WirelessRedstone] " + playerCannotCreateChannel + " : Name contains invalid caracters !";

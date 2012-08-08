@@ -37,11 +37,13 @@ public class WirelessBlockListener implements Listener
 				|| plugin.WireBox.isScreen(event.getLine(0)))
 		{
 			
-			if (!plugin.permissionsHandler.hasPermission(event.getPlayer(),"WirelessRedstone.createsign"))
+			if (!plugin.permissions.canCreateReceiver(event.getPlayer())
+					||!plugin.permissions.canCreateTransmitter(event.getPlayer())
+					||!plugin.permissions.canCreateScreen(event.getPlayer()))
 			{
 				event.getBlock().setType(Material.AIR);
 				event.getPlayer().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.SIGN, 1));
-				event.getPlayer().sendMessage("[WirelessRedstone] You don't have the permission to create this sign!");
+				event.getPlayer().sendMessage(WirelessRedstone.strings.playerCannotCreateSign);
 				return;
 			}
 			if (event.getLine(1) == null)
@@ -58,7 +60,7 @@ public class WirelessBlockListener implements Listener
 			{
 				event.getBlock().setType(Material.AIR);
 				event.getPlayer().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.SIGN, 1));
-				event.getPlayer().sendMessage("[WirelessRedstone] You don't have the permission to create this sign!");
+				event.getPlayer().sendMessage(WirelessRedstone.strings.playerCannotCreateSign);
 				return;
 			}
 			
@@ -294,6 +296,7 @@ public class WirelessBlockListener implements Listener
 				{
 					event.getPlayer().sendMessage("[WirelessRedstone] You are not allowed to remove this sign!");
 					event.setCancelled(true);
+					signObject.update();
 				}
 				return;
 			}

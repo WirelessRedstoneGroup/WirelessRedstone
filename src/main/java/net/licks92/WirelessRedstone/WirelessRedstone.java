@@ -8,6 +8,7 @@ import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.IPermissions;
 import net.licks92.WirelessRedstone.Permissions.Vault;
+import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Permissions.opPermissions;
 import net.licks92.WirelessRedstone.Utils.Metrics;
 import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
@@ -28,7 +29,7 @@ public class WirelessRedstone extends JavaPlugin
 	public static WirelessStringProvider strings;
 	private static StackableLogger logger = new StackableLogger("WirelessRedstone");
 	public WireBox WireBox = new WireBox(this);
-	public IPermissions permissionsHandler;
+	public WirelessPermissions permissions;
 	public static Permission perms;
 	public WirelessWorldListener worldlistener;
 	public WirelessBlockListener blocklistener;
@@ -65,22 +66,8 @@ public class WirelessRedstone extends JavaPlugin
 		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
 		WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		WirelessRedstone.logger.fine("Loading Permissions...");
-		Plugin vaultPlugin = pm.getPlugin("Vault");
-
-		// Choosing Permissions it need to be used. Stolen from Essentials.
-		// Credits to Essentials Team
-		if (vaultPlugin != null && config.getVaultUsage())
-		{
-			this.permissionsHandler = new Vault(this);
-			logger.info("Using Vault !");
-		}
-		else
-		{
-			logger.info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
-			this.permissionsHandler = new opPermissions(this);
-		}
-
-		logger.fine("Loaded Permissions...");
+		
+		permissions = new WirelessPermissions(this);
 		if(config.getDebugMode())
 		{
 			logger.info("Debug Mode activated !");

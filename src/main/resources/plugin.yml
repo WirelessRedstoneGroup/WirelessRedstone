@@ -13,6 +13,7 @@ commands:
       usage: |
              Example: /<command> help
    wrhelp:
+      aliases: [wirelessredstonehelp]
       description: WirelessRedstone help menu
       usage: |
              Example: /<command>
@@ -56,3 +57,75 @@ commands:
       description: Lists all channels!
       usage: |
              Example: /<command> page
+permissions:
+    wirelessredstone.*:
+        description: Gives access to all Wireless Redstone commands
+        children:
+            wirelessredstone.create.*: true
+            wirelessredstone.remove.*: true
+            wirelessredstone.commands.*: true
+            wirelessredstone.admin.**: true
+    wirelessredstone.create.*:
+        description: Allows you to create any sign
+        children:
+            wirelessredstone.create.transmitter: true
+            wirelessredstone.create.receiver: true
+            wirelessredstone.create.screen: true
+    wirelessredstone.remove.*:
+        description: Allows you to remove any sign
+        children:
+            wirelessredstone.remove.transmitter: true
+            wirelessredstone.remove.receiver: true
+            wirelessredstone.remove.screen: true
+    wirelessredstone.commands.*:
+        description: Gives you access to all commands
+        children:
+            wirelessredstone.commands.removechannel: true
+            wirelessredstone.commands.info: true
+            wirelessredstone.commands.list: true
+            wirelessredstone.commands.help: true
+    wirelessredstone.admin.*:
+        description: Gives you access to all admin commands
+        children:
+            wirelessredstone.admin.isAdmin: true
+            wirelessredstone.admin.addOwner: true
+            wirelessredstone.admin.removeOwner: true
+    wirelessredstone.create.transmitter:
+        description: Allows you to create a transmitter
+        default: op
+    wirelessredstone.create.receiver:
+        description: Allows you to create a receiver
+        default: op
+    wirelessredstone.create.screen:
+        description: Allows you to create a screen
+        default: op
+    wirelessredstone.remove.transmitter:
+        description: Allows you to remove a transmitter
+        default: op
+    wirelessredstone.remove.receiver:
+        description: Allows you to remove a receiver
+        default: op
+    wirelessredstone.remove.screen:
+        description: Allows you to remove a screen
+        default: op
+    wirelessredstone.commands.removechannel:
+        description: Allows you to remove a channel, only if you're an owner.
+        default: op
+    wirelessredstone.commands.info:
+        description: Allows you to see informations about a channel.
+        default: op
+    wirelessredstone.commands.list:
+        description: Allows you see the list of the channel that you're the owner.
+        default: op
+    wirelessredstone.commands.help:
+        description: Allows you see the WirelessRedstone help.
+        default: op
+    wirelessredstone.admin.isAdmin:
+        description: If you have this node, you're an owner of every channel.
+        default: op
+    wirelessredstone.admin.addOwner:
+        description: Allows you to add an owner to a channel.
+        default: op
+    wirelessredstone.admin.removeOwner:
+        description: Allows you to remove an owner from a channel.
+        default: op
