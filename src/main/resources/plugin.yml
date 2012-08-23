@@ -64,7 +64,7 @@ permissions:
             wirelessredstone.create.*: true
             wirelessredstone.remove.*: true
             wirelessredstone.commands.*: true
-            wirelessredstone.admin.**: true
+            wirelessredstone.admin.*: true
     wirelessredstone.create.*:
         description: Allows you to create any sign
         children:

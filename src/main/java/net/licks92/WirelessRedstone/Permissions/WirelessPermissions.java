@@ -11,6 +11,9 @@ public class WirelessPermissions
 	private String canCreateReceiver = "wirelessredstone.create.receiver";
 	private String canCreateTransmitter = "wirelessredstone.create.transmitter";
 	private String canCreateScreen = "wirelessredstone.create.screen";
+	private String canRemoveReceiver = "wirelessredstone.remove.receiver";
+	private String canRemoveTransmitter = "wirelessredstone.remove.transmitter";
+	private String canRemoveScreen = "wirelessredstone.remove.screen";
 	private String isWirelessAdmin = "wirelessredstone.admin.isAdmin";
 	private String canRemoveChannel = "wirelessredstone.commands.removechannel";
 	private String canUseListCommand = "wirelessredstone.commands.list";
@@ -50,6 +53,21 @@ public class WirelessPermissions
 	public boolean canCreateScreen(Player player)
 	{
 		return permissionsHandler.hasPermission(player, canCreateScreen);
+	}
+	
+	public boolean canRemoveReceiver(Player player)
+	{
+		return permissionsHandler.hasPermission(player, canRemoveReceiver);
+	}
+
+	public boolean canRemoveTransmitter(Player player)
+	{
+		return permissionsHandler.hasPermission(player, canRemoveTransmitter);
+	}
+
+	public boolean canRemoveScreen(Player player)
+	{
+		return permissionsHandler.hasPermission(player, canRemoveScreen);
 	}
 	
 	public boolean isWirelessAdmin(Player player)

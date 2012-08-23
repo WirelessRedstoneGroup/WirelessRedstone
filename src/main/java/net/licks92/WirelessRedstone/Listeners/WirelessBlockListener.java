@@ -271,7 +271,8 @@ public class WirelessBlockListener implements Listener
 			Sign signObject = (Sign) event.getBlock().getState();
 			if (plugin.WireBox.isReceiver(signObject.getLine(0)))
 			{
-				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1)))
+				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1))
+						&& plugin.permissions.canRemoveReceiver(event.getPlayer()))
 				{
 					if (plugin.WireBox.removeWirelessReceiver(signObject.getLine(1), event.getBlock().getLocation()))
 					{
@@ -302,7 +303,8 @@ public class WirelessBlockListener implements Listener
 			}
 			else if (plugin.WireBox.isTransmitter(signObject.getLine(0)))
 			{
-				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1)))
+				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1))
+						&& plugin.permissions.canRemoveTransmitter(event.getPlayer()))
 				{
 					if (plugin.WireBox.removeWirelessTransmitter(signObject.getLine(1), event.getBlock().getLocation()))
 					{
@@ -362,7 +364,8 @@ public class WirelessBlockListener implements Listener
 			}
 			else if(plugin.WireBox.isScreen(signObject.getLine(0)))
 			{
-				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1)))
+				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1))
+						&& plugin.permissions.canRemoveScreen(event.getPlayer()))
 				{
 					if (plugin.WireBox.removeWirelessScreen(signObject.getLine(1), event.getBlock().getLocation()))
 					{
