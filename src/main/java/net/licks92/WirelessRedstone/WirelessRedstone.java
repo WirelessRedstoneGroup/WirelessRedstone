@@ -6,10 +6,7 @@ import net.licks92.WirelessRedstone.Configuration.WirelessStringProvider;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
-import net.licks92.WirelessRedstone.Permissions.IPermissions;
-import net.licks92.WirelessRedstone.Permissions.Vault;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
-import net.licks92.WirelessRedstone.Permissions.opPermissions;
 import net.licks92.WirelessRedstone.Utils.Metrics;
 import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
 import net.licks92.WirelessRedstone.Utils.Metrics.Plotter;
@@ -18,9 +15,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WirelessRedstone extends JavaPlugin
@@ -62,7 +57,6 @@ public class WirelessRedstone extends JavaPlugin
 		blocklistener = new WirelessBlockListener(this);
 		playerlistener = new WirelessPlayerListener(this);
 		
-		PluginManager pm = getServer().getPluginManager();
 		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
 		WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		WirelessRedstone.logger.fine("Loading Permissions...");

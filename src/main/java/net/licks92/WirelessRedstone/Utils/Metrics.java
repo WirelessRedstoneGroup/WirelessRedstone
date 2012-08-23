@@ -28,8 +28,6 @@ package net.licks92.WirelessRedstone.Utils;
  * either expressed or implied, of anybody else.
  */
 
-package org.mcstats;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.InvalidConfigurationException;
