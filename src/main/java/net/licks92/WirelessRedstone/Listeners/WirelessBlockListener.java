@@ -295,7 +295,7 @@ public class WirelessBlockListener implements Listener
 				}
 				else
 				{
-					event.getPlayer().sendMessage("[WirelessRedstone] You are not allowed to remove this sign!");
+					event.getPlayer().sendMessage(WirelessRedstone.strings.playerCannotDestroySign);
 					event.setCancelled(true);
 					signObject.update();
 				}
@@ -357,7 +357,7 @@ public class WirelessBlockListener implements Listener
 				}
 				else
 				{
-					event.getPlayer().sendMessage("[WirelessRedstone] You are not allowed to remove this sign!");
+					event.getPlayer().sendMessage(WirelessRedstone.strings.playerCannotDestroySign);
 					event.setCancelled(true);
 				}
 				return;
@@ -378,6 +378,11 @@ public class WirelessBlockListener implements Listener
 						plugin.WireBox.removeChannel(signObject.getLine(1));
 						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign! Channel removed, no more signs in the worlds.");
 					}
+				}
+				else
+				{
+					event.getPlayer().sendMessage(WirelessRedstone.strings.playerCannotDestroySign);
+					event.setCancelled(true);
 				}
 			}
 		}

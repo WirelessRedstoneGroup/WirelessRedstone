@@ -9,8 +9,6 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 
 public class WirelessStringProvider
 {
-	private NewWirelessConfiguration config;
-	private WirelessRedstone plugin;
 	public String playerExtendedChannel;
 	public String playerCreatedChannel;
 	public String playerCannotCreateChannel;
@@ -21,17 +19,15 @@ public class WirelessStringProvider
 	public String signDestroyed;
 	public String channelRemovedCauseNoSign;
 	public String channelNameContainsInvalidCaracters;
+	public String playerCannotDestroySign;
 	public String noItemOnList;
 	public String tooFewArguments;
 	public List<String> tagsTransmitter = new ArrayList<String>();
 	public List<String> tagsReceiver = new ArrayList<String>();
 	public List<String> tagsScreen = new ArrayList<String>();
 	
-	public WirelessStringProvider(WirelessRedstone r_plugin)
-	{
-		plugin = r_plugin;
-		config = WirelessRedstone.config;
-		
+	public WirelessStringProvider()
+	{	
 		//If useSystemLanguage is true, then the language argument is not used
 		loadStrings();
 	}
@@ -52,6 +48,7 @@ public class WirelessStringProvider
 			channelNameContainsInvalidCaracters = "[WirelessRedstone] " + playerCannotCreateChannel + " : Name contains invalid caracters !";
 			tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
 			noItemOnList = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
+			playerCannotDestroySign = ChatColor.RED + "[WirelessRedstone] You are not allowed to destroy this sign!" ;
 			tagsTransmitter.add("[transmitter]");
 			tagsTransmitter.add("[wrt]");
 			tagsReceiver.add("[receiver]");

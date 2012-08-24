@@ -51,7 +51,7 @@ public class WirelessRedstone extends JavaPlugin
 		
 		//Load config and strings
 		config = new NewWirelessConfiguration(this);
-		strings = new WirelessStringProvider(this);
+		strings = new WirelessStringProvider();
 		
 		//Load listeners
 		worldlistener = new WirelessWorldListener(this);
