@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Configuration.NewWirelessConfiguration;
 import net.licks92.WirelessRedstone.Configuration.WirelessStringProvider;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
@@ -88,6 +89,8 @@ public class WirelessRedstone extends JavaPlugin
 		try
 		{
 			metrics = new Metrics(this);
+			
+			// Channel metrics
 			final Graph channelGraph = metrics.createGraph("Channel metrics");
 			channelGraph.addPlotter(new Plotter("Total channels")
 			{
@@ -103,6 +106,48 @@ public class WirelessRedstone extends JavaPlugin
 				public int getValue()
 				{
 					return WireBox.getAllSigns().size();
+				}
+			});
+			
+			// Sign Metrics
+			final Graph signGraph = metrics.createGraph("Sign metrics");
+			signGraph.addPlotter(new Plotter("Transmitters")
+			{
+				@Override
+				public int getValue()
+				{
+					int total = 0;
+					for(WirelessChannel channel : config.getAllChannels())
+					{
+						total+=channel.getTransmitters().size();
+					}
+					return total;
+				}
+			});
+			signGraph.addPlotter(new Plotter("Receivers")
+			{
+				@Override
+				public int getValue()
+				{
+					int total = 0;
+					for(WirelessChannel channel : config.getAllChannels())
+					{
+						total+=channel.getReceivers().size();
+					}
+					return total;
+				}
+			});
+			signGraph.addPlotter(new Plotter("Screens")
+			{
+				@Override
+				public int getValue()
+				{
+					int total = 0;
+					for(WirelessChannel channel : config.getAllChannels())
+					{
+						total+=channel.getScreens().size();
+					}
+					return total;
 				}
 			});
 			metrics.start();
