@@ -525,6 +525,16 @@ public class WirelessCommands implements CommandExecutor
 				player.sendMessage(" - " + tempChannel.getTransmitters().size() + " transmitters.");
 				player.sendMessage(" - " + tempChannel.getScreens().size() + " screens.");
 				
+				/*
+				 * Showing the owners
+				 */
+				
+				player.sendMessage("The owners of this channel are : ");
+				for(String owner : tempChannel.getOwners())
+				{
+					player.sendMessage(" - " +  owner);
+				}
+				
 				return true;
 			}
 			else
