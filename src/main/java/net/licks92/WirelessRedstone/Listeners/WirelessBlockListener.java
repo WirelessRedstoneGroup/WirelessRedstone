@@ -117,8 +117,20 @@ public class WirelessBlockListener implements Listener
 		{
 			return;
 		}
+		try
+		{
+			if(plugin.WireBox.getChannel(signObject.getLine(1)).isLocked())
+			{
+				return;
+			}
+		}
+		catch (NullPointerException ex)
+		{
+			
+		}
 		if (event.getBlock().isBlockPowered() || event.getBlock().isBlockIndirectlyPowered())
 		{
+			//Turning on the receivers
 			try
 			{
 				//Change receivers
@@ -195,7 +207,7 @@ public class WirelessBlockListener implements Listener
 				//Change screens
 				for(Location screen : plugin.WireBox.getScreenLocations(signObject.getLine(1)))
 				{
-					String str = "Active : " + ChatColor.GREEN + "YES";
+					String str = ChatColor.GREEN + "ACTIVE";
 					Sign sign = (Sign) screen.getBlock().getState();
 					sign.setLine(2, str);
 					sign.update();
@@ -248,7 +260,7 @@ public class WirelessBlockListener implements Listener
 					//Change screens
 					for(Location screen : plugin.WireBox.getScreenLocations(signObject.getLine(1)))
 					{
-						String str = "Active : " + ChatColor.RED + "NO";
+						String str = ChatColor.RED + "INACTIVE";
 						Sign sign = (Sign) screen.getBlock().getState();
 						sign.setLine(2, str);
 						sign.update();

@@ -162,7 +162,11 @@ public class WirelessCommands implements CommandExecutor
 			}
 			else if (commandName.equals("info"))
 			{
-				return performShowInfo(sender,args,player);
+				return performShowInfo(sender,args, player);
+			}
+			else if (commandName.equals("lock"))
+			{
+				return performLockChannel(sender, args, player);
 			}
 			else
 			{
@@ -176,6 +180,11 @@ public class WirelessCommands implements CommandExecutor
 		}
 	}
 	
+	private boolean performLockChannel(CommandSender sender, String[] args, Player player)
+	{
+		return false;
+	}
+
 	private boolean performWRlist(CommandSender sender, String[] args, Player player)
 	{
 		if (!plugin.permissions.canUseListCommand(player))
@@ -206,7 +215,7 @@ public class WirelessCommands implements CommandExecutor
 			ex.printStackTrace();
 		}
 
-		if (args.length == 1)
+		if (args.length >= 1)
 		{
 			int pagenumber;
 			try
@@ -231,11 +240,6 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage(WirelessRedstone.strings.forMoreInfosPerformWRInfo);
 			player.sendMessage(WirelessRedstone.strings.nextPage);
 			return true;
-		}
-		else if(args.length > 1)
-		{
-			player.sendMessage("Too Many Arguments !");
-			return false;
 		}
 		else
 		{

@@ -28,12 +28,14 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	private int id;
 	@NotNull
 	private String name;
+	@NotNull
+	private boolean locked;
 	
 	private List<String> owners;
 	private List<WirelessTransmitter> transmitters = new LinkedList<WirelessTransmitter>();
 	private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
 	private List<WirelessScreen> screens = new LinkedList<WirelessScreen>();
-
+	
 	public WirelessChannel()
 	{
 		
@@ -42,12 +44,20 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	@SuppressWarnings("unchecked")
 	public WirelessChannel(Map<String, Object> map)
 	{
-		id = (Integer) map.get("id");
-		name = (String) map.get("name");
-		owners = (List<String>) map.get("owners");
-		setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
-		setReceivers((List<WirelessReceiver>) map.get("receivers"));
-		setScreens((List<WirelessScreen>) map.get("screens"));
+		this.setId((Integer) map.get("id"));
+		this.setName((String) map.get("name"));
+		this.setOwners((List<String>) map.get("owners"));
+		this.setReceivers((List<WirelessReceiver>) map.get("receivers"));
+		this.setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
+		this.setScreens((List<WirelessScreen>) map.get("screens"));
+		try
+		{
+			this.setLocked((Boolean) map.get("locked"));
+		}
+		catch (NullPointerException ex)
+		{
+			
+		}
 	}
 	
 	public void removeReceiverAt(Location loc)
@@ -133,6 +143,10 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public void setLocked(boolean value) {
+		this.locked = value;
+	}
 
 	public void setOwners(List<String> owners) {
 		this.owners = owners;
@@ -165,6 +179,11 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	public String getName()
 	{
 		return this.name;
+	}
+	
+	public boolean isLocked()
+	{
+		return this.locked;
 	}
 
 	public List<WirelessTransmitter> getTransmitters()
@@ -228,17 +247,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		map.put("receivers", getReceivers());
 		map.put("transmitters", getTransmitters());
 		map.put("screens", getScreens());
+		map.put("locked", isLocked());
 		return map;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void deserialize(Map<String,Object> map)
-	{
-		this.setId((Integer) map.get("id"));
-		this.setName((String) map.get("name"));
-		this.setOwners((List<String>) map.get("owners"));
-		this.setReceivers((List<WirelessReceiver>) map.get("receivers"));
-		this.setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
-		this.setScreens((List<WirelessScreen>) map.get("screens"));
 	}
 }
