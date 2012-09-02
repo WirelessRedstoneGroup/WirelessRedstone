@@ -69,9 +69,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else if (commandName.equals("wrlist"))
 		{
-			player.sendMessage(ChatColor.RED + "Function not implemented yet !");
-			return true;
-			//return performWRlist(sender, args, player);
+			return performWRlist(sender, args, player);
 		}
 		return true;
 	}
@@ -160,9 +158,7 @@ public class WirelessCommands implements CommandExecutor
 			}
 			else if (commandName.equals("list"))
 			{
-				player.sendMessage(ChatColor.RED + "Function not implemented yet !");
-				return true;
-				//return performWRlist(sender, args, player);
+				return performWRlist(sender, args, player);
 			}
 			else if (commandName.equals("info"))
 			{
@@ -180,8 +176,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 	}
 	
-	@SuppressWarnings("unused")
- 	private boolean performWRlist(CommandSender sender, String[] args, Player player)
+	private boolean performWRlist(CommandSender sender, String[] args, Player player)
 	{
 		if (!plugin.permissions.canUseListCommand(player))
 		{
@@ -193,18 +188,20 @@ public class WirelessCommands implements CommandExecutor
 		{
 			for (WirelessChannel channel : plugin.WireBox.getChannels())
 			{
+				//Show Name of each channel and his activity
 				if(channel != null)
 				{
 					String item = channel.getName() + " : ";
-					for (String owner : channel.getOwners())
-					{
-						item += owner + ", ";
-					}
+					if(plugin.WireBox.isActive(channel))
+						item += ChatColor.GREEN + "ACTIVE";
+					else
+						item += ChatColor.RED + "INACTIVE";
 					list.add(item);
 				}
-				list.add("Receivers: " + channel.getReceivers().size() + " | Transmitters: " + channel.getTransmitters().size()); //Bug NullPointerExcetion
 			}
-		} catch(NullPointerException ex) {
+		}
+		catch(NullPointerException ex)
+		{
 			WirelessRedstone.getStackableLogger().severe("Unable to get the list of channels ! Stack trace ==>");
 			ex.printStackTrace();
 		}
@@ -223,14 +220,16 @@ public class WirelessCommands implements CommandExecutor
 			}
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + plugin.WireBox.getChannels().size() + " channel(s) )");
 			ShowList(list, pagenumber, player);
-			player.sendMessage("\n/wrlist pagenumber for next page!");
+			player.sendMessage(ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>");
+			player.sendMessage(ChatColor.AQUA + "\n/wr list pagenumber for next page!");
 			return true;
 		}
 		else if (args.length == 0)
 		{
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + plugin.WireBox.getChannels().size() + " channel(s) )");
 			ShowList(list, 1, player);
-			player.sendMessage("\n/wrlist pagenumber for next page!");
+			player.sendMessage(ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>");
+			player.sendMessage(ChatColor.AQUA + "\n/wr list pagenumber for next page!");
 			return true;
 		}
 		else if(args.length > 1)
@@ -481,7 +480,9 @@ public class WirelessCommands implements CommandExecutor
 	{
 		/*
 		 * This method shows the status of a WirelessChannel.
-		 * At the moment, it only shows if the channel is active or not...
+		 * At the moment, it shows :
+		 * - if the channel is active or not.
+		 * - how many signs of each kind is in each channel.
 		 */
 		if (!plugin.permissions.canSeeChannelInfo(player))
 		{
@@ -516,8 +517,14 @@ public class WirelessCommands implements CommandExecutor
 					player.sendMessage("Is Activated : " + ChatColor.RED + "NO");
 				}
 				/*
-				 * Send the final message
+				 * Counting signs of the channel.
 				 */
+				player.sendMessage("This channel contains :");
+
+				player.sendMessage(" + " + tempChannel.getReceivers().size() + " receivers.");
+				player.sendMessage(" - " + tempChannel.getTransmitters().size() + " transmitters.");
+				player.sendMessage(" - " + tempChannel.getScreens().size() + " screens.");
+				
 				return true;
 			}
 			else
@@ -556,7 +563,7 @@ public class WirelessCommands implements CommandExecutor
 			{
 				if(!(i >= itemsonlist))
 				{
-					player.sendMessage(list.get(i));
+					player.sendMessage(" - " + list.get(i));
 				}
 			}
 		}

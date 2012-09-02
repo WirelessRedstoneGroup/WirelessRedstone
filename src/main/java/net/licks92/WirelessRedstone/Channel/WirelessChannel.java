@@ -169,17 +169,38 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 
 	public List<WirelessTransmitter> getTransmitters()
 	{
-		return this.transmitters;
+		try
+		{
+			return this.transmitters;
+		}
+		catch (NullPointerException ex)
+		{
+			return new LinkedList<WirelessTransmitter>();
+		}
 	}
 
 	public List<WirelessReceiver> getReceivers()
 	{
-		return this.receivers;
+		try
+		{
+			return this.receivers;
+		}
+		catch (NullPointerException ex)
+		{
+			return new LinkedList<WirelessReceiver>();
+		}
 	}
 	
 	public List<WirelessScreen> getScreens()
 	{
-		return this.screens;
+		try
+		{
+			return this.screens;
+		}
+		catch (NullPointerException ex)
+		{
+			return new LinkedList<WirelessScreen>();
+		}
 	}
 
 	public List<String> getOwners()
