@@ -180,7 +180,7 @@ public class WirelessCommands implements CommandExecutor
 	{
 		if (!plugin.permissions.canUseListCommand(player))
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 		ArrayList<String> list = new ArrayList<String>();
@@ -220,16 +220,16 @@ public class WirelessCommands implements CommandExecutor
 			}
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + plugin.WireBox.getChannels().size() + " channel(s) )");
 			ShowList(list, pagenumber, player);
-			player.sendMessage(ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>");
-			player.sendMessage(ChatColor.AQUA + "\n/wr list pagenumber for next page!");
+			player.sendMessage(WirelessRedstone.strings.forMoreInfosPerformWRInfo);
+			player.sendMessage(WirelessRedstone.strings.nextPage);
 			return true;
 		}
 		else if (args.length == 0)
 		{
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + plugin.WireBox.getChannels().size() + " channel(s) )");
 			ShowList(list, 1, player);
-			player.sendMessage(ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>");
-			player.sendMessage(ChatColor.AQUA + "\n/wr list pagenumber for next page!");
+			player.sendMessage(WirelessRedstone.strings.forMoreInfosPerformWRInfo);
+			player.sendMessage(WirelessRedstone.strings.nextPage);
 			return true;
 		}
 		else if(args.length > 1)
@@ -247,7 +247,7 @@ public class WirelessCommands implements CommandExecutor
 	{
 		if(!plugin.permissions.isWirelessAdmin(player))
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 		if (args.length >= 3)
@@ -267,7 +267,7 @@ public class WirelessCommands implements CommandExecutor
 				}
 				else
 				{
-					player.sendMessage(WirelessRedstone.strings.playerHaveNotAccessToChannel);
+					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
 			else if (subcommand.equalsIgnoreCase("removeowner"))
@@ -281,7 +281,7 @@ public class WirelessCommands implements CommandExecutor
 				}
 				else
 				{
-					player.sendMessage(WirelessRedstone.strings.playerHaveNotAccessToChannel);
+					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
 			else
@@ -303,7 +303,7 @@ public class WirelessCommands implements CommandExecutor
 	{
 		if (!plugin.permissions.canSeeHelp(player))
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 
@@ -354,7 +354,7 @@ public class WirelessCommands implements CommandExecutor
 				}
 				else
 				{
-					player.sendMessage(WirelessRedstone.strings.playerHaveNotAccessToChannel);
+					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
 			else if(args.length == 0)
@@ -365,7 +365,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 		return true;
@@ -393,7 +393,7 @@ public class WirelessCommands implements CommandExecutor
 				}
 				else
 				{
-					player.sendMessage(WirelessRedstone.strings.playerHaveNotAccessToChannel);
+					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
 			else if(args.length == 0)
@@ -404,7 +404,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 		return true;
@@ -429,7 +429,7 @@ public class WirelessCommands implements CommandExecutor
 				}
 				else
 				{
-					player.sendMessage(WirelessRedstone.strings.playerHaveNotAccessToChannel);
+					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
 			else if(args.length == 0)
@@ -440,7 +440,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 		return true;
@@ -459,7 +459,7 @@ public class WirelessCommands implements CommandExecutor
 				}
 				else
 				{
-					player.sendMessage(WirelessRedstone.strings.playerHaveNotAccessToChannel);
+					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
 			else if(args.length == 0)
@@ -470,7 +470,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 		return true;
@@ -486,7 +486,7 @@ public class WirelessCommands implements CommandExecutor
 		 */
 		if (!plugin.permissions.canSeeChannelInfo(player))
 		{
-			player.sendMessage(WirelessRedstone.strings.playerHaveNotPermission);
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
 		if(args.length == 0)
@@ -519,7 +519,7 @@ public class WirelessCommands implements CommandExecutor
 				/*
 				 * Counting signs of the channel.
 				 */
-				player.sendMessage("This channel contains :");
+				player.sendMessage(WirelessRedstone.strings.thisChannelContains);
 
 				player.sendMessage(" + " + tempChannel.getReceivers().size() + " receivers.");
 				player.sendMessage(" - " + tempChannel.getTransmitters().size() + " transmitters.");
@@ -529,7 +529,7 @@ public class WirelessCommands implements CommandExecutor
 				 * Showing the owners
 				 */
 				
-				player.sendMessage("The owners of this channel are : ");
+				player.sendMessage(WirelessRedstone.strings.ownersOfTheChannelAre);
 				for(String owner : tempChannel.getOwners())
 				{
 					player.sendMessage(" - " +  owner);
@@ -539,7 +539,7 @@ public class WirelessCommands implements CommandExecutor
 			}
 			else
 			{
-				player.sendMessage(WirelessRedstone.strings.playerHaveNotAccessToChannel);
+				player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 			}
 		}
 		return false;
