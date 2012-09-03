@@ -71,6 +71,11 @@ public class WirelessCommands implements CommandExecutor
 		{
 			return performWRlist(sender, args, player);
 		}
+		else if (commandName.equals("wrlock")
+				||commandName.equals("wrunlock"))
+		{
+			return performLockChannel(sender, args, player);
+		}
 		return true;
 	}
 	
@@ -111,7 +116,7 @@ public class WirelessCommands implements CommandExecutor
 		return commands;
 	}
 	
-	public boolean performWR(CommandSender sender, String[] r_args, Player player)
+	private boolean performWR(CommandSender sender, String[] r_args, Player player)
 	{
 		//If a command is sent after the /wr, perform it. Else, perform help.
 		if(r_args.length>=1)
@@ -164,7 +169,8 @@ public class WirelessCommands implements CommandExecutor
 			{
 				return performShowInfo(sender,args, player);
 			}
-			else if (commandName.equals("lock"))
+			else if (commandName.equals("lock")
+					||commandName.equals("unlock"))
 			{
 				return performLockChannel(sender, args, player);
 			}
@@ -182,6 +188,29 @@ public class WirelessCommands implements CommandExecutor
 	
 	private boolean performLockChannel(CommandSender sender, String[] args, Player player)
 	{
+		if(args.length==0)
+		{
+			player.sendMessage(WirelessRedstone.strings.tooFewArguments);
+		}
+		if(!plugin.permissions.canLockChannel(player))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
+			return true;
+		}
+		if(args.length>=1)
+		{
+			WirelessChannel channel = plugin.WireBox.getChannel(args[0]);
+			if(channel.isLocked())
+			{
+				channel.setLocked(false);
+				player.sendMessage(WirelessRedstone.strings.channelUnlocked);
+			}
+			else
+			{
+				channel.setLocked(true);
+				player.sendMessage(WirelessRedstone.strings.channelLocked);
+			}
+		}
 		return false;
 	}
 
@@ -339,7 +368,7 @@ public class WirelessCommands implements CommandExecutor
 		return true;
 	}
 
-	public boolean performCreateTransmitter(CommandSender sender, String[] args, Player player)
+	private boolean performCreateTransmitter(CommandSender sender, String[] args, Player player)
 	{
 		if (plugin.permissions.canCreateTransmitter(player))
 		{
@@ -375,7 +404,7 @@ public class WirelessCommands implements CommandExecutor
 		return true;
 	}
 
-	public boolean performCreateReceiver(CommandSender sender, String[] args,Player player)
+	private boolean performCreateReceiver(CommandSender sender, String[] args,Player player)
 	{
 		if (plugin.permissions.canCreateReceiver(player))
 		{
@@ -414,7 +443,7 @@ public class WirelessCommands implements CommandExecutor
 		return true;
 	}
 	
-	public boolean performCreateScreen(CommandSender sender, String[] args, Player player)
+	private boolean performCreateScreen(CommandSender sender, String[] args, Player player)
 	{
 		if (plugin.permissions.canCreateScreen(player))
 		{
@@ -450,7 +479,7 @@ public class WirelessCommands implements CommandExecutor
 		return true;
 	}
 	
-	public boolean performRemoveChannel(CommandSender sender, String[] args, Player player)
+	private boolean performRemoveChannel(CommandSender sender, String[] args, Player player)
 	{
 		if (plugin.permissions.canRemoveChannel(player))
 		{
@@ -480,7 +509,7 @@ public class WirelessCommands implements CommandExecutor
 		return true;
 	}
 
-	public boolean performShowInfo(CommandSender sender, String[] args, Player player)
+	private boolean performShowInfo(CommandSender sender, String[] args, Player player)
 	{
 		/*
 		 * This method shows the status of a WirelessChannel.

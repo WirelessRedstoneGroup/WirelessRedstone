@@ -47,6 +47,11 @@ commands:
       description: Channel admin commands
       usage: |
              Example: /<command> subcommand
+   wrlock:
+      aliases: [wrunlock]
+      description: Lock / Unlock a channel
+      usage: |
+             Example /<command> channel
    wrremove:
       aliases: [wrdelete]
       description: Remove a channel with all its signs!
@@ -84,6 +89,7 @@ permissions:
             wirelessredstone.commands.info: true
             wirelessredstone.commands.list: true
             wirelessredstone.commands.help: true
+            wirelessredstone.commands.lock: true
     wirelessredstone.admin.*:
         description: Gives you access to all admin commands
         children:
@@ -116,6 +122,9 @@ permissions:
         default: op
     wirelessredstone.commands.list:
         description: Allows you see the list of the channel that you're the owner.
+        default: op
+    wirelessredstone.commands.lock:
+        description: Allow you to lock / unlock a channel.
         default: op
     wirelessredstone.commands.help:
         description: Allows you see the WirelessRedstone help.

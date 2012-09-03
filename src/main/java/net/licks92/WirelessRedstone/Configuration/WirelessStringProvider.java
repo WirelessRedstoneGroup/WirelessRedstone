@@ -18,6 +18,8 @@ public class WirelessStringProvider
 	public String playerCannotCreateSign;
 	public String ownersOfTheChannelAre;
 	public String thisChannelContains;
+	public String channelLocked;
+	public String channelUnlocked;
 	public String nextPage;
 	public String signDestroyed;
 	public String channelRemovedCauseNoSign;
@@ -53,8 +55,10 @@ public class WirelessStringProvider
 			tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
 			noItemOnList = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
 			playerCannotDestroySign = ChatColor.RED + "[WirelessRedstone] You are not allowed to destroy this sign!";
-			ownersOfTheChannelAre = "The owners of this channel are : ";
-			thisChannelContains = "This channel contains :";
+			ownersOfTheChannelAre = "[WirelessRedstone] The owners of this channel are : ";
+			thisChannelContains = "[WirelessRedstone] This channel contains :";
+			channelLocked = ChatColor.GREEN + "[WirelessRedstone] Channel locked !";
+			channelUnlocked = ChatColor.GREEN + "[WirelessRedstone] Channel unlocked !";
 			nextPage = ChatColor.AQUA + "\n/wr list pagenumber for next page!";
 			forMoreInfosPerformWRInfo = ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>";
 			tagsTransmitter.add("[transmitter]");
