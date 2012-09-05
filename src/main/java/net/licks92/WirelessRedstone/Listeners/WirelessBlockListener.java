@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone.Listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
