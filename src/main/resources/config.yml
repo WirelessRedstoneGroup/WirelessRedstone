@@ -14,3 +14,6 @@ UseVault: true
 
 #Debug Mode, don't activate it if you're not a tester or a developper
 DebugMode: false
+
+#This value can be set to false, because some people can create signs with a command and destroy them to get free signs.
+DropSignWhenBroken: true

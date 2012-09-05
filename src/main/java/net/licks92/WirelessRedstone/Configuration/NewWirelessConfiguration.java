@@ -91,6 +91,11 @@ public class NewWirelessConfiguration
 		return getConfig().getInt("cancelChunkUnloadRange", 4);
 	}
 	
+	public boolean getSignDrop()
+	{
+		return getConfig().getBoolean("DropSignWhenBroken", true);
+	}
+	
 	public boolean getDebugMode()
 	{
 		return getConfig().getBoolean("DebugMode", false);

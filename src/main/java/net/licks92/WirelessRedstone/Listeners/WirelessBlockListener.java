@@ -1,10 +1,13 @@
 package net.licks92.WirelessRedstone.Listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -283,6 +286,10 @@ public class WirelessBlockListener implements Listener
 			Sign signObject = (Sign) event.getBlock().getState();
 			if (plugin.WireBox.isReceiver(signObject.getLine(0)))
 			{
+				if(!WirelessRedstone.config.getSignDrop())
+				{
+					cancelEvent(event);
+				}
 				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1))
 						&& plugin.permissions.canRemoveReceiver(event.getPlayer()))
 				{
@@ -315,6 +322,10 @@ public class WirelessBlockListener implements Listener
 			}
 			else if (plugin.WireBox.isTransmitter(signObject.getLine(0)))
 			{
+				if(!WirelessRedstone.config.getSignDrop())
+				{
+					cancelEvent(event);
+				}
 				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1))
 						&& plugin.permissions.canRemoveTransmitter(event.getPlayer()))
 				{
@@ -376,6 +387,10 @@ public class WirelessBlockListener implements Listener
 			}
 			else if(plugin.WireBox.isScreen(signObject.getLine(0)))
 			{
+				if(!WirelessRedstone.config.getSignDrop())
+				{
+					cancelEvent(event);
+				}
 				if (plugin.WireBox.hasAccessToChannel(event.getPlayer(),signObject.getLine(1))
 						&& plugin.permissions.canRemoveScreen(event.getPlayer()))
 				{
@@ -426,5 +441,46 @@ public class WirelessBlockListener implements Listener
 				}
 			}
 		}
+	}
+	
+	private void cancelEvent(BlockBreakEvent event)
+	{
+		/*
+		 * Methods cancelEvent and sendBlockBreakParticles, taken from http://www.bukkit.fr/index.php?threads/enlever-le-drop-dun-block.850/page-2#post-11582
+		 * All credits to richie3366.
+		 */
+		
+	    event.setCancelled(true);
+	    
+	    ItemStack is = event.getPlayer().getItemInHand();
+
+	    if(is.getType().getMaxDurability() > 0){
+	        is.setDurability((short) (is.getDurability() + 1));
+
+	        if(is.getDurability() >= is.getType().getMaxDurability()){
+	            event.getPlayer().setItemInHand(null);
+	        }
+	    }
+
+	    Block b = event.getBlock();
+
+	    int lastType = b.getTypeId();
+
+	    b.setType(Material.AIR);
+
+	    sendBlockBreakParticles(b, lastType, event.getPlayer());
+	}
+
+	private void sendBlockBreakParticles(Block b, int lastType, Player author)
+	{
+	    int radius = 64;
+	    radius *= radius;
+	 
+	    for (Player player : b.getWorld().getPlayers()) {
+	        int distance = (int)player.getLocation().distanceSquared(b.getLocation());
+	        if (distance <= radius && !player.equals(author)){
+	          player.playEffect(b.getLocation(), Effect.STEP_SOUND, lastType);
+	        }
+	    }
 	}
 }
