@@ -19,11 +19,25 @@ public class WirelessPlayerListener implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		// Will be implemented later, do not delete this class plz
-		/*Player player = event.getPlayer();
-		if(this.plugin.permissionsHandler.hasPermission(player, "WirelessRedstone.admin"))
+		/*
+		 * Check for updates and notify the admins.
+		 */
+		
+		if(plugin.permissions.isWirelessAdmin(event.getPlayer()))
 		{
-			player.sendMessage("[WARNING] Null Channels Exist in the config! Please remove them in the settings.yml file!");
-		}*/
+			try
+			{
+				double newversion = plugin.updateCheck(plugin.currentversion);
+				
+				if(newversion > plugin.currentversion)
+				{
+					event.getPlayer().sendMessage("[WirelessRedstone] A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
+				}
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
 	}
 }
