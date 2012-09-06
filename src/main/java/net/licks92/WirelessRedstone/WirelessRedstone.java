@@ -121,6 +121,7 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wra").setExecutor(new WirelessCommands(this));
 		getCommand("wrlist").setExecutor(new WirelessCommands(this));
 		getCommand("wri").setExecutor(new WirelessCommands(this));
+		getCommand("wrlock").setExecutor(new WirelessCommands(this));
 
 		WirelessRedstone.logger.fine("Loading Chunks");
 		LoadChunks();
@@ -242,13 +243,12 @@ public class WirelessRedstone extends JavaPlugin
                 NodeList firstElementTagName = firstElement.getElementsByTagName("title");
                 Element firstNameElement = (Element) firstElementTagName.item(0);
                 NodeList firstNodes = firstNameElement.getChildNodes();
-                System.out.println(firstNodes.item(0).getNodeValue().replace("Wireless Redstone ", "").split("b")[0].replaceFirst("\\.", "").trim());
                 return Double.valueOf(firstNodes.item(0).getNodeValue().replace("Wireless Redstone ", "").split("b")[0].replaceFirst("\\.", "").trim());
             }
         }
-        catch (Exception localException)
+        catch (Exception ex)
         {
-        	localException.printStackTrace();
+        	ex.printStackTrace();
         }
         return currentVersion;
     }
