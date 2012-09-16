@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone;
 
+import java.net.SocketException;
 import java.net.URL;
 import java.util.logging.Level;
 
@@ -253,9 +254,9 @@ public class WirelessRedstone extends JavaPlugin
                 return Double.valueOf(firstNodes.item(0).getNodeValue().replace("Wireless Redstone ", "").split("b")[0].replaceFirst("\\.", "").trim());
             }
         }
-        catch (Exception ex)
+        catch(SocketException ex)
         {
-        	ex.printStackTrace();
+        	logger.warning("Could not get the informations about the latest version. Maybe your internet connection is broken?");
         }
         return currentVersion;
     }
