@@ -38,6 +38,7 @@ public class NewWirelessConfiguration
 		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
 		
 		//Loading and saving
+		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		reloadConfig();

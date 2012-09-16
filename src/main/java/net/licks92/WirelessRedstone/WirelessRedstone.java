@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import java.net.URL;
+import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -31,7 +32,7 @@ public class WirelessRedstone extends JavaPlugin
 {
 	public static NewWirelessConfiguration config;
 	public static WirelessStringProvider strings;
-	private static StackableLogger logger = new StackableLogger("WirelessRedstone");
+	private static StackableLogger logger = new StackableLogger("[WirelessRedstone]");
 	public WireBox WireBox = new WireBox(this);
 	public WirelessPermissions permissions;
 	public static Permission perms;
@@ -57,6 +58,17 @@ public class WirelessRedstone extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		config = new NewWirelessConfiguration(this);
+		if(config.getDebugMode())
+		{
+			logger.info("Debug Mode activated !");
+			logger.setLogLevel(Level.FINEST);
+		}
+		else
+		{
+			WirelessRedstone.logger.setLogLevel(config.getLogLevel());
+		}
+		
 		currentversion = Double.valueOf(getDescription().getVersion().split("b")[0].replaceFirst("\\.", ""));
 		
 		/*
@@ -66,6 +78,7 @@ public class WirelessRedstone extends JavaPlugin
 		 * 
 		 * All credits to the developpers of Vault (http://dev.bukkit.org/server-mods/vault/);
 		 */
+		
 		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable()
 		{
 			@Override
@@ -90,7 +103,6 @@ public class WirelessRedstone extends JavaPlugin
 		PluginDescriptionFile pdfFile = getDescription();
 		
 		//Load config and strings
-		config = new NewWirelessConfiguration(this);
 		strings = new WirelessStringProvider();
 		
 		//Load listeners
@@ -99,14 +111,9 @@ public class WirelessRedstone extends JavaPlugin
 		playerlistener = new WirelessPlayerListener(this);
 		
 		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
-		WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		WirelessRedstone.logger.fine("Loading Permissions...");
 		
 		permissions = new WirelessPermissions(this);
-		if(config.getDebugMode())
-		{
-			logger.info("Debug Mode activated !");
-		}
 		config.save();
 
 		this.WireBox.UpdateChacheNoThread();

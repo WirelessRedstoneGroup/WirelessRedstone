@@ -17,42 +17,41 @@ public class StackableLogger
 
 	public void config(String msg)
 	{
-		this.logger.config(this.prefix + ": " + msg);
+		logger.config(prefix + " " + msg);
 	}
 
 	public void fine(String msg)
 	{
-		this.logger.fine(this.prefix + ": " + msg);
+		logger.fine(prefix + " " + msg);
 	}
 
 	public void finer(String msg)
 	{
-		this.logger.finer(this.prefix + ": " + msg);
+		logger.finer(prefix + " " + msg);
 	}
 
 	public void finest(String msg)
 	{
-		this.logger.finest(this.prefix + ": " + msg);
+		logger.finest(prefix + " " + msg);
 	}
 
 	public void info(String msg)
 	{
-		this.logger.info(this.prefix + ": " + msg);
+		logger.info(prefix + " " + msg);
 	}
 
 	public void severe(String msg)
 	{
-		this.logger.severe(this.prefix + ": " + msg);
+		logger.severe(prefix + " " + msg);
 	}
 
 	public void warning(String msg)
 	{
-		this.logger.warning(this.prefix + ": " + msg);
+		logger.warning(prefix + " " + msg);
 	}
 	
 	public void setLogLevel(Level level)
 	{
-		this.logger.setLevel(level);
+		logger.setLevel(level);
 	}
-
 }
