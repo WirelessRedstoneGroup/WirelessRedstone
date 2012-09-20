@@ -1,10 +1,11 @@
 package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
@@ -13,13 +14,15 @@ import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 public class NewWirelessConfiguration
 {
-	private static final String CHANNEL_SECTION = "WirelessChannels";
+	private static final String CHANNEL_FOLDER = "/channels";
+	private File channelFolder;
 	private WirelessRedstone plugin;
 	
 	private FileConfiguration getConfig()
@@ -43,6 +46,10 @@ public class NewWirelessConfiguration
 		plugin.saveConfig();
 		reloadConfig();
 		
+		//Create the channel folder
+		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
+		channelFolder.mkdir();
+		
 		//Try to know if the config is an OldConfiguration, and convert it
 		File oldConfig = new File(plugin.getDataFolder(), "settings.yml");
 		if(oldConfig.exists())
@@ -52,6 +59,9 @@ public class NewWirelessConfiguration
 		
 		//Language selection
 		
+		//Show debug informations about the config...
+		if(getDebugMode())
+			System.out.println(channelFolder.getAbsolutePath());
 	}
 	
 	public void convertOldConfigToNew(File file)
@@ -104,11 +114,27 @@ public class NewWirelessConfiguration
 	
 	public WirelessChannel getWirelessChannel(String channelName)
 	{
-		ConfigurationSection section = getConfig().getConfigurationSection(CHANNEL_SECTION);
-		if(section == null)
-			return null; // section not found.
+		YamlConfiguration channelConfig = new YamlConfiguration();
+		try
+		{
+			File channelFile = new File(channelFolder, channelName + ".yml");
+			channelFile.createNewFile();
+			channelConfig.load(channelFile);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvalidConfigurationException e)
+		{
+			e.printStackTrace();
+		}
 		
-		Object channel = section.get(channelName);
+		Object channel = channelConfig.get(channelName);
 		if(channel == null)
 			return null; // channel not found
 		else if(!(channel instanceof WirelessChannel))
@@ -122,24 +148,68 @@ public class NewWirelessConfiguration
 	
 	public void setWirelessChannel(String channelName, WirelessChannel channel)
 	{
-		ConfigurationSection section = getConfig().getConfigurationSection(CHANNEL_SECTION);
-		if(section == null)
-			return;
+		FileConfiguration channelConfig = new YamlConfiguration();
+		try
+		{
+			File channelFile = new File(channelFolder, channelName + ".yml");
+			channelFile.createNewFile();
+			channelConfig.load(channelFile);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvalidConfigurationException e)
+		{
+			e.printStackTrace();
+		}
 		
-		section.set(channelName, channel);
+		channelConfig.set(channelName, channel);
+		
+		try
+		{
+			channelConfig.save(new File(channelFolder, channelName + ".yml"));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public Collection<WirelessChannel> getAllChannels()
 	{
-		ConfigurationSection section = getConfig().getConfigurationSection(CHANNEL_SECTION);
-		if(section == null)
+		ArrayList<File> fileList = new ArrayList<File>();
+		
+		if(fileList.isEmpty())
 			return new ArrayList<WirelessChannel>(0);
 		
-		Map<String, Object> values = section.getValues(true);
 		List<WirelessChannel> channels = new ArrayList<WirelessChannel>();
-		for(String cname : values.keySet())
+		
+		for(File f : channelFolder.listFiles())
 		{
-			Object channel = section.get(cname);
+			fileList.add(f);
+			FileConfiguration channelConfig = new YamlConfiguration();
+			try
+			{
+				channelConfig.load(f);
+			}
+			catch (FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (InvalidConfigurationException e)
+			{
+				e.printStackTrace();
+			}
+			Object channel = channelConfig.get(f.getName().split(".yml").toString());
 			if(channel instanceof WirelessChannel)
 			{
 				channels.add((WirelessChannel)channel);

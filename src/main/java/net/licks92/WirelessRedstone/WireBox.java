@@ -117,7 +117,7 @@ public class WireBox
 				return false;
 			}
 		}
-		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
+		if (WirelessRedstone.config.getWirelessChannel(cname) == null)
 		{
 			if(cname.contains("."))
 			{
@@ -136,7 +136,7 @@ public class WireBox
 			receiver.setDirection(cblock.getData());
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
-			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
 			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
@@ -149,7 +149,7 @@ public class WireBox
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
+			Object tempobject = WirelessRedstone.config.getWirelessChannel(cname);
 			if (tempobject instanceof WirelessChannel)
 			{
 				WirelessChannel channel = (WirelessChannel) tempobject;
@@ -162,7 +162,7 @@ public class WireBox
 				receiver.setDirection(cblock.getData());
 				receiver.setisWallSign(isWallSign);
 				channel.addReceiver(receiver);
-				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
+				WirelessRedstone.config.setWirelessChannel(cname, channel);
 				WirelessRedstone.config.save();
 				player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
 				this.UpdateCache();
@@ -239,7 +239,7 @@ public class WireBox
 		{
 			isWallSign = true;
 		}
-		if (WirelessRedstone.config.get("WirelessChannels." + cname) == null)
+		if (WirelessRedstone.config.getWirelessChannel(cname) == null)
 		{
 			if(cname.contains("."))
 			{
@@ -258,7 +258,7 @@ public class WireBox
 			screen.setDirection(cblock.getData());
 			screen.setisWallSign(isWallSign);
 			channel.addScreen(screen);
-			WirelessRedstone.config.set("WirelessChannels." + cname,channel);
+			WirelessRedstone.config.setWirelessChannel(cname, channel);
 			WirelessRedstone.config.save();
 			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
@@ -271,7 +271,7 @@ public class WireBox
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			Object tempobject = WirelessRedstone.config.get("WirelessChannels." + cname);
+			Object tempobject = WirelessRedstone.config.getWirelessChannel(cname);
 			if (tempobject instanceof WirelessChannel)
 			{
 				WirelessChannel channel = (WirelessChannel) tempobject;
@@ -284,7 +284,7 @@ public class WireBox
 				screen.setDirection(cblock.getData());
 				screen.setisWallSign(isWallSign);
 				channel.addScreen(screen);
-				WirelessRedstone.config.set("WirelessChannels." + cname, channel);
+				WirelessRedstone.config.setWirelessChannel(cname, channel);
 				WirelessRedstone.config.save();
 				player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
 				this.UpdateCache();

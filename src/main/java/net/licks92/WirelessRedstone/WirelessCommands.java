@@ -380,7 +380,7 @@ public class WirelessCommands implements CommandExecutor
 					player.getLocation().getBlock();
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
-					sign.setLine(0, "[wrt]");
+					sign.setLine(0, WirelessRedstone.strings.tagsTransmitter.get(0));
 					sign.setLine(1, channelname);
 					sign.update(true);
 					plugin.WireBox.addWirelessTransmitter(channelname, player.getLocation().getBlock(), player);
@@ -415,7 +415,7 @@ public class WirelessCommands implements CommandExecutor
 				{
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
-					sign.setLine(0, "[WRr]");
+					sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
 					sign.setLine(1, channelname);
 					sign.update(true);
 					if(!plugin.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player))
@@ -455,7 +455,7 @@ public class WirelessCommands implements CommandExecutor
 					player.getLocation().getBlock();
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
-					sign.setLine(0, "[wrs]");
+					sign.setLine(0, WirelessRedstone.strings.tagsScreen.get(0));
 					sign.setLine(1, channelname);
 					sign.update(true);
 					plugin.WireBox.addWirelessScreen(channelname, player.getLocation().getBlock(), player);

@@ -63,6 +63,7 @@ public class WirelessRedstone extends JavaPlugin
 		if(config.getDebugMode())
 		{
 			logger.info("Debug Mode activated !");
+			logger.info("Log level set to FINEST because of the debug mode");
 			logger.setLogLevel(Level.FINEST);
 		}
 		else
