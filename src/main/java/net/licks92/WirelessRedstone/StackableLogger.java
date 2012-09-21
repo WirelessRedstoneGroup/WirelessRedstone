@@ -14,6 +14,14 @@ public class StackableLogger
 		this.logger = Logger.getLogger(MINECRAFT_LOGGER);
 		this.prefix = prefix;
 	}
+	
+	public void debug(String msg)
+	{
+		if(WirelessRedstone.config.getDebugMode())
+		{
+			logger.info(msg);
+		}
+	}
 
 	public void config(String msg)
 	{
