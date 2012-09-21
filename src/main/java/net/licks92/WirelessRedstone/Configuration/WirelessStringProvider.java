@@ -20,6 +20,7 @@ public class WirelessStringProvider
 	public String thisChannelContains;
 	public String channelLocked;
 	public String channelUnlocked;
+	public String pageNumberInferiorToZero;
 	public String nextPage;
 	public String signDestroyed;
 	public String channelRemovedCauseNoSign;
@@ -57,6 +58,7 @@ public class WirelessStringProvider
 			playerCannotDestroySign = ChatColor.RED + "[WirelessRedstone] You are not allowed to destroy this sign!";
 			ownersOfTheChannelAre = "[WirelessRedstone] The owners of this channel are : ";
 			thisChannelContains = "[WirelessRedstone] This channel contains :";
+			pageNumberInferiorToZero = ChatColor.RED + "[WirelessRedstone] Page number cannot be inferior to 0!";
 			channelLocked = ChatColor.GREEN + "[WirelessRedstone] Channel locked !";
 			channelUnlocked = ChatColor.GREEN + "[WirelessRedstone] Channel unlocked !";
 			nextPage = ChatColor.AQUA + "\n/wr list pagenumber for next page!";

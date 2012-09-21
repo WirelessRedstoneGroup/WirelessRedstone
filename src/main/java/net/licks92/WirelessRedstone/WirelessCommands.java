@@ -584,6 +584,11 @@ public class WirelessCommands implements CommandExecutor
 		 * Show a page from list of Strings
 		 * Where maxitems is the maximum items on each page
 		 */
+		
+		if(cpage > 1)
+		{
+			player.sendMessage(WirelessRedstone.strings.pageNumberInferiorToZero);
+		}
 		int itemsonlist = list.size();
 		int maxitems = 5;
 		int currentpage = cpage;
