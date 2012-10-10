@@ -22,8 +22,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 public class NewWirelessConfiguration
 {
 	private static final String CHANNEL_FOLDER = "/channels";
+	
 	private File channelFolder;
 	private WirelessRedstone plugin;
+	private boolean saveInSQLDatabase;
 	
 	private FileConfiguration getConfig()
 	{
@@ -34,21 +36,39 @@ public class NewWirelessConfiguration
 	{
 		plugin = r_plugin;
 		
-		//Initialize the serialization
-		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
-		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
-		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
-		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
-		
 		//Loading and saving
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		reloadConfig();
 		
-		//Create the channel folder
-		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
-		channelFolder.mkdir();
+		//Storage system => SQL or config files
+		if(getSQLUsage())
+		{
+			initSQLSave();
+		}
+		else
+		{
+			initTextSave();
+		}
+		
+		//Language selection
+		//To implement
+		
+		//Show debug informations about the config...
+		if(getDebugMode())
+			System.out.println(channelFolder.getAbsolutePath());
+	}
+
+	private boolean initTextSave()
+	{
+		saveInSQLDatabase = false;
+		
+		//Initialize the serialization
+		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
+		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
+		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
+		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
 		
 		//Try to know if the config is an OldConfiguration, and convert it
 		File oldConfig = new File(plugin.getDataFolder(), "settings.yml");
@@ -57,11 +77,17 @@ public class NewWirelessConfiguration
 			convertOldConfigToNew(oldConfig);
 		}
 		
-		//Language selection
+		//Create the channel folder
+		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
+		channelFolder.mkdir();
 		
-		//Show debug informations about the config...
-		if(getDebugMode())
-			System.out.println(channelFolder.getAbsolutePath());
+		return true;
+	}
+	
+	private boolean initSQLSave()
+	{
+		saveInSQLDatabase = true;
+		return true;
 	}
 	
 	public void convertOldConfigToNew(File file)
@@ -85,6 +111,11 @@ public class NewWirelessConfiguration
 	public boolean getVaultUsage()
 	{
 		return getConfig().getBoolean("UseVault");
+	}
+	
+	private boolean getSQLUsage()
+	{
+		return getConfig().getBoolean("UseSQL");
 	}
 
 	public void save()

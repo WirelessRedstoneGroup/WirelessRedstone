@@ -3,6 +3,9 @@
 #The level correspond on the rate of informations you will receive about the plugin. It can be FINEST, FINER, FINE, INFO, WARNING or SEVERE
 LogLevel: INFO
 
+#If true, then the plugin uses a database to store the channels.
+UseSQL: true
+
 #If you want to this plugin work, you should not set this value to false
 cancelChunkUnloads: true
 
