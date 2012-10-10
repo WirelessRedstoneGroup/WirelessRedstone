@@ -33,7 +33,7 @@ public class WirelessRedstone extends JavaPlugin
 {
 	public static NewWirelessConfiguration config;
 	public static WirelessStringProvider strings;
-	private static StackableLogger logger = new StackableLogger("[WirelessRedstone]");
+	private static StackableLogger logger;
 	public WireBox WireBox = new WireBox(this);
 	public WirelessPermissions permissions;
 	public static Permission perms;
@@ -43,33 +43,39 @@ public class WirelessRedstone extends JavaPlugin
 	private static Metrics metrics;
 	public double currentversion;
 	public double newversion;
-
+	
 	public static StackableLogger getStackableLogger()
 	{
 		return logger;
 	}
-
+	
 	@Override
 	public void onDisable()
 	{
-
+		config.close();
 	}
 	
-
 	@Override
 	public void onEnable()
 	{
+		PluginDescriptionFile pdfFile = getDescription();
+		
 		config = new NewWirelessConfiguration(this);
 		if(config.getDebugMode())
 		{
+			logger = new StackableLogger("[WirelessRedstone]", true);
 			logger.info("Debug Mode activated !");
 			logger.info("Log level set to FINEST because of the debug mode");
 			logger.setLogLevel(Level.FINEST);
 		}
 		else
 		{
+			logger = new StackableLogger("[WirelessRedstone]", false);
 			WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		}
+		config.init();
+		
+		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
 		
 		currentversion = Double.valueOf(getDescription().getVersion().split("b")[0].replaceFirst("\\.", ""));
 		
@@ -102,8 +108,6 @@ public class WirelessRedstone extends JavaPlugin
 			}
 		}, 0, 24000);
 		
-		PluginDescriptionFile pdfFile = getDescription();
-		
 		//Load config and strings
 		strings = new WirelessStringProvider();
 		
@@ -112,7 +116,6 @@ public class WirelessRedstone extends JavaPlugin
 		blocklistener = new WirelessBlockListener(this);
 		playerlistener = new WirelessPlayerListener(this);
 		
-		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
 		WirelessRedstone.logger.fine("Loading Permissions...");
 		
 		permissions = new WirelessPermissions(this);

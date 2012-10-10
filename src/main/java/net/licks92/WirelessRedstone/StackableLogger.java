@@ -3,24 +3,26 @@ package net.licks92.WirelessRedstone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+
 public class StackableLogger
 {
 	private Logger logger;
 	private String prefix;
+	private boolean debug;
 	public static final String MINECRAFT_LOGGER = "Minecraft";
 
-	public StackableLogger(String prefix)
+	public StackableLogger(String prefix, boolean debug)
 	{
-		this.logger = Logger.getLogger(MINECRAFT_LOGGER);
+		this.logger = Bukkit.getLogger();
 		this.prefix = prefix;
+		this.debug = debug;
 	}
 	
 	public void debug(String msg)
 	{
-		if(WirelessRedstone.config.getDebugMode())
-		{
-			logger.info(msg);
-		}
+		if(debug)
+			info(msg);
 	}
 
 	public void config(String msg)

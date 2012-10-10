@@ -3,10 +3,14 @@ package net.licks92.WirelessRedstone.Configuration;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
+
+import lib.PatPeter.SQLibrary.Database;
+import lib.PatPeter.SQLibrary.SQLite;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
@@ -14,6 +18,7 @@ import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,6 +31,8 @@ public class NewWirelessConfiguration
 	private File channelFolder;
 	private WirelessRedstone plugin;
 	private boolean saveInSQLDatabase;
+
+	private SQLite db;
 	
 	private FileConfiguration getConfig()
 	{
@@ -41,7 +48,14 @@ public class NewWirelessConfiguration
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		reloadConfig();
-		
+	}
+	
+	public void init()
+	{
+		//Create the channel folder
+				channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
+				channelFolder.mkdir();
+				
 		//Storage system => SQL or config files
 		if(getSQLUsage())
 		{
@@ -51,13 +65,13 @@ public class NewWirelessConfiguration
 		{
 			initTextSave();
 		}
-		
+
 		//Language selection
 		//To implement
-		
+
 		//Show debug informations about the config...
 		if(getDebugMode())
-			System.out.println(channelFolder.getAbsolutePath());
+			WirelessRedstone.getStackableLogger().debug("Channels stored in " + channelFolder.getAbsolutePath());
 	}
 
 	private boolean initTextSave()
@@ -77,16 +91,37 @@ public class NewWirelessConfiguration
 			convertOldConfigToNew(oldConfig);
 		}
 		
-		//Create the channel folder
-		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
-		channelFolder.mkdir();
-		
 		return true;
 	}
 	
 	private boolean initSQLSave()
 	{
 		saveInSQLDatabase = true;
+		
+		db = new SQLite(Bukkit.getLogger(), "[WirelessRedstone]", "channels", channelFolder.getAbsolutePath());
+		
+		try
+		{
+			db.open();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been established!");
+		
+		return true;
+	}
+	
+	public boolean close()
+	{
+		if(saveInSQLDatabase)
+		{
+			db.close();
+			WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been successfully closed!");
+			return true;
+		}
 		return true;
 	}
 	
@@ -94,6 +129,8 @@ public class NewWirelessConfiguration
 	{
 		OldWirelessConfiguration oldConfiguration = new OldWirelessConfiguration(plugin.getDataFolder());
 		getConfig().set("WirelessChannels", oldConfiguration.get("WirelessChannels"));
+		
+		WirelessRedstone.getStackableLogger().debug("Old text configuration has been converted to new text configuration");
 		
 		file.delete();
 	}
@@ -145,36 +182,44 @@ public class NewWirelessConfiguration
 	
 	public WirelessChannel getWirelessChannel(String channelName)
 	{
-		YamlConfiguration channelConfig = new YamlConfiguration();
-		try
+		if(saveInSQLDatabase)
 		{
-			File channelFile = new File(channelFolder, channelName + ".yml");
-			channelFile.createNewFile();
-			channelConfig.load(channelFile);
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (InvalidConfigurationException e)
-		{
-			e.printStackTrace();
-		}
-		
-		Object channel = channelConfig.get(channelName);
-		if(channel == null)
-			return null; // channel not found
-		else if(!(channel instanceof WirelessChannel))
-		{
-			plugin.getLogger().warning("Channel "+channelName+" does not seem to be of type WirelessChannel.");
 			return null;
 		}
 		else
-			return (WirelessChannel)channel;
+		{
+			YamlConfiguration channelConfig = new YamlConfiguration();
+			try
+			{
+				File channelFile = new File(channelFolder, channelName + ".yml");
+				channelFile.createNewFile();
+				channelConfig.load(channelFile);
+			}
+			catch (FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (InvalidConfigurationException e)
+			{
+				e.printStackTrace();
+			}
+			
+			Object channel = channelConfig.get(channelName);
+			if(channel == null)
+				return null; // channel not found
+			else if(!(channel instanceof WirelessChannel))
+			{
+				plugin.getLogger().warning("Channel "+channelName+" does not seem to be of type WirelessChannel.");
+				return null;
+			}
+			else
+				return (WirelessChannel)channel;
+		}
+		
 	}
 	
 	public void setWirelessChannel(String channelName, WirelessChannel channel)
