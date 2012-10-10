@@ -182,7 +182,6 @@ public class NewWirelessConfiguration
 	
 	public Collection<WirelessChannel> getAllChannels()
 	{
-		long time1 = System.currentTimeMillis();
 		ArrayList<File> fileList = new ArrayList<File>();
 		
 		if(fileList.isEmpty())
@@ -218,10 +217,6 @@ public class NewWirelessConfiguration
 			else
 				plugin.getLogger().warning("Channel "+channel+" is not of type WirelessChannel.");
 		}
-		
-		long time2 = System.currentTimeMillis();
-		
-		WirelessRedstone.getStackableLogger().debug("Method getAllChannels time of execution in milliseconds : " + (time2 - time1));
 		
 		return channels;
 	}

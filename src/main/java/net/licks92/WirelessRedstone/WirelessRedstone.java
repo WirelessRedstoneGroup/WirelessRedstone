@@ -207,6 +207,7 @@ public class WirelessRedstone extends JavaPlugin
 			e.printStackTrace();
 		}
 		
+		//Loading finished !
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
 
