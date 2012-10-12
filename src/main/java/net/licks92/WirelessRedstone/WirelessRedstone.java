@@ -8,7 +8,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Configuration.NewWirelessConfiguration;
+import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
 import net.licks92.WirelessRedstone.Configuration.WirelessStringProvider;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList;
 
 public class WirelessRedstone extends JavaPlugin
 {
-	public static NewWirelessConfiguration config;
+	public static WirelessConfiguration config;
 	public static WirelessStringProvider strings;
 	private static StackableLogger logger;
 	public WireBox WireBox = new WireBox(this);
@@ -60,7 +60,7 @@ public class WirelessRedstone extends JavaPlugin
 	{
 		PluginDescriptionFile pdfFile = getDescription();
 		
-		config = new NewWirelessConfiguration(this);
+		config = new WirelessConfiguration(this);
 		if(config.getDebugMode())
 		{
 			logger = new StackableLogger("[WirelessRedstone]", true);
