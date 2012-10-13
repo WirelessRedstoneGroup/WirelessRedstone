@@ -71,14 +71,13 @@ public class WirelessCommands implements CommandExecutor
 		{
 			return performWRlist(sender, args, player);
 		}
-		else if (commandName.equals("wrlock")
-				||commandName.equals("wrunlock"))
+		else if (commandName.equals("wrlock"))
 		{
 			return performLockChannel(sender, args, player);
 		}
 		return true;
 	}
-	
+
 	public ArrayList<String> generateCommandList(Player player)
 	{
 		ArrayList<String> commands = new ArrayList<String>(); 
@@ -283,17 +282,17 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
-		if (args.length >= 3)
+		if (args.length > 0)
 		{
-			String channelname = args[0];
-			String subcommand = args[1];
-			String playername = args[2];
+			String subCommand = args[0];
 
-			if (subcommand.equalsIgnoreCase("addowner"))
+			if (subCommand.equalsIgnoreCase("addowner"))
 			{
-				if (plugin.WireBox.hasAccessToChannel(player, channelname))
+				String channelName = args[1];
+				String playername = args[2];
+				if (plugin.WireBox.hasAccessToChannel(player, channelName))
 				{
-					WirelessChannel channel = plugin.WireBox.getChannel(channelname);
+					WirelessChannel channel = plugin.WireBox.getChannel(channelName);
 					channel.addOwner(playername);
 					plugin.WireBox.SaveChannel(channel);
 					return true;
@@ -303,11 +302,14 @@ public class WirelessCommands implements CommandExecutor
 					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
-			else if (subcommand.equalsIgnoreCase("removeowner"))
+			
+			else if (subCommand.equalsIgnoreCase("removeowner"))
 			{
-				if (plugin.WireBox.hasAccessToChannel(player, channelname))
+				String channelName = args[1];
+				String playername = args[2];
+				if (plugin.WireBox.hasAccessToChannel(player, channelName))
 				{
-					WirelessChannel channel = plugin.WireBox.getChannel(channelname);
+					WirelessChannel channel = plugin.WireBox.getChannel(channelName);
 					channel.removeOwner(playername);
 					plugin.WireBox.SaveChannel(channel);
 					return true;
@@ -317,6 +319,12 @@ public class WirelessCommands implements CommandExecutor
 					player.sendMessage(WirelessRedstone.strings.playerHasNotAccessToChannel);
 				}
 			}
+			
+			else if (subCommand.equalsIgnoreCase("wipedata"))
+			{
+				return performWipeData(sender, args, player);
+			}
+			
 			else
 			{
 				player.sendMessage("[WirelessRedstone] Unknown sub command!");
@@ -325,8 +333,9 @@ public class WirelessCommands implements CommandExecutor
 		else
 		{
 			player.sendMessage("Channel Admin Commands:");
-			player.sendMessage("/wr admin channelname addowner playername - Add a player to channel.");
-			player.sendMessage("/wr admin channelname removeowner playername - Add a player to channel.");
+			player.sendMessage("/wr admin addowner channelname playername - Add a player to channel.");
+			player.sendMessage("/wr admin removeowner channelname playername - Add a player to channel.");
+			player.sendMessage("/wr admin wipedata - Erase the database! Don't do it if you don't know what you're doing!");
 		}
 		return true;
 
@@ -507,6 +516,31 @@ public class WirelessCommands implements CommandExecutor
 			return true;
 		}
 		return true;
+	}
+	
+	private boolean performWipeData(CommandSender sender, String[] args, Player player)
+	{
+		/*
+		 * To-do list:
+		 * - Make a backup before.
+		 * - Remove all the signs of every channel.
+		 */
+		
+		if(!plugin.permissions.canWipeData(player))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
+			return true;
+		}
+		if(WirelessRedstone.config.sqlConfig.wipeDB())
+		{
+			player.sendMessage("Database has been succesfully wiped!");
+			return true;
+		}
+		else
+		{
+			player.sendMessage("Database hasn't been wiped.");
+			return true;
+		}
 	}
 
 	private boolean performShowInfo(CommandSender sender, String[] args, Player player)

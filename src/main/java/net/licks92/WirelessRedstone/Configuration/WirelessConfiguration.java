@@ -31,7 +31,7 @@ public class WirelessConfiguration
 	
 	private File channelFolder;
 	private WirelessRedstone plugin;
-	private SQLConfiguration sqlConfig;
+	public SQLConfiguration sqlConfig;
 	
 	private FileConfiguration getConfig()
 	{

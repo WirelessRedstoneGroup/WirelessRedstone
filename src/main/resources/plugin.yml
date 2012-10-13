@@ -96,6 +96,7 @@ permissions:
             wirelessredstone.admin.isAdmin: true
             wirelessredstone.admin.addOwner: true
             wirelessredstone.admin.removeOwner: true
+            wirelessredstone.admin.wipeData: true
     wirelessredstone.create.transmitter:
         description: Allows you to create a transmitter
         default: op
@@ -137,4 +138,7 @@ permissions:
         default: op
     wirelessredstone.admin.removeOwner:
         description: Allows you to remove an owner from a channel.
+        default: op
+    wirelessredstone.admin.wipeData:
+        description: Allows you to wipe all the database.
         default: op

@@ -14,6 +14,7 @@ import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Bukkit;
 
+import lib.PatPeter.SQLibrary.MySQL;
 import lib.PatPeter.SQLibrary.SQLite;
 
 public class SQLConfiguration
@@ -45,16 +46,8 @@ public class SQLConfiguration
 	
 	public boolean init()
 	{
+		WirelessRedstone.getStackableLogger().debug("Establishing connection to database...");
 		db = new SQLite(Bukkit.getLogger(), "[WirelessRedstone]", "channels", channelFolder.getAbsolutePath());
-		
-		try
-		{
-			db.open();
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
 		
 		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been established!");
 		
@@ -84,6 +77,34 @@ public class SQLConfiguration
 		}
 	}
 	
+	public boolean wipeDB()
+	{
+		try
+		{
+			//Get the names of all the tables
+			ResultSet rs = db.query("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			ArrayList<String> tables = new ArrayList<String>();
+			while(rs.next())
+			{
+				tables.add(rs.getString("name"));
+			}
+			rs.close();
+			
+			//Erase all the tables
+			for(int i = 0; i < tables.size(); i++)
+			{
+				db.query("DROP TABLE " + tables.get(i));
+			}
+			
+			return true;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public WirelessChannel getWirelessChannel(String channelName)
 	{
 		try
@@ -97,7 +118,7 @@ public class SQLConfiguration
 					
 					//Get the ResultSet from the table we want
 					ResultSet rs2 = db.query("SELECT * FROM " + channelName);
-					if(!rs2.first()) //If the table is empty
+					if(!(rs2.getString("name") == null)) //If the table is empty
 					{
 						db.query("DROP TABLE " + channelName);
 						return new WirelessChannel();
@@ -120,10 +141,10 @@ public class SQLConfiguration
 					//Set the owners
 					ArrayList<String> owners = new ArrayList<String>();
 					rs2.first();
-					do
+					while(rs2.next())
 					{
 						owners.add(rs2.getString(sql_channelowners));
-					}while(rs2.next());
+					}
 					channel.setOwners(owners);
 					
 					//Set the wireless signs
@@ -131,7 +152,7 @@ public class SQLConfiguration
 					ArrayList<WirelessTransmitter> transmitters = new ArrayList<WirelessTransmitter>();
 					ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
 					rs2.first();
-					do
+					while(rs.next())
 					{
 						if(rs2.getString(sql_signtype).equals("receiver"))
 						{
@@ -169,7 +190,7 @@ public class SQLConfiguration
 							screen.setZ(rs2.getInt(sql_signz));
 							screens.add(screen);
 						}
-					}while(rs2.next());
+					}
 					channel.setReceivers(receivers);
 					channel.setTransmitters(transmitters);
 					channel.setScreens(screens);
