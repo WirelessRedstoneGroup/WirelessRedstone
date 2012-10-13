@@ -23,7 +23,6 @@ public class SQLConfiguration
 	
 	private final String sql_iswallsign = "iswallsign";
 	private final String sql_direction = "direction";
-	private final String sql_channelid = "id";
 	private final String sql_channelname = "name";
 	private final String sql_channellocked = "locked";
 	private final String sql_channelowners = "owners";
@@ -47,6 +46,7 @@ public class SQLConfiguration
 	public boolean init()
 	{
 		WirelessRedstone.getStackableLogger().debug("Establishing connection to database...");
+		
 		db = new SQLite(Bukkit.getLogger(), "[WirelessRedstone]", "channels", channelFolder.getAbsolutePath());
 		
 		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been established!");
@@ -56,16 +56,17 @@ public class SQLConfiguration
 	
 	private boolean sqlTableExists(String name)
 	{
-		ResultSet rs = db.query("SELECT name FROM sqlite_master WHERE type = \"table\"");
 		try
 		{
-			do
+			ResultSet rs = db.query("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			
+			while(rs.next())
 			{
 				if(rs.getString("name").equals(name))
 				{
 					return true;
 				}
-			}while(rs.next());
+			}
 
 			rs.close();
 			return false;
@@ -129,7 +130,6 @@ public class SQLConfiguration
 					
 					//Set the Id, the name, and the locked variable
 					rs2.first();
-					channel.setId(rs2.getInt(sql_channelid));
 					channel.setName(rs2.getString(sql_channelname));
 					if(rs2.getInt(sql_channellocked) == 1)
 						channel.setLocked(true);
@@ -151,8 +151,7 @@ public class SQLConfiguration
 					ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
 					ArrayList<WirelessTransmitter> transmitters = new ArrayList<WirelessTransmitter>();
 					ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
-					rs2.first();
-					while(rs.next())
+					while(rs2.next())
 					{
 						if(rs2.getString(sql_signtype).equals("receiver"))
 						{
@@ -205,87 +204,100 @@ public class SQLConfiguration
 		{
 			e.printStackTrace();
 		}
-		WirelessRedstone.getStackableLogger().severe("Method getWirelessChannel : No channel with the given name (" + channelName + ") was found! Did you edit or remove the database?");
-		return new WirelessChannel();
+		return null; //Channel not found
 	}
 	
 	public void setWirelessChannel(String channelName, WirelessChannel channel)
 	{
-		if(channel == null)
+		//try
 		{
-			db.query("DROP TABLE " + channelName);
-			return;
-		}
-		if(!sqlTableExists(channelName))
-		{
-			//Get the type of the sign that has been created
-			String signtype;
-			IWirelessPoint wirelesspoint;
-			if(!channel.getReceivers().isEmpty())
+			if(channel == null)
 			{
-				signtype = "receiver";
-				wirelesspoint = channel.getReceivers().get(0);
-			}
-			else if(!channel.getTransmitters().isEmpty())
-			{
-				signtype = "transmitter";
-				wirelesspoint = channel.getTransmitters().get(0);
-			}
-			else if(!channel.getScreens().isEmpty())
-			{
-				signtype = "screen";
-				wirelesspoint = channel.getScreens().get(0);
-			}
-			else
-			{
-				WirelessRedstone.getStackableLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
-				plugin.WireBox.removeChannel(channelName);
+				db.query("DROP TABLE " + channelName);
 				return;
 			}
-			
-			//Create the table
-			db.createTable("CREATE TABLE " + channelName + " ( "
-					
-					//First columns are for the channel
-					+ sql_channelname + " char(64),"
-					+ sql_channelid + " int,"
-					+ sql_channellocked + " int (1),"
-					+ sql_channelowners + " char(64),"
-					
-					//After there are the signs colums
-					+ sql_signtype + " char(32),"
-					+ sql_signx + " int,"
-					+ sql_signy + " int,"
-					+ sql_signz + " int,"
-					+ sql_direction + " int,"
-					+ sql_signowner + " char(64),"
-					+ sql_signworld + " char(128),"
-					+ sql_iswallsign + " int(1)"
-					+ " ) ");
-			
-			//Fill the columns name, id and locked
-			db.query("INSERT INTO " + channelName + " (" + sql_channelname + "," + sql_channelid + "," + sql_channellocked + "," + sql_channelowners + ") "
-					+ "VALUES ('" + channel.getName() + "'," //name
-					+ channel.getId() + "," //id
-					+ "0" + "," //locked
-					+ "'" + channel.getOwners().get(0)
-					+ "')"); //The first owner
-			
-			//Create the sign that caused the channel to create
-			db.query("INSERT INTO " + channelName + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
-					+ "VALUES ('" + signtype + "'," //Type of the wireless point
-					+ wirelesspoint.getX() + ","
-					+ wirelesspoint.getY() + ","
-					+ wirelesspoint.getZ() + ","
-					+ wirelesspoint.getDirection() + ","
-					+ "'" + wirelesspoint.getOwner() + "',"
-					+ "'" + wirelesspoint.getWorld() + "',"
-					+ wirelesspoint.getisWallSign()
-					+ " ) ");
-			
-			//Finished!
-			return;
+			if(!sqlTableExists(channelName))
+			{
+				//Get the type of the sign that has been created
+				String signtype;
+				IWirelessPoint wirelesspoint;
+				int iswallsign;
+				if(!channel.getReceivers().isEmpty())
+				{
+					signtype = "receiver";
+					wirelesspoint = channel.getReceivers().get(0);
+				}
+				else if(!channel.getTransmitters().isEmpty())
+				{
+					signtype = "transmitter";
+					wirelesspoint = channel.getTransmitters().get(0);
+				}
+				else if(!channel.getScreens().isEmpty())
+				{
+					signtype = "screen";
+					wirelesspoint = channel.getScreens().get(0);
+				}
+				else
+				{
+					WirelessRedstone.getStackableLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
+					plugin.WireBox.removeChannel(channelName);
+					return;
+				}
+				if(wirelesspoint.getisWallSign())
+				{
+					iswallsign = 1;
+				}
+				else
+				{
+					iswallsign = 0;
+				}
+				
+				//Create the table
+				db.createTable("CREATE TABLE " + channelName + " ( "
+						
+						//First columns are for the channel
+						+ sql_channelname + " char(64),"
+						+ sql_channellocked + " int (1),"
+						+ sql_channelowners + " char(64),"
+						
+						//After there are the signs colums
+						+ sql_signtype + " char(32),"
+						+ sql_signx + " int,"
+						+ sql_signy + " int,"
+						+ sql_signz + " int,"
+						+ sql_direction + " int,"
+						+ sql_signowner + " char(64),"
+						+ sql_signworld + " char(128),"
+						+ sql_iswallsign + " int(1)"
+						+ " ) ");
+				
+				//Fill the columns name, id and locked
+				db.query("INSERT INTO " + channelName + " (" + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
+						+ "VALUES ('" + channel.getName() + "'," //name
+						+ "0" + "," //locked
+						+ "'" + channel.getOwners().get(0)
+						+ "')"); //The first owner
+				
+				//Create the sign that caused the channel to create
+				db.query("INSERT INTO " + channelName + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
+						+ "VALUES ('" + signtype + "'," //Type of the wireless point
+						+ wirelesspoint.getX() + ","
+						+ wirelesspoint.getY() + ","
+						+ wirelesspoint.getZ() + ","
+						+ wirelesspoint.getDirection() + ","
+						+ "'" + wirelesspoint.getOwner() + "',"
+						+ "'" + wirelesspoint.getWorld() + "',"
+						+ iswallsign
+						+ " ) ");
+				
+				//Finished!
+				return;
+			}
 		}
+		/*catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}*/
 	}
 	
 	public boolean close()

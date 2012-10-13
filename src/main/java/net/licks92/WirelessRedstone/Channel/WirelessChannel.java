@@ -31,7 +31,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	@NotNull
 	private boolean locked;
 	
-	private List<String> owners;
+	private List<String> owners = new LinkedList<String>();
 	private List<WirelessTransmitter> transmitters = new LinkedList<WirelessTransmitter>();
 	private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
 	private List<WirelessScreen> screens = new LinkedList<WirelessScreen>();
@@ -127,14 +127,15 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	public void addScreen(WirelessScreen screen)
 	{
 		if (screens == null)
-			screens = new ArrayList<WirelessScreen>();
+			screens = new LinkedList<WirelessScreen>();
 		
 		screens.add(screen);
 	}
 
-	public void addOwner(String username) {
+	public void addOwner(String username)
+	{
 		if (this.owners == null) 
-			this.owners = new ArrayList<String>();
+			this.owners = new LinkedList<String>();
 		
 		if(!this.owners.contains(username))
 			this.owners.add(username);
@@ -224,7 +225,14 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 
 	public List<String> getOwners()
 	{
-		return this.owners;
+		try
+		{
+			return this.owners;
+		}
+		catch(NullPointerException ex)
+		{
+			return new LinkedList<String>();
+		}
 	}
 
 	public int getId()
