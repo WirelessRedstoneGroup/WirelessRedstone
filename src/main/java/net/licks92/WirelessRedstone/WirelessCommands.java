@@ -223,7 +223,7 @@ public class WirelessCommands implements CommandExecutor
 		ArrayList<String> list = new ArrayList<String>();
 		try
 		{
-			for (WirelessChannel channel : plugin.WireBox.getChannels())
+			for (WirelessChannel channel : WirelessRedstone.config.getAllChannels())
 			{
 				//Show Name of each channel and his activity
 				if(channel != null)
@@ -255,7 +255,7 @@ public class WirelessCommands implements CommandExecutor
 				player.sendMessage("This page number is not an number!");
 				return true;
 			}
-			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + plugin.WireBox.getChannels().size() + " channel(s) )");
+			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + WirelessRedstone.config.getAllChannels().size() + " channel(s) )");
 			ShowList(list, pagenumber, player);
 			player.sendMessage(WirelessRedstone.strings.forMoreInfosPerformWRInfo);
 			player.sendMessage(WirelessRedstone.strings.nextPage);
@@ -263,7 +263,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else if (args.length == 0)
 		{
-			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + plugin.WireBox.getChannels().size() + " channel(s) )");
+			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + WirelessRedstone.config.getAllChannels().size() + " channel(s) )");
 			ShowList(list, 1, player);
 			player.sendMessage(WirelessRedstone.strings.forMoreInfosPerformWRInfo);
 			player.sendMessage(WirelessRedstone.strings.nextPage);
@@ -290,11 +290,14 @@ public class WirelessCommands implements CommandExecutor
 			{
 				String channelName = args[1];
 				String playername = args[2];
+				WirelessRedstone.getStackableLogger().debug(player.getName() + " has been added to the owners of " + channelName);
 				if (plugin.WireBox.hasAccessToChannel(player, channelName))
 				{
+					WirelessRedstone.getStackableLogger().debug(player.getName() + " has been added to the owners of " + channelName);
 					WirelessChannel channel = plugin.WireBox.getChannel(channelName);
 					channel.addOwner(playername);
-					plugin.WireBox.SaveChannel(channel);
+					WirelessRedstone.config.updateChannel(channelName, channel);
+					
 					return true;
 				}
 				else
@@ -311,7 +314,7 @@ public class WirelessCommands implements CommandExecutor
 				{
 					WirelessChannel channel = plugin.WireBox.getChannel(channelName);
 					channel.removeOwner(playername);
-					plugin.WireBox.SaveChannel(channel);
+					WirelessRedstone.config.updateChannel(channelName, channel);
 					return true;
 				}
 				else
@@ -531,7 +534,7 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
-		if(WirelessRedstone.config.sqlConfig.wipeDB())
+		if(WirelessRedstone.config.wipeData())
 		{
 			player.sendMessage("Database has been succesfully wiped!");
 			return true;
