@@ -75,7 +75,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			}
 			i++;
 		}
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 	
 	public void removeTransmitterAt(Location loc)
@@ -90,7 +89,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			}
 			i++;
 		}
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 	
 	public void removeScreenAt(Location loc)
@@ -105,14 +103,11 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			}
 			i++;
 		}
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 	
 	public boolean removeOwner(String username)
 	{
 		boolean ret = this.owners.remove(username);
-		
-		WirelessRedstone.config.updateChannel(getName(), this);
 		
 		return ret;
 	}
@@ -123,7 +118,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			transmitters = new ArrayList<WirelessTransmitter>();
 
 		transmitters.add(transmitter);
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	public void addReceiver(WirelessReceiver receiver)
@@ -132,7 +126,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			receivers = new ArrayList<WirelessReceiver>();
 
 		receivers.add(receiver);
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 	
 	public void addScreen(WirelessScreen screen)
@@ -141,7 +134,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			screens = new LinkedList<WirelessScreen>();
 		
 		screens.add(screen);
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	public void addOwner(String username)
@@ -151,22 +143,18 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		
 		if(!this.owners.contains(username))
 			this.owners.add(username);
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	public void setName(String name) {
 		this.name = name;
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 	
 	public void setLocked(boolean value) {
 		this.locked = value;
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	public void setOwners(List<String> owners) {
 		this.owners = owners;
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	public void setTransmitters(List<WirelessTransmitter> transmitters)
@@ -175,7 +163,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			this.transmitters = transmitters;
 		else
 			this.transmitters = new LinkedList<WirelessTransmitter>();
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	public void setReceivers(List<WirelessReceiver> receivers)
@@ -184,7 +171,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			this.receivers = receivers;
 		else
 			this.receivers = new LinkedList<WirelessReceiver>();
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 	
 	public void setScreens(List<WirelessScreen> screens)
@@ -193,7 +179,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			this.screens = screens;
 		else
 			this.screens = new LinkedList<WirelessScreen>();
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	public String getName()
@@ -262,7 +247,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	public void setId(int id)
 	{
 		this.id = id;
-		WirelessRedstone.config.updateChannel(getName(), this);
 	}
 
 	@Override

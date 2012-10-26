@@ -63,20 +63,15 @@ public class WireBox
 		return false;
 	}
 
-	public WirelessChannel getChannel(String channel)
-	{
-		return WirelessRedstone.config.getWirelessChannel(channel);
-	}
-
 	public boolean hasAccessToChannel(Player player, String channelname)
 	{
-		if (getChannel(channelname) != null)
+		if (WirelessRedstone.config.getWirelessChannel(channelname) != null)
 		{
 			if(this.plugin.permissions.isWirelessAdmin(player))
 			{
 				return true;
 			}
-			else if(getChannel(channelname).getOwners().contains(player.getName()))
+			else if(WirelessRedstone.config.getWirelessChannel(channelname).getOwners().contains(player.getName()))
 			{
 				return true;
 			}
@@ -349,7 +344,7 @@ public class WireBox
 	
 	public ArrayList<Location> getReceiverLocations(String channelname)
 	{
-		WirelessChannel channel = this.plugin.WireBox.getChannel(channelname);
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelname);
 		if(channel == null)
 			return new ArrayList<Location>();
 		
@@ -368,7 +363,7 @@ public class WireBox
 	
 	public ArrayList<Location> getScreenLocations(String channelname)
 	{
-		WirelessChannel channel = this.plugin.WireBox.getChannel(channelname);
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelname);
 		if(channel == null)
 			return new ArrayList<Location>();
 		
@@ -436,15 +431,14 @@ public class WireBox
 	public boolean removeWirelessReceiver(String cname, Location loc)
 	{
 		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
-		if(channel != null)
+		if (channel != null)
 		{
-			channel.removeReceiverAt(loc);
 			WirelessRedstone.config.removeWirelessPoint(cname, loc);
-			WirelessRedstone.config.save();
 			this.UpdateCache();
 			return true;
 		}
-		return true;
+		else
+			return false;
 	}
 
 	public boolean removeWirelessTransmitter(String cname, Location loc)
@@ -452,12 +446,12 @@ public class WireBox
 		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
 		if (channel != null)
 		{
-			channel.removeTransmitterAt(loc);
 			WirelessRedstone.config.removeWirelessPoint(cname, loc);
 			this.UpdateCache();
 			return true;
 		}
-		return true;
+		else
+			return false;
 	}
 	
 	public boolean removeWirelessScreen(String cname, Location loc)
@@ -465,13 +459,12 @@ public class WireBox
 		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
 		if (channel != null)
 		{
-			channel.removeScreenAt(loc);
 			WirelessRedstone.config.removeWirelessPoint(cname, loc);
-			WirelessRedstone.config.save();
 			this.UpdateCache();
 			return true;
 		}
-		return true;
+		else
+			return false;
 	}
 
 	public boolean removeChannel(String cname)

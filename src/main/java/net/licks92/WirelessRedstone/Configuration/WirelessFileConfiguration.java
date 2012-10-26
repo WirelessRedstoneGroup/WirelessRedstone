@@ -54,12 +54,12 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 		try
 		{
 			File channelFile = new File(channelFolder, channelName + ".yml");
-			channelFile.createNewFile();
 			channelConfig.load(channelFile);
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			//WirelessRedstone.getStackableLogger().debug("File " + channelName + ".yml wans't found in the channels folder, returning null.");
+			return null;
 		}
 		catch (IOException e)
 		{
@@ -88,12 +88,13 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 		try
 		{
 			File channelFile = new File(channelFolder, channelName + ".yml");
-			channelFile.createNewFile();
+			if(channel != null)
+				channelFile.createNewFile();
 			channelConfig.load(channelFile);
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			return;
 		}
 		catch (IOException e)
 		{
@@ -126,6 +127,13 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 	public void removeWirelessChannel(String channelName)
 	{
 		setWirelessChannel(channelName, null);
+		for(File f : channelFolder.listFiles())
+		{
+			if(f.getName().equals(channelName))
+			{
+				f.delete();
+			}
+		}
 	}
 
 	@Override
@@ -176,7 +184,11 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 	@Override
 	public boolean wipeData()
 	{
-		return false;
+		for(File f : channelFolder.listFiles())
+		{
+			removeWirelessChannel(f.getName());
+		}
+		return true;
 	}
 
 	@Override
@@ -218,7 +230,6 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 				WirelessRedstone.getStackableLogger().warning("Channel "+channel+" is not of type WirelessChannel.");
 		}
 		return channels;
-
 	}
 
 	@Override

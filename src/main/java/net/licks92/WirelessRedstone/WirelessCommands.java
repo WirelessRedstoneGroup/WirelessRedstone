@@ -198,7 +198,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		if(args.length>=1)
 		{
-			WirelessChannel channel = plugin.WireBox.getChannel(args[0]);
+			WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
 			if(channel.isLocked())
 			{
 				channel.setLocked(false);
@@ -294,7 +294,7 @@ public class WirelessCommands implements CommandExecutor
 				if (plugin.WireBox.hasAccessToChannel(player, channelName))
 				{
 					WirelessRedstone.getStackableLogger().debug(player.getName() + " has been added to the owners of " + channelName);
-					WirelessChannel channel = plugin.WireBox.getChannel(channelName);
+					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.addOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
 					
@@ -312,7 +312,7 @@ public class WirelessCommands implements CommandExecutor
 				String playername = args[2];
 				if (plugin.WireBox.hasAccessToChannel(player, channelName))
 				{
-					WirelessChannel channel = plugin.WireBox.getChannel(channelName);
+					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.removeOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
 					return true;
@@ -568,12 +568,12 @@ public class WirelessCommands implements CommandExecutor
 		{
 			if (plugin.WireBox.hasAccessToChannel(player, args[0]))
 			{
-				if(plugin.WireBox.getChannel(args[0]) == null)
+				if(WirelessRedstone.config.getWirelessChannel(args[0]) == null)
 				{
 					player.sendMessage("This channel doesn't exists");
 					return false;
 				}
-				WirelessChannel tempChannel = plugin.WireBox.getChannel(args[0]);
+				WirelessChannel tempChannel = WirelessRedstone.config.getWirelessChannel(args[0]);
 				player.sendMessage("STATUS OF " + tempChannel.getName());
 				/*
 				 * Checking for active transmitters
