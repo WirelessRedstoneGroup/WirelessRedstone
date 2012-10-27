@@ -332,7 +332,8 @@ public class WirelessBlockListener implements Listener
 					{
 						event.getPlayer().sendMessage(WirelessRedstone.strings.signDestroyed);
 						if (WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getTransmitters().size() == 0
-								&& WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getReceivers().size() == 0)
+								&& WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getReceivers().size() == 0
+								&& WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getScreens().size() == 0)
 						{
 							plugin.WireBox.removeChannel(signObject.getLine(1));
 							event.getPlayer().sendMessage(WirelessRedstone.strings.channelRemovedCauseNoSign);

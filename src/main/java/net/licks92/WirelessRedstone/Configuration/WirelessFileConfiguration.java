@@ -150,35 +150,45 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 	}
 
 	@Override
-	public void removeWirelessPoint(String channelName, Location loc)
+	public boolean removeWirelessReceiver(String channelName, Location loc)
 	{
-		for (WirelessReceiver receiver : getWirelessChannel(channelName).getReceivers())
+		WirelessChannel channel = getWirelessChannel(channelName);
+		if (channel != null)
 		{
-			if (receiver.getX() == loc.getBlockX()
-					&& receiver.getY() == loc.getBlockY()
-					&& receiver.getZ() == loc.getBlockZ())
-			{
-				getWirelessChannel(channelName).removeReceiverAt(loc);
-			}
+			channel.removeReceiverAt(loc);
+			updateChannel(channelName, channel);
+			return true;
 		}
-		for (WirelessTransmitter transmitter : getWirelessChannel(channelName).getTransmitters())
+		else
+			return false;
+	}
+	
+	@Override
+	public boolean removeWirelessTransmitter(String channelName, Location loc)
+	{
+		WirelessChannel channel = getWirelessChannel(channelName);
+		if (channel != null)
 		{
-			if (transmitter.getX() == loc.getBlockX()
-					&& transmitter.getY() == loc.getBlockY()
-					&& transmitter.getZ() == loc.getBlockZ())
-			{
-				getWirelessChannel(channelName).removeTransmitterAt(loc);
-			}
+			channel.removeTransmitterAt(loc);
+			updateChannel(channelName, channel);
+			return true;
 		}
-		for (WirelessScreen screen : getWirelessChannel(channelName).getScreens())
+		else
+			return false;
+	}
+	
+	@Override
+	public boolean removeWirelessScreen(String channelName, Location loc)
+	{
+		WirelessChannel channel = getWirelessChannel(channelName);
+		if (channel != null)
 		{
-			if (screen.getX() == loc.getBlockX()
-					&& screen.getY() == loc.getBlockY()
-					&& screen.getZ() == loc.getBlockZ())
-			{
-				getWirelessChannel(channelName).removeScreenAt(loc);
-			}
+			channel.removeScreenAt(loc);
+			updateChannel(channelName, channel);
+			return true;
 		}
+		else
+			return false;
 	}
 
 	@Override

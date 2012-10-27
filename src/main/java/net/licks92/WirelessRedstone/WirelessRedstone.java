@@ -98,7 +98,15 @@ public class WirelessRedstone extends JavaPlugin
 					
 					if(newversion > currentversion)
 					{
-						WirelessRedstone.logger.info("[WirelessRedstone] A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
+						logger.info("A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
+					}
+					else if(newversion < currentversion)
+					{
+						logger.info("You are using a version that is higher than the repository version! Did you download it on the github code repo?");
+					}
+					else //If it's the same version...
+					{
+						logger.debug("You are using the same version as the official repository.");
 					}
 				}
 				catch (Exception e1)

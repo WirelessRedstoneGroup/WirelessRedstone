@@ -23,7 +23,11 @@ public interface IWirelessStorageConfiguration
 	
 	void createWirelessPoint(String channelName, IWirelessPoint point);
 	
-	void removeWirelessPoint(String channelName, Location loc);
+	boolean removeWirelessReceiver(String channelName, Location loc);
+	
+	boolean removeWirelessTransmitter(String channelName, Location loc);
+	
+	boolean removeWirelessScreen(String channelName, Location loc);
 	
 	void updateChannel(String channelName, WirelessChannel channel);
 	

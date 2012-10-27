@@ -85,9 +85,19 @@ public class WirelessConfiguration
 		storage.removeWirelessChannel(channelName);
 	}
 	
-	public void removeWirelessPoint(String channelName, Location loc)
+	public boolean removeWirelessReceiver(String channelName, Location loc)
 	{
-		storage.removeWirelessPoint(channelName, loc);
+		return storage.removeWirelessReceiver(channelName, loc);
+	}
+	
+	public boolean removeWirelessTransmitter(String channelName, Location loc)
+	{
+		return storage.removeWirelessTransmitter(channelName, loc);
+	}
+	
+	public boolean removeWirelessScreen(String channelName, Location loc)
+	{
+		return storage.removeWirelessScreen(channelName, loc);
 	}
 	
 	public Collection<WirelessChannel> getAllChannels()

@@ -400,7 +400,7 @@ public class WireBox
 								&& receiver.getY() == loc.getBlockY()
 								&& receiver.getZ() == loc.getBlockZ())
 						{
-							WirelessRedstone.config.removeWirelessPoint(channel.getName(), loc);
+							WirelessRedstone.config.removeWirelessReceiver(channel.getName(), loc);
 							if (!byplayer)
 							{
 								for (String owner : channel.getOwners())
@@ -430,12 +430,9 @@ public class WireBox
 
 	public boolean removeWirelessReceiver(String cname, Location loc)
 	{
-		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
-		if (channel != null)
+		if(WirelessRedstone.config.removeWirelessReceiver(cname, loc))
 		{
-			WirelessRedstone.config.removeWirelessPoint(cname, loc);
-			WirelessRedstone.config.updateChannel(cname, channel);
-			this.UpdateCache();
+			UpdateCache();
 			return true;
 		}
 		else
@@ -444,12 +441,9 @@ public class WireBox
 
 	public boolean removeWirelessTransmitter(String cname, Location loc)
 	{
-		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
-		if (channel != null)
+		if(WirelessRedstone.config.removeWirelessTransmitter(cname, loc))
 		{
-			WirelessRedstone.config.removeWirelessPoint(cname, loc);
-			WirelessRedstone.config.updateChannel(cname, channel);
-			this.UpdateCache();
+			UpdateCache();
 			return true;
 		}
 		else
@@ -458,12 +452,9 @@ public class WireBox
 	
 	public boolean removeWirelessScreen(String cname, Location loc)
 	{
-		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
-		if (channel != null)
+		if(WirelessRedstone.config.removeWirelessScreen(cname, loc))
 		{
-			WirelessRedstone.config.removeWirelessPoint(cname, loc);
-			WirelessRedstone.config.updateChannel(cname, channel);
-			this.UpdateCache();
+			UpdateCache();
 			return true;
 		}
 		else
@@ -477,7 +468,6 @@ public class WireBox
 		{
 			this.removeSigns(channel);
 			WirelessRedstone.config.removeChannel(cname);
-			WirelessRedstone.config.save();
 			this.UpdateCache();
 			return true;
 		}
@@ -508,6 +498,18 @@ public class WireBox
 		catch(NullPointerException ex)
 		{
 			//When there isn't any transmitter, it'll throw this exception.
+		}
+		
+		try
+		{
+			for(IWirelessPoint point : channel.getScreens())
+			{
+				this.getPointLocation(point).getBlock().setType(Material.AIR);
+			}
+		}
+		catch(NullPointerException ex)
+		{
+			//When there isn't any screen, it'll throw this exception.
 		}
 	}
 

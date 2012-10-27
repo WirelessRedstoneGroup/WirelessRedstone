@@ -302,7 +302,7 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 	@Override
 	public void removeWirelessChannel(String channelName)
 	{
-		
+		return;
 	}
 
 	@Override
@@ -314,19 +314,31 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 	@Override
 	public void createWirelessPoint(String channelName, IWirelessPoint point)
 	{
-		
-	}
-
-	@Override
-	public void removeWirelessPoint(String channelName, Location loc)
-	{
-		
+		return;
 	}
 
 	@Override
 	public void updateChannel(String channelName, WirelessChannel channel)
 	{
-		
+		return;
+	}
+
+	@Override
+	public boolean removeWirelessReceiver(String channelName, Location loc)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean removeWirelessTransmitter(String channelName, Location loc)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean removeWirelessScreen(String channelName, Location loc)
+	{
+		return false;
 	}
 
 }
