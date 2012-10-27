@@ -434,6 +434,7 @@ public class WireBox
 		if (channel != null)
 		{
 			WirelessRedstone.config.removeWirelessPoint(cname, loc);
+			WirelessRedstone.config.updateChannel(cname, channel);
 			this.UpdateCache();
 			return true;
 		}
@@ -447,6 +448,7 @@ public class WireBox
 		if (channel != null)
 		{
 			WirelessRedstone.config.removeWirelessPoint(cname, loc);
+			WirelessRedstone.config.updateChannel(cname, channel);
 			this.UpdateCache();
 			return true;
 		}
@@ -460,6 +462,7 @@ public class WireBox
 		if (channel != null)
 		{
 			WirelessRedstone.config.removeWirelessPoint(cname, loc);
+			WirelessRedstone.config.updateChannel(cname, channel);
 			this.UpdateCache();
 			return true;
 		}

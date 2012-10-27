@@ -22,7 +22,7 @@ public class StackableLogger
 	public void debug(String msg)
 	{
 		if(debug)
-			info(msg);
+			logger.info("[WRDebug] " + msg);
 	}
 
 	public void config(String msg)

@@ -290,14 +290,12 @@ public class WirelessCommands implements CommandExecutor
 			{
 				String channelName = args[1];
 				String playername = args[2];
-				WirelessRedstone.getStackableLogger().debug(player.getName() + " has been added to the owners of " + channelName);
 				if (plugin.WireBox.hasAccessToChannel(player, channelName))
 				{
-					WirelessRedstone.getStackableLogger().debug(player.getName() + " has been added to the owners of " + channelName);
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.addOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
-					
+					WirelessRedstone.getStackableLogger().debug(playername + " has been added to the list of owners of " + channelName);
 					return true;
 				}
 				else
@@ -315,6 +313,7 @@ public class WirelessCommands implements CommandExecutor
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.removeOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
+					WirelessRedstone.getStackableLogger().debug(playername + " has been removed from the list of owners of " + channelName);
 					return true;
 				}
 				else
