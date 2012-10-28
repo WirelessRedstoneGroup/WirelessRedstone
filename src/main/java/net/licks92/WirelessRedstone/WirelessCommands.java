@@ -252,7 +252,7 @@ public class WirelessCommands implements CommandExecutor
 			}
 			catch (Exception e)
 			{
-				player.sendMessage("This page number is not an number!");
+				player.sendMessage("This page number is not a number!");
 				return true;
 			}
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + WirelessRedstone.config.getAllChannels().size() + " channel(s) )");
@@ -590,7 +590,7 @@ public class WirelessCommands implements CommandExecutor
 				 */
 				player.sendMessage(WirelessRedstone.strings.thisChannelContains);
 
-				player.sendMessage(" + " + tempChannel.getReceivers().size() + " receivers.");
+				player.sendMessage(" - " + tempChannel.getReceivers().size() + " receivers.");
 				player.sendMessage(" - " + tempChannel.getTransmitters().size() + " transmitters.");
 				player.sendMessage(" - " + tempChannel.getScreens().size() + " screens.");
 				
@@ -621,7 +621,7 @@ public class WirelessCommands implements CommandExecutor
 		 * Where maxitems is the maximum items on each page
 		 */
 		
-		if(cpage > 1)
+		if(cpage < 0)
 		{
 			player.sendMessage(WirelessRedstone.strings.pageNumberInferiorToZero);
 		}

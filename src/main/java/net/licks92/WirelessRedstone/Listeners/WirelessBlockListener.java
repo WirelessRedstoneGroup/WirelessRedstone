@@ -341,7 +341,7 @@ public class WirelessBlockListener implements Listener
 						
 						else if (WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getTransmitters().size() == 0)
 						{
-							event.getPlayer().sendMessage("[WirelessRedstone] No other Transmitters found, Resettings Power data on receivers to sign.");
+							event.getPlayer().sendMessage(ChatColor.GREEN + "[WirelessRedstone] No other Transmitters found, switching receivers to off.");
 							for (WirelessReceiver receiver : WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getReceivers())
 							{
 								Location rloc = plugin.WireBox.getPointLocation(receiver);
@@ -396,14 +396,17 @@ public class WirelessBlockListener implements Listener
 				{
 					if (plugin.WireBox.removeWirelessScreen(signObject.getLine(1), event.getBlock().getLocation()))
 					{
-						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign!");
+						event.getPlayer().sendMessage(WirelessRedstone.strings.signDestroyed);
+						if (WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getTransmitters().size() == 0
+								&& WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getReceivers().size() == 0)
+						{
+							plugin.WireBox.removeChannel(signObject.getLine(1));
+							event.getPlayer().sendMessage(WirelessRedstone.strings.channelRemovedCauseNoSign);
+						}
 					}
-					
-					if (WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getTransmitters().size() == 0
-							&& WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getReceivers().size() == 0)
+					else
 					{
-						plugin.WireBox.removeChannel(signObject.getLine(1));
-						event.getPlayer().sendMessage("[WirelessRedstone] Succesfully removed this sign! Channel removed, no more signs in the worlds.");
+						WirelessRedstone.getStackableLogger().debug("Screen wasn't found in the config, but the sign has been successfuly removed !");
 					}
 				}
 				else

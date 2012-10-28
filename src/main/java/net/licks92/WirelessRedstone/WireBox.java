@@ -237,8 +237,7 @@ public class WireBox
 			screen.setDirection(cblock.getData());
 			screen.setisWallSign(isWallSign);
 			channel.addScreen(screen);
-			WirelessRedstone.config.createWirelessPoint(cname, screen);
-			WirelessRedstone.config.save();
+			WirelessRedstone.config.createWirelessChannel(cname, channel);
 			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
 			return true;

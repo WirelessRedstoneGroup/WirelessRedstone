@@ -56,8 +56,8 @@ public class WirelessStringProvider
 			tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
 			noItemOnList = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
 			playerCannotDestroySign = ChatColor.RED + "[WirelessRedstone] You are not allowed to destroy this sign!";
-			ownersOfTheChannelAre = "[WirelessRedstone] The owners of this channel are : ";
-			thisChannelContains = "[WirelessRedstone] This channel contains :";
+			ownersOfTheChannelAre = "The owners of this channel are : ";
+			thisChannelContains = "This channel contains :";
 			pageNumberInferiorToZero = ChatColor.RED + "[WirelessRedstone] Page number cannot be inferior to 0!";
 			channelLocked = ChatColor.GREEN + "[WirelessRedstone] Channel locked !";
 			channelUnlocked = ChatColor.GREEN + "[WirelessRedstone] Channel unlocked !";
