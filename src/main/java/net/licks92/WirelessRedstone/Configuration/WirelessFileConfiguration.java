@@ -203,17 +203,11 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 
 	@Override
 	public Collection<WirelessChannel> getAllChannels()
-	{
-		ArrayList<File> fileList = new ArrayList<File>();
-		
-		if(fileList.isEmpty())
-			return new ArrayList<WirelessChannel>(0);
-		
+	{	
 		List<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 		
 		for(File f : channelFolder.listFiles())
 		{
-			fileList.add(f);
 			FileConfiguration channelConfig = new YamlConfiguration();
 			try
 			{
@@ -231,13 +225,25 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 			{
 				e.printStackTrace();
 			}
-			Object channel = channelConfig.get(f.getName().split(".yml").toString());
+			String channelName = f.getName();
+			channelName = channelName.split(".yml")[0];
+			Object channel = channelConfig.get(channelName);
 			if(channel instanceof WirelessChannel)
 			{
 				channels.add((WirelessChannel)channel);
+				WirelessRedstone.getStackableLogger().debug("Channel added in getAllChannels() list : " + ((WirelessChannel)channel).getName());
+			}
+			else if(channel == null)
+			{
+				WirelessRedstone.getStackableLogger().debug("File " + f.getName() + " does not contain a Wireless Channel. Removing it.");
+				f.delete();
 			}
 			else
-				WirelessRedstone.getStackableLogger().warning("Channel "+channel+" is not of type WirelessChannel.");
+				WirelessRedstone.getStackableLogger().warning("Channel " + channel + " is not of type WirelessChannel.");
+		}
+		if(channels.isEmpty())
+		{
+			return new ArrayList<WirelessChannel>();
 		}
 		return channels;
 	}

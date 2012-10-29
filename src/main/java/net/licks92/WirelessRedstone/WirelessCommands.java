@@ -263,7 +263,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		else if (args.length == 0)
 		{
-			player.sendMessage(ChatColor.AQUA + "WirelessRedstone Channel List(" + WirelessRedstone.config.getAllChannels().size() + " channel(s) )");
+			player.sendMessage(ChatColor.AQUA + "Channel List (" + WirelessRedstone.config.getAllChannels().size() + " channel(s))");
 			ShowList(list, 1, player);
 			player.sendMessage(WirelessRedstone.strings.forMoreInfosPerformWRInfo);
 			player.sendMessage(WirelessRedstone.strings.nextPage);
@@ -569,8 +569,8 @@ public class WirelessCommands implements CommandExecutor
 			{
 				if(WirelessRedstone.config.getWirelessChannel(args[0]) == null)
 				{
-					player.sendMessage("This channel doesn't exists");
-					return false;
+					player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
+					return true;
 				}
 				WirelessChannel tempChannel = WirelessRedstone.config.getWirelessChannel(args[0]);
 				player.sendMessage("STATUS OF " + tempChannel.getName());
@@ -630,10 +630,17 @@ public class WirelessCommands implements CommandExecutor
 		int currentpage = cpage;
 		int totalpages = 0;
 		for(int i = 0; i <= itemsonlist/maxitems; i++)
-		{
 			totalpages = i + 1;
+		if(cpage > totalpages)
+		{
+			player.sendMessage(ChatColor.RED + "[WirelessRedstone] There only are " + totalpages + " pages.");
+			return;
 		}
-
+		if(itemsonlist == 0)
+		{
+			player.sendMessage(ChatColor.RED + "[WirelessRedstone] This list is empty.");
+			return;
+		}
 		int currentitem = ((cpage * maxitems) - maxitems);
 		// 2*3 = 6 ; 6 - 3 = 3
 		player.sendMessage("Page " + currentpage + " on " + totalpages);

@@ -20,6 +20,7 @@ public class WirelessStringProvider
 	public String thisChannelContains;
 	public String channelLocked;
 	public String channelUnlocked;
+	public String channelDoesNotExist;
 	public String pageNumberInferiorToZero;
 	public String nextPage;
 	public String signDestroyed;
@@ -53,6 +54,7 @@ public class WirelessStringProvider
 			signDestroyed = ChatColor.GREEN + "[WirelessRedstone] Succesfully removed this sign !";
 			channelRemovedCauseNoSign = ChatColor.GREEN + "[WirelessRedstone] Channel removed, no more signs in the worlds.";
 			channelNameContainsInvalidCaracters = "[WirelessRedstone] " + playerCannotCreateChannel + " : Name contains invalid caracters !";
+			channelDoesNotExist = ChatColor.RED + "[WirelessRedstone] This channel doesn't exist!";
 			tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
 			noItemOnList = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
 			playerCannotDestroySign = ChatColor.RED + "[WirelessRedstone] You are not allowed to destroy this sign!";
@@ -61,7 +63,7 @@ public class WirelessStringProvider
 			pageNumberInferiorToZero = ChatColor.RED + "[WirelessRedstone] Page number cannot be inferior to 0!";
 			channelLocked = ChatColor.GREEN + "[WirelessRedstone] Channel locked !";
 			channelUnlocked = ChatColor.GREEN + "[WirelessRedstone] Channel unlocked !";
-			nextPage = ChatColor.AQUA + "\n/wr list pagenumber for next page!";
+			nextPage = ChatColor.GREEN + "\n/wr list pagenumber for next page!";
 			forMoreInfosPerformWRInfo = ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>";
 			tagsTransmitter.add("[transmitter]");
 			tagsTransmitter.add("[wrt]");
