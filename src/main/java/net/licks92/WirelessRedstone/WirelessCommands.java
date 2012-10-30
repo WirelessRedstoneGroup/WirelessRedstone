@@ -84,22 +84,22 @@ public class WirelessCommands implements CommandExecutor
 
 		if (plugin.permissions.canCreateTransmitter(player))
 		{
-			commands.add("/wr transmitter channelname - Creates transmitter sign.");
+			commands.add("/wr transmitter <channelname> - Creates transmitter sign.");
 		}
 
 		if (plugin.permissions.canCreateReceiver(player))
 		{
-			commands.add("/wr receiver channelname - Creates receiver sign.");
+			commands.add("/wr receiver <channelname> - Creates receiver sign.");
 		}
 		
 		if (plugin.permissions.canCreateScreen(player))
 		{
-			commands.add("/wr screen channelname - Creates screen sign.");
+			commands.add("/wr screen <channelname> - Creates screen sign.");
 		}
 
 		if (plugin.permissions.canRemoveChannel(player))
 		{
-			commands.add("/wr remove channel - Removes a channel.");
+			commands.add("/wr remove <channel> - Removes a channel.");
 		}
 
 		if (plugin.permissions.isWirelessAdmin(player))
@@ -109,7 +109,22 @@ public class WirelessCommands implements CommandExecutor
 
 		if (plugin.permissions.canUseListCommand(player))
 		{
-			commands.add("/wr list - Lists all the channels with the owners.");
+			commands.add("/wr list [page] - Lists all the channels with the owners.");
+		}
+		
+		if(plugin.permissions.canSeeChannelInfo(player))
+		{
+			commands.add("/wr info <channel> - Get some informations about a channel.");
+		}
+		
+		if(plugin.permissions.canLockChannel(player))
+		{
+			commands.add("/wr lock/unlock <channel> - Locks/Unlocks a channel.");
+		}
+		
+		if(plugin.permissions.canSeeHelp(player))
+		{
+			commands.add("/wr help [page] - Shows a list of commands you can use.");
 		}
 
 		return commands;
@@ -202,11 +217,13 @@ public class WirelessCommands implements CommandExecutor
 			if(channel.isLocked())
 			{
 				channel.setLocked(false);
+				WirelessRedstone.config.updateChannel(args[0], channel);
 				player.sendMessage(WirelessRedstone.strings.channelUnlocked);
 			}
 			else
 			{
 				channel.setLocked(true);
+				WirelessRedstone.config.updateChannel(args[0], channel);
 				player.sendMessage(WirelessRedstone.strings.channelLocked);
 			}
 		}
@@ -295,7 +312,8 @@ public class WirelessCommands implements CommandExecutor
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.addOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
-					WirelessRedstone.getStackableLogger().debug(playername + " has been added to the list of owners of " + channelName);
+					WirelessRedstone.getStackableLogger().info(playername + " has been added to the list of owners of " + channelName);
+					player.sendMessage(ChatColor.GREEN + playername + " has been added to the list of owners of " + channelName);
 					return true;
 				}
 				else
@@ -313,7 +331,8 @@ public class WirelessCommands implements CommandExecutor
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.removeOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
-					WirelessRedstone.getStackableLogger().debug(playername + " has been removed from the list of owners of " + channelName);
+					WirelessRedstone.getStackableLogger().info(playername + " has been removed from the list of owners of " + channelName);
+					player.sendMessage(ChatColor.GREEN + playername + " has been removed from the list of owners of " + channelName);
 					return true;
 				}
 				else
@@ -367,7 +386,7 @@ public class WirelessCommands implements CommandExecutor
 			}
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone User Commands:");
 			ShowList(commands, pagenumber, player);
-			player.sendMessage("/wr help " + Integer.toString(pagenumber + 1) + " for next page!");
+			player.sendMessage(ChatColor.AQUA + "/wr help " + Integer.toString(pagenumber + 1) + " for next page!\n");
 			return true;
 		}
 		else
@@ -584,6 +603,14 @@ public class WirelessCommands implements CommandExecutor
 				else
 				{
 					player.sendMessage("Is Activated : " + ChatColor.RED + "NO");
+				}
+				if(tempChannel.isLocked())
+				{
+					player.sendMessage("Is Locked : " + ChatColor.RED + "Yes");
+				}
+				else
+				{
+					player.sendMessage("Is Locked : " + ChatColor.GREEN + "No");
 				}
 				/*
 				 * Counting signs of the channel.
