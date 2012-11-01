@@ -32,4 +32,6 @@ public interface IWirelessStorageConfiguration
 	void updateChannel(String channelName, WirelessChannel channel);
 	
 	boolean wipeData();
+	
+	boolean backupData();
 }

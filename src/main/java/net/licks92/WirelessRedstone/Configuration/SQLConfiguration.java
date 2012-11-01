@@ -341,4 +341,10 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 		return false;
 	}
 
+	@Override
+	public boolean backupData() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

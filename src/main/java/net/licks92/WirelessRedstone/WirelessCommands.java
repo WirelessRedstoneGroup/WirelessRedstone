@@ -346,6 +346,11 @@ public class WirelessCommands implements CommandExecutor
 				return performWipeData(sender, args, player);
 			}
 			
+			else if (subCommand.equalsIgnoreCase("backup"))
+			{
+				return performBackupData(sender, args, player);
+			}
+			
 			else
 			{
 				player.sendMessage("[WirelessRedstone] Unknown sub command!");
@@ -357,6 +362,7 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage("/wr admin addowner channelname playername - Add a player to channel.");
 			player.sendMessage("/wr admin removeowner channelname playername - Add a player to channel.");
 			player.sendMessage("/wr admin wipedata - Erase the database! Don't do it if you don't know what you're doing!");
+			player.sendMessage("/wr admin backup - Backup the database. You should use it before to update in order to recover it if an error occurs.");
 		}
 		return true;
 
@@ -554,12 +560,31 @@ public class WirelessCommands implements CommandExecutor
 		}
 		if(WirelessRedstone.config.wipeData())
 		{
-			player.sendMessage("Database has been succesfully wiped!");
+			player.sendMessage(ChatColor.GREEN + "Database has been succesfully wiped!");
 			return true;
 		}
 		else
 		{
 			player.sendMessage("Database hasn't been wiped.");
+			return true;
+		}
+	}
+	
+	private boolean performBackupData(CommandSender sender, String[] args, Player player)
+	{
+		if(!plugin.permissions.canBackupData(player))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
+			return true;
+		}
+		if(WirelessRedstone.config.backupData())
+		{
+			player.sendMessage(ChatColor.GREEN + "A backup has been made!");
+			return true;
+		}
+		else
+		{
+			player.sendMessage(ChatColor.RED + "Backup failed!");
 			return true;
 		}
 	}

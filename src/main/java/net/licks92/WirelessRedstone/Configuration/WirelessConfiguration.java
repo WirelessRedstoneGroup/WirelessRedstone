@@ -11,7 +11,7 @@ import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class WirelessConfiguration
+public class WirelessConfiguration implements IWirelessStorageConfiguration
 {
 	private static final String CHANNEL_FOLDER = "/channels";
 	
@@ -35,7 +35,7 @@ public class WirelessConfiguration
 		reloadConfig();
 	}
 	
-	public void init()
+	public boolean init()
 	{
 		//Create the channel folder
 		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
@@ -52,16 +52,25 @@ public class WirelessConfiguration
 			storage = new WirelessFileConfiguration(channelFolder);
 		
 		storage.init();
+		
+		return true;
 	}
 	
-	public void close()
+	public boolean close()
 	{
 		storage.close();
+		
+		return true;
 	}
 	
 	public boolean wipeData()
 	{
 		return storage.wipeData();
+	}
+	
+	public boolean backupData()
+	{
+		return storage.backupData();
 	}
 
 	public void reloadConfig()
@@ -84,7 +93,7 @@ public class WirelessConfiguration
 		storage.createWirelessChannel(channelName, channel);
 	}
 	
-	public void removeChannel(String channelName)
+	public void removeWirelessChannel(String channelName)
 	{
 		storage.removeWirelessChannel(channelName);
 	}

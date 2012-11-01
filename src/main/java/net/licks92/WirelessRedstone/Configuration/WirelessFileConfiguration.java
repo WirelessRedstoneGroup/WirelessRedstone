@@ -1,11 +1,15 @@
 package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -194,9 +198,57 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 	@Override
 	public boolean wipeData()
 	{
+		//Backup the channels folder first.
+		backupData();
+		
+		//Then remove the channels and the files.
 		for(File f : channelFolder.listFiles())
 		{
 			removeWirelessChannel(f.getName());
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean backupData()
+	{
+		try
+		{
+			FileOutputStream fos = new FileOutputStream(channelFolder.getCanonicalPath() + ".zip");
+			ZipOutputStream zos = new ZipOutputStream(fos);
+
+			for (File file : channelFolder.listFiles())
+			{
+				if (!file.isDirectory() && file.getName().contains(".yml"))
+				{
+					FileInputStream fis = new FileInputStream(file);
+					
+					ZipEntry zipEntry = new ZipEntry(file.getPath());
+					zos.putNextEntry(zipEntry);
+					
+					byte[] bytes = new byte[1024];
+					int length;
+					
+					while ((length = fis.read(bytes)) >= 0)
+					{
+						zos.write(bytes, 0, length);
+					}
+
+					zos.closeEntry();
+					fis.close();
+				}
+			}
+
+			zos.close();
+			fos.close();
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
 		}
 		return true;
 	}

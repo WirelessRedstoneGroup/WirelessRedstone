@@ -466,7 +466,7 @@ public class WireBox
 		if (channel != null)
 		{
 			this.removeSigns(channel);
-			WirelessRedstone.config.removeChannel(cname);
+			WirelessRedstone.config.removeWirelessChannel(cname);
 			this.UpdateCache();
 			return true;
 		}
