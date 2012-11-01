@@ -42,9 +42,13 @@ public class WirelessConfiguration
 		channelFolder.mkdir();
 		
 		//Create the storage config
-		/*if(getSQLUsage())
-			storage = new SQLConfiguration(channelFolder);
-		else*/
+		if(getSQLUsage())
+		{
+			//storage = new SQLConfiguration(channelFolder);
+			WirelessRedstone.getStackableLogger().info("SQL Storage is not available yet. You will still use the yaml files to store the channels.");
+			storage = new WirelessFileConfiguration(channelFolder);
+		}
+		else
 			storage = new WirelessFileConfiguration(channelFolder);
 		
 		storage.init();
@@ -84,7 +88,7 @@ public class WirelessConfiguration
 	{
 		storage.removeWirelessChannel(channelName);
 	}
-	
+
 	public boolean removeWirelessReceiver(String channelName, Location loc)
 	{
 		return storage.removeWirelessReceiver(channelName, loc);
@@ -105,6 +109,9 @@ public class WirelessConfiguration
 		return storage.getAllChannels();
 	}
 	
+	/*
+	 * updateChannel() has to update the fields that concern the channel (means that it has not to update the wirelesssigns).
+	 */
 	public void updateChannel(String channelName, WirelessChannel channel)
 	{
 		storage.updateChannel(channelName, channel);
