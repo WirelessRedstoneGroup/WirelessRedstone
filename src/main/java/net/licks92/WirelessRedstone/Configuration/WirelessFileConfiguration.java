@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -214,7 +215,14 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 	{
 		try
 		{
-			FileOutputStream fos = new FileOutputStream(channelFolder.getCanonicalPath() + ".zip");
+			String zipName = "WRBackup "
+					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+					+ Calendar.getInstance().get(Calendar.MONTH)
+					+ Calendar.getInstance().get(Calendar.YEAR) + "-"
+					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+					+ Calendar.getInstance().get(Calendar.MINUTE)
+					+ Calendar.getInstance().get(Calendar.SECOND);
+			FileOutputStream fos = new FileOutputStream((channelFolder.getCanonicalPath().split(channelFolder.getName())[0]) + zipName + ".zip");
 			ZipOutputStream zos = new ZipOutputStream(fos);
 
 			for (File file : channelFolder.listFiles())
@@ -223,7 +231,7 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 				{
 					FileInputStream fis = new FileInputStream(file);
 					
-					ZipEntry zipEntry = new ZipEntry(file.getPath());
+					ZipEntry zipEntry = new ZipEntry(file.getName());
 					zos.putNextEntry(zipEntry);
 					
 					byte[] bytes = new byte[1024];
@@ -241,6 +249,8 @@ public class WirelessFileConfiguration implements IWirelessStorageConfiguration
 
 			zos.close();
 			fos.close();
+			
+		WirelessRedstone.getStackableLogger().info("Channels saved in archive : " + zipName);
 		}
 		catch (FileNotFoundException e)
 		{
