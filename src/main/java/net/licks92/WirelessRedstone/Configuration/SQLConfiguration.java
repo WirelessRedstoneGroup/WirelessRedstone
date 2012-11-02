@@ -1,10 +1,17 @@
 package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
@@ -90,9 +97,9 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 			rs.close();
 			
 			//Erase all the tables
-			for(int i = 0; i < tables.size(); i++)
+			for(String channelName : tables)
 			{
-				db.query("DROP TABLE " + tables.get(i));
+				removeWirelessChannel(channelName);
 			}
 			
 			return true;
@@ -102,6 +109,59 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	@Override
+	public boolean backupData()
+	{
+		try
+		{
+			String zipName = "WRBackup "
+					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+					+ Calendar.getInstance().get(Calendar.MONTH)
+					+ Calendar.getInstance().get(Calendar.YEAR) + "-"
+					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+					+ Calendar.getInstance().get(Calendar.MINUTE)
+					+ Calendar.getInstance().get(Calendar.SECOND);
+			FileOutputStream fos = new FileOutputStream((channelFolder.getCanonicalPath().split(channelFolder.getName())[0]) + zipName + ".zip");
+			ZipOutputStream zos = new ZipOutputStream(fos);
+
+			for (File file : channelFolder.listFiles())
+			{
+				if (!file.isDirectory() && file.getName().contains(".db"))
+				{
+					FileInputStream fis = new FileInputStream(file);
+					
+					ZipEntry zipEntry = new ZipEntry(file.getName());
+					zos.putNextEntry(zipEntry);
+					
+					byte[] bytes = new byte[1024];
+					int length;
+					
+					while ((length = fis.read(bytes)) >= 0)
+					{
+						zos.write(bytes, 0, length);
+					}
+
+					zos.closeEntry();
+					fis.close();
+				}
+			}
+
+			zos.close();
+			fos.close();
+			
+		WirelessRedstone.getStackableLogger().info("Channels saved in archive : " + zipName);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return true;
 	}
 	
 	public WirelessChannel getWirelessChannel(String channelName)
@@ -340,11 +400,4 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 	{
 		return false;
 	}
-
-	@Override
-	public boolean backupData() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
