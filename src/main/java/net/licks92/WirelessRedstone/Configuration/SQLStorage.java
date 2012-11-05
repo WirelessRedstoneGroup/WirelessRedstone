@@ -77,6 +77,8 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			{
 				if(rs.getString("name").equals(name))
 				{
+					rs.close();
+					statement.close();
 					return true;
 				}
 			}
@@ -199,6 +201,8 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					if(rs2.getString("name") == null) //If the table is empty
 					{
 						statement.executeUpdate("DROP TABLE " + channelName);
+						rs2.close();
+						statement.close();
 						return new WirelessChannel();
 					}
 					
