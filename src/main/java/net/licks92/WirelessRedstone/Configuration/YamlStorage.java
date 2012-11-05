@@ -28,9 +28,11 @@ import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 public class YamlStorage implements IWirelessStorageConfiguration
 {
 	private File channelFolder;
+	private WirelessRedstone plugin;
 	
-	public YamlStorage(File channelFolder)
+	public YamlStorage(File channelFolder, WirelessRedstone r_plugin)
 	{
+		plugin = r_plugin;
 		this.channelFolder = channelFolder;
 	}
 	
@@ -131,6 +133,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	@Override
 	public void removeWirelessChannel(String channelName)
 	{
+		plugin.WireBox.removeSigns(getWirelessChannel(channelName));
 		setWirelessChannel(channelName, null);
 		for(File f : channelFolder.listFiles())
 		{
@@ -139,6 +142,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 				f.delete();
 			}
 		}
+		plugin.WireBox.UpdateCache();
 	}
 
 	@Override

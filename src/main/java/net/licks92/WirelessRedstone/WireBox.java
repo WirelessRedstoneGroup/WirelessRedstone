@@ -460,20 +460,7 @@ public class WireBox
 			return false;
 	}
 
-	public boolean removeChannel(String cname)
-	{
-		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
-		if (channel != null)
-		{
-			this.removeSigns(channel);
-			WirelessRedstone.config.removeWirelessChannel(cname);
-			this.UpdateCache();
-			return true;
-		}
-		return true;
-	}
-
-	private void removeSigns(WirelessChannel channel)
+	public void removeSigns(WirelessChannel channel)
 	{
 		try
 		{

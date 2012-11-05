@@ -523,7 +523,7 @@ public class WirelessCommands implements CommandExecutor
 			{
 				if (plugin.WireBox.hasAccessToChannel(player, args[0]))
 				{
-					plugin.WireBox.removeChannel(args[0]);
+					WirelessRedstone.config.removeWirelessChannel(args[0]);
 					player.sendMessage("Channel has been removed !");
 				}
 				else

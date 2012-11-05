@@ -42,7 +42,7 @@ public class WirelessWorldListener implements Listener
 							continue;
 						}
 
-						WirelessRedstone.getStackableLogger().finer("Chunk prevented from unloading!");
+						WirelessRedstone.getStackableLogger().debug("Chunk prevented from unloading!");
 						event.setCancelled(true);
 						return;
 					}

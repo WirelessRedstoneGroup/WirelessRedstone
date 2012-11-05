@@ -32,6 +32,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	
 	private final String sql_iswallsign = "iswallsign";
 	private final String sql_direction = "direction";
+	private final String sql_channelid = "id";
 	private final String sql_channelname = "name";
 	private final String sql_channellocked = "locked";
 	private final String sql_channelowners = "owners";
@@ -42,11 +43,13 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	private final String sql_signz = "z";
 	private final String sql_signtype = "signtype";
 	
-	File channelFolder;
+	private File channelFolder;
+	private WirelessRedstone plugin;
 	
-	public SQLStorage(File r_channelFolder)
+	public SQLStorage(File r_channelFolder, WirelessRedstone r_plugin)
 	{
 		channelFolder = r_channelFolder;
+		plugin = r_plugin;
 		
 		sqlFile = new File(channelFolder.getAbsolutePath() + File.separator + "channels.db");
 	}
@@ -222,6 +225,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					WirelessChannel channel = new WirelessChannel();
 					
 					//Set the Id, the name, and the locked variable
+					channel.setId(rs2.getInt(sql_channelid));
 					channel.setName(rs2.getString(sql_channelname));
 					if(rs2.getInt(sql_channellocked) == 1)
 						channel.setLocked(true);
@@ -350,6 +354,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 				statement.executeUpdate("CREATE TABLE " + channelName + " ( "
 					
 					//First columns are for the channel
+					+ sql_channelid + " int,"
 					+ sql_channelname + " char(64),"
 					+ sql_channellocked + " int (1),"
 					+ sql_channelowners + " char(64),"
@@ -366,8 +371,10 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ " ) ");
 			
 				//Fill the columns name, id and locked
-				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
-					+ "VALUES ('" + channel.getName() + "'," //name
+				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_channelid + "," + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
+					+ "VALUES ("
+					+ channel.getId() + ","
+					+ "'" + channel.getName() + "'," //name
 					+ "0" + "," //locked
 					+ "'" + channel.getOwners().get(0)
 					+ "')"); //The first owner
@@ -400,6 +407,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	{
 		try
 		{
+			plugin.WireBox.removeSigns(getWirelessChannel(channelName));
 			if(!sqlTableExists(channelName))
 				return;
 			Statement statement = connection.createStatement();
@@ -407,6 +415,8 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			plugin.WireBox.UpdateCache();
 		}
 		return;
 	}
@@ -499,6 +509,13 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	@Override
 	public void updateChannel(String channelName, WirelessChannel channel)
 	{
+		try
+		{
+			Statement statement = connection.createStatement();
+			statement.executeUpdate("UPDATE " + channelName + "");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return;
 	}
 
