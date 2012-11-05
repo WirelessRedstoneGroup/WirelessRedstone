@@ -66,6 +66,18 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		return true;
 	}
 	
+	public boolean close()
+	{
+		try {
+			//Close
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been successfully closed!");
+		return true;
+	}
+	
 	private boolean sqlTableExists(String name)
 	{
 		try
@@ -222,50 +234,55 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					ArrayList<String> owners = new ArrayList<String>();
 					while(rs2.next())
 					{
-						owners.add(rs2.getString(sql_channelowners));
+						if(rs2.getString(sql_channelowners) != null)
+							owners.add(rs2.getString(sql_channelowners));
 					}
 					channel.setOwners(owners);
+					rs2.close();
+					
+					//Because a SQLite ResultSet is TYPE_FORWARD only, we have to create a third ResultSet and close the second
+					ResultSet rs3 = statement.executeQuery("SELECT * FROM " + channelName);
 					
 					//Set the wireless signs
 					ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
 					ArrayList<WirelessTransmitter> transmitters = new ArrayList<WirelessTransmitter>();
 					ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
-					while(rs2.next())
+					while(rs3.next())
 					{
-						if(rs2.getString(sql_signtype).equals("receiver"))
+						if(rs3.getString(sql_signtype).equals("receiver"))
 						{
 							WirelessReceiver receiver = new WirelessReceiver();
-							receiver.setDirection(rs2.getInt(sql_direction));
-							receiver.setisWallSign(rs2.getBoolean(sql_iswallsign));
-							receiver.setOwner(rs2.getString(sql_signowner));
-							receiver.setWorld(rs2.getString(sql_signworld));
-							receiver.setX(rs2.getInt(sql_signx));
-							receiver.setY(rs2.getInt(sql_signy));
-							receiver.setZ(rs2.getInt(sql_signz));
+							receiver.setDirection(rs3.getInt(sql_direction));
+							receiver.setisWallSign(rs3.getBoolean(sql_iswallsign));
+							receiver.setOwner(rs3.getString(sql_signowner));
+							receiver.setWorld(rs3.getString(sql_signworld));
+							receiver.setX(rs3.getInt(sql_signx));
+							receiver.setY(rs3.getInt(sql_signy));
+							receiver.setZ(rs3.getInt(sql_signz));
 							receivers.add(receiver);
 						}
-						if(rs2.getString(sql_signtype).equals("transmitter"))
+						if(rs3.getString(sql_signtype).equals("transmitter"))
 						{
 							WirelessTransmitter transmitter = new WirelessTransmitter();
-							transmitter.setDirection(rs2.getInt(sql_direction));
-							transmitter.setisWallSign(rs2.getBoolean(sql_iswallsign));
-							transmitter.setOwner(rs2.getString(sql_signowner));
-							transmitter.setWorld(rs2.getString(sql_signworld));
-							transmitter.setX(rs2.getInt(sql_signx));
-							transmitter.setY(rs2.getInt(sql_signy));
-							transmitter.setZ(rs2.getInt(sql_signz));
+							transmitter.setDirection(rs3.getInt(sql_direction));
+							transmitter.setisWallSign(rs3.getBoolean(sql_iswallsign));
+							transmitter.setOwner(rs3.getString(sql_signowner));
+							transmitter.setWorld(rs3.getString(sql_signworld));
+							transmitter.setX(rs3.getInt(sql_signx));
+							transmitter.setY(rs3.getInt(sql_signy));
+							transmitter.setZ(rs3.getInt(sql_signz));
 							transmitters.add(transmitter);
 						}
-						if(rs2.getString(sql_signtype).equals("screen"))
+						if(rs3.getString(sql_signtype).equals("screen"))
 						{
 							WirelessScreen screen = new WirelessScreen();
-							screen.setDirection(rs2.getInt(sql_direction));
-							screen.setisWallSign(rs2.getBoolean(sql_iswallsign));
-							screen.setOwner(rs2.getString(sql_signowner));
-							screen.setWorld(rs2.getString(sql_signworld));
-							screen.setX(rs2.getInt(sql_signx));
-							screen.setY(rs2.getInt(sql_signy));
-							screen.setZ(rs2.getInt(sql_signz));
+							screen.setDirection(rs3.getInt(sql_direction));
+							screen.setisWallSign(rs3.getBoolean(sql_iswallsign));
+							screen.setOwner(rs3.getString(sql_signowner));
+							screen.setWorld(rs3.getString(sql_signworld));
+							screen.setX(rs3.getInt(sql_signx));
+							screen.setY(rs3.getInt(sql_signy));
+							screen.setZ(rs3.getInt(sql_signz));
 							screens.add(screen);
 						}
 					}
@@ -274,7 +291,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					channel.setScreens(screens);
 					
 					//Done. Return channel
-					rs2.close();
+					rs3.close();
 					statement.close();
 					return channel;
 				}
@@ -285,19 +302,6 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			e.printStackTrace();
 		}
 		return null; //Channel not found
-	}
-
-	
-	public boolean close()
-	{
-		try {
-			//Close
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been successfully closed!");
-		return true;
 	}
 
 	@Override
@@ -421,87 +425,12 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			{
 				channelNames.add(rs.getString("name"));
 			}
-			rs.close(); //Always close the ResultSet
+			rs.close();
+			statement.close();
 			
 			for(String channelName : channelNames)
 			{
-				//Get the ResultSet from the table we want
-				ResultSet rs2 = statement.executeQuery("SELECT * FROM " + channelName);
-				if(rs2.getString("name") == null) //If the table is empty
-				{
-					statement.executeUpdate("DROP TABLE " + channelName);
-					break;
-				}
-				
-				//Create an empty WirelessChannel
-				WirelessChannel channel = new WirelessChannel();
-				
-				//Set the Id, the name, and the locked variable
-				channel.setName(rs2.getString(sql_channelname));
-				if(rs2.getInt(sql_channellocked) == 1)
-					channel.setLocked(true);
-				else if(rs2.getInt(sql_channellocked) == 0)
-					channel.setLocked(false);
-				else
-					channel.setLocked(false);
-				
-				//Set the owners
-				ArrayList<String> owners = new ArrayList<String>();
-				while(rs2.next())
-				{
-					owners.add(rs2.getString(sql_channelowners));
-				}
-				channel.setOwners(owners);
-				
-				//Set the wireless signs
-				ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
-				ArrayList<WirelessTransmitter> transmitters = new ArrayList<WirelessTransmitter>();
-				ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
-				while(rs2.next())
-				{
-					if(rs2.getString(sql_signtype).equals("receiver"))
-					{
-						WirelessReceiver receiver = new WirelessReceiver();
-						receiver.setDirection(rs2.getInt(sql_direction));
-						receiver.setisWallSign(rs2.getBoolean(sql_iswallsign));
-						receiver.setOwner(rs2.getString(sql_signowner));
-						receiver.setWorld(rs2.getString(sql_signworld));
-						receiver.setX(rs2.getInt(sql_signx));
-						receiver.setY(rs2.getInt(sql_signy));
-						receiver.setZ(rs2.getInt(sql_signz));
-						receivers.add(receiver);
-					}
-					if(rs2.getString(sql_signtype).equals("transmitter"))
-					{
-						WirelessTransmitter transmitter = new WirelessTransmitter();
-						transmitter.setDirection(rs2.getInt(sql_direction));
-						transmitter.setisWallSign(rs2.getBoolean(sql_iswallsign));
-						transmitter.setOwner(rs2.getString(sql_signowner));
-						transmitter.setWorld(rs2.getString(sql_signworld));
-						transmitter.setX(rs2.getInt(sql_signx));
-						transmitter.setY(rs2.getInt(sql_signy));
-						transmitter.setZ(rs2.getInt(sql_signz));
-						transmitters.add(transmitter);
-					}
-					if(rs2.getString(sql_signtype).equals("screen"))
-					{
-						WirelessScreen screen = new WirelessScreen();
-						screen.setDirection(rs2.getInt(sql_direction));
-						screen.setisWallSign(rs2.getBoolean(sql_iswallsign));
-						screen.setOwner(rs2.getString(sql_signowner));
-						screen.setWorld(rs2.getString(sql_signworld));
-						screen.setX(rs2.getInt(sql_signx));
-						screen.setY(rs2.getInt(sql_signy));
-						screen.setZ(rs2.getInt(sql_signz));
-						screens.add(screen);
-					}
-				}
-				channel.setReceivers(receivers);
-				channel.setTransmitters(transmitters);
-				channel.setScreens(screens);
-				
-				rs2.close();
-				channels.add(channel);
+				channels.add(getWirelessChannel(channelName));
 			}
 			return channels;
 		}
