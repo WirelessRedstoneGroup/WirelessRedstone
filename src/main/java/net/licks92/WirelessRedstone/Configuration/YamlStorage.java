@@ -25,11 +25,11 @@ import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
-public class WirelessFileConfiguration implements IWirelessStorageConfiguration
+public class YamlStorage implements IWirelessStorageConfiguration
 {
 	private File channelFolder;
 	
-	public WirelessFileConfiguration(File channelFolder)
+	public YamlStorage(File channelFolder)
 	{
 		this.channelFolder = channelFolder;
 	}

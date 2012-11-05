@@ -5,8 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -20,14 +23,12 @@ import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import lib.PatPeter.SQLibrary.SQLite;
-
-public class SQLConfiguration implements IWirelessStorageConfiguration
-{
-	private SQLite db;
+public class SQLStorage implements IWirelessStorageConfiguration
+{	
+	private File sqlFile;
+	private Connection connection;
 	
 	private final String sql_iswallsign = "iswallsign";
 	private final String sql_direction = "direction";
@@ -43,16 +44,22 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 	
 	File channelFolder;
 	
-	public SQLConfiguration(File channelFolder)
+	public SQLStorage(File r_channelFolder)
 	{
-		this.channelFolder = channelFolder;
+		channelFolder = r_channelFolder;
+		
+		sqlFile = new File(channelFolder.getAbsolutePath() + File.separator + "channels.db");
 	}
 	
 	public boolean init()
 	{
 		WirelessRedstone.getStackableLogger().debug("Establishing connection to database...");
 		
-		db = new SQLite(Bukkit.getLogger(), "[WirelessRedstone]", "channels", channelFolder.getAbsolutePath());
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + sqlFile.getAbsolutePath());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been established!");
 		
@@ -63,7 +70,8 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 	{
 		try
 		{
-			ResultSet rs = db.query("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
 			
 			while(rs.next())
 			{
@@ -74,6 +82,7 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 			}
 
 			rs.close();
+			statement.close();
 			return false;
 		}
 		catch (SQLException e)
@@ -85,16 +94,20 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 	
 	public boolean wipeData()
 	{
+		//Backup before wiping
+		backupData();
 		try
 		{
 			//Get the names of all the tables
-			ResultSet rs = db.query("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
 			ArrayList<String> tables = new ArrayList<String>();
 			while(rs.next())
 			{
 				tables.add(rs.getString("name"));
 			}
 			rs.close();
+			statement.close();
 			
 			//Erase all the tables
 			for(String channelName : tables)
@@ -164,22 +177,28 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 		return true;
 	}
 	
-	public WirelessChannel getWirelessChannel(String channelName)
+	public WirelessChannel getWirelessChannel(String r_channelName)
 	{
 		try
 		{
-			ResultSet rs = db.query("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			ArrayList<String> channels = new ArrayList<String>();
 			while(rs.next())
 			{
-				if(rs.getString("name").equals(channelName))
+				channels.add(rs.getString("name"));
+			}
+			rs.close(); //Always close the ResultSet
+			
+			for(String channelName : channels)
+			{
+				if(channelName.equals(r_channelName))
 				{
-					rs.close(); //Always close the ResultSet
-					
 					//Get the ResultSet from the table we want
-					ResultSet rs2 = db.query("SELECT * FROM " + channelName);
-					if(!(rs2.getString("name") == null)) //If the table is empty
+					ResultSet rs2 = statement.executeQuery("SELECT * FROM " + channelName);
+					if(rs2.getString("name") == null) //If the table is empty
 					{
-						db.query("DROP TABLE " + channelName);
+						statement.executeUpdate("DROP TABLE " + channelName);
 						return new WirelessChannel();
 					}
 					
@@ -187,7 +206,6 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 					WirelessChannel channel = new WirelessChannel();
 					
 					//Set the Id, the name, and the locked variable
-					rs2.first();
 					channel.setName(rs2.getString(sql_channelname));
 					if(rs2.getInt(sql_channellocked) == 1)
 						channel.setLocked(true);
@@ -198,7 +216,6 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 					
 					//Set the owners
 					ArrayList<String> owners = new ArrayList<String>();
-					rs2.first();
 					while(rs2.next())
 					{
 						owners.add(rs2.getString(sql_channelowners));
@@ -254,6 +271,7 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 					
 					//Done. Return channel
 					rs2.close();
+					statement.close();
 					return channel;
 				}
 			}
@@ -268,12 +286,13 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 	
 	public boolean close()
 	{
-		if(WirelessRedstone.config.getSQLUsage())
-		{
-			db.close();
-			WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been successfully closed!");
-			return true;
+		try {
+			//Close
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been successfully closed!");
 		return true;
 	}
 
@@ -316,8 +335,11 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 				iswallsign = 0;
 			}
 			
-			//Create the table
-			db.createTable("CREATE TABLE " + channelName + " ( "
+			try
+			{
+				//Create the table
+				Statement statement = connection.createStatement();
+				statement.executeUpdate("CREATE TABLE " + channelName + " ( "
 					
 					//First columns are for the channel
 					+ sql_channelname + " char(64),"
@@ -335,15 +357,15 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 					+ sql_iswallsign + " int(1)"
 					+ " ) ");
 			
-			//Fill the columns name, id and locked
-			db.query("INSERT INTO " + channelName + " (" + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
+				//Fill the columns name, id and locked
+				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
 					+ "VALUES ('" + channel.getName() + "'," //name
 					+ "0" + "," //locked
 					+ "'" + channel.getOwners().get(0)
 					+ "')"); //The first owner
 			
-			//Create the sign that caused the channel to create
-			db.query("INSERT INTO " + channelName + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
+				//Create the sign that caused the channel to create
+				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
 					+ "VALUES ('" + signtype + "'," //Type of the wireless point
 					+ wirelesspoint.getX() + ","
 					+ wirelesspoint.getY() + ","
@@ -354,26 +376,190 @@ public class SQLConfiguration implements IWirelessStorageConfiguration
 					+ iswallsign
 					+ " ) ");
 			
-			//Finished!
-			return;
+				//Finished!
+				statement.close();
+				return;
+			}
+			catch(SQLException ex)
+			{
+				ex.printStackTrace();
+			}
 		}
 	}
 
 	@Override
 	public void removeWirelessChannel(String channelName)
 	{
+		try
+		{
+			if(!sqlTableExists(channelName))
+				return;
+			Statement statement = connection.createStatement();
+			statement.executeUpdate("DROP TABLE " + channelName);
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return;
 	}
 
 	@Override
 	public Collection<WirelessChannel> getAllChannels()
 	{
-		return null;
+		try
+		{
+			Statement statement = connection.createStatement();
+			ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
+			
+			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			ArrayList<String> channelNames = new ArrayList<String>();
+			while(rs.next())
+			{
+				channelNames.add(rs.getString("name"));
+			}
+			rs.close(); //Always close the ResultSet
+			
+			for(String channelName : channelNames)
+			{
+				//Get the ResultSet from the table we want
+				ResultSet rs2 = statement.executeQuery("SELECT * FROM " + channelName);
+				if(rs2.getString("name") == null) //If the table is empty
+				{
+					statement.executeUpdate("DROP TABLE " + channelName);
+					break;
+				}
+				
+				//Create an empty WirelessChannel
+				WirelessChannel channel = new WirelessChannel();
+				
+				//Set the Id, the name, and the locked variable
+				channel.setName(rs2.getString(sql_channelname));
+				if(rs2.getInt(sql_channellocked) == 1)
+					channel.setLocked(true);
+				else if(rs2.getInt(sql_channellocked) == 0)
+					channel.setLocked(false);
+				else
+					channel.setLocked(false);
+				
+				//Set the owners
+				ArrayList<String> owners = new ArrayList<String>();
+				while(rs2.next())
+				{
+					owners.add(rs2.getString(sql_channelowners));
+				}
+				channel.setOwners(owners);
+				
+				//Set the wireless signs
+				ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
+				ArrayList<WirelessTransmitter> transmitters = new ArrayList<WirelessTransmitter>();
+				ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
+				while(rs2.next())
+				{
+					if(rs2.getString(sql_signtype).equals("receiver"))
+					{
+						WirelessReceiver receiver = new WirelessReceiver();
+						receiver.setDirection(rs2.getInt(sql_direction));
+						receiver.setisWallSign(rs2.getBoolean(sql_iswallsign));
+						receiver.setOwner(rs2.getString(sql_signowner));
+						receiver.setWorld(rs2.getString(sql_signworld));
+						receiver.setX(rs2.getInt(sql_signx));
+						receiver.setY(rs2.getInt(sql_signy));
+						receiver.setZ(rs2.getInt(sql_signz));
+						receivers.add(receiver);
+					}
+					if(rs2.getString(sql_signtype).equals("transmitter"))
+					{
+						WirelessTransmitter transmitter = new WirelessTransmitter();
+						transmitter.setDirection(rs2.getInt(sql_direction));
+						transmitter.setisWallSign(rs2.getBoolean(sql_iswallsign));
+						transmitter.setOwner(rs2.getString(sql_signowner));
+						transmitter.setWorld(rs2.getString(sql_signworld));
+						transmitter.setX(rs2.getInt(sql_signx));
+						transmitter.setY(rs2.getInt(sql_signy));
+						transmitter.setZ(rs2.getInt(sql_signz));
+						transmitters.add(transmitter);
+					}
+					if(rs2.getString(sql_signtype).equals("screen"))
+					{
+						WirelessScreen screen = new WirelessScreen();
+						screen.setDirection(rs2.getInt(sql_direction));
+						screen.setisWallSign(rs2.getBoolean(sql_iswallsign));
+						screen.setOwner(rs2.getString(sql_signowner));
+						screen.setWorld(rs2.getString(sql_signworld));
+						screen.setX(rs2.getInt(sql_signx));
+						screen.setY(rs2.getInt(sql_signy));
+						screen.setZ(rs2.getInt(sql_signz));
+						screens.add(screen);
+					}
+				}
+				channel.setReceivers(receivers);
+				channel.setTransmitters(transmitters);
+				channel.setScreens(screens);
+				
+				rs2.close();
+				channels.add(channel);
+			}
+			return channels;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null; //Channel not found
 	}
 
 	@Override
 	public void createWirelessPoint(String channelName, IWirelessPoint point)
 	{
+		if(!sqlTableExists(channelName))
+		{
+			WirelessRedstone.getStackableLogger().severe("Could not create this wireless point in the channel " + channelName + ", it does not exist!");
+		}
+		
+		int iswallsign;
+		String signtype;
+		
+		if(point instanceof WirelessReceiver)
+		{
+			signtype = "receiver";
+		}
+		else if(point instanceof WirelessTransmitter)
+		{
+			signtype = "transmitter";
+		}
+		else //if WirelessScreen
+		{
+			signtype = "screen";
+		}
+		
+		if(point.getisWallSign())
+		{
+			iswallsign = 1;
+		}
+		else
+		{
+			iswallsign = 0;
+		}
+		
+		try
+		{
+			Statement statement = connection.createStatement();
+			statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
+					+ "VALUES ('" + signtype + "'," //Type of the wireless point
+					+ point.getX() + ","
+					+ point.getY() + ","
+					+ point.getZ() + ","
+					+ point.getDirection() + ","
+					+ "'" + point.getOwner() + "',"
+					+ "'" + point.getWorld() + "',"
+					+ iswallsign
+					+ " ) ");
+			statement.close();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}
 		return;
 	}
 
