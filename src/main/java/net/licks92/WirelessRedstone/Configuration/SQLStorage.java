@@ -511,8 +511,25 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	{
 		try
 		{
+			int locked = (channel.isLocked()) ? 1 : 0;
 			Statement statement = connection.createStatement();
-			statement.executeUpdate("UPDATE " + channelName + "");
+			
+			//Update name and lock status
+			statement.executeUpdate("UPDATE " + channelName
+					+ " SET "
+					+ sql_channelname + "='" + channel.getName() + "' "
+					+ sql_channellocked + "=" + locked + " "
+					+ "WHERE " + sql_channelid + "=" + channel.getId());
+			
+			//Then update the owners
+			statement.executeUpdate("ALTER TABLE " + channelName + " DROP COLUMN " + sql_channelowners);
+			statement.executeUpdate("ALTER TABLE " + channelName + " ADD COLUMN " + sql_channelowners);
+			for(String owner : channel.getOwners())
+			{
+				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_channelowners + ") VALUES " + owner);
+			}
+			statement.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

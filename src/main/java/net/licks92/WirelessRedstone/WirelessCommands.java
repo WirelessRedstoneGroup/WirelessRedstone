@@ -303,7 +303,7 @@ public class WirelessCommands implements CommandExecutor
 		{
 			String subCommand = args[0];
 
-			if (subCommand.equalsIgnoreCase("addowner"))
+			if (subCommand.equalsIgnoreCase("addowner") && args.length > 2)
 			{
 				String channelName = args[1];
 				String playername = args[2];
@@ -322,7 +322,7 @@ public class WirelessCommands implements CommandExecutor
 				}
 			}
 			
-			else if (subCommand.equalsIgnoreCase("removeowner"))
+			else if (subCommand.equalsIgnoreCase("removeowner") && args.length > 2)
 			{
 				String channelName = args[1];
 				String playername = args[2];
