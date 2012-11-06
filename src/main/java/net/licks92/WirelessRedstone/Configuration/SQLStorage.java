@@ -251,6 +251,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
 					ArrayList<WirelessTransmitter> transmitters = new ArrayList<WirelessTransmitter>();
 					ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
+					rs3.next();//Because first row does not contain a wireless sign
 					while(rs3.next())
 					{
 						if(rs3.getString(sql_signtype).equals("receiver"))
@@ -393,6 +394,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			
 				//Finished!
 				statement.close();
+				plugin.WireBox.UpdateCache();
 				return;
 			}
 			catch(SQLException ex)
@@ -498,6 +500,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ iswallsign
 					+ " ) ");
 			statement.close();
+			plugin.WireBox.UpdateCache();
 		}
 		catch (SQLException ex)
 		{
@@ -539,18 +542,42 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	@Override
 	public boolean removeWirelessReceiver(String channelName, Location loc)
 	{
-		return false;
+		getWirelessChannel(channelName).removeReceiverAt(loc);
+		return removeWirelessPoint(channelName, loc);
 	}
 
 	@Override
 	public boolean removeWirelessTransmitter(String channelName, Location loc)
 	{
-		return false;
+		getWirelessChannel(channelName).removeTransmitterAt(loc);
+		return removeWirelessPoint(channelName, loc);
 	}
 
 	@Override
 	public boolean removeWirelessScreen(String channelName, Location loc)
 	{
-		return false;
+		getWirelessChannel(channelName).removeScreenAt(loc);
+		return removeWirelessPoint(channelName, loc);
+	}
+	
+	private boolean removeWirelessPoint(String channelName, Location loc)
+	{
+		try
+		{
+			Statement statement = connection.createStatement();
+			String sql = "DELETE FROM " + channelName + " WHERE "
+					+ sql_signx + "=" + loc.getBlockX() + " AND "
+					+ sql_signy + "=" + loc.getBlockY() + " AND "
+					+ sql_signz + "=" + loc.getBlockZ() + " AND "
+					+ sql_signworld + "='" + loc.getWorld().getName() + "'";
+			statement.executeUpdate(sql);
+			WirelessRedstone.getStackableLogger().debug("Statement to delete wireless sign : " + sql);
+			statement.close();
+			plugin.WireBox.UpdateCache();
+		} catch (SQLException ex) {
+			WirelessRedstone.getStackableLogger().debug(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 }

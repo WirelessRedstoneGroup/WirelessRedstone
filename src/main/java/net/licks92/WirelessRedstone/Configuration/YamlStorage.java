@@ -114,6 +114,8 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		
 		channelConfig.set(channelName, channel);
 		
+		plugin.WireBox.UpdateCache();
+		
 		try
 		{
 			channelConfig.save(new File(channelFolder, channelName + ".yml"));
@@ -142,7 +144,6 @@ public class YamlStorage implements IWirelessStorageConfiguration
 				f.delete();
 			}
 		}
-		plugin.WireBox.UpdateCache();
 	}
 
 	@Override

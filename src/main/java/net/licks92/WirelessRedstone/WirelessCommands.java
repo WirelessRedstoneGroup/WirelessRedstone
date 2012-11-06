@@ -365,7 +365,6 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage("/wr admin backup - Backup the database. You should use it before to update in order to recover it if an error occurs.");
 		}
 		return true;
-
 	}
 
 	private boolean performHelp(CommandSender sender, String[] args, Player player)
