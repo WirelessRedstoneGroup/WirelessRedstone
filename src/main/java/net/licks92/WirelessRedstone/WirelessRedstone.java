@@ -211,6 +211,39 @@ public class WirelessRedstone extends JavaPlugin
 					return total;
 				}
 			});
+			
+			final Graph storageGraph = metrics.createGraph("Storage used");
+			storageGraph.addPlotter(new Plotter("SQL")
+			{
+				@Override
+				public int getValue()
+				{
+					if(config.getSQLUsage())
+					{
+						return 1;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+			});
+			
+			storageGraph.addPlotter(new Plotter("Yaml files")
+			{
+				@Override
+				public int getValue()
+				{
+					if(!config.getSQLUsage())
+					{
+						return 1;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+			});
 			metrics.start();
 		}
 		catch(Exception e)
