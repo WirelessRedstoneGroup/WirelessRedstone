@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -16,6 +17,8 @@ import org.bukkit.entity.Player;
 public class WirelessCommands implements CommandExecutor
 {
 	private final WirelessRedstone plugin;
+	
+	private boolean wipeDataConfirm = false;
 
 	public WirelessCommands(WirelessRedstone plugin)
 	{
@@ -544,19 +547,33 @@ public class WirelessCommands implements CommandExecutor
 		return true;
 	}
 	
-	private boolean performWipeData(CommandSender sender, String[] args, Player player)
+	private boolean performWipeData(CommandSender sender, String[] args, final Player player)
 	{
 		/*
 		 * To-do list:
 		 * - Make a backup before.
 		 * - Remove all the signs of every channel.
 		 */
-		
 		if(!plugin.permissions.canWipeData(player))
 		{
 			player.sendMessage(WirelessRedstone.strings.playerHasNotPermission);
 			return true;
 		}
+		if(!wipeDataConfirm)
+		{
+			player.sendMessage("You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.");
+			wipeDataConfirm = true;
+			Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							wipeDataConfirm = false;
+						}
+					}, 300L);
+			return true;
+		}
+		wipeDataConfirm = false;
 		if(WirelessRedstone.config.wipeData())
 		{
 			player.sendMessage(ChatColor.GREEN + "Database has been succesfully wiped!");
