@@ -56,7 +56,12 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	
 	public boolean init()
 	{
-		WirelessRedstone.getStackableLogger().debug("Establishing connection to database...");
+		return init(true);
+	}
+	
+	public boolean init(boolean allowConvert)
+	{
+		WirelessRedstone.getWRLogger().debug("Establishing connection to database...");
 		
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + sqlFile.getAbsolutePath());
@@ -64,7 +69,17 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			e.printStackTrace();
 		}
 		
-		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been established!");
+		WirelessRedstone.getWRLogger().debug("Connection to SQL Database has been established!");
+		
+		if(canConvert() && allowConvert)
+		{
+			WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in .yml files.");
+			WirelessRedstone.getWRLogger().info("Beginning data transfer... (from Yaml files to SQL Database)");
+			if(convert())
+			{
+				WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the SQL Database.");
+			}
+		}
 		
 		return true;
 	}
@@ -77,7 +92,48 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		WirelessRedstone.getStackableLogger().debug("Connection to SQL Database has been successfully closed!");
+		WirelessRedstone.getWRLogger().debug("Connection to SQL Database has been successfully closed!");
+		return true;
+	}
+	
+	public boolean canConvert()
+	{
+		for(File file : channelFolder.listFiles())
+		{
+			if(file.getName().contains(".yml"))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean convert()
+	{
+		WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
+		if(!backupData())
+		{
+			WirelessRedstone.getWRLogger().severe("Backup failed ! Data transfer abort...");
+		}
+		else
+		{
+			WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
+			
+			YamlStorage yaml = new YamlStorage(channelFolder, plugin);
+			yaml.init(false);
+			for(WirelessChannel channel : yaml.getAllChannels())
+			{
+				createWirelessChannel(channel.getName(), channel);
+			}
+			yaml.close();
+			for(File f : channelFolder.listFiles())
+			{
+				if(f.getName().contains(".yml"))
+				{
+					f.delete();
+				}
+			}
+		}
 		return true;
 	}
 	
@@ -181,7 +237,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			zos.close();
 			fos.close();
 			
-		WirelessRedstone.getStackableLogger().info("Channels saved in archive : " + zipName);
+		WirelessRedstone.getWRLogger().info("Channels saved in archive : " + zipName);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -335,7 +391,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			}
 			else
 			{
-				WirelessRedstone.getStackableLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
+				WirelessRedstone.getWRLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
 				removeWirelessChannel(channelName);
 				return;
 			}
@@ -458,7 +514,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	{
 		if(!sqlTableExists(channelName))
 		{
-			WirelessRedstone.getStackableLogger().severe("Could not create this wireless point in the channel " + channelName + ", it does not exist!");
+			WirelessRedstone.getWRLogger().severe("Could not create this wireless point in the channel " + channelName + ", it does not exist!");
 		}
 		
 		int iswallsign;
@@ -571,11 +627,11 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ sql_signz + "=" + loc.getBlockZ() + " AND "
 					+ sql_signworld + "='" + loc.getWorld().getName() + "'";
 			statement.executeUpdate(sql);
-			WirelessRedstone.getStackableLogger().debug("Statement to delete wireless sign : " + sql);
+			WirelessRedstone.getWRLogger().debug("Statement to delete wireless sign : " + sql);
 			statement.close();
 			plugin.WireBox.UpdateCache();
 		} catch (SQLException ex) {
-			WirelessRedstone.getStackableLogger().debug(ex.getMessage());
+			WirelessRedstone.getWRLogger().debug(ex.getMessage());
 			return false;
 		}
 		return true;

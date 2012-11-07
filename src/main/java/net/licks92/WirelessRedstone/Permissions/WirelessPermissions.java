@@ -32,30 +32,30 @@ public class WirelessPermissions
 		if (pm.getPlugin("Vault") != null && WirelessRedstone.config.getVaultUsage())
 		{
 			this.permissionsHandler = new Vault(plugin);
-			WirelessRedstone.getStackableLogger().info("Using Vault for permissions !");
+			WirelessRedstone.getWRLogger().info("Using Vault for permissions !");
 		}
 		else if(pm.getPlugin("PermissionsEx") != null)
 		{
-			WirelessRedstone.getStackableLogger().info("Using PermissionsEx for permissions !");
+			WirelessRedstone.getWRLogger().info("Using PermissionsEx for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
 		}
 		else if(pm.getPlugin("PermissionsBukkit") != null)
 		{
-			WirelessRedstone.getStackableLogger().info("Using PermissionsBukkit for permissions !");
+			WirelessRedstone.getWRLogger().info("Using PermissionsBukkit for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
 		}
 		else if(pm.getPlugin("bPermissions") != null)
 		{
-			WirelessRedstone.getStackableLogger().info("Using bPermissions for permissions !");
+			WirelessRedstone.getWRLogger().info("Using bPermissions for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
 		}
 		else
 		{
-			WirelessRedstone.getStackableLogger().info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
+			WirelessRedstone.getWRLogger().info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
 			this.permissionsHandler = new opPermissions(plugin);
 		}
 
-		WirelessRedstone.getStackableLogger().fine("Loaded Permissions...");
+		WirelessRedstone.getWRLogger().fine("Loaded Permissions...");
 	}
 	
 	public boolean canCreateReceiver(Player player)

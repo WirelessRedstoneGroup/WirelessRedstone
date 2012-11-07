@@ -201,7 +201,7 @@ public class WirelessBlockListener implements Listener
 						}
 						else // Not West East North South ...
 						{
-							WirelessRedstone.getStackableLogger().info("Strange Data !");
+							WirelessRedstone.getWRLogger().info("Strange Data !");
 						}
 					}
 				}
@@ -217,7 +217,7 @@ public class WirelessBlockListener implements Listener
 			}
 			catch (RuntimeException e) 
 			{
-				WirelessRedstone.getStackableLogger().severe("Error while updating redstone event onBlockRedstoneChange 1 :"+e.getClass()+":"+e.getStackTrace());
+				WirelessRedstone.getWRLogger().severe("Error while updating redstone event onBlockRedstoneChange 1 :"+e.getClass()+":"+e.getStackTrace());
 				return;
 			}
 		}
@@ -271,7 +271,7 @@ public class WirelessBlockListener implements Listener
 			}
 			catch (RuntimeException e)
 			{
-				WirelessRedstone.getStackableLogger().severe("Error while updating redstone onBlockRedstoneChange 2 :"+e.getClass()+":"+e.getStackTrace());
+				WirelessRedstone.getWRLogger().severe("Error while updating redstone onBlockRedstoneChange 2 :"+e.getClass()+":"+e.getStackTrace());
 				return;
 			}
 		}
@@ -308,7 +308,7 @@ public class WirelessBlockListener implements Listener
 					}
 					else
 					{
-						WirelessRedstone.getStackableLogger().debug("Receiver wasn't found in the config, but the sign has been successfuly removed !");
+						WirelessRedstone.getWRLogger().debug("Receiver wasn't found in the config, but the sign has been successfuly removed !");
 					}
 				}
 				else
@@ -375,7 +375,7 @@ public class WirelessBlockListener implements Listener
 					}
 					else 
 					{
-						WirelessRedstone.getStackableLogger().debug("Transmitter wasn't found in the config, but the sign has been successfuly removed !");
+						WirelessRedstone.getWRLogger().debug("Transmitter wasn't found in the config, but the sign has been successfuly removed !");
 					}
 				}
 				else
@@ -406,7 +406,7 @@ public class WirelessBlockListener implements Listener
 					}
 					else
 					{
-						WirelessRedstone.getStackableLogger().debug("Screen wasn't found in the config, but the sign has been successfuly removed !");
+						WirelessRedstone.getWRLogger().debug("Screen wasn't found in the config, but the sign has been successfuly removed !");
 					}
 				}
 				else

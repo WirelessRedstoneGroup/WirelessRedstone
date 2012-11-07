@@ -33,7 +33,7 @@ public class WirelessRedstone extends JavaPlugin
 {
 	public static WirelessConfiguration config;
 	public static WirelessStringProvider strings;
-	private static StackableLogger logger;
+	private static WRLogger logger;
 	public WireBox WireBox = new WireBox(this);
 	public WirelessPermissions permissions;
 	public static Permission perms;
@@ -44,7 +44,7 @@ public class WirelessRedstone extends JavaPlugin
 	public double currentversion;
 	public double newversion;
 	
-	public static StackableLogger getStackableLogger()
+	public static WRLogger getWRLogger()
 	{
 		return logger;
 	}
@@ -63,14 +63,14 @@ public class WirelessRedstone extends JavaPlugin
 		config = new WirelessConfiguration(this);
 		if(config.getDebugMode())
 		{
-			logger = new StackableLogger("[WirelessRedstone]", true);
+			logger = new WRLogger("[WirelessRedstone]", true);
 			logger.info("Debug Mode activated !");
 			logger.info("Log level set to FINEST because of the debug mode");
 			logger.setLogLevel(Level.FINEST);
 		}
 		else
 		{
-			logger = new StackableLogger("[WirelessRedstone]", false);
+			logger = new WRLogger("[WirelessRedstone]", false);
 			WirelessRedstone.logger.setLogLevel(config.getLogLevel());
 		}
 		config.init();

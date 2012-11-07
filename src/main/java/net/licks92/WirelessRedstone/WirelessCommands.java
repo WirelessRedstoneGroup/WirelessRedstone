@@ -33,7 +33,7 @@ public class WirelessCommands implements CommandExecutor
 		
 		if (!(sender instanceof Player))
 		{
-			WirelessRedstone.getStackableLogger().info("Only in-game players can use this command.");
+			WirelessRedstone.getWRLogger().info("Only in-game players can use this command.");
 			return true;
 		}
 		
@@ -259,7 +259,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		catch(NullPointerException ex)
 		{
-			WirelessRedstone.getStackableLogger().severe("Unable to get the list of channels ! Stack trace ==>");
+			WirelessRedstone.getWRLogger().severe("Unable to get the list of channels ! Stack trace ==>");
 			ex.printStackTrace();
 		}
 
@@ -315,7 +315,7 @@ public class WirelessCommands implements CommandExecutor
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.addOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
-					WirelessRedstone.getStackableLogger().info(playername + " has been added to the list of owners of " + channelName);
+					WirelessRedstone.getWRLogger().info(playername + " has been added to the list of owners of " + channelName);
 					player.sendMessage(ChatColor.GREEN + playername + " has been added to the list of owners of " + channelName);
 					return true;
 				}
@@ -334,7 +334,7 @@ public class WirelessCommands implements CommandExecutor
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.removeOwner(playername);
 					WirelessRedstone.config.updateChannel(channelName, channel);
-					WirelessRedstone.getStackableLogger().info(playername + " has been removed from the list of owners of " + channelName);
+					WirelessRedstone.getWRLogger().info(playername + " has been removed from the list of owners of " + channelName);
 					player.sendMessage(ChatColor.GREEN + playername + " has been removed from the list of owners of " + channelName);
 					return true;
 				}

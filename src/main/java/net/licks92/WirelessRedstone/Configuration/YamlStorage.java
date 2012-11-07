@@ -39,11 +39,26 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	@Override
 	public boolean init()
 	{
+		return init(true);
+	}
+	
+	public boolean init(boolean allowConvert)
+	{
 		//Initialize the serialization
 		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
 		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
 		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
 		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
+		
+		if(canConvert() && allowConvert)
+		{
+			WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in SQL Database.");
+			WirelessRedstone.getWRLogger().info("Beginning data transfer... (from SQL Database to Yaml Files)");
+			if(convert())
+			{
+				WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the Yaml Files.");
+			}
+		}
 		
 		return true;
 	}
@@ -51,6 +66,47 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	@Override
 	public boolean close()
 	{
+		return true;
+	}
+	
+	public boolean canConvert()
+	{
+		for(File file : channelFolder.listFiles())
+		{
+			if(file.getName().contains(".db"))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean convert()
+	{
+		WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
+		if(!backupData())
+		{
+			WirelessRedstone.getWRLogger().severe("Backup failed ! Data transfer abort...");
+		}
+		else
+		{
+			WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
+			
+			SQLStorage sql = new SQLStorage(channelFolder, plugin);
+			sql.init(false);
+			for(WirelessChannel channel : sql.getAllChannels())
+			{
+				createWirelessChannel(channel.getName(), channel);
+			}
+			sql.close();
+			for(File f : channelFolder.listFiles())
+			{
+				if(f.getName().contains(".db"))
+				{
+					f.delete();
+				}
+			}
+		}
 		return true;
 	}
 
@@ -82,7 +138,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			return null; // channel not found
 		else if(!(channel instanceof WirelessChannel))
 		{
-			WirelessRedstone.getStackableLogger().warning("Channel "+channelName+" does not seem to be of type WirelessChannel.");
+			WirelessRedstone.getWRLogger().warning("Channel "+channelName+" does not seem to be of type WirelessChannel.");
 			return null;
 		}
 		else
@@ -255,7 +311,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			zos.close();
 			fos.close();
 			
-		WirelessRedstone.getStackableLogger().info("Channels saved in archive : " + zipName);
+		WirelessRedstone.getWRLogger().info("Channels saved in archive : " + zipName);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -298,15 +354,15 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			if(channel instanceof WirelessChannel)
 			{
 				channels.add((WirelessChannel)channel);
-				WirelessRedstone.getStackableLogger().debug("Channel added in getAllChannels() list : " + ((WirelessChannel)channel).getName());
+				WirelessRedstone.getWRLogger().debug("Channel added in getAllChannels() list : " + ((WirelessChannel)channel).getName());
 			}
 			else if(channel == null)
 			{
-				WirelessRedstone.getStackableLogger().debug("File " + f.getName() + " does not contain a Wireless Channel. Removing it.");
+				WirelessRedstone.getWRLogger().debug("File " + f.getName() + " does not contain a Wireless Channel. Removing it.");
 				f.delete();
 			}
 			else
-				WirelessRedstone.getStackableLogger().warning("Channel " + channel + " is not of type WirelessChannel.");
+				WirelessRedstone.getWRLogger().warning("Channel " + channel + " is not of type WirelessChannel.");
 		}
 		if(channels.isEmpty())
 		{

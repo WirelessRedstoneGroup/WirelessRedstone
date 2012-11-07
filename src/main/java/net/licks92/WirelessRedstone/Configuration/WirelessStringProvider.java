@@ -74,8 +74,8 @@ public class WirelessStringProvider
 		}
 		catch (Exception ex)
 		{
-			WirelessRedstone.getStackableLogger().severe("Could not load strings !");
-			WirelessRedstone.getStackableLogger().severe("Exception stacktrace : ");
+			WirelessRedstone.getWRLogger().severe("Could not load strings !");
+			WirelessRedstone.getWRLogger().severe("Exception stacktrace : ");
 			ex.printStackTrace();
 			return false;
 		}

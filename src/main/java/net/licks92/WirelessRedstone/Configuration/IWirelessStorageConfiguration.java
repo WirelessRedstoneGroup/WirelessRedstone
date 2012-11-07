@@ -13,6 +13,10 @@ public interface IWirelessStorageConfiguration
 	
 	boolean close();
 	
+	boolean canConvert();
+	
+	boolean convert();
+	
 	WirelessChannel getWirelessChannel(String channelName);
 	
 	Collection<WirelessChannel> getAllChannels();

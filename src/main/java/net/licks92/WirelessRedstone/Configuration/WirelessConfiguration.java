@@ -45,22 +45,26 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		if(getSQLUsage())
 		{
 			storage = new SQLStorage(channelFolder, plugin);
-			/*WirelessRedstone.getStackableLogger().info("SQL Storage is not available yet. You will still use the yaml files to store the channels.");
-			storage = new WirelessFileConfiguration(channelFolder);*/
 		}
 		else
 			storage = new YamlStorage(channelFolder, plugin);
 		
-		storage.init();
-		
-		return true;
+		return storage.init();
 	}
 	
 	public boolean close()
 	{
-		storage.close();
-		
-		return true;
+		return storage.close();
+	}
+	
+	public boolean canConvert()
+	{
+		return storage.canConvert();
+	}
+	
+	public boolean convert()
+	{
+		return storage.convert();
 	}
 	
 	public boolean wipeData()

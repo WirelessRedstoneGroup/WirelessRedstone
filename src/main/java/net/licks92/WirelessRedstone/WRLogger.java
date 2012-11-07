@@ -5,14 +5,14 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
-public class StackableLogger
+public class WRLogger
 {
 	private Logger logger;
 	private String prefix;
 	private boolean debug;
 	public static final String MINECRAFT_LOGGER = "Minecraft";
 
-	public StackableLogger(String prefix, boolean debug)
+	public WRLogger(String prefix, boolean debug)
 	{
 		this.logger = Bukkit.getLogger();
 		this.prefix = prefix;
