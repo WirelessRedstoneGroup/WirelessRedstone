@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -183,9 +185,11 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	}
 
 	@Override
-	public void createWirelessChannel(String channelName, WirelessChannel channel)
+	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
 	{
 		setWirelessChannel(channelName, channel);
+		
+		return true;
 	}
 
 	@Override
@@ -201,9 +205,43 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			}
 		}
 	}
+	
+	public boolean renameWirelessChannel(String channelName, String newChannelName)
+	{
+		WirelessChannel channel = getWirelessChannel(channelName);
+		
+		List<IWirelessPoint> signs = new ArrayList<IWirelessPoint>();
+		
+		signs.addAll(channel.getReceivers());
+		signs.addAll(channel.getTransmitters());
+		signs.addAll(channel.getScreens());
+		
+		for(IWirelessPoint sign : signs)
+		{
+			Location loc = new Location(Bukkit.getWorld(sign.getWorld()), sign.getX(), sign.getY(), sign.getZ());
+			Sign signBlock = (Sign) loc.getBlock();
+			signBlock.setLine(1, newChannelName);
+		}
+		
+		//Remove the old channel in the config
+		setWirelessChannel(channelName, null);
+		
+		for(File f : channelFolder.listFiles())
+		{
+			if(f.getName().equals(channelName))
+			{
+				f.delete();
+			}
+		}
+		
+		//Set a new channel
+		createWirelessChannel(newChannelName, channel);
+		
+		return true;
+	}
 
 	@Override
-	public void createWirelessPoint(String channelName, IWirelessPoint point)
+	public boolean createWirelessPoint(String channelName, IWirelessPoint point)
 	{
 		WirelessChannel channel = getWirelessChannel(channelName);
 		if(point instanceof WirelessReceiver)
@@ -213,6 +251,8 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		else if(point instanceof WirelessScreen)
 			channel.addScreen((WirelessScreen) point);
 		setWirelessChannel(channelName, channel);
+		
+		return true;
 	}
 
 	@Override

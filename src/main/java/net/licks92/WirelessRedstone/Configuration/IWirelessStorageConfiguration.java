@@ -21,11 +21,11 @@ public interface IWirelessStorageConfiguration
 	
 	Collection<WirelessChannel> getAllChannels();
 	
-	void createWirelessChannel(String channelName, WirelessChannel channel);
+	boolean createWirelessChannel(String channelName, WirelessChannel channel);
 	
 	void removeWirelessChannel(String channelName);
 	
-	void createWirelessPoint(String channelName, IWirelessPoint point);
+	boolean createWirelessPoint(String channelName, IWirelessPoint point);
 	
 	boolean removeWirelessReceiver(String channelName, Location loc);
 	
@@ -34,6 +34,8 @@ public interface IWirelessStorageConfiguration
 	boolean removeWirelessScreen(String channelName, Location loc);
 	
 	void updateChannel(String channelName, WirelessChannel channel);
+	
+	boolean renameWirelessChannel(String channelName, String newChannelName);
 	
 	boolean wipeData();
 	

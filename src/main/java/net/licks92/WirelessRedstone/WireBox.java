@@ -124,7 +124,11 @@ public class WireBox
 			receiver.setDirection(cblock.getData());
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
-			WirelessRedstone.config.createWirelessChannel(cname, channel);
+			if(!WirelessRedstone.config.createWirelessChannel(cname, channel))
+			{
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				return false;
+			}
 			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
 			return true;
@@ -180,7 +184,11 @@ public class WireBox
 			transmitter.setDirection(cblock.getData());
 			transmitter.setisWallSign(isWallSign);
 			channel.addTransmitter(transmitter);
-			WirelessRedstone.config.createWirelessChannel(cname, channel);
+			if(!WirelessRedstone.config.createWirelessChannel(cname, channel))
+			{
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				return false;
+			}
 			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
 			return true;
@@ -237,7 +245,11 @@ public class WireBox
 			screen.setDirection(cblock.getData());
 			screen.setisWallSign(isWallSign);
 			channel.addScreen(screen);
-			WirelessRedstone.config.createWirelessChannel(cname, channel);
+			if(!WirelessRedstone.config.createWirelessChannel(cname, channel))
+			{
+				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				return false;
+			}
 			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
 			this.UpdateCache();
 			return true;
@@ -329,6 +341,11 @@ public class WireBox
 		}
 		else
 			return true;
+	}
+	
+	public boolean isValidName(String channelName)
+	{
+		return true;
 	}
 
 	public ArrayList<Location> getReceiverLocations(WirelessChannel channel)

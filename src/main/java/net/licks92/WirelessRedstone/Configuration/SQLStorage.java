@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -23,7 +24,9 @@ import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 
 public class SQLStorage implements IWirelessStorageConfiguration
 {	
@@ -123,6 +126,11 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			yaml.init(false);
 			for(WirelessChannel channel : yaml.getAllChannels())
 			{
+				if(channel.getName().contains("-"))
+				{
+					channel.setName(channel.getName().replace("-", "_"));
+				}
+				
 				createWirelessChannel(channel.getName(), channel);
 			}
 			yaml.close();
@@ -366,7 +374,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	}
 
 	@Override
-	public void createWirelessChannel(String channelName, WirelessChannel channel)
+	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
 	{
 		if(!sqlTableExists(channelName)) //Create the channel
 		{
@@ -393,7 +401,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			{
 				WirelessRedstone.getWRLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
 				removeWirelessChannel(channelName);
-				return;
+				return false;
 			}
 			if(wirelesspoint.getisWallSign())
 			{
@@ -451,13 +459,53 @@ public class SQLStorage implements IWirelessStorageConfiguration
 				//Finished!
 				statement.close();
 				plugin.WireBox.UpdateCache();
-				return;
+				return true;
 			}
 			catch(SQLException ex)
 			{
 				ex.printStackTrace();
 			}
 		}
+		WirelessRedstone.getWRLogger().debug("Tried to create a channel that already exists in the database");
+		return false;
+	}
+	
+	public boolean renameWirelessChannel(String channelName, String newChannelName)
+	{
+		WirelessChannel channel = getWirelessChannel(channelName);
+		
+		List<IWirelessPoint> signs = new ArrayList<IWirelessPoint>();
+		
+		signs.addAll(channel.getReceivers());
+		signs.addAll(channel.getTransmitters());
+		signs.addAll(channel.getScreens());
+		
+		for(IWirelessPoint sign : signs)
+		{
+			Location loc = new Location(Bukkit.getWorld(sign.getWorld()), sign.getX(), sign.getY(), sign.getZ());
+			Sign signBlock = (Sign) loc.getBlock();
+			signBlock.setLine(1, newChannelName);
+		}
+		
+		try
+		{
+			Statement statement = connection.createStatement();
+			
+			//Remove the old channel in the config
+			statement.executeUpdate("DROP TABLE " + channelName);
+			
+			statement.close();
+			
+			//Set a new channel - HAVE TO FIND A BETTER WAY THAN JUST REMOVING THE TABLE AND CREATE AN OTHER
+			createWirelessChannel(newChannelName, channel);
+		}
+		
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return true;
 	}
 
 	@Override
@@ -510,7 +558,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	}
 
 	@Override
-	public void createWirelessPoint(String channelName, IWirelessPoint point)
+	public boolean createWirelessPoint(String channelName, IWirelessPoint point)
 	{
 		if(!sqlTableExists(channelName))
 		{
@@ -562,7 +610,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		{
 			ex.printStackTrace();
 		}
-		return;
+		return true;
 	}
 
 	@Override
@@ -598,22 +646,40 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	@Override
 	public boolean removeWirelessReceiver(String channelName, Location loc)
 	{
-		getWirelessChannel(channelName).removeReceiverAt(loc);
-		return removeWirelessPoint(channelName, loc);
+		WirelessChannel channel = getWirelessChannel(channelName);
+		if(channel!=null)
+		{
+			channel.removeReceiverAt(loc);
+			return removeWirelessPoint(channelName, loc);
+		}
+		else
+			return false;
 	}
 
 	@Override
 	public boolean removeWirelessTransmitter(String channelName, Location loc)
 	{
-		getWirelessChannel(channelName).removeTransmitterAt(loc);
-		return removeWirelessPoint(channelName, loc);
+		WirelessChannel channel = getWirelessChannel(channelName);
+		if(channel!=null)
+		{
+			channel.removeTransmitterAt(loc);
+			return removeWirelessPoint(channelName, loc);
+		}
+		else
+			return false;
 	}
 
 	@Override
 	public boolean removeWirelessScreen(String channelName, Location loc)
 	{
-		getWirelessChannel(channelName).removeScreenAt(loc);
-		return removeWirelessPoint(channelName, loc);
+		WirelessChannel channel = getWirelessChannel(channelName);
+		if(channel!=null)
+		{
+			channel.removeScreenAt(loc);
+			return removeWirelessPoint(channelName, loc);
+		}
+		else
+			return false;
 	}
 	
 	private boolean removeWirelessPoint(String channelName, Location loc)

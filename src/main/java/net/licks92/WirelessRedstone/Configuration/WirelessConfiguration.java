@@ -19,6 +19,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	private WirelessRedstone plugin;
 	private IWirelessStorageConfiguration storage;
 	
+	public String[] badCharacters = {"|","-","*","/","<",">"," ","=","~","!","^","(",")"};
+	
 	private FileConfiguration getConfig()
 	{
 		return plugin.getConfig();
@@ -33,6 +35,18 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		reloadConfig();
+	}
+	
+	private boolean isValidName(String str)
+	{
+		for(String character : badCharacters)
+		{
+			if(str.contains(character))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public boolean init()
@@ -87,19 +101,28 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		return storage.getWirelessChannel(channelName);
 	}
 	
-	public void createWirelessPoint(String channelName, IWirelessPoint point)
+	public boolean createWirelessPoint(String channelName, IWirelessPoint point)
 	{
-		storage.createWirelessPoint(channelName, point);
+		return storage.createWirelessPoint(channelName, point);
 	}
 	
-	public void createWirelessChannel(String channelName, WirelessChannel channel)
+	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
 	{
-		storage.createWirelessChannel(channelName, channel);
+		if(!isValidName(channelName))
+		{
+			return false;
+		}
+		return storage.createWirelessChannel(channelName, channel);
 	}
 	
 	public void removeWirelessChannel(String channelName)
 	{
 		storage.removeWirelessChannel(channelName);
+	}
+	
+	public boolean renameWirelessChannel(String channelName, String newChannelName)
+	{
+		return storage.renameWirelessChannel(channelName, newChannelName);
 	}
 
 	public boolean removeWirelessReceiver(String channelName, Location loc)
