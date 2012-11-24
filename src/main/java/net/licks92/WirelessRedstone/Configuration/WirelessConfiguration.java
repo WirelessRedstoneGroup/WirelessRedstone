@@ -19,7 +19,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	private WirelessRedstone plugin;
 	private IWirelessStorageConfiguration storage;
 	
-	public String[] badCharacters = {"|","-","*","/","<",">"," ","=","~","!","^","(",")"};
+	public char[] badCharacters = {'|','-','*','/','<','>',' ','=','~','!','^','(',')'};
 	
 	private FileConfiguration getConfig()
 	{
@@ -35,18 +35,6 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		reloadConfig();
-	}
-	
-	private boolean isValidName(String str)
-	{
-		for(String character : badCharacters)
-		{
-			if(str.contains(character))
-			{
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	public boolean init()
@@ -108,10 +96,6 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	
 	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
 	{
-		if(!isValidName(channelName))
-		{
-			return false;
-		}
 		return storage.createWirelessChannel(channelName, channel);
 	}
 	

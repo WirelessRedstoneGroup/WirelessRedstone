@@ -67,8 +67,13 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		WirelessRedstone.getWRLogger().debug("Establishing connection to database...");
 		
 		try {
+			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + sqlFile.getAbsolutePath());
 		} catch (SQLException e) {
+			WirelessRedstone.getWRLogger().severe("Something wrong happened during the connection to the database! Error log :");
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			WirelessRedstone.getWRLogger().severe("Class org.sqlite.JDBC not found, cannot connect to database. Error log :");
 			e.printStackTrace();
 		}
 		
@@ -85,6 +90,34 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		}
 		
 		return true;
+	}
+	
+	public String getNormalName(String asciiName)
+	{
+		for(char character : WirelessRedstone.config.badCharacters)
+		{
+			String ascii = "" + (int)character;
+			String code = "_char_" + ascii + "_";
+			if(asciiName.contains(code))
+			{
+				asciiName = asciiName.replace(code, String.valueOf(character));
+			}
+		}
+		return asciiName;
+	}
+	
+	public String getAsciiName(String normalName)
+	{
+		for(char character : WirelessRedstone.config.badCharacters)
+		{
+			if(normalName.contains(String.valueOf(character)))
+			{
+				String ascii = "" + (int)character;
+				String code = "_char_" + ascii + "_";
+				normalName = normalName.replace(String.valueOf(character), code);
+			}
+		}
+		return normalName;
 	}
 	
 	public boolean close()
@@ -126,11 +159,6 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			yaml.init(false);
 			for(WirelessChannel channel : yaml.getAllChannels())
 			{
-				if(channel.getName().contains("-"))
-				{
-					channel.setName(channel.getName().replace("-", "_"));
-				}
-				
 				createWirelessChannel(channel.getName(), channel);
 			}
 			yaml.close();
@@ -154,7 +182,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			
 			while(rs.next())
 			{
-				if(rs.getString("name").equals(name))
+				if(getNormalName(rs.getString("name")).equals(name))
 				{
 					rs.close();
 					statement.close();
@@ -265,9 +293,11 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
 			ArrayList<String> channels = new ArrayList<String>();
+			
 			while(rs.next())
 			{
-				channels.add(rs.getString("name"));
+				channels.add(getNormalName(rs.getString("name")));
+				WirelessRedstone.getWRLogger().debug("Added" + getNormalName(rs.getString("name")) + "to the list of channels.");
 			}
 			rs.close(); //Always close the ResultSet
 			
@@ -276,10 +306,10 @@ public class SQLStorage implements IWirelessStorageConfiguration
 				if(channelName.equals(r_channelName))
 				{
 					//Get the ResultSet from the table we want
-					ResultSet rs2 = statement.executeQuery("SELECT * FROM " + channelName);
+					ResultSet rs2 = statement.executeQuery("SELECT * FROM " + getAsciiName(channelName));
 					if(rs2.getString("name") == null) //If the table is empty
 					{
-						statement.executeUpdate("DROP TABLE " + channelName);
+						statement.executeUpdate("DROP TABLE " + getAsciiName(channelName));
 						rs2.close();
 						statement.close();
 						return new WirelessChannel();
@@ -309,7 +339,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					rs2.close();
 					
 					//Because a SQLite ResultSet is TYPE_FORWARD only, we have to create a third ResultSet and close the second
-					ResultSet rs3 = statement.executeQuery("SELECT * FROM " + channelName);
+					ResultSet rs3 = statement.executeQuery("SELECT * FROM " + getAsciiName(channelName));
 					
 					//Set the wireless signs
 					ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
@@ -416,7 +446,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			{
 				//Create the table
 				Statement statement = connection.createStatement();
-				statement.executeUpdate("CREATE TABLE " + channelName + " ( "
+				statement.executeUpdate("CREATE TABLE " + getAsciiName(channelName) + " ( "
 					
 					//First columns are for the channel
 					+ sql_channelid + " int,"
@@ -436,7 +466,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ " ) ");
 			
 				//Fill the columns name, id and locked
-				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_channelid + "," + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
+				statement.executeUpdate("INSERT INTO " + getAsciiName(channelName) + " (" + sql_channelid + "," + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
 					+ "VALUES ("
 					+ channel.getId() + ","
 					+ "'" + channel.getName() + "'," //name
@@ -445,7 +475,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ "')"); //The first owner
 			
 				//Create the sign that caused the channel to create
-				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
+				statement.executeUpdate("INSERT INTO " + getAsciiName(channelName) + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
 					+ "VALUES ('" + signtype + "'," //Type of the wireless point
 					+ wirelesspoint.getX() + ","
 					+ wirelesspoint.getY() + ","
@@ -492,7 +522,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			Statement statement = connection.createStatement();
 			
 			//Remove the old channel in the config
-			statement.executeUpdate("DROP TABLE " + channelName);
+			statement.executeUpdate("DROP TABLE " + getAsciiName(channelName));
 			
 			statement.close();
 			
@@ -517,7 +547,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			if(!sqlTableExists(channelName))
 				return;
 			Statement statement = connection.createStatement();
-			statement.executeUpdate("DROP TABLE " + channelName);
+			statement.executeUpdate("DROP TABLE " + getAsciiName(channelName));
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -539,7 +569,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			ArrayList<String> channelNames = new ArrayList<String>();
 			while(rs.next())
 			{
-				channelNames.add(rs.getString("name"));
+				channelNames.add(getNormalName(rs.getString("name")));
 			}
 			rs.close();
 			statement.close();
@@ -593,7 +623,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		try
 		{
 			Statement statement = connection.createStatement();
-			statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
+			statement.executeUpdate("INSERT INTO " + getAsciiName(channelName) + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
 					+ "VALUES ('" + signtype + "'," //Type of the wireless point
 					+ point.getX() + ","
 					+ point.getY() + ","
@@ -622,18 +652,18 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			Statement statement = connection.createStatement();
 			
 			//Update name and lock status
-			statement.executeUpdate("UPDATE " + channelName
+			statement.executeUpdate("UPDATE " + getAsciiName(channelName)
 					+ " SET "
 					+ sql_channelname + "='" + channel.getName() + "' "
 					+ sql_channellocked + "=" + locked + " "
 					+ "WHERE " + sql_channelid + "=" + channel.getId());
 			
 			//Then update the owners
-			statement.executeUpdate("ALTER TABLE " + channelName + " DROP COLUMN " + sql_channelowners);
-			statement.executeUpdate("ALTER TABLE " + channelName + " ADD COLUMN " + sql_channelowners);
+			statement.executeUpdate("ALTER TABLE " + getAsciiName(channelName) + " DROP COLUMN " + sql_channelowners);
+			statement.executeUpdate("ALTER TABLE " + getAsciiName(channelName) + " ADD COLUMN " + sql_channelowners);
 			for(String owner : channel.getOwners())
 			{
-				statement.executeUpdate("INSERT INTO " + channelName + " (" + sql_channelowners + ") VALUES " + owner);
+				statement.executeUpdate("INSERT INTO " + getAsciiName(channelName) + " (" + sql_channelowners + ") VALUES " + owner);
 			}
 			statement.close();
 			
@@ -687,7 +717,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		try
 		{
 			Statement statement = connection.createStatement();
-			String sql = "DELETE FROM " + channelName + " WHERE "
+			String sql = "DELETE FROM " + getAsciiName(channelName) + " WHERE "
 					+ sql_signx + "=" + loc.getBlockX() + " AND "
 					+ sql_signy + "=" + loc.getBlockY() + " AND "
 					+ sql_signz + "=" + loc.getBlockZ() + " AND "
