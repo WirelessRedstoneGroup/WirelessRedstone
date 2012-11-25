@@ -150,6 +150,7 @@ public class WirelessBlockListener implements Listener
 						else
 						{
 							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(), (byte) 0x5,true);
+							receiver.getBlock().getState().update();
 						}
 					}
 					else if (receiver.getBlock().getType() == Material.WALL_SIGN)
@@ -164,6 +165,7 @@ public class WirelessBlockListener implements Listener
 							else
 							{
 								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
+								receiver.getBlock().getState().update();
 							}
 						}
 						else if (data == 0x3) //North
@@ -175,6 +177,7 @@ public class WirelessBlockListener implements Listener
 							else
 							{
 								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x3, true);
+								receiver.getBlock().getState().update();
 							}
 						}
 						else if (data == 0x4) //East
@@ -186,6 +189,7 @@ public class WirelessBlockListener implements Listener
 							else
 							{
 								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x2, true);
+								receiver.getBlock().getState().update();
 							}
 						}
 						else if (data == 0x5) //West
@@ -197,6 +201,7 @@ public class WirelessBlockListener implements Listener
 							else
 							{
 								receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x1, true);
+								receiver.getBlock().getState().update();
 							}
 						}
 						else // Not West East North South ...
@@ -243,12 +248,14 @@ public class WirelessBlockListener implements Listener
 						{
 							othersign.setType(Material.WALL_SIGN);
 							othersign.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) receiver.getDirection(), true);
+							othersign.getState().update();
 						}
 						else
 						{
 							othersign.setType(Material.SIGN_POST);
 							othersign.setTypeIdAndData(Material.SIGN_POST.getId(),
 									(byte) receiver.getDirection(), true);
+							othersign.getState().update();
 						}
 	
 						if (othersign.getState() instanceof Sign) {
