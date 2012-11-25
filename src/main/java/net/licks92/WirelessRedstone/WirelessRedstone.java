@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone;
 
 import java.net.SocketException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -303,6 +304,10 @@ public class WirelessRedstone extends JavaPlugin
         catch(SocketException ex)
         {
         	logger.warning("Could not get the informations about the latest version. Maybe your internet connection is broken?");
+        }
+        catch(UnknownHostException ex)
+        {
+        	logger.warning("Could not find the host dev.bukkit. Maybe your server can't connect to the internet.");
         }
         return currentVersion;
     }
