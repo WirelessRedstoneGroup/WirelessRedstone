@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,6 +38,52 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	{
 		plugin = r_plugin;
 		this.channelFolder = channelFolder;
+	}
+	
+	public static void sendInFiles(ConfigurationSection section, String folder)
+	{
+		if(section == null)
+		{
+			return;
+		}
+		Map<String, Object> map = section.getValues(true);
+		
+		for(String cname : map.keySet())
+		{
+			WirelessChannel channel = (WirelessChannel) map.get(cname);
+			
+			FileConfiguration channelConfig = new YamlConfiguration();
+			try
+			{
+				File channelFile = new File(folder, channel.getName() + ".yml");
+				if(channel != null)
+					channelFile.createNewFile();
+				channelConfig.load(channelFile);
+			}
+			catch (FileNotFoundException e)
+			{
+				return;
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (InvalidConfigurationException e)
+			{
+				e.printStackTrace();
+			}
+			
+			channelConfig.set(channel.getName(), channel);
+			
+			try
+			{
+				channelConfig.save(new File(folder, channel.getName() + ".yml"));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override

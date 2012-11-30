@@ -1,15 +1,21 @@
 package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 public class WirelessConfiguration implements IWirelessStorageConfiguration
 {
@@ -29,6 +35,24 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	public WirelessConfiguration(WirelessRedstone r_plugin)
 	{
 		plugin = r_plugin;
+		
+		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
+		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
+		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
+		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
+		
+		if(getConfig().getConfigurationSection("WirelessChannels") != null)
+		{	
+			// Send those channels in files...
+			System.out.println("[WirelessRedstone] Updating from 1.7b or lower, please wait until the end of this process...");
+			try {
+				YamlStorage.sendInFiles(getConfig().getConfigurationSection("WirelessChannels"), (new File(plugin.getDataFolder(), CHANNEL_FOLDER)).getCanonicalPath());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			getConfig().set("WirelessChannels", null);
+		}
 		
 		//Loading and saving
 		getConfig().options().copyHeader(true);
