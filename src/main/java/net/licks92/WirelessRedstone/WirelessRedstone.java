@@ -29,6 +29,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXParseException;
 
 public class WirelessRedstone extends JavaPlugin
 {
@@ -308,6 +309,10 @@ public class WirelessRedstone extends JavaPlugin
         catch(UnknownHostException ex)
         {
         	logger.warning("Could not find the host dev.bukkit. Maybe your server can't connect to the internet.");
+        }
+        catch(SAXParseException ex)
+        {
+        	logger.warning("Could not connect to bukkitdev. It seems that something's blocking the plugin. Do you have an internet protection?");
         }
         return currentVersion;
     }
