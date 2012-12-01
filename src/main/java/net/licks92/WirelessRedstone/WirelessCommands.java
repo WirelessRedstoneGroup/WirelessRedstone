@@ -8,11 +8,13 @@ import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 
 public class WirelessCommands implements CommandExecutor
 {
@@ -420,6 +422,9 @@ public class WirelessCommands implements CommandExecutor
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
 					sign.setLine(0, WirelessRedstone.strings.tagsTransmitter.get(0));
 					sign.setLine(1, channelname);
+					org.bukkit.material.Sign dataSign = new org.bukkit.material.Sign();
+					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
+					sign.setData(dataSign);
 					sign.update(true);
 					plugin.WireBox.addWirelessTransmitter(channelname, player.getLocation().getBlock(), player);
 				}
@@ -454,7 +459,10 @@ public class WirelessCommands implements CommandExecutor
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
 					sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
-					sign.setLine(1, channelname);
+					sign.setLine(1, channelname);					
+					org.bukkit.material.Sign dataSign = new org.bukkit.material.Sign();
+					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
+					sign.setData(dataSign);
 					sign.update(true);
 					if(!plugin.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player))
 					{
@@ -495,6 +503,9 @@ public class WirelessCommands implements CommandExecutor
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
 					sign.setLine(0, WirelessRedstone.strings.tagsScreen.get(0));
 					sign.setLine(1, channelname);
+					org.bukkit.material.Sign dataSign = new org.bukkit.material.Sign();
+					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
+					sign.setData(dataSign);
 					sign.update(true);
 					plugin.WireBox.addWirelessScreen(channelname, player.getLocation().getBlock(), player);
 				}
@@ -728,6 +739,39 @@ public class WirelessCommands implements CommandExecutor
 		}
 
 	}
-
-
+	
+	public BlockFace getPlayerDirection(Player player)
+    {
+ 
+        BlockFace dir = null;
+     
+        float y = player.getLocation().getYaw();
+     
+        if( y < 0 ){y += 360;}
+     
+        y %= 360;
+     
+        int i = (int)((y+8) / 22.5);
+     
+        if(i == 0){dir = BlockFace.WEST;}
+        else if(i == 1){dir = BlockFace.WEST_NORTH_WEST;}
+        else if(i == 2){dir = BlockFace.NORTH_WEST;}
+        else if(i == 3){dir = BlockFace.NORTH_NORTH_WEST;}
+        else if(i == 4){dir = BlockFace.NORTH;}
+        else if(i == 5){dir = BlockFace.NORTH_NORTH_EAST;}
+        else if(i == 6){dir = BlockFace.NORTH_EAST;}
+        else if(i == 7){dir = BlockFace.EAST_NORTH_EAST;}
+        else if(i == 8){dir = BlockFace.EAST;}
+        else if(i == 9){dir = BlockFace.EAST_SOUTH_EAST;}
+        else if(i == 10){dir = BlockFace.SOUTH_EAST;}
+        else if(i == 11){dir = BlockFace.SOUTH_SOUTH_EAST;}
+        else if(i == 12){dir = BlockFace.SOUTH;}
+        else if(i == 13){dir = BlockFace.SOUTH_SOUTH_WEST;}
+        else if(i == 14){dir = BlockFace.SOUTH_WEST;}
+        else if(i == 15){dir = BlockFace.WEST_SOUTH_WEST;}
+        else {dir = BlockFace.WEST;}
+     
+        return dir;
+ 
+    }
 }
