@@ -53,7 +53,7 @@ public class WirelessStringProvider
 			playerCannotCreateSign = ChatColor.RED + "[WirelessRedstone] You don't have the permission to create this sign!";
 			signDestroyed = ChatColor.GREEN + "[WirelessRedstone] Succesfully removed this sign !";
 			channelRemovedCauseNoSign = ChatColor.GREEN + "[WirelessRedstone] Channel removed, no more signs in the worlds.";
-			channelNameContainsInvalidCaracters = playerCannotCreateChannel + " : Name contains invalid caracters !";
+			channelNameContainsInvalidCaracters = playerCannotCreateChannel + " : Name contains invalid caracters : a dot '.'!";
 			channelDoesNotExist = ChatColor.RED + "[WirelessRedstone] This channel doesn't exist!";
 			tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
 			noItemOnList = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
