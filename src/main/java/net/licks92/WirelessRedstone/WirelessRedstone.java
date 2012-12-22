@@ -88,35 +88,37 @@ public class WirelessRedstone extends JavaPlugin
 		 * 
 		 * All credits to the developpers of Vault (http://dev.bukkit.org/server-mods/vault/);
 		 */
-		
-		this.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), new Runnable()
+		if(config.doCheckForUpdates())
 		{
-			@Override
-			public void run()
+			this.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), new Runnable()
 			{
-				try
+				@Override
+				public void run()
 				{
-					newversion = updateCheck(currentversion);
-					
-					if(newversion > currentversion)
+					try
 					{
-						logger.info("A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
+						newversion = updateCheck(currentversion);
+						
+						if(newversion > currentversion)
+						{
+							logger.info("A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
+						}
+						else if(newversion < currentversion)
+						{
+							logger.info("You are using a version that is higher than the repository version! Did you download it on the github code repo?");
+						}
+						else //If it's the same version...
+						{
+							logger.debug("You are using the same version as the official repository.");
+						}
 					}
-					else if(newversion < currentversion)
+					catch (Exception e1)
 					{
-						logger.info("You are using a version that is higher than the repository version! Did you download it on the github code repo?");
-					}
-					else //If it's the same version...
-					{
-						logger.debug("You are using the same version as the official repository.");
+						e1.printStackTrace();
 					}
 				}
-				catch (Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			}
-		}, 0, 24000);
+			}, 0, 24000);
+		}
 		
 		//Load config and strings
 		strings = new WirelessStringProvider();

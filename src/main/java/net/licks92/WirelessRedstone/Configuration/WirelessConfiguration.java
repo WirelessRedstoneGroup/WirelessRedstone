@@ -164,6 +164,11 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	{
 		return Level.parse(getConfig().getString("LogLevel"));
 	}
+	
+	public boolean doCheckForUpdates()
+	{
+		return getConfig().getBoolean("CheckForUpdates");
+	}
 
 	public boolean getVaultUsage()
 	{
