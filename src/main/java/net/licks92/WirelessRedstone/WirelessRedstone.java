@@ -89,7 +89,7 @@ public class WirelessRedstone extends JavaPlugin
 		 * All credits to the developpers of Vault (http://dev.bukkit.org/server-mods/vault/);
 		 */
 		
-		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable()
+		this.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), new Runnable()
 		{
 			@Override
 			public void run()

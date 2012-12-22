@@ -404,7 +404,7 @@ public class WireBox
 
 	public void removeReceiverAt(final Location loc, final boolean byplayer)
 	{
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable()
 		{
 			public void run()
 			{
@@ -528,7 +528,7 @@ public class WireBox
 
 	public void UpdateAllSignsList()
 	{
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable()
 		{
 			public void run()
 			{
@@ -559,7 +559,7 @@ public class WireBox
 				}
 				allPointsListCache = returnlist;
 			}
-		}, 0L);
+		});
 	}
 
 	public List<Location> getAllReceiverLocations()
@@ -569,7 +569,7 @@ public class WireBox
 
 	public void UpdateReceiverLocations()
 	{
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable()
 		{
 			public void run()
 			{
@@ -591,7 +591,7 @@ public class WireBox
 				}
 				receiverlistcachelocation = returnlist;
 			}
-		}, 0L);
+		});
 	}
 
 	public void UpdateCache()

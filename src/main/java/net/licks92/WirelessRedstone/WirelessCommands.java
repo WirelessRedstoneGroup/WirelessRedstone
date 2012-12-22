@@ -14,7 +14,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.material.MaterialData;
 
 public class WirelessCommands implements CommandExecutor
 {
@@ -574,7 +573,7 @@ public class WirelessCommands implements CommandExecutor
 		{
 			player.sendMessage("You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.");
 			wipeDataConfirm = true;
-			Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+			Bukkit.getScheduler().runTaskLater(plugin, new Runnable()
 					{
 						@Override
 						public void run()
