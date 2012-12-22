@@ -286,20 +286,22 @@ public class WireBox
 		BlockFace face = BlockFace.DOWN;
 		switch(block.getData())
 		{
-		case 0x2: //South
-			face = BlockFace.WEST;
-			break;
-			
-		case 0x3: //North
-			face = BlockFace.EAST;
-			break;
-			
-		case 0x4: //east
+		// Remember that here is the face where the text can be seen, not the face of the block on where the sign is.
+		
+		case 0x2: //North
 			face = BlockFace.SOUTH;
 			break;
 			
-		case 0x5: //West
+		case 0x3: //South
 			face = BlockFace.NORTH;
+			break;
+			
+		case 0x4: //West
+			face = BlockFace.EAST;
+			break;
+			
+		case 0x5: //East
+			face = BlockFace.WEST;
 			break;
 		}
 		Block tempBlock = block.getRelative(face);
