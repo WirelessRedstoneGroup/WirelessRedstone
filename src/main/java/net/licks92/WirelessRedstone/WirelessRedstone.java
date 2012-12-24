@@ -15,9 +15,9 @@ import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
-import net.licks92.WirelessRedstone.Utils.Metrics;
-import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
-import net.licks92.WirelessRedstone.Utils.Metrics.Plotter;
+import net.licks92.WirelessRedstone.Utils.BukkitMetrics;
+import net.licks92.WirelessRedstone.Utils.BukkitMetrics.Graph;
+import net.licks92.WirelessRedstone.Utils.BukkitMetrics.Plotter;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Chunk;
@@ -42,7 +42,7 @@ public class WirelessRedstone extends JavaPlugin
 	public WirelessWorldListener worldlistener;
 	public WirelessBlockListener blocklistener;
 	public WirelessPlayerListener playerlistener;
-	private static Metrics metrics;
+	private static BukkitMetrics metrics;
 	public double currentversion;
 	public double newversion;
 	
@@ -153,7 +153,7 @@ public class WirelessRedstone extends JavaPlugin
 		//Metrics
 		try
 		{
-			metrics = new Metrics(this);
+			metrics = new BukkitMetrics(this);
 			
 			// Channel metrics
 			final Graph channelGraph = metrics.createGraph("Channel metrics");
