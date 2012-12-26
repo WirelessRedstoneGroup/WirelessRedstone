@@ -99,6 +99,8 @@ public class WirelessRedstone extends JavaPlugin
 					{
 						newversion = updateCheck(currentversion);
 						
+						logger.debug("Actual version is " + currentversion + " where repository version is " + newversion);
+						
 						if(newversion > currentversion)
 						{
 							logger.info("A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");

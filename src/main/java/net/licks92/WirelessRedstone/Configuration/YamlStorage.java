@@ -40,7 +40,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		this.channelFolder = channelFolder;
 	}
 	
-	public static void sendInFiles(ConfigurationSection section, String folder)
+	/*public static void sendInFiles(ConfigurationSection section, String folder)
 	{
 		if(section == null)
 		{
@@ -84,7 +84,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 	
 	@Override
 	public boolean init()

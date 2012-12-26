@@ -560,9 +560,10 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	@Override
 	public Collection<WirelessChannel> getAllChannels()
 	{
+		Statement statement;
 		try
 		{
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 			
 			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");

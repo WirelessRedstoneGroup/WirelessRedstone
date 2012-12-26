@@ -1,7 +1,6 @@
 package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;
 
@@ -40,19 +39,6 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
 		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
 		
-		if(getConfig().getConfigurationSection("WirelessChannels") != null)
-		{	
-			// Send those channels in files...
-			System.out.println("[WirelessRedstone] Updating from 1.7b or lower, please wait until the end of this process...");
-			try {
-				YamlStorage.sendInFiles(getConfig().getConfigurationSection("WirelessChannels"), (new File(plugin.getDataFolder(), CHANNEL_FOLDER)).getCanonicalPath());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			getConfig().set("WirelessChannels", null);
-		}
-		
 		//Loading and saving
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
@@ -65,6 +51,14 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		//Create the channel folder
 		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
 		channelFolder.mkdir();
+		
+		if(getConfig().isSet("WirelessChannels"))
+		{
+			WirelessRedstone.getWRLogger().info("Updating data into new format !");
+			ConfigurationUpdater updater = new ConfigurationUpdater(getConfig(), channelFolder, plugin);
+			updater.update();
+			WirelessRedstone.getWRLogger().info("Successfully transfered your channels into the new database format.");
+		}
 		
 		//Create the storage config
 		if(getSQLUsage())
