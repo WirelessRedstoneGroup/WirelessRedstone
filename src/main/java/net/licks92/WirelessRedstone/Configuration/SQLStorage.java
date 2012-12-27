@@ -406,40 +406,13 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	@Override
 	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
 	{
-		if(!sqlTableExists(channelName)) //Create the channel
+		if(!sqlTableExists(channelName)) //Check if channel already exists
 		{
 			//Get the type of the sign that has been created
-			String signtype;
-			IWirelessPoint wirelesspoint;
-			int iswallsign;
-			if(!channel.getReceivers().isEmpty())
-			{
-				signtype = "receiver";
-				wirelesspoint = channel.getReceivers().get(0);
-			}
-			else if(!channel.getTransmitters().isEmpty())
-			{
-				signtype = "transmitter";
-				wirelesspoint = channel.getTransmitters().get(0);
-			}
-			else if(!channel.getScreens().isEmpty())
-			{
-				signtype = "screen";
-				wirelesspoint = channel.getScreens().get(0);
-			}
-			else
+			if(!channel.getReceivers().isEmpty() && !channel.getTransmitters().isEmpty() && !channel.getScreens().isEmpty())
 			{
 				WirelessRedstone.getWRLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
-				removeWirelessChannel(channelName);
 				return false;
-			}
-			if(wirelesspoint.getisWallSign())
-			{
-				iswallsign = 1;
-			}
-			else
-			{
-				iswallsign = 0;
 			}
 			
 			try
@@ -473,21 +446,18 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ "0" + "," //locked
 					+ "'" + channel.getOwners().get(0)
 					+ "')"); //The first owner
-			
-				//Create the sign that caused the channel to create
-				statement.executeUpdate("INSERT INTO " + getAsciiName(channelName) + " (" + sql_signtype + "," + sql_signx + "," + sql_signy + "," + sql_signz + "," + sql_direction + "," + sql_signowner + "," + sql_signworld + "," + sql_iswallsign + ") "
-					+ "VALUES ('" + signtype + "'," //Type of the wireless point
-					+ wirelesspoint.getX() + ","
-					+ wirelesspoint.getY() + ","
-					+ wirelesspoint.getZ() + ","
-					+ wirelesspoint.getDirection() + ","
-					+ "'" + wirelesspoint.getOwner() + "',"
-					+ "'" + wirelesspoint.getWorld() + "',"
-					+ iswallsign
-					+ " ) ");
-			
-				//Finished!
+				//Finished this part
 				statement.close();
+				
+				//Create the wireless points
+				ArrayList<IWirelessPoint> points = new ArrayList<IWirelessPoint>();
+				points.add((IWirelessPoint) channel.getReceivers());
+				points.add((IWirelessPoint) channel.getTransmitters());
+				points.add((IWirelessPoint) channel.getScreens());
+				for(IWirelessPoint ipoint : points)
+				{
+					createWirelessPoint(channelName, ipoint);
+				}
 				plugin.WireBox.UpdateCache();
 				return true;
 			}
