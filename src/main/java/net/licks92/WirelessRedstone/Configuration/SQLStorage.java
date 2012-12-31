@@ -83,7 +83,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		{
 			WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in .yml files.");
 			WirelessRedstone.getWRLogger().info("Beginning data transfer... (from Yaml files to SQL Database)");
-			if(convert())
+			if(convertToAnotherStorage())
 			{
 				WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the SQL Database.");
 			}
@@ -144,7 +144,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		return false;
 	}
 	
-	public boolean convert()
+	public boolean convertToAnotherStorage()
 	{
 		WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
 		if(!backupData())

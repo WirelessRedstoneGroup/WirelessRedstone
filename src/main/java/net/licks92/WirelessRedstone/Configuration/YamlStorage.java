@@ -9,14 +9,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -104,7 +102,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		{
 			WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in SQL Database.");
 			WirelessRedstone.getWRLogger().info("Beginning data transfer... (from SQL Database to Yaml Files)");
-			if(convert())
+			if(convertToAnotherStorage())
 			{
 				WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the Yaml Files.");
 			}
@@ -131,7 +129,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		return false;
 	}
 	
-	public boolean convert()
+	public boolean convertToAnotherStorage()
 	{
 		WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
 		if(!backupData())

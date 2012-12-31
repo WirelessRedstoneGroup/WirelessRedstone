@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -43,6 +44,7 @@ public class WirelessRedstone extends JavaPlugin
 	public WirelessBlockListener blocklistener;
 	public WirelessPlayerListener playerlistener;
 	private static BukkitMetrics metrics;
+	private BukkitTask updateChecker;
 	public double currentversion;
 	public double newversion;
 	
@@ -55,6 +57,7 @@ public class WirelessRedstone extends JavaPlugin
 	public void onDisable()
 	{
 		config.close();
+		updateChecker.cancel();
 	}
 	
 	@Override
@@ -90,7 +93,7 @@ public class WirelessRedstone extends JavaPlugin
 		 */
 		if(config.doCheckForUpdates())
 		{
-			this.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), new Runnable()
+			updateChecker = this.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), new Runnable()
 			{
 				@Override
 				public void run()
