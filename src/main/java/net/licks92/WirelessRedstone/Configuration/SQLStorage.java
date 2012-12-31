@@ -451,9 +451,18 @@ public class SQLStorage implements IWirelessStorageConfiguration
 				
 				//Create the wireless points
 				ArrayList<IWirelessPoint> points = new ArrayList<IWirelessPoint>();
-				points.add((IWirelessPoint) channel.getReceivers());
-				points.add((IWirelessPoint) channel.getTransmitters());
-				points.add((IWirelessPoint) channel.getScreens());
+				for(IWirelessPoint ipoint : channel.getReceivers())
+				{
+					points.add(ipoint);
+				}
+				for(IWirelessPoint ipoint : channel.getTransmitters())
+				{
+					points.add(ipoint);
+				}
+				for(IWirelessPoint ipoint : channel.getScreens())
+				{
+					points.add(ipoint);
+				}
 				for(IWirelessPoint ipoint : points)
 				{
 					createWirelessPoint(channelName, ipoint);
@@ -536,7 +545,17 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			statement = connection.createStatement();
 			ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 			
-			ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			ResultSet rs = null;
+			
+			try
+			{
+				rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
+			}
+			catch(NullPointerException ex)
+			{
+				WirelessRedstone.getWRLogger().severe("SQL : NullPointerException when asking for the list of channels!");
+				return new ArrayList<WirelessChannel>();
+			}
 			ArrayList<String> channelNames = new ArrayList<String>();
 			while(rs.next())
 			{
@@ -554,6 +573,10 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		catch (SQLException e)
 		{
 			e.printStackTrace();
+		}
+		catch (NullPointerException ex)
+		{
+			
 		}
 		return null; //Channel not found
 	}
