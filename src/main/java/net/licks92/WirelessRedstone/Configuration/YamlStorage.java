@@ -102,7 +102,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		{
 			WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in SQL Database.");
 			WirelessRedstone.getWRLogger().info("Beginning data transfer... (from SQL Database to Yaml Files)");
-			if(convertToAnotherStorage())
+			if(convertFromAnotherStorage())
 			{
 				WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the Yaml Files.");
 			}
@@ -129,7 +129,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		return false;
 	}
 	
-	public boolean convertToAnotherStorage()
+	public boolean convertFromAnotherStorage()
 	{
 		WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
 		if(!backupData())
@@ -144,6 +144,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			sql.init(false);
 			for(WirelessChannel channel : sql.getAllChannels())
 			{
+				//Something fails here! Channels do not transfer the transmitter that's strange!
 				createWirelessChannel(channel.getName(), channel);
 			}
 			sql.close();

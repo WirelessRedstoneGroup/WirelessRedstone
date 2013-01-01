@@ -15,7 +15,7 @@ public interface IWirelessStorageConfiguration
 	
 	boolean canConvert();
 	
-	boolean convertToAnotherStorage();
+	boolean convertFromAnotherStorage();
 	
 	WirelessChannel getWirelessChannel(String channelName);
 	

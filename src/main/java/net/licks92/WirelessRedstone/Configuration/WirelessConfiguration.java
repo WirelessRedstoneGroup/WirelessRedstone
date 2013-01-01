@@ -81,9 +81,9 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		return storage.canConvert();
 	}
 	
-	public boolean convertToAnotherStorage()
+	public boolean convertFromAnotherStorage()
 	{
-		return storage.convertToAnotherStorage();
+		return storage.convertFromAnotherStorage();
 	}
 	
 	public boolean wipeData()

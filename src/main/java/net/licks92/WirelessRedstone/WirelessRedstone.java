@@ -32,6 +32,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
+
+/**
+ * This class is the main class of the plugin. It controls the Configuration, the Listeners,
+ * it sends the metrics and controls the actions when enabling / disabling.
+ * 
+ * @author licks92
+ */
 public class WirelessRedstone extends JavaPlugin
 {
 	public static WirelessConfiguration config;
@@ -48,11 +55,20 @@ public class WirelessRedstone extends JavaPlugin
 	public double currentversion;
 	public double newversion;
 	
+	/**
+	 * Wireless Redstone logger
+	 * 
+	 * @return logger
+	 */
 	public static WRLogger getWRLogger()
 	{
 		return logger;
 	}
 	
+	
+	/**
+	 * Calls the actions to do when disabling the plugin.
+	 */
 	@Override
 	public void onDisable()
 	{
@@ -60,6 +76,9 @@ public class WirelessRedstone extends JavaPlugin
 		updateChecker.cancel();
 	}
 	
+	/**
+	 * Calls the actions to do when enabling the plugin (i.e when starting the server)
+	 */
 	@Override
 	public void onEnable()
 	{
@@ -263,7 +282,10 @@ public class WirelessRedstone extends JavaPlugin
 		//Loading finished !
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
-
+	
+	/**
+	 * Load the chunks which contain a wireless sign.
+	 */
 	public void LoadChunks()
 	{
 		if (WirelessRedstone.config.isCancelChunkUnloads())
@@ -288,11 +310,23 @@ public class WirelessRedstone extends JavaPlugin
 		}
 	}
 	
+	/**
+	 * Returns this object
+	 * 
+	 * @return plugin
+	 */
 	public WirelessRedstone getPlugin()
 	{
 		return this;
 	}
 	
+	/**
+	 * Gets the number of the latest version on the bukkit repository
+	 * 
+	 * @param currentVersion
+	 * @return repoversion
+	 * @throws Exception
+	 */
 	public double updateCheck(double currentVersion) throws Exception {
         String pluginUrlString = "http://dev.bukkit.org/server-mods/wireless-redstone/files.rss";
         try {
