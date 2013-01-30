@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.licks92</groupId>
   <artifactId>WirelessRedstone</artifactId>
-  <version>1.8.2b</version>
+  <version>1.8.3b</version>
   <name>WirelessRedstone</name>
   <build>
     <plugins>
@@ -29,7 +29,7 @@
       <artifactId>Vault</artifactId>
       <scope>system</scope>
       <systemPath>${basedir}/lib/Vault.jar</systemPath>
-      <version>1.2.17-SNAPSHOT</version>
+      <version>1.2.22-SNAPSHOT</version>
     </dependency>
   </dependencies>
  
@@ -45,7 +45,7 @@
   		<dependency>
   			<groupId>org.bukkit</groupId>
   			<artifactId>bukkit</artifactId>
-  			<version>1.4.6-R0.3</version>
+  			<version>1.4.7-R0.1</version>
   		</dependency>
    	</dependencies>
   </dependencyManagement>
