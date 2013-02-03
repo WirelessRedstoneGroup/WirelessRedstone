@@ -48,6 +48,11 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	
 	public boolean init()
 	{
+		//Set the config header
+		getConfig().options().header("Wireless Redstone Configuration.\n" +
+				"If you want to change the language, then follow the instructions in the Configuration Section on dev.bukkit.org/server-mods/wireless-redstone/\n" +
+				"If you want to change any other setting, do the same.");
+		
 		//Create the channel folder
 		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
 		channelFolder.mkdir();
@@ -157,6 +162,11 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	public Level getLogLevel()
 	{
 		return Level.parse(getConfig().getString("LogLevel"));
+	}
+	
+	public String getLanguage()
+	{
+		return getConfig().getString("Language");
 	}
 	
 	public boolean doCheckForUpdates()

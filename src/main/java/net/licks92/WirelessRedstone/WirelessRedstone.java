@@ -145,7 +145,7 @@ public class WirelessRedstone extends JavaPlugin
 		}
 		
 		//Load config and strings
-		strings = new WirelessStringProvider();
+		strings = new WirelessStringProvider(this, config.getLanguage());
 		
 		//Load listeners
 		worldlistener = new WirelessWorldListener(this);

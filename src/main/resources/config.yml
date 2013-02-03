@@ -1,6 +1,7 @@
-#This is the configuration of the Wireless Redstone Plugin, Please don't edit it if you don't know what to do...
+#Corresponds to the language used by the plugin. In order to get it working, you must have the corresponding file <language>.yml in the folder strings/
+Language: english
 
-#The level correspond on the rate of informations you will receive about the plugin. It can be FINEST, FINER, FINE, INFO, WARNING or SEVERE
+#The level corresponds on the rate of informations you will receive about the plugin. It can be FINEST, FINER, FINE, INFO, WARNING or SEVERE
 LogLevel: INFO
 
 #If set to false, the plugin won't tell you that a new version is available on the repository.

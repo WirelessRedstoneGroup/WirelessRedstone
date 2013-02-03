@@ -1,5 +1,7 @@
 package net.licks92.WirelessRedstone.Configuration;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,14 +9,29 @@ import org.bukkit.ChatColor;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 
+/**
+ * 
+ * @author licks92
+ * 
+ * Loads the strings that are in a specific .yml file. If there isn't any file, then load the default strings.
+ * Allows to get the strings in order to use them in other classes.
+ *
+ */
 public class WirelessStringProvider
 {
+	private final String STRINGS_FOLDER = "/strings";
+	private File stringsFolder;
+	private String language;
+	private final String defaultLanguage = "default";
+	private WirelessRedstone plugin;
+	
+	//Strings
 	public String playerExtendedChannel;
 	public String playerCreatedChannel;
 	public String playerCannotCreateChannel;
 	public String playerCannotCreateReceiverOnBlock;
-	public String playerHasNotPermission;
-	public String playerHasNotAccessToChannel;
+	public String playerDoesntHavePermission;
+	public String playerDoesntHaveAccessToChannel;
 	public String playerCannotCreateSign;
 	public String ownersOfTheChannelAre;
 	public String thisChannelContains;
@@ -22,7 +39,7 @@ public class WirelessStringProvider
 	public String channelUnlocked;
 	public String channelDoesNotExist;
 	public String pageNumberInferiorToZero;
-	public String nextPage;
+	public String commandForNextPage;
 	public String signDestroyed;
 	public String channelRemovedCauseNoSign;
 	public String channelNameContainsInvalidCaracters;
@@ -34,10 +51,26 @@ public class WirelessStringProvider
 	public List<String> tagsReceiver = new ArrayList<String>();
 	public List<String> tagsScreen = new ArrayList<String>();
 	
-	public WirelessStringProvider()
-	{	
-		//If useSystemLanguage is true, then the language argument is not used
+	private enum LoadingError
+	{
+		FileNotFound , StringsMissing
+	}
+	
+	public WirelessStringProvider(WirelessRedstone plugin, String language)
+	{
+		this.plugin = plugin;
+		try {
+			stringsFolder = new File(plugin.getDataFolder().getCanonicalPath() + STRINGS_FOLDER);
+			stringsFolder.mkdirs();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		loadStrings();
+	}
+	
+	private LoadingError loadFromYaml()
+	{
+		return LoadingError.FileNotFound;
 	}
 	
 	private boolean loadStrings()
@@ -48,8 +81,8 @@ public class WirelessStringProvider
 			playerCreatedChannel = ChatColor.GREEN + "[WirelessRedstone] You just created a new channel!";
 			playerCannotCreateChannel = ChatColor.RED + "[WirelessRedstone] You cannot create a channel";
 			playerCannotCreateReceiverOnBlock = ChatColor.RED + "[WirelessRedstone] You cannot create a wireless receiver on this block !";
-			playerHasNotPermission = ChatColor.RED + "You don't have the permissions to use this command.";
-			playerHasNotAccessToChannel = ChatColor.RED + "[WirelessRedstone] You don't have access to this channel.";
+			playerDoesntHavePermission = ChatColor.RED + "You don't have the permissions to use this command.";
+			playerDoesntHaveAccessToChannel = ChatColor.RED + "[WirelessRedstone] You don't have access to this channel.";
 			playerCannotCreateSign = ChatColor.RED + "[WirelessRedstone] You don't have the permission to create this sign!";
 			signDestroyed = ChatColor.GREEN + "[WirelessRedstone] Succesfully removed this sign !";
 			channelRemovedCauseNoSign = ChatColor.GREEN + "[WirelessRedstone] Channel removed, no more signs in the worlds.";
@@ -63,7 +96,7 @@ public class WirelessStringProvider
 			pageNumberInferiorToZero = ChatColor.RED + "[WirelessRedstone] Page number cannot be inferior to 0!";
 			channelLocked = ChatColor.GREEN + "[WirelessRedstone] Channel locked !";
 			channelUnlocked = ChatColor.GREEN + "[WirelessRedstone] Channel unlocked !";
-			nextPage = ChatColor.GREEN + "\n/wr list pagenumber for next page!";
+			commandForNextPage = ChatColor.GREEN + "\n/wr list pagenumber for next page!";
 			forMoreInfosPerformWRInfo = ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>";
 			tagsTransmitter.add("[transmitter]");
 			tagsTransmitter.add("[wrt]");

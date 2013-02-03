@@ -1,0 +1,24 @@
+WirelessRedstoneTagInChat: [WirelessRedstone]
+tagsTransmitter: [wrt, transmitter]
+tagsReceiver: [wrr, receiver]
+tagsScreen: [wrs, screen]
+playerExtendedChannel: You just extended a channel!
+playerCreatedChannel: You just created a new channel!
+playerCannotCreateChannel: You cannot create a channel.
+playerCannotCreateReceiverOnBlock: You cannot create a wireless receiver on this block !
+playerDoesntHavePermission: You don't have the permissions to do this.
+playerDoesntHaveAccessToChannel: You don't have access to this channel.
+playerCannotCreateSign: You don't have the permission to create this sign!
+signDestroyed: Succesfully removed this sign !
+channelRemovedCauseNoSign: Channel removed, no more signs in the worlds.
+channelNameContainsInvalidCaracters: Channel name contains invalid caracters!
+channelDoesNotExist: This channel doesn't exist!
+tooFewArguments: Too few arguments !
+noItemOnList: There are no items on this list!
+playerCannotDestroySign: You are not allowed to destroy this sign!
+ownersOfTheChannelAre: The owners of this channel are
+thisChannelContains: This channel contains
+pageNumberInferiorToZero: Page number cannot be inferior to 0!
+channelUnlocked: Channel unlocked !
+commandForNextPage: /wr list pagenumber for next page!
+forMoreInfosPerformWRInfo: To get more informations about a channel, perform /wr info <channel>.
