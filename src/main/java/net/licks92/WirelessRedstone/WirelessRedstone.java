@@ -10,7 +10,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
-import net.licks92.WirelessRedstone.Configuration.WirelessStringProvider;
+import net.licks92.WirelessRedstone.Configuration.WirelessStringLoader;
+import net.licks92.WirelessRedstone.Configuration.WirelessStrings;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
@@ -38,11 +39,14 @@ import org.xml.sax.SAXParseException;
  * it sends the metrics and controls the actions when enabling / disabling.
  * 
  * @author licks92
+ * 
+ * @version 1.8.4b
  */
 public class WirelessRedstone extends JavaPlugin
 {
 	public static WirelessConfiguration config;
-	public static WirelessStringProvider strings;
+	public static WirelessStrings strings;
+	private WirelessStringLoader stringLoader;
 	private static WRLogger logger;
 	public WireBox WireBox = new WireBox(this);
 	public WirelessPermissions permissions;
@@ -144,8 +148,9 @@ public class WirelessRedstone extends JavaPlugin
 			}, 0, 24000);
 		}
 		
-		//Load config and strings
-		strings = new WirelessStringProvider(this, config.getLanguage());
+		//Load strings
+		strings = new WirelessStrings();
+		stringLoader = new WirelessStringLoader(this, config.getLanguage());
 		
 		//Load listeners
 		worldlistener = new WirelessWorldListener(this);
