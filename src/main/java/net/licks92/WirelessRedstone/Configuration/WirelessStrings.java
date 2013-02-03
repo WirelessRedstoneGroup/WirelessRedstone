@@ -1,14 +1,7 @@
 package net.licks92.WirelessRedstone.Configuration;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.bukkit.ChatColor;
-
-import net.licks92.WirelessRedstone.WirelessRedstone;
 
 /**
  * 
@@ -41,6 +34,7 @@ public class WirelessStrings
 	public String noItemOnList;
 	public String tooFewArguments;
 	public String forMoreInfosPerformWRInfo;
+	public String customizedLanguageSuccessfullyLoaded;
 	public List<String> tagsTransmitter = new ArrayList<String>();
 	public List<String> tagsReceiver = new ArrayList<String>();
 	public List<String> tagsScreen = new ArrayList<String>();

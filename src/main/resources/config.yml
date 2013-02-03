@@ -1,5 +1,5 @@
 #Corresponds to the language used by the plugin. In order to get it working, you must have the corresponding file <language>.yml in the folder strings/
-Language: english
+Language: default
 
 #The level corresponds on the rate of informations you will receive about the plugin. It can be FINEST, FINER, FINE, INFO, WARNING or SEVERE
 LogLevel: INFO

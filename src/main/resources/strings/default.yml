@@ -22,3 +22,4 @@ pageNumberInferiorToZero: Page number cannot be inferior to 0!
 channelUnlocked: Channel unlocked !
 commandForNextPage: /wr list pagenumber for next page!
 forMoreInfosPerformWRInfo: To get more informations about a channel, perform /wr info <channel>.
+customizedLanguageSuccessfullyLoaded: You successfully loaded your customized language for Wireless Redstone! 

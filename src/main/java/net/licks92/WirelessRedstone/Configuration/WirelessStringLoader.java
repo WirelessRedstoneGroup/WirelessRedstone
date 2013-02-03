@@ -1,8 +1,6 @@
 package net.licks92.WirelessRedstone.Configuration;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,18 +21,17 @@ public class WirelessStringLoader
 	
 	private final String STRINGS_FOLDER = "/strings";
 	private File stringsFolder;
-	private String language;
 	private final String defaultLanguage = "default";
 	
 	private enum LoadingError
 	{
-		FileNotFound , StringsMissing
+		FileNotFound , MissingStrings , NoError
 	}
 	
 	public WirelessStringLoader(WirelessRedstone plugin, String language)
 	{
 		this.plugin = plugin;
-		this.strings = plugin.strings;
+		this.strings = WirelessRedstone.strings;
 		try {
 			stringsFolder = new File(plugin.getDataFolder().getCanonicalPath() + STRINGS_FOLDER);
 			stringsFolder.mkdirs();
@@ -45,13 +42,33 @@ public class WirelessStringLoader
 				WirelessRedstone.getWRLogger().info("No language was found in the strings folder. Creating a new one by default.");
 			}
 			
-			//
+			switch(loadFromYaml(language))
+			{
+			case FileNotFound:
+				createDefaultFile();
+				loadFromYaml(defaultLanguage);
+				WirelessRedstone.getWRLogger().warning("The language file " + language + ".yml couldn't be found in the strings folder. Now using the default language.");
+				break;
+				
+			case MissingStrings:
+				createDefaultFile();
+				loadFromYaml(defaultLanguage);
+				WirelessRedstone.getWRLogger().warning("There are missing strings in the file : " + language + ".yml, so we can't load it. Now using the default language.");
+				break;
+				
+			case NoError:
+				if(!language.equals(defaultLanguage))
+					WirelessRedstone.getWRLogger().info(strings.customizedLanguageSuccessfullyLoaded);
+				else
+					WirelessRedstone.getWRLogger().debug("Successfully loaded the default language.");
+				break;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private LoadingError loadFromYaml()
+	private LoadingError loadFromYaml(String language)
 	{
 		return LoadingError.FileNotFound;
 	}
