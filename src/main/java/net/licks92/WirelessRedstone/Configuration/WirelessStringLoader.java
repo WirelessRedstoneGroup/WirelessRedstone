@@ -19,7 +19,7 @@ public class WirelessStringLoader
 	private WirelessRedstone plugin;
 	private WirelessStrings strings;
 	
-	private final String STRINGS_FOLDER = "/strings";
+	private final String STRINGS_FOLDER = "/languages";
 	private File stringsFolder;
 	private final String defaultLanguage = "default";
 	
@@ -75,7 +75,7 @@ public class WirelessStringLoader
 	
 	private void createDefaultFile() throws IOException
 	{
-		InputStream in = plugin.getResource("strings/default.yml");
+		InputStream in = plugin.getResource("languages/default.yml");
 		String fileName = stringsFolder.getCanonicalPath() + "/" + defaultLanguage + ".yml";
 		FileOutputStream fos = new FileOutputStream(fileName);
 		int i = 0;
