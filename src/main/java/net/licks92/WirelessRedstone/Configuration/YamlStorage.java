@@ -124,7 +124,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		}
 		catch (FileNotFoundException e)
 		{
-			//WirelessRedstone.getStackableLogger().debug("File " + channelName + ".yml wans't found in the channels folder, returning null.");
+			WirelessRedstone.getWRLogger().debug("File " + channelName + ".yml wasn't found in the channels folder, returning null.");
 			return null;
 		}
 		catch (IOException e)

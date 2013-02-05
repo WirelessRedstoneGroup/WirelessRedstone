@@ -1,11 +1,16 @@
 package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 
@@ -25,15 +30,16 @@ public class WirelessStringLoader
 	
 	private enum LoadingError
 	{
-		FileNotFound , MissingStrings , NoError
+		FileNotFound , MissingStrings , NoError , UnknownError
 	}
 	
 	public WirelessStringLoader(WirelessRedstone plugin, String language)
 	{
 		this.plugin = plugin;
 		this.strings = WirelessRedstone.strings;
+		ConfigurationSerialization.registerClass(WirelessStrings.class, "WirelessStrings");
 		try {
-			stringsFolder = new File(plugin.getDataFolder().getCanonicalPath() + STRINGS_FOLDER);
+			stringsFolder = new File(plugin.getDataFolder(), STRINGS_FOLDER);
 			stringsFolder.mkdirs();
 			
 			if(stringsFolder.listFiles().length == 0) //If Strings folder does not contain any strings file.
@@ -62,6 +68,10 @@ public class WirelessStringLoader
 				else
 					WirelessRedstone.getWRLogger().debug("Successfully loaded the default language.");
 				break;
+				
+			case UnknownError:
+				WirelessRedstone.getWRLogger().warning("An unknow error happened during the loading of the language file. Now using the default language.");
+				break;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,7 +80,31 @@ public class WirelessStringLoader
 	
 	private LoadingError loadFromYaml(String language)
 	{
-		return LoadingError.FileNotFound;
+		FileConfiguration lang = new YamlConfiguration();
+		File languageFile = new File(stringsFolder, language + ".yml");
+		try {
+			lang.load(languageFile);
+			Object obj = lang.get("Strings");
+			if(!(obj instanceof WirelessStrings))
+			{
+				return LoadingError.MissingStrings;
+			}
+			else
+			{
+				strings = (WirelessStrings)obj;
+			}
+		} catch (FileNotFoundException e)
+		{
+			return LoadingError.FileNotFound;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return LoadingError.UnknownError;
+		} catch (InvalidConfigurationException e) {
+			e.printStackTrace();
+			return LoadingError.UnknownError;
+		}
+		
+		return LoadingError.NoError;
 	}
 	
 	private void createDefaultFile() throws IOException
@@ -108,7 +142,7 @@ public class WirelessStringLoader
 			strings.channelNameContainsInvalidCaracters = strings.playerCannotCreateChannel + " : Name contains invalid caracters : a dot '.'!";
 			strings.channelDoesNotExist = ChatColor.RED + "[WirelessRedstone] This channel doesn't exist!";
 			strings.tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
-			strings.noItemOnList = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
+			strings.noItemOnPage = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
 			strings.playerCannotDestroySign = ChatColor.RED + "[WirelessRedstone] You are not allowed to destroy this sign!";
 			strings.ownersOfTheChannelAre = "The owners of this channel are : ";
 			strings.thisChannelContains = "This channel contains :";
@@ -132,5 +166,10 @@ public class WirelessStringLoader
 			return false;
 		}
 		return true;
+	}
+
+	public WirelessStrings getStrings()
+	{
+		return strings;
 	}
 }

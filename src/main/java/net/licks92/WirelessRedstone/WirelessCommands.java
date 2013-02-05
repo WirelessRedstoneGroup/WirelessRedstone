@@ -218,6 +218,11 @@ public class WirelessCommands implements CommandExecutor
 		if(args.length>=1)
 		{
 			WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
+			if(channel == null)
+			{
+				player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
+				return true;
+			}
 			if(channel.isLocked())
 			{
 				channel.setLocked(false);
@@ -375,7 +380,7 @@ public class WirelessCommands implements CommandExecutor
 	{
 		if (!plugin.permissions.canSeeHelp(player))
 		{
-			player.sendMessage(WirelessRedstone.strings.playerDoesntHavePermission);
+			player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
 			return true;
 		}
 
@@ -724,7 +729,7 @@ public class WirelessCommands implements CommandExecutor
 		player.sendMessage("Page " + currentpage + " on " + totalpages);
 		if (totalpages == 0)
 		{
-			player.sendMessage(WirelessRedstone.strings.noItemOnList);
+			player.sendMessage(WirelessRedstone.strings.noItemOnPage);
 		}
 		else
 		{

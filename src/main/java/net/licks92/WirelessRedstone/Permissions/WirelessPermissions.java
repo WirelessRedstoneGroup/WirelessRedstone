@@ -51,7 +51,7 @@ public class WirelessPermissions
 		}
 		else
 		{
-			WirelessRedstone.getWRLogger().info("Any of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
+			WirelessRedstone.getWRLogger().info("None of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
 			this.permissionsHandler = new opPermissions(plugin);
 		}
 
