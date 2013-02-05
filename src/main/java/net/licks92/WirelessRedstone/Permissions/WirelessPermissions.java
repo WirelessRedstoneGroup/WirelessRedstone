@@ -49,6 +49,11 @@ public class WirelessPermissions
 			WirelessRedstone.getWRLogger().info("Using bPermissions for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
 		}
+		else if(pm.getPlugin("GroupManager") != null)
+		{
+			WirelessRedstone.getWRLogger().info("Using GroupManager for permissions !");
+			this.permissionsHandler = new SuperPerms(plugin);
+		}
 		else
 		{
 			WirelessRedstone.getWRLogger().info("None of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
