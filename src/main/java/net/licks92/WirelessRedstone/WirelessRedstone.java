@@ -125,7 +125,7 @@ public class WirelessRedstone extends JavaPlugin
 					{
 						newversion = updateCheck(currentversion);
 						
-						logger.debug("Actual version is " + currentversion + " where repository version is " + newversion);
+						logger.debug("Current version is " + currentversion + " where repository version is " + newversion);
 						
 						if(newversion > currentversion)
 						{

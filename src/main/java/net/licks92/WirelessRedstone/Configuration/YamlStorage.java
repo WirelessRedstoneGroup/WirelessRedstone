@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -370,7 +371,8 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	{	
 		List<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 		
-		for(File f : channelFolder.listFiles())
+		
+		for(File f : channelFolder.listFiles(new YamlFilter()))
 		{
 			FileConfiguration channelConfig = new YamlConfiguration();
 			try
@@ -389,8 +391,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			{
 				e.printStackTrace();
 			}
-			String channelName = f.getName();
-			channelName = channelName.split(".yml")[0];
+			String channelName = f.getName().split(".yml")[0];
 			Object channel = channelConfig.get(channelName);
 			if(channel instanceof WirelessChannel)
 			{
@@ -417,5 +418,16 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	{
 		setWirelessChannel(channelName, channel);
 	}
+}
 
+class YamlFilter implements FilenameFilter
+{
+	@Override
+	public boolean accept(File file, String name) {
+		if(name.contains(".yml"))
+			return true;
+		else
+			return false;
+	}
+	
 }
