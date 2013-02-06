@@ -8,6 +8,7 @@ import org.bukkit.plugin.PluginManager;
 public class WirelessPermissions
 {
 	public IPermissions permissionsHandler;
+	public String permPlugin;
 	private String canCreateReceiver = "wirelessredstone.create.receiver";
 	private String canCreateTransmitter = "wirelessredstone.create.transmitter";
 	private String canCreateScreen = "wirelessredstone.create.screen";
@@ -32,31 +33,37 @@ public class WirelessPermissions
 		if (pm.getPlugin("Vault") != null && WirelessRedstone.config.getVaultUsage())
 		{
 			this.permissionsHandler = new Vault(plugin);
+			permPlugin = "Vault";
 			WirelessRedstone.getWRLogger().info("Using Vault for permissions !");
 		}
 		else if(pm.getPlugin("PermissionsEx") != null)
 		{
-			WirelessRedstone.getWRLogger().info("Using PermissionsEx for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
+			permPlugin = "PermissionsEx";
+			WirelessRedstone.getWRLogger().info("Using PermissionsEx for permissions !");
 		}
 		else if(pm.getPlugin("PermissionsBukkit") != null)
 		{
-			WirelessRedstone.getWRLogger().info("Using PermissionsBukkit for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
+			permPlugin = "PermissionsBukkit";
+			WirelessRedstone.getWRLogger().info("Using PermissionsBukkit for permissions !");
 		}
 		else if(pm.getPlugin("bPermissions") != null)
 		{
-			WirelessRedstone.getWRLogger().info("Using bPermissions for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
+			permPlugin = "bPermissions";
+			WirelessRedstone.getWRLogger().info("Using bPermissions for permissions !");
 		}
 		else if(pm.getPlugin("GroupManager") != null)
 		{
-			WirelessRedstone.getWRLogger().info("Using GroupManager for permissions !");
 			this.permissionsHandler = new SuperPerms(plugin);
+			permPlugin = "GroupManager";
+			WirelessRedstone.getWRLogger().info("Using GroupManager for permissions !");
 		}
 		else
 		{
 			WirelessRedstone.getWRLogger().info("None of the supported permissions plugins has been detected! Defaulting to OP/Config files!");
+			permPlugin = "Bukkit OP Permissions";
 			this.permissionsHandler = new opPermissions(plugin);
 		}
 

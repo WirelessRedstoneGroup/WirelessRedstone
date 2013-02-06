@@ -277,7 +277,80 @@ public class WirelessRedstone extends JavaPlugin
 					}
 				}
 			});
+			
+			final Graph permissionsGraph = metrics.createGraph("Plugin used for Permissions");
+			permissionsGraph.addPlotter(new Plotter("Vault")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "Vault")
+						return 1;
+					else
+						return 0;
+				}
+			});
+			
+			permissionsGraph.addPlotter(new Plotter("PermissionsEx")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "PermissionsEx")
+						return 1;
+					else
+						return 0;
+				}
+			});
+			
+			permissionsGraph.addPlotter(new Plotter("PermissionsBukkit")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "PermissionsBukkit")
+						return 1;
+					else
+						return 0;
+				}
+			});
+			
+			permissionsGraph.addPlotter(new Plotter("bPermissions")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "bPermissions")
+						return 1;
+					else
+						return 0;
+				}
+			});
+			
+			permissionsGraph.addPlotter(new Plotter("GroupManager")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "GroupManager")
+						return 1;
+					else
+						return 0;
+				}
+			});
 			metrics.start();
+			
+			permissionsGraph.addPlotter(new Plotter("Bukkit OP Permissions")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "Bukkit OP Permissions")
+						return 1;
+					else
+						return 0;
+				}
+			});
 		}
 		catch(Exception e)
 		{
