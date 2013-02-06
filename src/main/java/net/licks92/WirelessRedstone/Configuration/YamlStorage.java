@@ -391,7 +391,12 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			{
 				e.printStackTrace();
 			}
-			String channelName = f.getName().split(".yml")[0];
+			String channelName;
+			try {
+				channelName = f.getName().split(".yml")[0];
+			} catch (ArrayIndexOutOfBoundsException ex) {
+				continue;
+			}
 			Object channel = channelConfig.get(channelName);
 			if(channel instanceof WirelessChannel)
 			{
