@@ -194,7 +194,7 @@ public class WirelessCommands implements CommandExecutor
 			}
 			else
 			{
-				player.sendMessage(ChatColor.RED + "This command does not exist.");
+				player.sendMessage(WirelessRedstone.strings.commandDoesNotExist);
 				return true;
 			}
 		}
@@ -362,7 +362,7 @@ public class WirelessCommands implements CommandExecutor
 			
 			else
 			{
-				player.sendMessage("[WirelessRedstone] Unknown sub command!");
+				player.sendMessage(WirelessRedstone.strings.subCommandDoesNotExist);
 			}
 		}
 		else
@@ -541,7 +541,7 @@ public class WirelessCommands implements CommandExecutor
 				if (plugin.WireBox.hasAccessToChannel(player, args[0]))
 				{
 					WirelessRedstone.config.removeWirelessChannel(args[0]);
-					player.sendMessage("Channel has been removed !");
+					player.sendMessage(WirelessRedstone.strings.channelRemoved);
 				}
 				else
 				{
@@ -576,7 +576,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		if(!wipeDataConfirm)
 		{
-			player.sendMessage("You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.");
+			player.sendMessage(WirelessRedstone.strings.DBAboutToBeDeleted);
 			wipeDataConfirm = true;
 			Bukkit.getScheduler().runTaskLater(plugin, new Runnable()
 					{
@@ -591,12 +591,12 @@ public class WirelessCommands implements CommandExecutor
 		wipeDataConfirm = false;
 		if(WirelessRedstone.config.wipeData())
 		{
-			player.sendMessage(ChatColor.GREEN + "Database has been succesfully wiped!");
+			player.sendMessage(WirelessRedstone.strings.DBDeleted);
 			return true;
 		}
 		else
 		{
-			player.sendMessage("Database hasn't been wiped.");
+			player.sendMessage(WirelessRedstone.strings.DBNotDeleted);
 			return true;
 		}
 	}
@@ -610,12 +610,12 @@ public class WirelessCommands implements CommandExecutor
 		}
 		if(WirelessRedstone.config.backupData())
 		{
-			player.sendMessage(ChatColor.GREEN + "A backup has been made!");
+			player.sendMessage(WirelessRedstone.strings.backupDone);
 			return true;
 		}
 		else
 		{
-			player.sendMessage(ChatColor.RED + "Backup failed!");
+			player.sendMessage(WirelessRedstone.strings.backupFailed);
 			return true;
 		}
 	}

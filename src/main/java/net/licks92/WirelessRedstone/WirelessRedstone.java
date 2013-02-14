@@ -10,12 +10,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
-import net.licks92.WirelessRedstone.Configuration.WirelessStringLoader;
-import net.licks92.WirelessRedstone.Configuration.WirelessStrings;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
+import net.licks92.WirelessRedstone.Strings.WirelessStringLoader;
+import net.licks92.WirelessRedstone.Strings.WirelessStrings;
 import net.licks92.WirelessRedstone.Utils.BukkitMetrics;
 import net.licks92.WirelessRedstone.Utils.BukkitMetrics.Graph;
 import net.licks92.WirelessRedstone.Utils.BukkitMetrics.Plotter;
@@ -32,6 +32,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
+
 
 
 /**
@@ -129,11 +130,11 @@ public class WirelessRedstone extends JavaPlugin
 						
 						if(newversion > currentversion)
 						{
-							logger.info("A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
+							logger.info(strings.newUpdateAvailable);
 						}
 						else if(newversion < currentversion)
 						{
-							logger.info("You are using a version that is higher than the repository version! Did you download it on the github code repo?");
+							logger.debug("You are using a version that is higher than the repository version! Did you download it on the github code repo?");
 						}
 						else //If it's the same version...
 						{
@@ -176,7 +177,7 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wri").setExecutor(new WirelessCommands(this));
 		getCommand("wrlock").setExecutor(new WirelessCommands(this));
 
-		WirelessRedstone.logger.fine("Loading Chunks");
+		WirelessRedstone.logger.fine("Loading Chunks...");
 		LoadChunks();
 		
 		//Metrics

@@ -4,7 +4,7 @@ Language: default
 #The level corresponds on the rate of informations you will receive about the plugin. It can be FINEST, FINER, FINE, INFO, WARNING or SEVERE
 LogLevel: INFO
 
-#If set to false, the plugin won't tell you that a new version is available on the repository.
+#If you don't want to be spammed with a message telling you that an amazing new release with new great functionnalities has been released, then set it to false.
 CheckForUpdates: true
 
 #If true, then the plugin uses a database to store the channels.

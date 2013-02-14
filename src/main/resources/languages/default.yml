@@ -1,14 +1,22 @@
 Strings:
   ==: WirelessStrings
+  backupDone: A backup has been created into the plugin folder!
+  backupFailed: Backup failed!
   chatTag: WirelessRedstone
   channelDoesNotExist: This channel doesn't exist!
   channelLocked: Channel locked !
   channelNameContainsInvalidCaracters: This channel name contains invalid caracters !
+  channelRemoved: This channel has been removed!
   channelRemovedCauseNoSign: Channel removed, no more signs in the worlds.
   channelUnlocked: Channel unlocked !
+  commandDoesNotExist: This command does not exist!
   commandForNextPage: /wr list pagenumber for next page!
   customizedLanguageSuccessfullyLoaded: You successfully loaded your customized language for Wireless Redstone! 
+  DBAboutToBeDeleted: You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.
+  DBDeleted: Database has been succesfully wiped!
+  DBNotDeleted: Database hasn't been wiped.
   forMoreInfosPerformWRInfo: To get more informations about a channel, perform /wr info <channel>.
+  newUpdateAvailable: A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/
   noItemOnPage: There are no items on this page!
   ownersOfTheChannelAre: The owners of this channel are
   pageNumberInferiorToZero: Page number cannot be inferior to 0!
@@ -21,5 +29,6 @@ Strings:
   playerDoesntHavePermission: You don't have the permissions to do this.
   playerExtendedChannel: You just extended a channel!
   signDestroyed: Succesfully removed this sign !
+  subCommandDoesNotExist: This subcommand doesn't exist!
   thisChannelContains: This channel contains
   tooFewArguments: Too few arguments !
