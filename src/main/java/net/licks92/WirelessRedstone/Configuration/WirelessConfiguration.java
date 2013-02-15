@@ -164,6 +164,11 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		return getConfig().getString("Language", "default");
 	}
 	
+	public boolean getColourfulLogging()
+	{
+		return getConfig().getBoolean("ColourfulLogging", true);
+	}
+	
 	public boolean doCheckForUpdates()
 	{
 		return getConfig().getBoolean("CheckForUpdates", true);

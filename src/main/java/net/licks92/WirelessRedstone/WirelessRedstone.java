@@ -91,22 +91,22 @@ public class WirelessRedstone extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		PluginDescriptionFile pdfFile = getDescription();
+		PluginDescriptionFile pdFile = getDescription();
 		
 		config = new WirelessConfiguration(this);
 		if(config.getDebugMode())
 		{
-			logger = new WRLogger("[WirelessRedstone]", this.getServer().getConsoleSender(), true);
+			logger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), true, config.getColourfulLogging());
 			logger.info("Debug Mode activated !");
 			logger.info("Log level set to FINEST because of the debug mode");
 		}
 		else
 		{
-			logger = new WRLogger("[WirelessRedstone]", this.getServer().getConsoleSender(), false);
+			logger = new WRLogger("[WirelessRedstone]", this.getServer().getConsoleSender(), false, config.getColourfulLogging());
 		}
 		config.init();
 		
-		WirelessRedstone.logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is loading...");
+		WirelessRedstone.logger.info(pdFile.getName() + " version " + pdFile.getVersion() + " is loading...");
 		
 		currentversion = Double.valueOf(getDescription().getVersion().split("b")[0].replaceFirst("\\.", ""));
 		
@@ -361,7 +361,7 @@ public class WirelessRedstone extends JavaPlugin
 		}
 		
 		//Loading finished !
-		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+		System.out.println(pdFile.getName() + " version " + pdFile.getVersion() + " is enabled!");
 	}
 	
 	/**

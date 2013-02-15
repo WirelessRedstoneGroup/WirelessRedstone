@@ -1,6 +1,8 @@
 #Corresponds to the language used by the plugin. In order to get it working, you must have the corresponding file <language>.yml in the folder strings/
 Language: default
 
+ColourfulLogging: true
+
 #If you don't want to be spammed with a message telling you that an amazing new release with new great functionnalities has been released, then set it to false.
 CheckForUpdates: true
 
