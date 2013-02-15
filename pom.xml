@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.licks92</groupId>
   <artifactId>WirelessRedstone</artifactId>
-  <version>1.8.4b</version>
+  <version>1.8.5b</version>
   <name>WirelessRedstone</name>
   <build>
     <plugins>
