@@ -654,11 +654,11 @@ public class WirelessCommands implements CommandExecutor
 				 */
 				if(plugin.WireBox.isActive(tempChannel))
 				{
-					player.sendMessage("Is Activated : " + ChatColor.GREEN + "YES");
+					player.sendMessage("Is Activated : " + ChatColor.GREEN + "Yes");
 				}
 				else
 				{
-					player.sendMessage("Is Activated : " + ChatColor.RED + "NO");
+					player.sendMessage("Is Activated : " + ChatColor.RED + "No");
 				}
 				if(tempChannel.isLocked())
 				{
@@ -721,7 +721,7 @@ public class WirelessCommands implements CommandExecutor
 		}
 		if(itemsonlist == 0)
 		{
-			player.sendMessage(ChatColor.RED + "[WirelessRedstone] This list is empty.");
+			player.sendMessage(WirelessRedstone.strings.pageEmpty);
 			return;
 		}
 		int currentitem = ((cpage * maxitems) - maxitems);
@@ -729,7 +729,7 @@ public class WirelessCommands implements CommandExecutor
 		player.sendMessage("Page " + currentpage + " on " + totalpages);
 		if (totalpages == 0)
 		{
-			player.sendMessage(WirelessRedstone.strings.noItemOnPage);
+			player.sendMessage(WirelessRedstone.strings.listEmpty);
 		}
 		else
 		{

@@ -77,8 +77,13 @@ public class WirelessRedstone extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
-		config.close();
-		updateChecker.cancel();
+		try
+		{
+			config.close();
+			updateChecker.cancel();
+		} catch (NullPointerException ex) {
+			
+		}
 	}
 	
 	/**

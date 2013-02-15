@@ -17,7 +17,8 @@ Strings:
   DBNotDeleted: Database hasn't been wiped.
   forMoreInfosPerformWRInfo: To get more informations about a channel, perform /wr info <channel>.
   newUpdateAvailable: A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/
-  noItemOnPage: There are no items on this page!
+  pageEmpty: This page is empty!
+  listEmpty: The list in empty!
   ownersOfTheChannelAre: The owners of this channel are
   pageNumberInferiorToZero: Page number cannot be inferior to 0!
   playerCannotCreateChannel: You are not allowed to create a channel.

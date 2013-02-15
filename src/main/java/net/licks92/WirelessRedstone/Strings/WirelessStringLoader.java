@@ -143,7 +143,7 @@ public class WirelessStringLoader
 			strings.channelNameContainsInvalidCaracters = strings.playerCannotCreateChannel + " : Name contains invalid caracters : a dot '.'!";
 			strings.channelDoesNotExist = ChatColor.RED + "[WirelessRedstone] This channel doesn't exist!";
 			strings.tooFewArguments = ChatColor.RED + "[WirelessRedstone] Too few arguments !";
-			strings.noItemOnPage = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
+			strings.pageEmpty = ChatColor.RED + "[WirelessRedstone] There are no items on this list!";
 			strings.playerCannotDestroySign = ChatColor.RED + "[WirelessRedstone] You are not allowed to destroy this sign!";
 			strings.ownersOfTheChannelAre = "The owners of this channel are : ";
 			strings.thisChannelContains = "This channel contains :";

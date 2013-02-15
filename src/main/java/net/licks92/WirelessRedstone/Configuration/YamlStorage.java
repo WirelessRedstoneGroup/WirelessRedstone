@@ -201,11 +201,12 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		setWirelessChannel(channelName, null);
 		for(File f : channelFolder.listFiles())
 		{
-			if(f.getName().equals(channelName))
+			if(f.getName().equals(channelName + ".yml"))
 			{
 				f.delete();
 			}
 		}
+		WirelessRedstone.getWRLogger().debug("Channel " + channelName + " successfully removed and file deleted.");
 	}
 	
 	public boolean renameWirelessChannel(String channelName, String newChannelName)

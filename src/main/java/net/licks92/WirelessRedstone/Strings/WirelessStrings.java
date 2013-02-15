@@ -36,9 +36,10 @@ public class WirelessStrings implements ConfigurationSerializable
 	public String DBDeleted;
 	public String DBNotDeleted;
 	public String forMoreInfosPerformWRInfo;
+	public String listEmpty;
 	public String newUpdateAvailable;
-	public String noItemOnPage;
 	public String ownersOfTheChannelAre;
+	public String pageEmpty;
 	public String pageNumberInferiorToZero;
 	public String playerCannotCreateChannel;
 	public String playerCannotCreateReceiverOnBlock;
@@ -75,9 +76,10 @@ public class WirelessStrings implements ConfigurationSerializable
 		DBDeleted = ChatColor.GREEN + chatTag + lang.get("DBDeleted");
 		DBNotDeleted = ChatColor.RED + chatTag + lang.get("DBNotDeleted");
 		forMoreInfosPerformWRInfo = ChatColor.GREEN + chatTag + lang.get("forMoreInfosPerformWRInfo");
+		listEmpty = ChatColor.RED + chatTag + lang.get("listEmpty");
 		newUpdateAvailable = ChatColor.GREEN + chatTag + lang.get("newUpdateAvailable");
-		noItemOnPage = ChatColor.RED + chatTag + lang.get("noItemOnList");
 		ownersOfTheChannelAre = chatTag + lang.get("ownersOfTheChannelAre");
+		pageEmpty = ChatColor.RED + chatTag + lang.get("pageEmpty");
 		pageNumberInferiorToZero = ChatColor.RED + chatTag + lang.get("pageNumberInferiorToZero");
 		playerCannotCreateChannel = ChatColor.RED + chatTag + lang.get("playerCannotCreateChannel");
 		playerCannotCreateReceiverOnBlock = ChatColor.RED + chatTag + lang.get("playerCannotCreateReceiverOnBlock");
