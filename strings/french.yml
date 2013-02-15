@@ -1,0 +1,35 @@
+Strings:
+  ==: WirelessStrings
+  backupDone: Une sauvegarde a ete creee!
+  backupFailed: La sauvegarde n'a pas pu etre creee!
+  chatTag: WirelessRedstone
+  channelDoesNotExist: Ce reseau n'existe pas!
+  channelLocked: Reseau bloque!
+  channelNameContainsInvalidCaracters: Ce nom de reseau contient des caracteres invalides!
+  channelRemoved: Ce reseau a ete supprime!
+  channelRemovedCauseNoSign: Ce reseau a ete supprime car il n'existe plus aucun panneau.
+  channelUnlocked: Reseau debloque!
+  commandDoesNotExist: Cette commande n'existe pas.
+  commandForNextPage: Tapez /wr list NoPage pour avoir la page suivante.
+  customizedLanguageSuccessfullyLoaded: Votre language personnalise Français a bien ete charge. Auteur : licks92. Bon jeu ;)
+  DBAboutToBeDeleted: La base de donnees va etre entierement supprimee! Une sauvegarde de prevention va etre realisee avant cela. Si vous etes prets a le faire, alors re-tapez cette commande.
+  DBDeleted: La base de donnees a bien ete supprimees.
+  DBNotDeleted: La base de donnees n'a pas pu etre supprimees.
+  forMoreInfosPerformWRInfo: Pour plus d'informations a propos d'un reseau, tapez /wr info reseau.
+  ownersOfTheChannelAre: Les maitres de ce réseau sont
+  newUpdateAvailable: Une nouvelle mise a jour est disponible! Je vous recommande vivement d'aller la telecharger sur le site http://dev.bukkit.org/server-mods/wireless-redstone/ , afin de beneficier des dernieres corrections de bugs et fonctionnalites.
+  pageEmpty: Cette page est vide!
+  listEmpty: Cette liste est vide!
+  pageNumberInferiorToZero: Le numero de page ne peut pas etre inferieur a 0!
+  playerCannotCreateChannel: Vous n'etes pas autorise a creer un reseau.
+  playerCannotCreateReceiverOnBlock: Vous ne pouvez pas crer de recepteur sur ce bloc.
+  playerCannotCreateSign: Vous n'avez pas la permission de creer ce panneau.
+  playerCannotDestroySign: Vous n'etes pas autorise a detruire ce panneau
+  playerCreatedChannel: Vous venez de creer un reseau.
+  playerDoesntHaveAccessToChannel: Vous n'avez pas acces a ce reseau.
+  playerDoesntHavePermission: Vous n'avez pas la permission de faire ceci.
+  playerExtendedChannel: Vous venez d'etendre un reseau.
+  signDestroyed: Ce panneau a ete correctement detruit.
+  subCommandDoesNotExist: Cette sous-commande n'existe pas.
+  thisChannelContains: Ce reseau contient 
+  tooFewArguments: Pas assez d'arguments!
