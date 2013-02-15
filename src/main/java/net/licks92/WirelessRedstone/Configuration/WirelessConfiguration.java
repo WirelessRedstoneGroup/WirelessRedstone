@@ -159,29 +159,24 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		storage.updateChannel(channelName, channel);
 	}
 	
-	public Level getLogLevel()
-	{
-		return Level.parse(getConfig().getString("LogLevel"));
-	}
-	
 	public String getLanguage()
 	{
-		return getConfig().getString("Language");
+		return getConfig().getString("Language", "default");
 	}
 	
 	public boolean doCheckForUpdates()
 	{
-		return getConfig().getBoolean("CheckForUpdates");
+		return getConfig().getBoolean("CheckForUpdates", true);
 	}
 
 	public boolean getVaultUsage()
 	{
-		return getConfig().getBoolean("UseVault");
+		return getConfig().getBoolean("UseVault", false);
 	}
 	
 	public boolean getSQLUsage()
 	{
-		return getConfig().getBoolean("UseSQL");
+		return getConfig().getBoolean("UseSQL", true);
 	}
 
 	public void save()

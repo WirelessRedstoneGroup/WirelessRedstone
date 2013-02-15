@@ -1,9 +1,6 @@
 #Corresponds to the language used by the plugin. In order to get it working, you must have the corresponding file <language>.yml in the folder strings/
 Language: default
 
-#The level corresponds on the rate of informations you will receive about the plugin. It can be FINEST, FINER, FINE, INFO, WARNING or SEVERE
-LogLevel: INFO
-
 #If you don't want to be spammed with a message telling you that an amazing new release with new great functionnalities has been released, then set it to false.
 CheckForUpdates: true
 

@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -97,15 +96,13 @@ public class WirelessRedstone extends JavaPlugin
 		config = new WirelessConfiguration(this);
 		if(config.getDebugMode())
 		{
-			logger = new WRLogger("[WirelessRedstone]", true);
+			logger = new WRLogger("[WirelessRedstone]", this.getServer().getConsoleSender(), true);
 			logger.info("Debug Mode activated !");
 			logger.info("Log level set to FINEST because of the debug mode");
-			logger.setLogLevel(Level.FINEST);
 		}
 		else
 		{
-			logger = new WRLogger("[WirelessRedstone]", false);
-			WirelessRedstone.logger.setLogLevel(config.getLogLevel());
+			logger = new WRLogger("[WirelessRedstone]", this.getServer().getConsoleSender(), false);
 		}
 		config.init();
 		
@@ -163,14 +160,14 @@ public class WirelessRedstone extends JavaPlugin
 		blocklistener = new WirelessBlockListener(this);
 		playerlistener = new WirelessPlayerListener(this);
 		
-		WirelessRedstone.logger.fine("Loading Permissions...");
+		WirelessRedstone.logger.info("Loading Permissions...");
 		
 		permissions = new WirelessPermissions(this);
 		config.save();
 
 		this.WireBox.UpdateChacheNoThread();
 
-		WirelessRedstone.logger.fine("Registering commands...");
+		WirelessRedstone.logger.info("Registering commands...");
 		getCommand("wirelessredstone").setExecutor(new WirelessCommands(this));
 		getCommand("wrhelp").setExecutor(new WirelessCommands(this));
 		getCommand("wrr").setExecutor(new WirelessCommands(this));
@@ -182,7 +179,7 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wri").setExecutor(new WirelessCommands(this));
 		getCommand("wrlock").setExecutor(new WirelessCommands(this));
 
-		WirelessRedstone.logger.fine("Loading Chunks...");
+		WirelessRedstone.logger.info("Loading Chunks...");
 		LoadChunks();
 		
 		//Metrics

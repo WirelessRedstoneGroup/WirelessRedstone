@@ -67,7 +67,7 @@ public class WirelessPermissions
 			this.permissionsHandler = new opPermissions(plugin);
 		}
 
-		WirelessRedstone.getWRLogger().fine("Loaded Permissions...");
+		WirelessRedstone.getWRLogger().info("Loaded Permissions...");
 	}
 	
 	public boolean canCreateReceiver(Player player)

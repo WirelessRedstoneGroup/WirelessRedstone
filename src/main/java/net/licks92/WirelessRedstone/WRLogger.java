@@ -4,64 +4,41 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 
 public class WRLogger
 {
-	private Logger logger;
+	ConsoleCommandSender console;
 	private String prefix;
 	private boolean debug;
 	public static final String MINECRAFT_LOGGER = "Minecraft";
 
-	public WRLogger(String prefix, boolean debug)
+	public WRLogger(String prefix, ConsoleCommandSender console, boolean debug)
 	{
-		this.logger = Bukkit.getLogger();
-		this.prefix = prefix;
+		this.prefix = ChatColor.RED + prefix + ChatColor.RESET;
 		this.debug = debug;
+		this.console = console;
+	}
+	
+	public void info(String msg)
+	{
+		console.sendMessage(prefix + " " + msg);
 	}
 	
 	public void debug(String msg)
 	{
 		if(debug)
-			logger.info("[WRDebug] " + msg);
-	}
-
-	public void config(String msg)
-	{
-		logger.config(prefix + " " + msg);
-	}
-
-	public void fine(String msg)
-	{
-		logger.fine(prefix + " " + msg);
-	}
-
-	public void finer(String msg)
-	{
-		logger.finer(prefix + " " + msg);
-	}
-
-	public void finest(String msg)
-	{
-		logger.finest(prefix + " " + msg);
-	}
-
-	public void info(String msg)
-	{
-		logger.info(prefix + " " + msg);
+			console.sendMessage(prefix + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + msg);
 	}
 
 	public void severe(String msg)
 	{
-		logger.severe(prefix + " " + msg);
+		console.sendMessage(prefix + ChatColor.DARK_RED + "[SEVERE] " + ChatColor.RESET + msg);
 	}
 
 	public void warning(String msg)
 	{
-		logger.warning(prefix + " " + msg);
-	}
-	
-	public void setLogLevel(Level level)
-	{
-		logger.setLevel(level);
+		console.sendMessage(prefix + ChatColor.RED + "[WARNING] " + ChatColor.RESET + msg);
 	}
 }
