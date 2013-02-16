@@ -11,7 +11,7 @@ Strings:
   channelUnlocked: Reseau debloque!
   commandDoesNotExist: Cette commande n'existe pas.
   commandForNextPage: Tapez /wr list NoPage pour avoir la page suivante.
-  customizedLanguageSuccessfullyLoaded: Votre language personnalise Français a bien ete charge. Auteur : licks92. Bon jeu ;)
+  customizedLanguageSuccessfullyLoaded: Votre language personnalise Français a bien ete charge. Auteur licks92. Bon jeu ;)
   DBAboutToBeDeleted: La base de donnees va etre entierement supprimee! Une sauvegarde de prevention va etre realisee avant cela. Si vous etes prets a le faire, alors re-tapez cette commande.
   DBDeleted: La base de donnees a bien ete supprimees.
   DBNotDeleted: La base de donnees n'a pas pu etre supprimees.
