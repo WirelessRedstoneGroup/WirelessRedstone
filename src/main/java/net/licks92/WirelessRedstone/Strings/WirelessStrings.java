@@ -44,6 +44,7 @@ public class WirelessStrings implements ConfigurationSerializable
 	public String playerCannotCreateChannel;
 	public String playerCannotCreateReceiverOnBlock;
 	public String playerCannotCreateSign;
+	public String playerCannotDestroyReceiverTorch;
 	public String playerCannotDestroySign;
 	public String playerCreatedChannel;
 	public String playerDoesntHaveAccessToChannel;
@@ -83,6 +84,9 @@ public class WirelessStrings implements ConfigurationSerializable
 		pageNumberInferiorToZero = ChatColor.RED + chatTag + lang.get("pageNumberInferiorToZero");
 		playerCannotCreateChannel = ChatColor.RED + chatTag + lang.get("playerCannotCreateChannel");
 		playerCannotCreateReceiverOnBlock = ChatColor.RED + chatTag + lang.get("playerCannotCreateReceiverOnBlock");
+		playerCannotCreateSign = ChatColor.RED + chatTag + lang.get("playerCannotCreateSign");
+		playerCannotDestroyReceiverTorch = ChatColor.RED + chatTag + lang.get("playerCannotDestroyReceiverTorch");
+		playerCannotDestroySign = ChatColor.RED + chatTag + lang.get("playerCannotDestroySign");
 		playerCreatedChannel = ChatColor.GREEN + chatTag + lang.get("playerCreatedChannel");
 		playerDoesntHaveAccessToChannel = ChatColor.RED + chatTag + lang.get("playerDoesntHaveAccessToChannel");
 		playerDoesntHavePermission = ChatColor.RED + chatTag + lang.get("playerDoesntHavePermission");

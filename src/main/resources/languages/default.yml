@@ -24,6 +24,7 @@ Strings:
   playerCannotCreateChannel: You are not allowed to create a channel.
   playerCannotCreateReceiverOnBlock: You cannot create a wireless receiver on this block !
   playerCannotCreateSign: You don't have the permission to create this sign!
+  playerCannotDestroyReceiverTorch: You cannot break my magic torches my friend!
   playerCannotDestroySign: You are not allowed to destroy this sign!
   playerCreatedChannel: You just created a new channel!
   playerDoesntHaveAccessToChannel: You don't have access to this channel.

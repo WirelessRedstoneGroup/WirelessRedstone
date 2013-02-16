@@ -24,6 +24,7 @@ Strings:
   playerCannotCreateChannel: Vous n'etes pas autorise a creer un reseau.
   playerCannotCreateReceiverOnBlock: Vous ne pouvez pas crer de recepteur sur ce bloc.
   playerCannotCreateSign: Vous n'avez pas la permission de creer ce panneau.
+  playerCannotDestroyReceiverTorch: Vous ne pouvez pas detruire mes torches magiques! Il s'agit d'un recepteur wifi allume ;)
   playerCannotDestroySign: Vous n'etes pas autorise a detruire ce panneau
   playerCreatedChannel: Vous venez de creer un reseau.
   playerDoesntHaveAccessToChannel: Vous n'avez pas acces a ce reseau.

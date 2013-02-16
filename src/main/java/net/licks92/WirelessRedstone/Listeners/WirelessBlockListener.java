@@ -433,7 +433,7 @@ public class WirelessBlockListener implements Listener
 			{
 				if (loc.equals(event.getBlock().getLocation()))
 				{
-					event.getPlayer().sendMessage("[WirelessRedstone] You cannot break my magic torches my friend!");
+					event.getPlayer().sendMessage(WirelessRedstone.strings.playerCannotDestroyReceiverTorch);
 					event.setCancelled(true);
 					return;
 				}
