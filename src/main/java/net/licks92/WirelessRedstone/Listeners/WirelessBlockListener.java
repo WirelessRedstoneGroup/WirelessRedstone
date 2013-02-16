@@ -222,7 +222,9 @@ public class WirelessBlockListener implements Listener
 			}
 			catch (RuntimeException e) 
 			{
-				WirelessRedstone.getWRLogger().severe("Error while updating redstone event onBlockRedstoneChange for Receivers :"+e.getClass()+":"+e.getMessage());
+				WirelessRedstone.getWRLogger().severe("Error while updating redstone event onBlockRedstoneChange for Receivers. Turn on the Debug Mode to get more informations.");
+				if(WirelessRedstone.config.getDebugMode())
+					e.printStackTrace();
 				return;
 			}
 		}
@@ -278,7 +280,9 @@ public class WirelessBlockListener implements Listener
 			}
 			catch (RuntimeException e)
 			{
-				WirelessRedstone.getWRLogger().severe("Error while updating redstone onBlockRedstoneChange for Screens :"+e.getClass()+":"+e.getMessage());
+				WirelessRedstone.getWRLogger().severe("Error while updating redstone onBlockRedstoneChange for Screens , turn on the Debug Mode to get more informations.");
+				if(WirelessRedstone.config.getDebugMode())
+					e.printStackTrace();
 				return;
 			}
 		}
