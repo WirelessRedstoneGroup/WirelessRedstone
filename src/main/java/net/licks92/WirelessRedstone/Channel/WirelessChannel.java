@@ -11,7 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -57,6 +60,23 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		{
 			
 		}
+	}
+	
+	public boolean isActive()
+	{
+		for(WirelessTransmitter t : getTransmitters())
+		{
+			Location loc = new Location(Bukkit.getWorld(t.getWorld()), t.getX(), t.getY(), t.getZ());
+			Block block = loc.getBlock();
+			if(block.getState() instanceof Sign)
+			{
+				if(block.isBlockIndirectlyPowered() || block.isBlockIndirectlyPowered())
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public void removeReceiverAt(Location loc)

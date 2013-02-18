@@ -112,6 +112,7 @@ public class WirelessBlockListener implements Listener
 		}
 		
 		Sign signObject = (Sign) event.getBlock().getState();
+		WirelessChannel channel;
 		
 		// Lets check if the sign is a Transmitter and if the channel name not
 		// is empty
@@ -119,9 +120,13 @@ public class WirelessBlockListener implements Listener
 		{
 			return;
 		}
+		else
+		{
+			channel = WirelessRedstone.config.getWirelessChannel(signObject.getLine(1));
+		}
 		try
 		{
-			if(WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).isLocked())
+			if(channel.isLocked())
 			{
 				return;
 			}
@@ -130,13 +135,13 @@ public class WirelessBlockListener implements Listener
 		{
 			
 		}
-		if (event.getBlock().isBlockPowered() || event.getBlock().isBlockIndirectlyPowered())
+		if (event.getBlock().isBlockPowered() || event.getBlock().isBlockIndirectlyPowered() || !(channel.isActive()))
 		{
-			//Turning on the receivers
+			//Turning on the receivers ONLY if the channel isn't active.
 			try
 			{
 				//Change receivers
-				for (Location receiver : plugin.WireBox.getReceiverLocations(signObject.getLine(1)))
+				for (Location receiver : plugin.WireBox.getReceiverLocations(channel.getName()))
 				{
 					if(receiver.getWorld() == null)
 						continue; // World currently not loaded
@@ -212,7 +217,7 @@ public class WirelessBlockListener implements Listener
 				}
 				
 				//Change screens
-				for(Location screen : plugin.WireBox.getScreenLocations(signObject.getLine(1)))
+				for(Location screen : plugin.WireBox.getScreenLocations(channel.getName()))
 				{
 					String str = ChatColor.GREEN + "ACTIVE";
 					Sign sign = (Sign) screen.getBlock().getState();
@@ -228,11 +233,10 @@ public class WirelessBlockListener implements Listener
 				return;
 			}
 		}
-		else if (!event.getBlock().isBlockPowered())
+		else if (!event.getBlock().isBlockPowered() || event.getBlock().isBlockIndirectlyPowered())
 		{
 			try
 			{
-				WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(signObject.getLine(1));
 				if(channel != null)
 				{
 					//Change receivers
