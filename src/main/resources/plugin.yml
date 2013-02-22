@@ -2,7 +2,7 @@ name: WirelessRedstone
 main: net.licks92.WirelessRedstone.WirelessRedstone
 website: http://dev.bukkit.org/server-mods/wireless-redstone/
 author: licks92
-version: 1.8.5b
+version: 1.8.6b
 description: A plugin for Bukkit that makes Wireless Redstone Connections! Original project by Wmisiedjan
 softdepend: [Vault]
 loadbefore: [Vault]
