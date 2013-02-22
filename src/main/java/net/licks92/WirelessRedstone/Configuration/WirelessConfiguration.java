@@ -23,7 +23,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	private WirelessRedstone plugin;
 	private IWirelessStorageConfiguration storage;
 	
-	public char[] badCharacters = {'|','-','*','/','<','>',' ','=','~','!','^','(',')'};
+	public char[] badCharacters = {'|','-','*','/','<','>',' ','=','~','!','^','(',')',':'};
 	
 	private FileConfiguration getConfig()
 	{

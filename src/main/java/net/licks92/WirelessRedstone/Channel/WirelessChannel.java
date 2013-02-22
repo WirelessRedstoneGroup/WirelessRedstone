@@ -62,6 +62,10 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		}
 	}
 	
+	/**
+	 * 
+	 * @return true if one the transmitters is active, false if they are all off.
+	 */
 	public boolean isActive()
 	{
 		for(WirelessTransmitter t : getTransmitters())

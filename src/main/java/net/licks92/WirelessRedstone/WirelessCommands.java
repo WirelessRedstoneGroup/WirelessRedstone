@@ -255,7 +255,7 @@ public class WirelessCommands implements CommandExecutor
 				if(channel != null)
 				{
 					String item = channel.getName() + " : ";
-					if(plugin.WireBox.isActive(channel))
+					if(channel.isActive())
 						item += ChatColor.GREEN + "ACTIVE";
 					else
 						item += ChatColor.RED + "INACTIVE";
@@ -652,7 +652,7 @@ public class WirelessCommands implements CommandExecutor
 				/*
 				 * Checking for active transmitters
 				 */
-				if(plugin.WireBox.isActive(tempChannel))
+				if(tempChannel.isActive())
 				{
 					player.sendMessage("Is Activated : " + ChatColor.GREEN + "Yes");
 				}

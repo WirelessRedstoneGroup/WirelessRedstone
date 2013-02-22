@@ -233,7 +233,7 @@ public class WirelessBlockListener implements Listener
 				return;
 			}
 		}
-		else if (!event.getBlock().isBlockPowered() || event.getBlock().isBlockIndirectlyPowered())
+		else if (!event.getBlock().isBlockPowered() || !event.getBlock().isBlockIndirectlyPowered() || channel.isActive())
 		{
 			try
 			{

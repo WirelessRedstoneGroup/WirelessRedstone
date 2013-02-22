@@ -387,22 +387,6 @@ public class WireBox
 		
 		return getScreenLocations(channel);
 	}
-	
-	public boolean isActive(WirelessChannel channel)
-	{
-		for(WirelessTransmitter transmitter : channel.getTransmitters())
-		{
-			Location tempLoc = new Location(plugin.getServer().getWorld(transmitter.getWorld()),
-					transmitter.getX(),
-					transmitter.getY(),
-					transmitter.getZ());
-			if(tempLoc.getBlock().isBlockIndirectlyPowered() || tempLoc.getBlock().isBlockPowered())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 
 	public void removeReceiverAt(final Location loc, final boolean byplayer)
 	{
