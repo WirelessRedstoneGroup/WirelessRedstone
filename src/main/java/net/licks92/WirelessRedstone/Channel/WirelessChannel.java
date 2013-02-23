@@ -11,8 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import net.licks92.WirelessRedstone.WirelessRedstone;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -63,8 +67,167 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	}
 	
 	/**
-	 * 
-	 * @return true if one the transmitters is active, false if they are all off.
+	 * Simply turns on the wireless channel, means that all the receivers and screens will turn on.
+	 */
+	public void turnOn()
+	{
+		//Turning on the receivers ONLY if the channel isn't active.
+		try
+		{
+			//Change receivers
+			for (Location receiver : WirelessRedstone.WireBox.getReceiverLocations(getName()))
+			{
+				if(receiver.getWorld() == null)
+					continue; // World currently not loaded
+				
+				if (receiver.getBlock().getType() == Material.SIGN_POST)
+				{
+					if (!WirelessRedstone.WireBox.isValidLocation(receiver.getBlock()))
+					{
+						WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
+					}
+					else
+					{
+						receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(), (byte) 0x5,true);
+						receiver.getBlock().getState().update();
+					}
+				}
+				else if (receiver.getBlock().getType() == Material.WALL_SIGN)
+				{
+					byte data = receiver.getBlock().getData(); // Correspond to the direction of the wall sign
+					if (data == 0x2) //South
+					{
+						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
+						{
+							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
+						}
+						else
+						{
+							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
+							receiver.getBlock().getState().update();
+						}
+					}
+					else if (data == 0x3) //North
+					{
+						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
+						{
+							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
+						}
+						else
+						{
+							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x3, true);
+							receiver.getBlock().getState().update();
+						}
+					}
+					else if (data == 0x4) //East
+					{
+						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
+						{
+							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
+						}
+						else
+						{
+							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x2, true);
+							receiver.getBlock().getState().update();
+						}
+					}
+					else if (data == 0x5) //West
+					{
+						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
+						{
+							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
+						}
+						else
+						{
+							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x1, true);
+							receiver.getBlock().getState().update();
+						}
+					}
+					else // Not West East North South ...
+					{
+						WirelessRedstone.getWRLogger().info("Strange Data !");
+					}
+				}
+			}
+			
+			//Turning on screens
+			for(Location screen : WirelessRedstone.WireBox.getScreenLocations(getName()))
+			{
+				String str = ChatColor.GREEN + "ACTIVE";
+				Sign sign = (Sign) screen.getBlock().getState();
+				sign.setLine(2, str);
+				sign.update();
+			}
+		}
+		catch (RuntimeException e) 
+		{
+			WirelessRedstone.getWRLogger().severe("Error while updating redstone event onBlockRedstoneChange for Receivers. Turn on the Debug Mode to get more informations.");
+			if(WirelessRedstone.config.getDebugMode())
+				e.printStackTrace();
+			return;
+		}
+	}
+	
+	/**
+	 * Simply turns off the channel : all the receivers and screens turn off.
+	 */
+	public void turnOff()
+	{
+		try
+		{
+				//Change receivers
+				for (WirelessReceiver receiver : getReceivers())
+				{
+					if(receiver.getWorld() == null)
+						continue; // World currently not loaded
+					
+					Location rloc = WirelessRedstone.WireBox.getPointLocation(receiver);
+					Block othersign = rloc.getBlock();
+
+					othersign.setType(Material.AIR);
+
+					if (receiver.getisWallSign())
+					{
+						othersign.setType(Material.WALL_SIGN);
+						othersign.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) receiver.getDirection(), true);
+						othersign.getState().update();
+					}
+					else
+					{
+						othersign.setType(Material.SIGN_POST);
+						othersign.setTypeIdAndData(Material.SIGN_POST.getId(),
+								(byte) receiver.getDirection(), true);
+						othersign.getState().update();
+					}
+
+					if (othersign.getState() instanceof Sign) {
+						Sign signtemp = (Sign) othersign.getState();
+						signtemp.setLine(0, "[WRr]");
+						signtemp.setLine(1, getName());
+						signtemp.update(true);
+					}
+				}
+				
+				//Change screens
+				for(Location screen : WirelessRedstone.WireBox.getScreenLocations(getName()))
+				{
+					String str = ChatColor.RED + "INACTIVE";
+					Sign sign = (Sign) screen.getBlock().getState();
+					sign.setLine(2, str);
+					sign.update();
+				}
+		}
+		catch (RuntimeException e)
+		{
+			WirelessRedstone.getWRLogger().severe("Error while updating redstone onBlockRedstoneChange for Screens , turn on the Debug Mode to get more informations.");
+			if(WirelessRedstone.config.getDebugMode())
+				e.printStackTrace();
+			return;
+		}
+	}
+	
+	/**
+	 * @return true if one of the transmitters is active, false if they are all off.
 	 */
 	public boolean isActive()
 	{
@@ -85,8 +248,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	
 	public void removeReceiverAt(Location loc)
 	{
-		@SuppressWarnings("unused")
-		int i = 0;
 		for(WirelessReceiver receiver : receivers)
 		{
 			if(receiver.getX() == loc.getBlockX() && receiver.getZ() == loc.getBlockZ() && receiver.getY() == loc.getBlockY())
@@ -94,35 +255,30 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 				receivers.remove(receiver);
 				return;
 			}
-			i++;
 		}
 	}
 	
 	public void removeTransmitterAt(Location loc)
 	{
-		int i = 0;
 		for(WirelessTransmitter transmitter : transmitters)
 		{
 			if(transmitter.getX() == loc.getBlockX() && transmitter.getZ() == loc.getBlockZ() && transmitter.getY() == loc.getBlockY())
 			{
-				transmitters.remove(i);
+				transmitters.remove(transmitter);
 				return;
 			}
-			i++;
 		}
 	}
 	
 	public void removeScreenAt(Location loc)
 	{
-		int i = 0;
 		for(WirelessScreen screen : screens)
 		{
 			if(screen.getX() == loc.getBlockX() && screen.getZ() == loc.getBlockZ() && screen.getY() == loc.getBlockY())
 			{
-				screens.remove(i);
+				screens.remove(screen);
 				return;
 			}
-			i++;
 		}
 	}
 	

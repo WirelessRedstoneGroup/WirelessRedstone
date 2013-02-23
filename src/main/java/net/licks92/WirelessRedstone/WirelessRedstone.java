@@ -48,7 +48,7 @@ public class WirelessRedstone extends JavaPlugin
 	public static WirelessStrings strings;
 	private WirelessStringLoader stringLoader;
 	private static WRLogger logger;
-	public WireBox WireBox = new WireBox(this);
+	public static WireBox WireBox;
 	public WirelessPermissions permissions;
 	public static Permission perms;
 	public WirelessWorldListener worldlistener;
@@ -93,6 +93,7 @@ public class WirelessRedstone extends JavaPlugin
 	{
 		PluginDescriptionFile pdFile = getDescription();
 		
+		WireBox = new WireBox(this);
 		config = new WirelessConfiguration(this);
 		if(config.getDebugMode())
 		{
@@ -165,7 +166,7 @@ public class WirelessRedstone extends JavaPlugin
 		permissions = new WirelessPermissions(this);
 		config.save();
 
-		this.WireBox.UpdateChacheNoThread();
+		WireBox.UpdateChacheNoThread();
 
 		WirelessRedstone.logger.info("Registering commands...");
 		getCommand("wirelessredstone").setExecutor(new WirelessCommands(this));
@@ -371,7 +372,7 @@ public class WirelessRedstone extends JavaPlugin
 	{
 		if (WirelessRedstone.config.isCancelChunkUnloads())
 		{
-			for (IWirelessPoint loc : this.WireBox.getAllSigns())
+			for (IWirelessPoint loc : WireBox.getAllSigns())
 			{
 				Location location = WireBox.getPointLocation(loc);
 				if(location.getWorld() == null)
