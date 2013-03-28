@@ -44,7 +44,7 @@ public class ConfigurationUpdater
 		for(String channelName : channelMap.keySet())
 		{
 			WirelessRedstone.getWRLogger().debug("Copying channel " + channelName + " into the new database...");
-			storage.createWirelessChannel(channelName, (WirelessChannel)cSection.get(channelName));
+			storage.createWirelessChannel((WirelessChannel)cSection.get(channelName));
 			WirelessRedstone.getWRLogger().debug("Successfully copied channel " + channelName + " into the new database!");
 		}
 		

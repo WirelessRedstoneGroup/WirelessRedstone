@@ -316,7 +316,7 @@ public class WirelessCommands implements CommandExecutor
 			{
 				String channelName = args[1];
 				String playername = args[2];
-				if (plugin.WireBox.hasAccessToChannel(player, channelName))
+				if (WirelessRedstone.WireBox.hasAccessToChannel(player, channelName))
 				{
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.addOwner(playername);
@@ -335,7 +335,7 @@ public class WirelessCommands implements CommandExecutor
 			{
 				String channelName = args[1];
 				String playername = args[2];
-				if (plugin.WireBox.hasAccessToChannel(player, channelName))
+				if (WirelessRedstone.WireBox.hasAccessToChannel(player, channelName))
 				{
 					WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelName);
 					channel.removeOwner(playername);
@@ -419,7 +419,7 @@ public class WirelessCommands implements CommandExecutor
 			if (args.length >= 1)
 			{
 				String channelname = args[0];
-				if (plugin.WireBox.hasAccessToChannel(player, channelname))
+				if (WirelessRedstone.WireBox.hasAccessToChannel(player, channelname))
 				{
 					player.getLocation().getBlock();
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
@@ -430,7 +430,7 @@ public class WirelessCommands implements CommandExecutor
 					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
 					sign.setData(dataSign);
 					sign.update(true);
-					plugin.WireBox.addWirelessTransmitter(channelname, player.getLocation().getBlock(), player);
+					WirelessRedstone.WireBox.addWirelessTransmitter(channelname, player.getLocation().getBlock(), player);
 				}
 				else
 				{
@@ -458,7 +458,7 @@ public class WirelessCommands implements CommandExecutor
 			if (args.length >= 1)
 			{
 				String channelname = args[0];
-				if (plugin.WireBox.hasAccessToChannel(player, channelname))
+				if (WirelessRedstone.WireBox.hasAccessToChannel(player, channelname))
 				{
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
@@ -468,7 +468,7 @@ public class WirelessCommands implements CommandExecutor
 					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
 					sign.setData(dataSign);
 					sign.update(true);
-					if(!plugin.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player))
+					if(!WirelessRedstone.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player))
 					{
 						sign.getBlock().breakNaturally();
 					}
@@ -500,7 +500,7 @@ public class WirelessCommands implements CommandExecutor
 			if (args.length >= 1)
 			{
 				String channelname = args[0];
-				if (plugin.WireBox.hasAccessToChannel(player, channelname))
+				if (WirelessRedstone.WireBox.hasAccessToChannel(player, channelname))
 				{
 					player.getLocation().getBlock();
 					player.getLocation().getBlock().setType(Material.SIGN_POST);
@@ -511,7 +511,7 @@ public class WirelessCommands implements CommandExecutor
 					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
 					sign.setData(dataSign);
 					sign.update(true);
-					plugin.WireBox.addWirelessScreen(channelname, player.getLocation().getBlock(), player);
+					WirelessRedstone.WireBox.addWirelessScreen(channelname, player.getLocation().getBlock(), player);
 				}
 				else
 				{
@@ -538,7 +538,7 @@ public class WirelessCommands implements CommandExecutor
 		{
 			if (args.length >= 1)
 			{
-				if (plugin.WireBox.hasAccessToChannel(player, args[0]))
+				if (WirelessRedstone.WireBox.hasAccessToChannel(player, args[0]))
 				{
 					WirelessRedstone.config.removeWirelessChannel(args[0]);
 					player.sendMessage(WirelessRedstone.strings.channelRemoved);
@@ -638,21 +638,28 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage(WirelessRedstone.strings.tooFewArguments);
 			return true;
 		}
+		/*
+		 * If there's only 1 argument, it should be the channel name.
+		 * In this case it will show :
+		 * If the channel is active.
+		 * The numbers of signs of each category in the channel.
+		 * The names of the owners of the channel.
+		 */
 		if(args.length == 1)
 		{
-			if (plugin.WireBox.hasAccessToChannel(player, args[0]))
+			if (WirelessRedstone.WireBox.hasAccessToChannel(player, args[0]))
 			{
-				if(WirelessRedstone.config.getWirelessChannel(args[0]) == null)
+				WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
+				if(channel == null)
 				{
 					player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
 					return true;
 				}
-				WirelessChannel tempChannel = WirelessRedstone.config.getWirelessChannel(args[0]);
-				player.sendMessage("STATUS OF " + tempChannel.getName());
+				player.sendMessage("STATUS OF " + channel.getName());
 				/*
 				 * Checking for active transmitters
 				 */
-				if(tempChannel.isActive())
+				if(channel.isActive())
 				{
 					player.sendMessage("Is Activated : " + ChatColor.GREEN + "Yes");
 				}
@@ -660,7 +667,7 @@ public class WirelessCommands implements CommandExecutor
 				{
 					player.sendMessage("Is Activated : " + ChatColor.RED + "No");
 				}
-				if(tempChannel.isLocked())
+				if(channel.isLocked())
 				{
 					player.sendMessage("Is Locked : " + ChatColor.RED + "Yes");
 				}
@@ -673,16 +680,16 @@ public class WirelessCommands implements CommandExecutor
 				 */
 				player.sendMessage(WirelessRedstone.strings.thisChannelContains);
 
-				player.sendMessage(" - " + tempChannel.getReceivers().size() + " receivers.");
-				player.sendMessage(" - " + tempChannel.getTransmitters().size() + " transmitters.");
-				player.sendMessage(" - " + tempChannel.getScreens().size() + " screens.");
+				player.sendMessage(" - " + channel.getReceivers().size() + " receivers.");
+				player.sendMessage(" - " + channel.getTransmitters().size() + " transmitters.");
+				player.sendMessage(" - " + channel.getScreens().size() + " screens.");
 				
 				/*
 				 * Showing the owners
 				 */
 				
 				player.sendMessage(WirelessRedstone.strings.ownersOfTheChannelAre);
-				for(String owner : tempChannel.getOwners())
+				for(String owner : channel.getOwners())
 				{
 					player.sendMessage(" - " +  owner);
 				}
@@ -692,7 +699,21 @@ public class WirelessCommands implements CommandExecutor
 			else
 			{
 				player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+				return true;
 			}
+		}
+		
+		/*
+		 *  Will be able to show more informations.
+		 *  The arguments will be :
+		 *  'r' or 'receivers'. In this case it will show how many receivers are in the channel, and the position of each of them.
+		 *  't' or 'transmitters'. In this case it will show how many transmitters are in the channel, and which ones are toggled.
+		 *  's' or 'screens'.
+		 */
+		
+		if(args.length == 2)
+		{
+			
 		}
 		return false;
 	}

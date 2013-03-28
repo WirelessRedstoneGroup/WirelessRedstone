@@ -42,7 +42,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
 	private List<WirelessScreen> screens = new LinkedList<WirelessScreen>();
 	
-	public WirelessChannel()
+	public WirelessChannel(String name)
 	{
 		
 	}

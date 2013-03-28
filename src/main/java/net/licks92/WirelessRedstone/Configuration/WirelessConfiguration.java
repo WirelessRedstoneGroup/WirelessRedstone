@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.logging.Level;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
@@ -106,53 +105,105 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		plugin.reloadConfig();
 	}
 	
+	/**
+	 * @return The Wireless Channel with the given name, null if doesn't exist or an error happened
+	 */
 	public WirelessChannel getWirelessChannel(String channelName)
 	{
 		return storage.getWirelessChannel(channelName);
 	}
 	
+	/**
+	 * Creates a WPoint in the channel with the given name.
+	 * 
+	 * @return True if everything happened fine, false if something wrong happened.
+	 */
 	public boolean createWirelessPoint(String channelName, IWirelessPoint point)
 	{
 		return storage.createWirelessPoint(channelName, point);
 	}
 	
-	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
+	/**
+	 * Creates a channel in the database.
+	 * 
+	 * @param channel - A wireless channel which has to contain at least one sign.
+	 */
+	public boolean createWirelessChannel(WirelessChannel channel)
 	{
-		return storage.createWirelessChannel(channelName, channel);
+		return storage.createWirelessChannel(channel);
 	}
 	
+	/**
+	 * Simply removes the channel with the given name from the database.
+	 */
 	public void removeWirelessChannel(String channelName)
 	{
 		storage.removeWirelessChannel(channelName);
 	}
 	
+	/**
+	 * Renames a wireless channel.
+	 * 
+	 * @param channelName - The actual channel name.
+	 * @param newChannelName - The new channel name.
+	 * 
+	 * @return true if everything went fine.
+	 */
 	public boolean renameWirelessChannel(String channelName, String newChannelName)
 	{
 		return storage.renameWirelessChannel(channelName, newChannelName);
 	}
 
+	/**
+	 * Removes a WReceiver from a channel.
+	 * 
+	 * @param channelName - The channel of the channel which contains the point.
+	 * @param loc - The location of the point.
+	 * 
+	 * @return true if everything went fine.
+	 */
 	public boolean removeWirelessReceiver(String channelName, Location loc)
 	{
 		return storage.removeWirelessReceiver(channelName, loc);
 	}
 	
+	/**
+	 * Removes a WTransmitter from a channel.
+	 * 
+	 * @param channelName - The channel of the channel which contains the point.
+	 * @param loc - The location of the point.
+	 * 
+	 * @return true if everything went fine.
+	 */
 	public boolean removeWirelessTransmitter(String channelName, Location loc)
 	{
 		return storage.removeWirelessTransmitter(channelName, loc);
 	}
 	
+	/**
+	 * Removes a WScreen from a channel.
+	 * 
+	 * @param channelName - The channel of the channel which contains the point.
+	 * @param loc - The location of the point.
+	 * 
+	 * @return true if everything went fine.
+	 */
 	public boolean removeWirelessScreen(String channelName, Location loc)
 	{
 		return storage.removeWirelessScreen(channelName, loc);
 	}
 	
+	/**
+	 * @return a list which contains all the channels that exist in the database.
+	 */
 	public Collection<WirelessChannel> getAllChannels()
 	{
 		return storage.getAllChannels();
 	}
 	
-	/*
-	 * updateChannel() has to update the fields that concern the channel (means that it has not to update the wirelesssigns).
+	/**
+	 * This method will update the fields of the specified channel, but it WON'T update the WirelessPoint list.
+	 * Don't use it in order to update the IWirelessPoint list because it won't save it.
 	 */
 	public void updateChannel(String channelName, WirelessChannel channel)
 	{

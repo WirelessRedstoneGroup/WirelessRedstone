@@ -21,7 +21,7 @@ public interface IWirelessStorageConfiguration
 	
 	Collection<WirelessChannel> getAllChannels();
 	
-	boolean createWirelessChannel(String channelName, WirelessChannel channel);
+	boolean createWirelessChannel(WirelessChannel channel);
 	
 	void removeWirelessChannel(String channelName);
 	

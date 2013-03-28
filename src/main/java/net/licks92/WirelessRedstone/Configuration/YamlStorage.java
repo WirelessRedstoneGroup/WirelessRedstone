@@ -100,7 +100,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 			for(WirelessChannel channel : sql.getAllChannels())
 			{
 				//Something fails here! Channels do not transfer the transmitter that's strange!
-				createWirelessChannel(channel.getName(), channel);
+				createWirelessChannel(channel);
 			}
 			sql.close();
 			for(File f : channelFolder.listFiles())
@@ -174,7 +174,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		
 		channelConfig.set(channelName, channel);
 		
-		plugin.WireBox.UpdateCache();
+		WirelessRedstone.WireBox.UpdateCache();
 		
 		try
 		{
@@ -187,9 +187,9 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	}
 
 	@Override
-	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
+	public boolean createWirelessChannel(WirelessChannel channel)
 	{
-		setWirelessChannel(channelName, channel);
+		setWirelessChannel(channel.getName(), channel);
 		
 		return true;
 	}
@@ -197,7 +197,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	@Override
 	public void removeWirelessChannel(String channelName)
 	{
-		plugin.WireBox.removeSigns(getWirelessChannel(channelName));
+		WirelessRedstone.WireBox.removeSigns(getWirelessChannel(channelName));
 		setWirelessChannel(channelName, null);
 		for(File f : channelFolder.listFiles())
 		{
@@ -238,7 +238,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		}
 		
 		//Set a new channel
-		createWirelessChannel(newChannelName, channel);
+		createWirelessChannel(channel);
 		
 		return true;
 	}

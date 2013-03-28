@@ -112,9 +112,8 @@ public class WireBox
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			channel = new WirelessChannel();
+			channel = new WirelessChannel(cname);
 			channel.addOwner(player.getName());
-			channel.setName(cname);
 			WirelessReceiver receiver = new WirelessReceiver();
 			receiver.setOwner(player.getName());
 			receiver.setWorld(loc.getWorld().getName());
@@ -124,7 +123,7 @@ public class WireBox
 			receiver.setDirection(cblock.getData());
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
-			if(!WirelessRedstone.config.createWirelessChannel(cname, channel))
+			if(!WirelessRedstone.config.createWirelessChannel(channel))
 			{
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
@@ -172,9 +171,8 @@ public class WireBox
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			channel = new WirelessChannel();
+			channel = new WirelessChannel(cname);
 			channel.addOwner(player.getName());
-			channel.setName(cname);
 			WirelessTransmitter transmitter = new WirelessTransmitter();
 			transmitter.setOwner(player.getName());
 			transmitter.setWorld(loc.getWorld().getName());
@@ -184,7 +182,7 @@ public class WireBox
 			transmitter.setDirection(cblock.getData());
 			transmitter.setisWallSign(isWallSign);
 			channel.addTransmitter(transmitter);
-			if(!WirelessRedstone.config.createWirelessChannel(cname, channel))
+			if(!WirelessRedstone.config.createWirelessChannel(channel))
 			{
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
@@ -233,9 +231,8 @@ public class WireBox
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			channel = new WirelessChannel();
+			channel = new WirelessChannel(cname);
 			channel.addOwner(player.getName());
-			channel.setName(cname);
 			WirelessScreen screen = new WirelessScreen();
 			screen.setOwner(player.getName());
 			screen.setWorld(loc.getWorld().getName());
@@ -245,7 +242,7 @@ public class WireBox
 			screen.setDirection(cblock.getData());
 			screen.setisWallSign(isWallSign);
 			channel.addScreen(screen);
-			if(!WirelessRedstone.config.createWirelessChannel(cname, channel))
+			if(!WirelessRedstone.config.createWirelessChannel(channel))
 			{
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;

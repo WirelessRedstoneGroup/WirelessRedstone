@@ -176,7 +176,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			yaml.init(false);
 			for(WirelessChannel channel : yaml.getAllChannels())
 			{
-				createWirelessChannel(channel.getName(), channel);
+				createWirelessChannel(channel);
 			}
 			yaml.close();
 			for(File f : channelFolder.listFiles())
@@ -329,15 +329,14 @@ public class SQLStorage implements IWirelessStorageConfiguration
 						statement.executeUpdate("DROP TABLE " + getDBName(channelName));
 						rs2.close();
 						statement.close();
-						return new WirelessChannel();
+						return null;
 					}
 					
 					//Create an empty WirelessChannel
-					WirelessChannel channel = new WirelessChannel();
+					WirelessChannel channel = new WirelessChannel(rs2.getString(sql_channelname));
 					
 					//Set the Id, the name, and the locked variable
 					channel.setId(rs2.getInt(sql_channelid));
-					channel.setName(rs2.getString(sql_channelname));
 					if(rs2.getInt(sql_channellocked) == 1)
 						channel.setLocked(true);
 					else if(rs2.getInt(sql_channellocked) == 0)
@@ -421,9 +420,9 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	}
 
 	@Override
-	public boolean createWirelessChannel(String channelName, WirelessChannel channel)
+	public boolean createWirelessChannel(WirelessChannel channel)
 	{
-		if(!sqlTableExists(channelName)) //Check if channel already exists
+		if(!sqlTableExists(channel.getName())) //Check if channel already exists
 		{
 			//Get the type of the sign that has been created
 			if(!channel.getReceivers().isEmpty() && !channel.getTransmitters().isEmpty() && !channel.getScreens().isEmpty())
@@ -436,7 +435,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			{
 				//Create the table
 				Statement statement = connection.createStatement();
-				statement.executeUpdate("CREATE TABLE " + getDBName(channelName) + " ( "
+				statement.executeUpdate("CREATE TABLE " + getDBName(channel.getName()) + " ( "
 					
 					//First columns are for the channel
 					+ sql_channelid + " int,"
@@ -456,7 +455,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ " ) ");
 			
 				//Fill the columns name, id and locked
-				statement.executeUpdate("INSERT INTO " + getDBName(channelName) + " (" + sql_channelid + "," + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
+				statement.executeUpdate("INSERT INTO " + getDBName(channel.getName()) + " (" + sql_channelid + "," + sql_channelname + "," + sql_channellocked + "," + sql_channelowners + ") "
 					+ "VALUES ("
 					+ channel.getId() + ","
 					+ "'" + channel.getName() + "'," //name
@@ -482,9 +481,9 @@ public class SQLStorage implements IWirelessStorageConfiguration
 				}
 				for(IWirelessPoint ipoint : points)
 				{
-					createWirelessPoint(channelName, ipoint);
+					createWirelessPoint(channel.getName(), ipoint);
 				}
-				plugin.WireBox.UpdateCache();
+				WirelessRedstone.WireBox.UpdateCache();
 				return true;
 			}
 			catch(SQLException ex)
@@ -523,7 +522,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			statement.close();
 			
 			//Set a new channel - HAVE TO FIND A BETTER WAY THAN JUST REMOVING THE TABLE AND CREATE AN OTHER
-			createWirelessChannel(newChannelName, channel);
+			createWirelessChannel(channel);
 		}
 		
 		catch (SQLException e)
@@ -539,7 +538,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 	{
 		try
 		{
-			plugin.WireBox.removeSigns(getWirelessChannel(channelName));
+			WirelessRedstone.WireBox.removeSigns(getWirelessChannel(channelName));
 			if(!sqlTableExists(channelName))
 				return;
 			Statement statement = connection.createStatement();
@@ -548,7 +547,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			plugin.WireBox.UpdateCache();
+			WirelessRedstone.WireBox.UpdateCache();
 		}
 		return;
 	}
@@ -645,7 +644,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ iswallsign
 					+ " ) ");
 			statement.close();
-			plugin.WireBox.UpdateCache();
+			WirelessRedstone.WireBox.UpdateCache();
 		}
 		catch (SQLException ex)
 		{
@@ -736,7 +735,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			statement.executeUpdate(sql);
 			WirelessRedstone.getWRLogger().debug("Statement to delete wireless sign : " + sql);
 			statement.close();
-			plugin.WireBox.UpdateCache();
+			WirelessRedstone.WireBox.UpdateCache();
 		} catch (SQLException ex) {
 			WirelessRedstone.getWRLogger().debug(ex.getMessage());
 			return false;
