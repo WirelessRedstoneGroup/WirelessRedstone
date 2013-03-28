@@ -44,7 +44,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	
 	public WirelessChannel(String name)
 	{
-		
+		this.setName(name);
 	}
 	
 	@SuppressWarnings("unchecked")
