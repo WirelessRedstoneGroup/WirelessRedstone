@@ -41,7 +41,7 @@ commands:
       aliases: [wrinfo, channelinfo]
       description: Channel informations
       usage: |
-             Example: /<command> channel
+             Example: /<command> channel signcategory
    wra:
       aliases: [wradmin]
       description: Channel admin commands

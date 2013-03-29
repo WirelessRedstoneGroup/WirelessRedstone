@@ -118,7 +118,7 @@ public class WirelessCommands implements CommandExecutor
 		
 		if(plugin.permissions.canSeeChannelInfo(player))
 		{
-			commands.add("/wr info <channel> - Get some informations about a channel.");
+			commands.add("/wr info <channel> <signCategory> - Get some informations about a channel.");
 		}
 		
 		if(plugin.permissions.canLockChannel(player))
@@ -647,60 +647,57 @@ public class WirelessCommands implements CommandExecutor
 		 */
 		if(args.length == 1)
 		{
-			if (WirelessRedstone.WireBox.hasAccessToChannel(player, args[0]))
+			WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
+			if(channel == null)
 			{
-				WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
-				if(channel == null)
-				{
-					player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
-					return true;
-				}
-				player.sendMessage("STATUS OF " + channel.getName());
-				/*
-				 * Checking for active transmitters
-				 */
-				if(channel.isActive())
-				{
-					player.sendMessage("Is Activated : " + ChatColor.GREEN + "Yes");
-				}
-				else
-				{
-					player.sendMessage("Is Activated : " + ChatColor.RED + "No");
-				}
-				if(channel.isLocked())
-				{
-					player.sendMessage("Is Locked : " + ChatColor.RED + "Yes");
-				}
-				else
-				{
-					player.sendMessage("Is Locked : " + ChatColor.GREEN + "No");
-				}
-				/*
-				 * Counting signs of the channel.
-				 */
-				player.sendMessage(WirelessRedstone.strings.thisChannelContains);
-
-				player.sendMessage(" - " + channel.getReceivers().size() + " receivers.");
-				player.sendMessage(" - " + channel.getTransmitters().size() + " transmitters.");
-				player.sendMessage(" - " + channel.getScreens().size() + " screens.");
-				
-				/*
-				 * Showing the owners
-				 */
-				
-				player.sendMessage(WirelessRedstone.strings.ownersOfTheChannelAre);
-				for(String owner : channel.getOwners())
-				{
-					player.sendMessage(" - " +  owner);
-				}
-				
+				player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
 				return true;
 			}
-			else
+			if (!WirelessRedstone.WireBox.hasAccessToChannel(player, args[0]))
 			{
 				player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
 				return true;
 			}
+			player.sendMessage("STATUS OF " + channel.getName());
+			/*
+			 * Checking for active transmitters
+			 */
+			if(channel.isActive())
+			{
+				player.sendMessage("Is Activated : " + ChatColor.GREEN + "Yes");
+			}
+			else
+			{
+				player.sendMessage("Is Activated : " + ChatColor.RED + "No");
+			}
+			if(channel.isLocked())
+			{
+				player.sendMessage("Is Locked : " + ChatColor.RED + "Yes");
+			}
+			else
+			{
+				player.sendMessage("Is Locked : " + ChatColor.GREEN + "No");
+			}
+			/*
+			 * Counting signs of the channel.
+			 */
+			player.sendMessage(WirelessRedstone.strings.thisChannelContains);
+
+			player.sendMessage(" - " + channel.getReceivers().size() + " receivers.");
+			player.sendMessage(" - " + channel.getTransmitters().size() + " transmitters.");
+			player.sendMessage(" - " + channel.getScreens().size() + " screens.");
+			
+			/*
+			 * Showing the owners
+			 */
+			
+			player.sendMessage(WirelessRedstone.strings.ownersOfTheChannelAre);
+			for(String owner : channel.getOwners())
+			{
+				player.sendMessage(" - " +  owner);
+			}
+			
+			return true;
 		}
 		
 		/*
@@ -713,7 +710,50 @@ public class WirelessCommands implements CommandExecutor
 		
 		if(args.length == 2)
 		{
+			WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
+			if(channel == null)
+			{
+				player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
+				return true;
+			}
+			if(!WirelessRedstone.WireBox.hasAccessToChannel(player, args[0]))
+			{
+				player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+				return true;
+			}
 			
+			String category = args[1];
+			
+			/*
+			 *  If someday I decide to use JRE 1.7, I should use a switch block here with the str category.
+			 *  In exemple :
+			 *  switch(category)
+			 *  {
+			 *  case "receivers":
+			 *  	code;
+			 *  	break;
+			 *  }
+			 */
+			
+			if(category.equals("receivers") || category.equals("r"))
+			{
+				//Let's show informations about receivers.
+				return true;
+			}
+			else if(category.equals("transmitters") || category.equals("transmitters"))
+			{
+				//Let's show informations about transmitters.
+				return true;
+			}
+			else if(category.equals("screens") || category.equals("s"))
+			{
+				//Let's show infos about screens.
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		return false;
 	}
