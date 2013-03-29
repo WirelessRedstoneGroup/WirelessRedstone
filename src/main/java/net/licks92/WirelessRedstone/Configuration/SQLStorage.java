@@ -324,8 +324,9 @@ public class SQLStorage implements IWirelessStorageConfiguration
 				{
 					//Get the ResultSet from the table we want
 					ResultSet rs2 = statement.executeQuery("SELECT * FROM " + getDBName(channelName));
-					if(rs2.getString("name") == null) //If the table is empty
-					{
+					try {
+						rs2.getString("name");
+					} catch(SQLException ex) {
 						statement.executeUpdate("DROP TABLE " + getDBName(channelName));
 						rs2.close();
 						statement.close();
