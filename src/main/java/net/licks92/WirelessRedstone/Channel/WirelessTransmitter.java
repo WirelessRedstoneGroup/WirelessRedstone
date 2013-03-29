@@ -34,6 +34,11 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
 		y = (Integer) map.get("y");
 		z = (Integer) map.get("z");
 	}
+	
+	public boolean isActive()
+	{
+		return false;
+	}
 
 	@Override
 	public String getOwner()

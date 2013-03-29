@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -738,16 +741,53 @@ public class WirelessCommands implements CommandExecutor
 			if(category.equals("receivers") || category.equals("r"))
 			{
 				//Let's show informations about receivers.
+				player.sendMessage(ChatColor.AQUA + "Wireless Receivers in the channel " + channel.getName());
+				ArrayList<String> lines = new ArrayList<String>();
+				
+				for(WirelessReceiver receiver : channel.getReceivers())
+				{
+					lines.add(" - Receiver in the world " + receiver.getWorld()
+							+ " at location " + receiver.getX()
+							+ "," + receiver.getY()
+							+ "," + receiver.getZ()
+							+ ".");
+				}
+				ShowList(lines, 0, player);
 				return true;
 			}
 			else if(category.equals("transmitters") || category.equals("transmitters"))
 			{
 				//Let's show informations about transmitters.
+				player.sendMessage(ChatColor.AQUA + "Wireless Transmitters in the channel " + channel.getName());
+				ArrayList<String> lines = new ArrayList<String>();
+				
+				for(WirelessTransmitter transmitter : channel.getTransmitters())
+				{
+					lines.add(" - Receiver in the world " + transmitter.getWorld()
+							+ " at location " + transmitter.getX()
+							+ "," + transmitter.getY()
+							+ "," + transmitter.getZ()
+							+ "is " + (transmitter.isActive() ? (ChatColor.GREEN + "ACTIVE") : (ChatColor.RED + "INACTIVE"))
+							+ ".");
+				}
+				ShowList(lines, 0, player);
 				return true;
 			}
 			else if(category.equals("screens") || category.equals("s"))
 			{
 				//Let's show infos about screens.
+				player.sendMessage(ChatColor.AQUA + "Wireless Receivers in the channel " + channel.getName());
+				ArrayList<String> lines = new ArrayList<String>();
+				
+				for(WirelessScreen screen : channel.getScreens())
+				{
+					lines.add(" - Screen in the world " + screen.getWorld()
+							+ " at location " + screen.getX()
+							+ "," + screen.getY()
+							+ "," + screen.getZ()
+							+ ".");
+				}
+				ShowList(lines, 0, player);
 				return true;
 			}
 			else
@@ -758,6 +798,12 @@ public class WirelessCommands implements CommandExecutor
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @param list - A list of lines that will be showed.
+	 * @param cpage - The current page, means that if there are several pages because the list is too long, it will this page (currently 5 lines per page)
+	 * @param player - The player who will be showed the list.
+	 */
 	public void ShowList(ArrayList<String> list, int cpage, Player player)
 	{ 
 		/*
