@@ -746,16 +746,16 @@ public class WirelessCommands implements CommandExecutor
 				
 				for(WirelessReceiver receiver : channel.getReceivers())
 				{
-					lines.add(" - Receiver in the world " + receiver.getWorld()
+					lines.add("Receiver in the world " + receiver.getWorld()
 							+ " at location " + receiver.getX()
 							+ "," + receiver.getY()
 							+ "," + receiver.getZ()
 							+ ".");
 				}
-				ShowList(lines, 0, player);
+				ShowList(lines, 1, player);
 				return true;
 			}
-			else if(category.equals("transmitters") || category.equals("transmitters"))
+			else if(category.equals("transmitters") || category.equals("t"))
 			{
 				//Let's show informations about transmitters.
 				player.sendMessage(ChatColor.AQUA + "Wireless Transmitters in the channel " + channel.getName());
@@ -763,31 +763,31 @@ public class WirelessCommands implements CommandExecutor
 				
 				for(WirelessTransmitter transmitter : channel.getTransmitters())
 				{
-					lines.add(" - Receiver in the world " + transmitter.getWorld()
+					lines.add("Transmitter in the world " + transmitter.getWorld()
 							+ " at location " + transmitter.getX()
 							+ "," + transmitter.getY()
 							+ "," + transmitter.getZ()
-							+ "is " + (transmitter.isActive() ? (ChatColor.GREEN + "ACTIVE") : (ChatColor.RED + "INACTIVE"))
+							+ " is " + (transmitter.isActive() ? (ChatColor.GREEN + "ACTIVE") : (ChatColor.RED + "INACTIVE"))
 							+ ".");
 				}
-				ShowList(lines, 0, player);
+				ShowList(lines, 1, player);
 				return true;
 			}
 			else if(category.equals("screens") || category.equals("s"))
 			{
 				//Let's show infos about screens.
-				player.sendMessage(ChatColor.AQUA + "Wireless Receivers in the channel " + channel.getName());
+				player.sendMessage(ChatColor.AQUA + "Wireless Screens in the channel " + channel.getName());
 				ArrayList<String> lines = new ArrayList<String>();
 				
 				for(WirelessScreen screen : channel.getScreens())
 				{
-					lines.add(" - Screen in the world " + screen.getWorld()
+					lines.add("Screen in the world " + screen.getWorld()
 							+ " at location " + screen.getX()
 							+ "," + screen.getY()
 							+ "," + screen.getZ()
 							+ ".");
 				}
-				ShowList(lines, 0, player);
+				ShowList(lines, 1, player);
 				return true;
 			}
 			else
@@ -799,9 +799,10 @@ public class WirelessCommands implements CommandExecutor
 	}
 	
 	/**
+	 * This method will show a list of lines to a player. It adds ' - ' to each line.
 	 * 
 	 * @param list - A list of lines that will be showed.
-	 * @param cpage - The current page, means that if there are several pages because the list is too long, it will this page (currently 5 lines per page)
+	 * @param cpage - The current page, means that if there are several pages because the list is too long, it will this page (currently 5 lines per page). Cannot be inferior to 1.
 	 * @param player - The player who will be showed the list.
 	 */
 	public void ShowList(ArrayList<String> list, int cpage, Player player)
@@ -811,7 +812,7 @@ public class WirelessCommands implements CommandExecutor
 		 * Where maxitems is the maximum items on each page
 		 */
 		
-		if(cpage < 0)
+		if(cpage < 1)
 		{
 			player.sendMessage(WirelessRedstone.strings.pageNumberInferiorToZero);
 		}
