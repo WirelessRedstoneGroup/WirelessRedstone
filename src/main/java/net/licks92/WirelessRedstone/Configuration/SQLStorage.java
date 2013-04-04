@@ -665,17 +665,18 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			//Update name and lock status
 			statement.executeUpdate("UPDATE " + getDBName(channelName)
 					+ " SET "
-					+ sql_channelname + "='" + channel.getName() + "' "
+					+ sql_channelname + "='" + channel.getName() + "' ,"
 					+ sql_channellocked + "=" + locked + " "
 					+ "WHERE " + sql_channelid + "=" + channel.getId());
 			
 			//Then update the owners
+			/* Temporary disabled because it makes the plugin crashing.
 			statement.executeUpdate("ALTER TABLE " + getDBName(channelName) + " DROP COLUMN " + sql_channelowners);
 			statement.executeUpdate("ALTER TABLE " + getDBName(channelName) + " ADD COLUMN " + sql_channelowners);
 			for(String owner : channel.getOwners())
 			{
 				statement.executeUpdate("INSERT INTO " + getDBName(channelName) + " (" + sql_channelowners + ") VALUES " + owner);
-			}
+			}*/
 			statement.close();
 			
 		} catch (SQLException e) {

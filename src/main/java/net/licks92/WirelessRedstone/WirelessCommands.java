@@ -231,12 +231,14 @@ public class WirelessCommands implements CommandExecutor
 				channel.setLocked(false);
 				WirelessRedstone.config.updateChannel(args[0], channel);
 				player.sendMessage(WirelessRedstone.strings.channelUnlocked);
+				return true;
 			}
 			else
 			{
 				channel.setLocked(true);
 				WirelessRedstone.config.updateChannel(args[0], channel);
 				player.sendMessage(WirelessRedstone.strings.channelLocked);
+				return true;
 			}
 		}
 		return false;
