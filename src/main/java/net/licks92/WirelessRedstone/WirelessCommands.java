@@ -715,89 +715,112 @@ public class WirelessCommands implements CommandExecutor
 		
 		if(args.length == 2)
 		{
-			WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
-			if(channel == null)
-			{
-				player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
-				return true;
+			return performAdvancedShowInfo(args, player, 1);
+		}
+		if(args.length == 3)
+		{
+			int page;
+			try {
+				page = Integer.parseInt(args[2]);
+			} catch (Exception ex) {
+				WirelessRedstone.getWRLogger().debug("Could not parse Integer while executing command ShowInfo. Third argument is " + args[2]);
+				player.sendMessage("This page number is not a number!");
+				return false;
 			}
-			if(!WirelessRedstone.WireBox.hasAccessToChannel(player, args[0]))
-			{
-				player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
-				return true;
-			}
-			
-			String category = args[1];
-			
-			/*
-			 *  If someday I decide to use JRE 1.7, I should use a switch block here with the str category.
-			 *  In exemple :
-			 *  switch(category)
-			 *  {
-			 *  case "receivers":
-			 *  	code;
-			 *  	break;
-			 *  }
-			 */
-			
-			if(category.equals("receivers") || category.equals("r"))
-			{
-				//Let's show informations about receivers.
-				player.sendMessage(ChatColor.AQUA + "Wireless Receivers in the channel " + channel.getName());
-				ArrayList<String> lines = new ArrayList<String>();
-				
-				for(WirelessReceiver receiver : channel.getReceivers())
-				{
-					lines.add("Receiver in the world " + receiver.getWorld()
-							+ " at location " + receiver.getX()
-							+ "," + receiver.getY()
-							+ "," + receiver.getZ()
-							+ ".");
-				}
-				ShowList(lines, 1, player);
-				return true;
-			}
-			else if(category.equals("transmitters") || category.equals("t"))
-			{
-				//Let's show informations about transmitters.
-				player.sendMessage(ChatColor.AQUA + "Wireless Transmitters in the channel " + channel.getName());
-				ArrayList<String> lines = new ArrayList<String>();
-				
-				for(WirelessTransmitter transmitter : channel.getTransmitters())
-				{
-					lines.add("Transmitter in the world " + transmitter.getWorld()
-							+ " at location " + transmitter.getX()
-							+ "," + transmitter.getY()
-							+ "," + transmitter.getZ()
-							+ " is " + (transmitter.isActive() ? (ChatColor.GREEN + "ACTIVE") : (ChatColor.RED + "INACTIVE"))
-							+ ".");
-				}
-				ShowList(lines, 1, player);
-				return true;
-			}
-			else if(category.equals("screens") || category.equals("s"))
-			{
-				//Let's show infos about screens.
-				player.sendMessage(ChatColor.AQUA + "Wireless Screens in the channel " + channel.getName());
-				ArrayList<String> lines = new ArrayList<String>();
-				
-				for(WirelessScreen screen : channel.getScreens())
-				{
-					lines.add("Screen in the world " + screen.getWorld()
-							+ " at location " + screen.getX()
-							+ "," + screen.getY()
-							+ "," + screen.getZ()
-							+ ".");
-				}
-				ShowList(lines, 1, player);
-				return true;
-			}
+			if(!(page > 0))
+				return performAdvancedShowInfo(args, player, page);
 			else
 			{
+				player.sendMessage(WirelessRedstone.strings.pageNumberInferiorToZero);
 				return false;
 			}
 		}
 		return false;
+	}
+	
+	private boolean performAdvancedShowInfo(String[] args, Player player, int page)
+	{
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
+		if(channel == null)
+		{
+			player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
+			return true;
+		}
+		if(!WirelessRedstone.WireBox.hasAccessToChannel(player, args[0]))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+			return true;
+		}
+		
+		String category = args[1];
+		
+		/*
+		 *  If someday I decide to use JRE 1.7, I should use a switch block here with the str category.
+		 *  In exemple :
+		 *  switch(category)
+		 *  {
+		 *  case "receivers":
+		 *  	code;
+		 *  	break;
+		 *  }
+		 */
+		
+		if(category.equals("receivers") || category.equals("r"))
+		{
+			//Let's show informations about receivers.
+			player.sendMessage(ChatColor.AQUA + "Wireless Receivers in the channel " + channel.getName());
+			ArrayList<String> lines = new ArrayList<String>();
+			
+			for(WirelessReceiver receiver : channel.getReceivers())
+			{
+				lines.add("Receiver in the world " + receiver.getWorld()
+						+ " at location " + receiver.getX()
+						+ "," + receiver.getY()
+						+ "," + receiver.getZ()
+						+ ".");
+			}
+			ShowList(lines, page, player);
+			return true;
+		}
+		else if(category.equals("transmitters") || category.equals("t"))
+		{
+			//Let's show informations about transmitters.
+			player.sendMessage(ChatColor.AQUA + "Wireless Transmitters in the channel " + channel.getName());
+			ArrayList<String> lines = new ArrayList<String>();
+			
+			for(WirelessTransmitter transmitter : channel.getTransmitters())
+			{
+				lines.add("Transmitter in the world " + transmitter.getWorld()
+						+ " at location " + transmitter.getX()
+						+ "," + transmitter.getY()
+						+ "," + transmitter.getZ()
+						+ " is " + (transmitter.isActive() ? (ChatColor.GREEN + "ACTIVE") : (ChatColor.RED + "INACTIVE"))
+						+ ".");
+			}
+			ShowList(lines, page, player);
+			return true;
+		}
+		else if(category.equals("screens") || category.equals("s"))
+		{
+			//Let's show infos about screens.
+			player.sendMessage(ChatColor.AQUA + "Wireless Screens in the channel " + channel.getName());
+			ArrayList<String> lines = new ArrayList<String>();
+			
+			for(WirelessScreen screen : channel.getScreens())
+			{
+				lines.add("Screen in the world " + screen.getWorld()
+						+ " at location " + screen.getX()
+						+ "," + screen.getY()
+						+ "," + screen.getZ()
+						+ ".");
+			}
+			ShowList(lines, page, player);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
