@@ -727,7 +727,7 @@ public class WirelessCommands implements CommandExecutor
 				player.sendMessage("This page number is not a number!");
 				return false;
 			}
-			if(!(page > 0))
+			if(page > 0)
 				return performAdvancedShowInfo(args, player, page);
 			else
 			{
