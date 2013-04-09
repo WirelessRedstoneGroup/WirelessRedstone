@@ -67,6 +67,25 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	}
 	
 	/**
+	 * This method is almost the same as turnOn(), except that the channel will be on for a temporary time only!
+	 * 
+	 * @param time - Time spent until the channel turns off.
+	 */
+	public void turnOn(int time)
+	{
+		turnOn();
+		Bukkit.getScheduler().runTaskLaterAsynchronously(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				turnOff();
+			}
+			
+		}, time);
+	}
+	
+	/**
 	 * Simply turns on the wireless channel, means that all the receivers and screens will turn on.
 	 */
 	public void turnOn()

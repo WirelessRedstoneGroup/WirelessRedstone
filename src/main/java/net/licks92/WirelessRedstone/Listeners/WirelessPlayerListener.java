@@ -63,6 +63,6 @@ public class WirelessPlayerListener implements Listener
 		
 		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(sign.getLine(1));
 		
-		channel.turnOn();
+		channel.turnOn(100);
 	}
 }
