@@ -234,6 +234,11 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	{
 		return getConfig().getBoolean("UseSQL", true);
 	}
+	
+	public int getInteractTransmitterTime()
+	{
+		return getConfig().getInt("InteractTransmitterTime", 1000);
+	}
 
 	public void save()
 	{
