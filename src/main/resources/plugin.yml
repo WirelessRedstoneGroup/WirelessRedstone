@@ -62,8 +62,8 @@ commands:
       description: Lists all channels!
       usage: |
              Example: /<command> page
-   wrtoggle:
-      aliases: [wractivate]
+   wractivate:
+      aliases: [wrtoggle]
       description: Temporarily turns on a channel for a given time.
       usage: |
              Example: /<command> channel time
@@ -95,6 +95,7 @@ permissions:
             wirelessredstone.commands.list: true
             wirelessredstone.commands.help: true
             wirelessredstone.commands.lock: true
+            wirelessredstone.commands.activate: true
     wirelessredstone.admin.*:
         description: Gives you access to all admin commands
         children:
@@ -135,6 +136,9 @@ permissions:
         default: op
     wirelessredstone.commands.help:
         description: Allows you see the WirelessRedstone help.
+        default: op
+    wirelessredstone.commands.activate:
+        description: Allows you to temporarily turn on a channel.
         default: op
     wirelessredstone.admin.isAdmin:
         description: If you have this node, you're an owner of every channel.

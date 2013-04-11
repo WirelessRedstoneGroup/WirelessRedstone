@@ -82,6 +82,10 @@ public class WirelessCommands implements CommandExecutor
 		{
 			return performLockChannel(sender, args, player);
 		}
+		else if(commandName.equals("wractivate"))
+		{
+			return performActivateChannel(sender, args, player);
+		}
 		return true;
 	}
 
@@ -127,6 +131,11 @@ public class WirelessCommands implements CommandExecutor
 		if(plugin.permissions.canLockChannel(player))
 		{
 			commands.add("/wr lock/unlock <channel> - Locks/Unlocks a channel.");
+		}
+		
+		if(plugin.permissions.canActivateChannel(player))
+		{
+			commands.add("/wr activate <channel> <time> - Turns on a channel for a given time.");
 		}
 		
 		if(plugin.permissions.canSeeHelp(player))
@@ -821,6 +830,12 @@ public class WirelessCommands implements CommandExecutor
 		{
 			return false;
 		}
+	}
+	
+	private boolean performActivateChannel(CommandSender sender, String[] args, Player player)
+	{
+		
+		return false;
 	}
 	
 	/**

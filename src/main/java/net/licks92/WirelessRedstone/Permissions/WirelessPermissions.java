@@ -23,6 +23,7 @@ public class WirelessPermissions
 	private String canLockChannel = "wirelessredstone.commands.lock";
 	private String canWipeData = "wirelessredstone.admin.wipedata";
 	private String canBackupData = "wirelessredstone.admin.backupdata";
+	private String canActivateChannel = "wirelessredstone.commands.activate";
 	
 	public WirelessPermissions(WirelessRedstone plugin)
 	{
@@ -138,5 +139,10 @@ public class WirelessPermissions
 	public boolean canBackupData(Player player)
 	{
 		return permissionsHandler.hasPermission(player, canBackupData);
+	}
+
+	public boolean canActivateChannel(Player player)
+	{
+		return permissionsHandler.hasPermission(player, canActivateChannel );
 	}
 }

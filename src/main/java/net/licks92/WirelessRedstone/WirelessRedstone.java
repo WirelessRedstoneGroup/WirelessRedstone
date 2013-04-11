@@ -179,6 +179,7 @@ public class WirelessRedstone extends JavaPlugin
 		getCommand("wrlist").setExecutor(new WirelessCommands(this));
 		getCommand("wri").setExecutor(new WirelessCommands(this));
 		getCommand("wrlock").setExecutor(new WirelessCommands(this));
+		getCommand("wractivate").setExecutor(new WirelessCommands(this));
 
 		WirelessRedstone.logger.info("Loading Chunks...");
 		LoadChunks();
