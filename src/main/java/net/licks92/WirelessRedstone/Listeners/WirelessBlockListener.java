@@ -125,16 +125,15 @@ public class WirelessBlockListener implements Listener
 		{
 			channel = WirelessRedstone.config.getWirelessChannel(signObject.getLine(1));
 		}
-		try
+		if(channel == null)
 		{
-			if(channel.isLocked())
-			{
-				return;
-			}
-		}
-		catch (NullPointerException ex)
-		{
-			//If this exception happens, it's because the channel doesn't exist, that's why we don't have to test if it's null or not after.
+			WirelessRedstone.getWRLogger().debug("The transmitter at location "
+					+ signObject.getX() + ","
+					+ signObject.getY() + ","
+					+ signObject.getZ() + " "
+					+ "in the world " + signObject.getWorld().getName()
+					+ " is actually linked with a null channel.");
+			return;
 		}
 		if (event.getBlock().isBlockPowered() || event.getBlock().isBlockIndirectlyPowered())
 		{

@@ -73,6 +73,11 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	 */
 	public void turnOn(int time)
 	{
+		if(isLocked())
+		{
+			WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
+			return;
+		}
 		turnOn();
 		Bukkit.getScheduler().runTaskLaterAsynchronously(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable()
 		{
@@ -90,6 +95,11 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	 */
 	public void turnOn()
 	{
+		if(isLocked())
+		{
+			WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
+			return;
+		}
 		//Turning on the receivers ONLY if the channel isn't active.
 		try
 		{
