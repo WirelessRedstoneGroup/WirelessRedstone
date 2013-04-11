@@ -834,8 +834,35 @@ public class WirelessCommands implements CommandExecutor
 	
 	private boolean performActivateChannel(CommandSender sender, String[] args, Player player)
 	{
-		
-		return false;
+		if(!(args.length > 1))
+		{
+			player.sendMessage(WirelessRedstone.strings.tooFewArguments);
+			return true;
+		}
+		if(!plugin.permissions.canActivateChannel(player))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerDoesntHavePermission);
+			return true;
+		}
+		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
+		if(channel == null)
+		{
+			player.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
+			return true;
+		}
+		if(!WirelessRedstone.WireBox.hasAccessToChannel(player, channel.getName()))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+			return true;
+		}
+		int time;
+		try {
+			time = Integer.parseInt(args[1]);
+		} catch (Exception ex) {
+			return false;
+		}
+		channel.turnOn(time);
+		return true;
 	}
 	
 	/**
