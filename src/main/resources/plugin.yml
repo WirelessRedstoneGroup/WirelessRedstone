@@ -62,6 +62,11 @@ commands:
       description: Lists all channels!
       usage: |
              Example: /<command> page
+   wrtoggle:
+      aliases: [wractivate]
+      description: Temporarily turns on a channel for a given time.
+      usage: |
+             Example: /<command> channel time
 permissions:
     wirelessredstone.*:
         description: Gives access to all Wireless Redstone commands
