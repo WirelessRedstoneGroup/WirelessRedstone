@@ -69,7 +69,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 	/**
 	 * This method is almost the same as turnOn(), except that the channel will be on for a temporary time only!
 	 * 
-	 * @param time - Time spent until the channel turns off.
+	 * @param time - Time spent until the channel turns off in ms.
 	 */
 	public void turnOn(int time)
 	{
@@ -78,8 +78,9 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
 			return;
 		}
+		int timeInTicks = time / 50; // It's the time in ticks, where the time variable is supposed to be the time in ms.
 		turnOn();
-		Bukkit.getScheduler().runTaskLaterAsynchronously(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable()
+		Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable()
 		{
 			@Override
 			public void run()
@@ -87,7 +88,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 				turnOff();
 			}
 			
-		}, time);
+		}, timeInTicks);
 	}
 	
 	/**

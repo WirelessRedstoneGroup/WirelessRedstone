@@ -64,7 +64,7 @@ commands:
              Example: /<command> page
    wractivate:
       aliases: [wrtoggle]
-      description: Temporarily turns on a channel for a given time.
+      description: Temporarily turns on a channel for a given time in ms.
       usage: |
              Example: /<command> channel time
 permissions:

@@ -6,6 +6,7 @@ import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -53,6 +54,10 @@ public class WirelessPlayerListener implements Listener
 	@EventHandler
 	public void onPlayerRightClick(PlayerInteractEvent event)
 	{
+		if(!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
+		{
+			return;
+		}
 		if(!(event.getClickedBlock().getState() instanceof Sign))
 			return;
 		

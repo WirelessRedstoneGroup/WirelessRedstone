@@ -135,7 +135,7 @@ public class WirelessCommands implements CommandExecutor
 		
 		if(plugin.permissions.canActivateChannel(player))
 		{
-			commands.add("/wr activate <channel> <time> - Turns on a channel for a given time.");
+			commands.add("/wr activate <channel> <time> - Turns on a channel for a given time in ms.");
 		}
 		
 		if(plugin.permissions.canSeeHelp(player))
@@ -203,6 +203,11 @@ public class WirelessCommands implements CommandExecutor
 					||commandName.equals("unlock"))
 			{
 				return performLockChannel(sender, args, player);
+			}
+			else if (commandName.equals("activate")
+					|| commandName.equals("toggle"))
+			{
+				return performActivateChannel(sender, args, player);
 			}
 			else
 			{
