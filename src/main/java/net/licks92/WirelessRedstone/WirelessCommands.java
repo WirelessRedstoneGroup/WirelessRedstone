@@ -419,14 +419,13 @@ public class WirelessCommands implements CommandExecutor
 			}
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone User Commands:");
 			ShowList(commands, pagenumber, player);
-			player.sendMessage(ChatColor.AQUA + "/wr help " + Integer.toString(pagenumber + 1) + " for next page!\n");
 			return true;
 		}
 		else
 		{
 			player.sendMessage(ChatColor.AQUA + "WirelessRedstone User Commands:");
 			ShowList(commands, 1, player);
-			player.sendMessage("/wr help 2 for next page!");
+			player.sendMessage(ChatColor.BOLD + "/wr help 2 for next page!");
 		}
 		return true;
 	}
@@ -884,17 +883,17 @@ public class WirelessCommands implements CommandExecutor
 		 * Where maxitems is the maximum items on each page
 		 */
 		
-		if(cpage < 1)
-		{
-			player.sendMessage(WirelessRedstone.strings.pageNumberInferiorToZero);
-		}
 		int itemsonlist = list.size();
 		int maxitems = 5;
 		int currentpage = cpage;
 		int totalpages = 0;
-		for(int i = 0; i <= itemsonlist/maxitems; i++)
+		if(currentpage < 1)
+		{
+			player.sendMessage(WirelessRedstone.strings.pageNumberInferiorToZero);
+		}
+		for(int i = 0; i < itemsonlist/maxitems; i++)
 			totalpages = i + 1;
-		if(cpage > totalpages)
+		if(currentpage > totalpages)
 		{
 			player.sendMessage(ChatColor.RED + "[WirelessRedstone] There only are " + totalpages + " pages.");
 			return;
@@ -904,9 +903,9 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage(WirelessRedstone.strings.pageEmpty);
 			return;
 		}
-		int currentitem = ((cpage * maxitems) - maxitems);
+		int currentitem = ((currentpage * maxitems) - maxitems);
 		// 2*3 = 6 ; 6 - 3 = 3
-		player.sendMessage("Page " + currentpage + " on " + totalpages);
+		player.sendMessage(ChatColor.UNDERLINE + "Page " + currentpage + " on " + totalpages);
 		if (totalpages == 0)
 		{
 			player.sendMessage(WirelessRedstone.strings.listEmpty);
@@ -917,7 +916,7 @@ public class WirelessCommands implements CommandExecutor
 			{
 				if(!(i >= itemsonlist))
 				{
-					player.sendMessage(" - " + list.get(i));
+					player.sendMessage("    - " + list.get(i));
 				}
 			}
 		}
