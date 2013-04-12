@@ -310,7 +310,8 @@ public class WireBox
 				|| tempBlock.getType() == Material.PISTON_STICKY_BASE
 				|| tempBlock.getType() == Material.GLOWSTONE
 				|| tempBlock.getType() == Material.REDSTONE_LAMP_ON
-				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF)
+				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF
+				|| tempBlock.getType() == Material.LEAVES)
 		{
 			return false;
 		}
@@ -334,7 +335,8 @@ public class WireBox
 				|| tempBlock.getType() == Material.PISTON_STICKY_BASE
 				|| tempBlock.getType() == Material.GLOWSTONE
 				|| tempBlock.getType() == Material.REDSTONE_LAMP_ON
-				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF)
+				|| tempBlock.getType() == Material.REDSTONE_LAMP_OFF
+				|| tempBlock.getType() == Material.LEAVES)
 		{
 			return false;
 		}
