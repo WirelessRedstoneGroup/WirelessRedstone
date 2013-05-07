@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
@@ -473,7 +474,7 @@ public class WirelessCommands implements CommandExecutor
 	{
 		if (plugin.permissions.canCreateReceiver(player))
 		{
-			if (args.length >= 1)
+			if (args.length == 1)
 			{
 				String channelname = args[0];
 				if (WirelessRedstone.WireBox.hasAccessToChannel(player, channelname))
@@ -486,7 +487,7 @@ public class WirelessCommands implements CommandExecutor
 					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
 					sign.setData(dataSign);
 					sign.update(true);
-					if(!WirelessRedstone.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player))
+					if(!WirelessRedstone.WireBox.addWirelessReceiver(channelname, player.getLocation().getBlock(), player, Type.Default))
 					{
 						sign.getBlock().breakNaturally();
 					}
@@ -495,6 +496,46 @@ public class WirelessCommands implements CommandExecutor
 				else
 				{
 					player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+				}
+			}
+			if(args.length >= 2)
+			{
+				String channelName = args[0];
+				String type = args[1];
+				
+				if(WirelessRedstone.WireBox.hasAccessToChannel(player, channelName))
+				{
+					player.getLocation().getBlock().setType(Material.SIGN_POST);
+					Sign sign = (Sign) player.getLocation().getBlock().getState();
+					sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
+					sign.setLine(1, channelName);
+					if(type.equals("inverter") || type.equals("inv"))
+					{
+						sign.setLine(2, WirelessRedstone.strings.tagsReceiverInverterType.get(0));
+					}
+					else
+					{
+						//Nothing, this is a default receiver.
+					}
+					org.bukkit.material.Sign dataSign = new org.bukkit.material.Sign();
+					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
+					sign.setData(dataSign);
+					sign.update(true);
+					if(type.equals("inverter") || type.equals("inv"))
+					{
+						if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Inverter))
+						{
+							sign.getBlock().breakNaturally();
+						}
+					}
+					else
+					{
+						if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Default))
+						{
+							sign.getBlock().breakNaturally();
+						}
+					}
+					return true;
 				}
 			}
 			else if(args.length == 0)

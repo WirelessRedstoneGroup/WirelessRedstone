@@ -6,13 +6,9 @@ import java.util.Collection;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 public class WirelessConfiguration implements IWirelessStorageConfiguration
 {
@@ -32,12 +28,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	public WirelessConfiguration(WirelessRedstone r_plugin)
 	{
 		plugin = r_plugin;
-		
-		ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
-		ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
-		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
-		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
-		
+				
 		//Loading and saving
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);

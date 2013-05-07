@@ -21,6 +21,7 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
@@ -377,6 +378,18 @@ public class SQLStorage implements IWirelessStorageConfiguration
 							receiver.setZ(rs3.getInt(sql_signz));
 							receivers.add(receiver);
 						}
+						if(rs3.getString(sql_signtype).equals("receiver_inverter"))
+						{
+							WirelessReceiverInverter receiver = new WirelessReceiverInverter();
+							receiver.setDirection(rs3.getInt(sql_direction));
+							receiver.setisWallSign(rs3.getBoolean(sql_iswallsign));
+							receiver.setOwner(rs3.getString(sql_signowner));
+							receiver.setWorld(rs3.getString(sql_signworld));
+							receiver.setX(rs3.getInt(sql_signx));
+							receiver.setY(rs3.getInt(sql_signy));
+							receiver.setZ(rs3.getInt(sql_signz));
+							receivers.add(receiver);
+						}
 						if(rs3.getString(sql_signtype).equals("transmitter"))
 						{
 							WirelessTransmitter transmitter = new WirelessTransmitter();
@@ -613,13 +626,21 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		{
 			signtype = "receiver";
 		}
+		else if(point instanceof WirelessReceiverInverter)
+		{
+			signtype = "receiver_inverter";
+		}
 		else if(point instanceof WirelessTransmitter)
 		{
 			signtype = "transmitter";
 		}
-		else //if WirelessScreen
+		else if(point instanceof WirelessScreen) //if WirelessScreen
 		{
 			signtype = "screen";
+		}
+		else
+		{
+			return false;
 		}
 		
 		if(point.getisWallSign())

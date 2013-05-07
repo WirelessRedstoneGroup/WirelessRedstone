@@ -105,7 +105,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 			//Change receivers
 			for (WirelessReceiver receiver : receivers)
 			{
-				receiver.turnOn();
+				receiver.turnOn(getName());
 			}
 			
 			//Turning on screens

@@ -26,6 +26,10 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 	private int direction = 0;
 	private boolean iswallsign = false;
 
+	public enum Type{
+		Default, Inverter;
+	}
+	
 	public WirelessReceiver()
 	{
 		
@@ -163,7 +167,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 		return loc;
 	}
 	
-	public void turnOn()
+	public void turnOn(String channelName)
 	{
 		Location loc = getLocation();
 		

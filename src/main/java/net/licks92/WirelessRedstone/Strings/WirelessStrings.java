@@ -55,9 +55,16 @@ public class WirelessStrings implements ConfigurationSerializable
 	public String thisChannelContains;
 	public String tooFewArguments;
 	
+	/*
+	 * These tags shouldn't be modified. Indeed, all the signs which all already created
+	 * would not work.
+	 */
 	public List<String> tagsTransmitter = new ArrayList<String>();
 	public List<String> tagsReceiver = new ArrayList<String>();
 	public List<String> tagsScreen = new ArrayList<String>();
+	//These tags corresponds to the receiver types.
+	public List<String> tagsReceiverDefaultType = new ArrayList<String>();
+	public List<String> tagsReceiverInverterType = new ArrayList<String>();
 	
 	public WirelessStrings(Map<String, Object> lang)
 	{
@@ -103,6 +110,9 @@ public class WirelessStrings implements ConfigurationSerializable
 		tagsReceiver.add("[wrr]");
 		tagsScreen.add("[screen]");
 		tagsScreen.add("[wrs]");
+		tagsReceiverDefaultType.add("[default]");
+		tagsReceiverDefaultType.add("[normal]");
+		tagsReceiverInverterType.add("[inverter]");
 	}
 	
 	@Override

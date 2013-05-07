@@ -20,6 +20,7 @@ import org.bukkit.material.MaterialData;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
 
 public class WirelessBlockListener implements Listener
 {
@@ -68,10 +69,29 @@ public class WirelessBlockListener implements Listener
 			
 			if (WirelessRedstone.WireBox.isReceiver(event.getLine(0)))
 			{
-				if(!WirelessRedstone.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer()))
+				if(WirelessRedstone.WireBox.isReceiverInverter(event.getLine(2)))
 				{
-					event.setCancelled(true);
-					event.getBlock().breakNaturally();
+					if(!WirelessRedstone.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer(), Type.Inverter))
+					{
+						event.setCancelled(true);
+						event.getBlock().breakNaturally();
+					}
+				}
+				else if(WirelessRedstone.WireBox.isReceiverDefault(event.getLine(2)))
+				{
+					if(!WirelessRedstone.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer(), Type.Default))
+					{
+						event.setCancelled(true);
+						event.getBlock().breakNaturally();
+					}
+				}
+				else
+				{
+					if(!WirelessRedstone.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer(), Type.Default))
+					{
+						event.setCancelled(true);
+						event.getBlock().breakNaturally();
+					}
 				}
 			}
 			else if(WirelessRedstone.WireBox.isTransmitter(event.getLine(0)))

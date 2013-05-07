@@ -152,6 +152,7 @@ public class WirelessStringLoader
 			strings.channelUnlocked = ChatColor.GREEN + "[WirelessRedstone] Channel unlocked !";
 			strings.commandForNextPage = ChatColor.GREEN + "\n/wr list pagenumber for next page!";
 			strings.forMoreInfosPerformWRInfo = ChatColor.AQUA + "For more informations about a channel, perform /wr info <channel>";
+			//Here we load the tags
 			strings.tagsTransmitter.add("[transmitter]");
 			strings.tagsTransmitter.add("[wrt]");
 			strings.tagsReceiver.add("[receiver]");

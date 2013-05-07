@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
@@ -24,6 +26,11 @@ public class WireBox
 		this.plugin = wirelessRedstone;
 	}
 
+	/**
+	 * @param data - The line of the sign
+	 * 
+	 * @return true if string corresponds to the tag of the transmitter.
+	 */
 	public boolean isTransmitter(String data)
 	{
 		for (String tag : WirelessRedstone.strings.tagsTransmitter)
@@ -36,6 +43,11 @@ public class WireBox
 		return false;
 	}
 
+	/**
+	 * @param data - The line of the sign
+	 * 
+	 * @return true if string corresponds to the tag of the receiver.
+	 */
 	public boolean isReceiver(String data)
 	{
 		for (String tag : WirelessRedstone.strings.tagsReceiver)
@@ -48,6 +60,11 @@ public class WireBox
 		return false;
 	}
 	
+	/**
+	 * @param data - The line of the sign
+	 * 
+	 * @return true if string corresponds to the tag of the screen.
+	 */
 	public boolean isScreen(String data)
 	{
 		for (String tag : WirelessRedstone.strings.tagsScreen)
@@ -59,6 +76,41 @@ public class WireBox
 		}
 		return false;
 	}
+	/**
+	 * @param data - The line of the sign
+	 * 
+	 * @return true if the string corresponds to the tag of the inverter receiver type
+	 */
+	public boolean isReceiverInverter(String data)
+	{
+		for(String tag : WirelessRedstone.strings.tagsReceiverInverterType)
+		{
+			if(data.toLowerCase().equals(tag.toLowerCase()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @param data - The line of the sign
+	 * 
+	 * @return true if the string corresponds to the tag of the default receiver type
+	 */
+	public boolean isReceiverDefault(String data)
+	{
+		for(String tag : WirelessRedstone.strings.tagsReceiverDefaultType)
+		{
+			if(data.toLowerCase().equals(tag.toLowerCase()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 
 	public boolean hasAccessToChannel(Player player, String channelname)
 	{
@@ -80,8 +132,16 @@ public class WireBox
 		return true;
 	}
 
-	public boolean addWirelessReceiver(String cname, Block cblock, Player player)
+	public boolean addWirelessReceiver(String cname, Block cblock, Player player, Type type)
 	{
+		WirelessRedstone.getWRLogger().debug("Adding a receiver at location " 
+				+ cblock.getLocation().getBlockX() + ","
+				+ cblock.getLocation().getBlockY() + ","
+				+ cblock.getLocation().getBlockZ() + " in the world "
+				+ cblock.getLocation().getWorld().getName() + " with the channel name "
+				+ cname + " and with the type " + type
+				+ " by the player " + player.getName());
+		
 		Location loc = cblock.getLocation();
 		Boolean isWallSign = (cblock.getType() == Material.WALL_SIGN) ? true : false;
 		WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(cname);
@@ -111,7 +171,18 @@ public class WireBox
 			}
 			channel = new WirelessChannel(cname);
 			channel.addOwner(player.getName());
-			WirelessReceiver receiver = new WirelessReceiver();
+			WirelessReceiver receiver;
+			switch(type)
+			{
+			case Default:
+				receiver = new WirelessReceiver();
+				
+			case Inverter:
+				receiver = new WirelessReceiverInverter();
+				
+			default:
+				receiver = new WirelessReceiver();
+			}
 			receiver.setOwner(player.getName());
 			receiver.setWorld(loc.getWorld().getName());
 			receiver.setX(loc.getBlockX());
@@ -136,18 +207,29 @@ public class WireBox
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-				WirelessReceiver receiver = new WirelessReceiver();
-				receiver.setOwner(player.getName());
-				receiver.setWorld(loc.getWorld().getName());
-				receiver.setX(loc.getBlockX());
-				receiver.setY(loc.getBlockY());
-				receiver.setZ(loc.getBlockZ());
-				receiver.setDirection(cblock.getData());
-				receiver.setisWallSign(isWallSign);
-				WirelessRedstone.config.createWirelessPoint(cname, receiver);
-				player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
-				WirelessRedstone.cache.update();
-				return true;
+			WirelessReceiver receiver;
+			switch(type)
+			{
+			case Default:
+				receiver = new WirelessReceiver();
+				
+			case Inverter:
+				receiver = new WirelessReceiverInverter();
+				
+			default:
+				receiver = new WirelessReceiver();
+			}
+			receiver.setOwner(player.getName());
+			receiver.setWorld(loc.getWorld().getName());
+			receiver.setX(loc.getBlockX());
+			receiver.setY(loc.getBlockY());
+			receiver.setZ(loc.getBlockZ());
+			receiver.setDirection(cblock.getData());
+			receiver.setisWallSign(isWallSign);
+			WirelessRedstone.config.createWirelessPoint(cname, receiver);
+			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
+			WirelessRedstone.cache.update();
+			return true;
 		}
 	}
 	
