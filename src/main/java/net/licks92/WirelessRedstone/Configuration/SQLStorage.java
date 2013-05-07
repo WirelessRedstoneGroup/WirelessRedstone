@@ -484,7 +484,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 				{
 					createWirelessPoint(channel.getName(), ipoint);
 				}
-				WirelessRedstone.WireBox.UpdateCache();
+				WirelessRedstone.cache.update();
 				return true;
 			}
 			catch(SQLException ex)
@@ -548,7 +548,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			WirelessRedstone.WireBox.UpdateCache();
+			WirelessRedstone.cache.update();
 		}
 		return;
 	}
@@ -645,7 +645,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ iswallsign
 					+ " ) ");
 			statement.close();
-			WirelessRedstone.WireBox.UpdateCache();
+			WirelessRedstone.cache.update();
 		}
 		catch (SQLException ex)
 		{
@@ -737,7 +737,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 			statement.executeUpdate(sql);
 			WirelessRedstone.getWRLogger().debug("Statement to delete wireless sign : " + sql);
 			statement.close();
-			WirelessRedstone.WireBox.UpdateCache();
+			WirelessRedstone.cache.update();
 		} catch (SQLException ex) {
 			WirelessRedstone.getWRLogger().debug(ex.getMessage());
 			return false;

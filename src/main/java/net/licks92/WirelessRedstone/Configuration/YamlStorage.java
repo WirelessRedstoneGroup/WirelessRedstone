@@ -174,7 +174,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		
 		channelConfig.set(channelName, channel);
 		
-		WirelessRedstone.WireBox.UpdateCache();
+		WirelessRedstone.cache.update();
 		
 		try
 		{

@@ -30,7 +30,7 @@ public class WirelessWorldListener implements Listener
 			{
 				try
 				{
-					List<IWirelessPoint> points = WirelessRedstone.WireBox.getAllSigns();
+					List<IWirelessPoint> points = WirelessRedstone.cache.getAllSigns();
 					for (IWirelessPoint point : points)
 					{
 						if (Math.abs(event.getChunk().getX() - WirelessRedstone.WireBox.getPointLocation(point).getBlock().getChunk().getX()) > WirelessRedstone.config.getChunkUnloadRange())

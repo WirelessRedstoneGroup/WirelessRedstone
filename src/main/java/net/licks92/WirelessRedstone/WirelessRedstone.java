@@ -20,6 +20,7 @@ import net.licks92.WirelessRedstone.Utils.BukkitMetrics.Graph;
 import net.licks92.WirelessRedstone.Utils.BukkitMetrics.Plotter;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -46,6 +47,7 @@ public class WirelessRedstone extends JavaPlugin
 {
 	public static WirelessConfiguration config;
 	public static WirelessStrings strings;
+	public static WirelessGlobalCache cache;
 	private WirelessStringLoader stringLoader;
 	private static WRLogger logger;
 	public static WireBox WireBox;
@@ -166,7 +168,7 @@ public class WirelessRedstone extends JavaPlugin
 		permissions = new WirelessPermissions(this);
 		config.save();
 
-		WireBox.UpdateChacheNoThread();
+		cache = new WirelessGlobalCache(this, config.getCacheRefreshFrequency());
 
 		WirelessRedstone.logger.info("Registering commands...");
 		getCommand("wirelessredstone").setExecutor(new WirelessCommands(this));
@@ -204,7 +206,7 @@ public class WirelessRedstone extends JavaPlugin
 				@Override
 				public int getValue()
 				{
-					return WireBox.getAllSigns().size();
+					return cache.getAllSigns().size();
 				}
 			});
 			
@@ -373,7 +375,7 @@ public class WirelessRedstone extends JavaPlugin
 	{
 		if (WirelessRedstone.config.isCancelChunkUnloads())
 		{
-			for (IWirelessPoint loc : WireBox.getAllSigns())
+			for (IWirelessPoint loc : cache.getAllSigns())
 			{
 				Location location = WireBox.getPointLocation(loc);
 				if(location.getWorld() == null)

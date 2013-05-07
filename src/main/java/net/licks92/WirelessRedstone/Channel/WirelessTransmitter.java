@@ -143,4 +143,11 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
 		this.setY((Integer) map.get("y"));
 		this.setZ((Integer) map.get("z"));
 	}
+
+	@Override
+	public Location getLocation()
+	{
+		Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+		return loc;
+	}
 }

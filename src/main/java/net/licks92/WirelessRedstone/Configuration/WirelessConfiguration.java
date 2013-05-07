@@ -239,6 +239,16 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	{
 		return getConfig().getInt("InteractTransmitterTime", 1000);
 	}
+	
+	/**
+	 * 
+	 * @return The cache refresh frequency in seconds.
+	 */
+	public int getCacheRefreshFrequency()
+	{
+		//150 by default
+		return getConfig().getInt("CacheRefreshFrequency", 150);
+	}
 
 	public void save()
 	{

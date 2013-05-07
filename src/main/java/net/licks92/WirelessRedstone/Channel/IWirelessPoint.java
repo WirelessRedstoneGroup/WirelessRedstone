@@ -1,5 +1,7 @@
 package net.licks92.WirelessRedstone.Channel;
 
+import org.bukkit.Location;
+
 public interface IWirelessPoint {
 	String getOwner();
 
@@ -28,4 +30,6 @@ public interface IWirelessPoint {
 	void setDirection(int direction);
 
 	void setisWallSign(boolean iswallsign);
+	
+	Location getLocation();
 }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -133,5 +135,11 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 		this.setX((Integer) map.get("x"));
 		this.setY((Integer) map.get("y"));
 		this.setZ((Integer) map.get("z"));
+	}
+
+	public Location getLocation()
+	{
+		Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+		return loc;
 	}
 }

@@ -3,6 +3,8 @@ package net.licks92.WirelessRedstone.Channel;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -116,6 +118,13 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 	@Override
 	public void setisWallSign(boolean iswallsign) {
 		this.iswallsign = iswallsign;
+	}
+
+	@Override
+	public Location getLocation()
+	{
+		Location loc = new Location(Bukkit.getWorld(world),x,y,z);
+		return loc;
 	}
 	
 }

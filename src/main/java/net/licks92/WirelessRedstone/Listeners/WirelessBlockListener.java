@@ -285,7 +285,7 @@ public class WirelessBlockListener implements Listener
 		}
 		else if(event.getBlock().getType().equals(Material.REDSTONE_TORCH_ON)) 
 		{
-			for (Location loc : WirelessRedstone.WireBox.getAllReceiverLocations())
+			for (Location loc : WirelessRedstone.cache.getAllReceiverLocations())
 			{
 				if (loc.equals(event.getBlock().getLocation()))
 				{
@@ -297,12 +297,21 @@ public class WirelessBlockListener implements Listener
 		}
 	}
 	
+	/**
+	 * From the bukkit javadoc :
+	 * Represents events with a source block and a destination block, currently only applies to
+	 * liquid (lava and water) and teleporting dragon eggs.
+	 * If a Block From To event is cancelled, the block will not move (the liquid will not flow).
+	 * 
+	 * @param event
+	 * @deprecated Because there's currently nothing that breaks a sign and sends that event.
+	 */
 	@EventHandler
 	public void onBlockFromTo(BlockFromToEvent event)
-	{
+	{	
 		if (event.getToBlock().getType() == Material.REDSTONE_TORCH_ON)
 		{
-			for (Location loc : WirelessRedstone.WireBox.getAllReceiverLocations())
+			for (Location loc : WirelessRedstone.cache.getAllReceiverLocations())
 			{
 				if (loc.getBlockX() == event.getToBlock().getLocation().getBlockX() || loc.getBlockY() == event.getToBlock().getLocation().getBlockY() || loc.getBlockZ() == event.getToBlock().getLocation().getBlockZ())
 				{
