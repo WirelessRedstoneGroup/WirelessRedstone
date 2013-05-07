@@ -6,6 +6,7 @@ import java.util.List;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
@@ -827,11 +828,16 @@ public class WirelessCommands implements CommandExecutor
 			
 			for(WirelessReceiver receiver : channel.getReceivers())
 			{
+				Type type = Type.Default;
+				if(receiver instanceof WirelessReceiverInverter)
+				{
+					type = Type.Inverter;
+				}
 				lines.add("Receiver in the world " + receiver.getWorld()
 						+ " at location " + receiver.getX()
 						+ "," + receiver.getY()
 						+ "," + receiver.getZ()
-						+ ".");
+						+ " of type : " + type + ".");
 			}
 			ShowList(lines, page, player);
 			return true;
