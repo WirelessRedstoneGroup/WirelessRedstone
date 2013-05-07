@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -127,4 +129,19 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 		return loc;
 	}
 	
+	public void turnOn()
+	{
+		String str = ChatColor.GREEN + "ACTIVE";
+		Sign sign = (Sign) getLocation().getBlock().getState();
+		sign.setLine(2, str);
+		sign.update();
+	}
+	
+	public void turnOff()
+	{
+		String str = ChatColor.RED + "INACTIVE";
+		Sign sign = (Sign) getLocation().getBlock().getState();
+		sign.setLine(2, str);
+		sign.update();
+	}
 }

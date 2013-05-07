@@ -4,8 +4,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.licks92.WirelessRedstone.WirelessRedstone;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -26,6 +31,10 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 		
 	}
 	
+	/**
+	 * IMPORTANT : You shouldn't have to create a WirelessReceiver with this method.
+	 * It's used by the bukkit serialization system.
+	 */
 	public WirelessReceiver(Map<String, Object> map)
 	{
 		owner = (String) map.get("owner");
@@ -111,7 +120,10 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 	{
 		this.iswallsign = iswallsign;
 	}
-
+	
+	/**
+	 * This method should be called ONLY by the bukkit serialization system!
+	 */
 	@Override
 	public Map<String, Object> serialize()
 	{
@@ -126,6 +138,11 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 		return map;
 	}
 	
+	/**
+	 * Don't use this method!
+	 * 
+	 * @param map
+	 */
 	public void deserialize(Map<String,Object> map)
 	{
 		this.setDirection((Integer) map.get("direction"));
@@ -136,10 +153,124 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 		this.setY((Integer) map.get("y"));
 		this.setZ((Integer) map.get("z"));
 	}
-
+	
+	/**
+	 * @return A Location object made with the receiver data.
+	 */
 	public Location getLocation()
 	{
 		Location loc = new Location(Bukkit.getWorld(world),x,y,z);
 		return loc;
+	}
+	
+	public void turnOn()
+	{
+		Location loc = getLocation();
+		
+		if(loc.getWorld() == null) // If the world is not loaded or doesn't exist
+			return;
+		
+		Block block = loc.getBlock();
+		
+		if (block.getType() == Material.SIGN_POST)
+		{
+			if (!WirelessRedstone.WireBox.isValidLocation(block))
+			{
+				WirelessRedstone.WireBox.signWarning(block, 1);
+			}
+			else
+			{
+				block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(), (byte) 0x5,true);
+				block.getState().update();
+			}
+		}
+		else if (block.getType() == Material.WALL_SIGN)
+		{
+			byte data = block.getData(); // Correspond to the direction of the wall sign
+			if (data == 0x2) //South
+			{
+				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
+				{
+					WirelessRedstone.WireBox.signWarning(block, 1);
+				}
+				else
+				{
+					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
+					block.getState().update();
+				}
+			}
+			else if (data == 0x3) //North
+			{
+				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
+				{
+					WirelessRedstone.WireBox.signWarning(block, 1);
+				}
+				else
+				{
+					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x3, true);
+					block.getState().update();
+				}
+			}
+			else if (data == 0x4) //East
+			{
+				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
+				{
+					WirelessRedstone.WireBox.signWarning(block, 1);
+				}
+				else
+				{
+					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x2, true);
+					block.getState().update();
+				}
+			}
+			else if (data == 0x5) //West
+			{
+				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
+				{
+					WirelessRedstone.WireBox.signWarning(block, 1);
+				}
+				else
+				{
+					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x1, true);
+					block.getState().update();
+				}
+			}
+			else // Not West East North South ...
+			{
+				WirelessRedstone.getWRLogger().info("Strange Data !");
+			}
+		}
+	}
+	
+	public void turnOff(String channelName)
+	{
+		Location loc = getLocation();
+		if(loc.getWorld() == null)
+			return;
+		
+		Block block = loc.getBlock();
+
+		block.setType(Material.AIR);
+
+		if (getisWallSign())
+		{
+			block.setType(Material.WALL_SIGN);
+			block.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) getDirection(), true);
+			block.getState().update();
+		}
+		else
+		{
+			block.setType(Material.SIGN_POST);
+			block.setTypeIdAndData(Material.SIGN_POST.getId(),
+					(byte) getDirection(), true);
+			block.getState().update();
+		}
+
+		if (block.getState() instanceof Sign) {
+			Sign signtemp = (Sign) block.getState();
+			signtemp.setLine(0, "[WRr]");
+			signtemp.setLine(1, channelName);
+			signtemp.update(true);
+		}
 	}
 }

@@ -105,88 +105,15 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 		try
 		{
 			//Change receivers
-			for (Location receiver : WirelessRedstone.WireBox.getReceiverLocations(getName()))
+			for (WirelessReceiver receiver : receivers)
 			{
-				if(receiver.getWorld() == null)
-					continue; // World currently not loaded
-				
-				if (receiver.getBlock().getType() == Material.SIGN_POST)
-				{
-					if (!WirelessRedstone.WireBox.isValidLocation(receiver.getBlock()))
-					{
-						WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
-					}
-					else
-					{
-						receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(), (byte) 0x5,true);
-						receiver.getBlock().getState().update();
-					}
-				}
-				else if (receiver.getBlock().getType() == Material.WALL_SIGN)
-				{
-					byte data = receiver.getBlock().getData(); // Correspond to the direction of the wall sign
-					if (data == 0x2) //South
-					{
-						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
-						{
-							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
-						}
-						else
-						{
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
-							receiver.getBlock().getState().update();
-						}
-					}
-					else if (data == 0x3) //North
-					{
-						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
-						{
-							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
-						}
-						else
-						{
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x3, true);
-							receiver.getBlock().getState().update();
-						}
-					}
-					else if (data == 0x4) //East
-					{
-						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
-						{
-							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
-						}
-						else
-						{
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x2, true);
-							receiver.getBlock().getState().update();
-						}
-					}
-					else if (data == 0x5) //West
-					{
-						if (!WirelessRedstone.WireBox.isValidWallLocation(receiver.getBlock()))
-						{
-							WirelessRedstone.WireBox.signWarning(receiver.getBlock(), 1);
-						}
-						else
-						{
-							receiver.getBlock().setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x1, true);
-							receiver.getBlock().getState().update();
-						}
-					}
-					else // Not West East North South ...
-					{
-						WirelessRedstone.getWRLogger().info("Strange Data !");
-					}
-				}
+				receiver.turnOn();
 			}
 			
 			//Turning on screens
-			for(Location screen : WirelessRedstone.WireBox.getScreenLocations(getName()))
+			for(WirelessScreen screen : screens)
 			{
-				String str = ChatColor.GREEN + "ACTIVE";
-				Sign sign = (Sign) screen.getBlock().getState();
-				sign.setLine(2, str);
-				sign.update();
+				screen.turnOn();
 			}
 		}
 		catch (RuntimeException e) 
@@ -208,43 +135,13 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable
 				//Change receivers
 				for (WirelessReceiver receiver : getReceivers())
 				{
-					if(receiver.getWorld() == null)
-						continue; // World currently not loaded
-					
-					Location rloc = WirelessRedstone.WireBox.getPointLocation(receiver);
-					Block othersign = rloc.getBlock();
-
-					othersign.setType(Material.AIR);
-
-					if (receiver.getisWallSign())
-					{
-						othersign.setType(Material.WALL_SIGN);
-						othersign.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) receiver.getDirection(), true);
-						othersign.getState().update();
-					}
-					else
-					{
-						othersign.setType(Material.SIGN_POST);
-						othersign.setTypeIdAndData(Material.SIGN_POST.getId(),
-								(byte) receiver.getDirection(), true);
-						othersign.getState().update();
-					}
-
-					if (othersign.getState() instanceof Sign) {
-						Sign signtemp = (Sign) othersign.getState();
-						signtemp.setLine(0, "[WRr]");
-						signtemp.setLine(1, getName());
-						signtemp.update(true);
-					}
+					receiver.turnOff(getName());
 				}
 				
 				//Change screens
-				for(Location screen : WirelessRedstone.WireBox.getScreenLocations(getName()))
+				for(WirelessScreen screen : screens)
 				{
-					String str = ChatColor.RED + "INACTIVE";
-					Sign sign = (Sign) screen.getBlock().getState();
-					sign.setLine(2, str);
-					sign.update();
+					screen.turnOff();
 				}
 		}
 		catch (RuntimeException e)

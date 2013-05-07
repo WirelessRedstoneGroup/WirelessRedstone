@@ -351,7 +351,7 @@ public class WireBox
 		ArrayList<Location> returnlist = new ArrayList<Location>();
 		for (WirelessReceiver receiver : channel.getReceivers())
 		{
-			returnlist.add(this.getPointLocation(receiver));
+			returnlist.add(receiver.getLocation());
 		}
 		return returnlist;
 	}
@@ -370,7 +370,7 @@ public class WireBox
 		ArrayList<Location> returnlist = new ArrayList<Location>();
 		for(WirelessScreen screen : channel.getScreens())
 		{
-			returnlist.add(this.getPointLocation(screen));
+			returnlist.add(screen.getLocation());
 		}
 		return returnlist;
 	}
@@ -465,7 +465,7 @@ public class WireBox
 		{
 			for (IWirelessPoint point : channel.getReceivers())
 			{
-				this.getPointLocation(point).getBlock().setType(Material.AIR);
+				point.getLocation().getBlock().setType(Material.AIR);
 			}
 		}
 		catch(NullPointerException ex)
@@ -477,7 +477,7 @@ public class WireBox
 		{
 			for (IWirelessPoint point : channel.getTransmitters())
 			{
-				this.getPointLocation(point).getBlock().setType(Material.AIR);
+				point.getLocation().getBlock().setType(Material.AIR);
 			}
 		}
 		catch(NullPointerException ex)
@@ -489,19 +489,13 @@ public class WireBox
 		{
 			for(IWirelessPoint point : channel.getScreens())
 			{
-				this.getPointLocation(point).getBlock().setType(Material.AIR);
+				point.getLocation().getBlock().setType(Material.AIR);
 			}
 		}
 		catch(NullPointerException ex)
 		{
 			//When there isn't any screen, it'll throw this exception.
 		}
-	}
-
-	public Location getPointLocation(IWirelessPoint point)
-	{
-		return new Location(plugin.getServer().getWorld(point.getWorld()),
-				point.getX(), point.getY(), point.getZ());
 	}
 
 	public void signWarning(Block block, int code)
