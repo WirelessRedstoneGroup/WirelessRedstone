@@ -211,7 +211,7 @@ public class WirelessBlockListener implements Listener
 							event.getPlayer().sendMessage(ChatColor.GREEN + "[WirelessRedstone] No other Transmitters found, switching receivers to off.");
 							for (WirelessReceiver receiver : WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getReceivers())
 							{
-								Location rloc = WirelessRedstone.WireBox.getPointLocation(receiver);
+								Location rloc = receiver.getLocation();
 								Block othersign = rloc.getBlock();
 								if (receiver.getisWallSign())
 								{

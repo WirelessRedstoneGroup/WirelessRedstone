@@ -374,9 +374,9 @@ public class WirelessRedstone extends JavaPlugin
 	{
 		if (WirelessRedstone.config.isCancelChunkUnloads())
 		{
-			for (IWirelessPoint loc : cache.getAllSigns())
+			for (IWirelessPoint point : cache.getAllSigns())
 			{
-				Location location = WireBox.getPointLocation(loc);
+				Location location = point.getLocation();
 				if(location.getWorld() == null)
 					continue; // world currently not loaded.
 				
