@@ -524,6 +524,7 @@ public class WirelessCommands implements CommandExecutor
 					sign.update(true);
 					if(type.equals("inverter") || type.equals("inv"))
 					{
+						WirelessRedstone.getWRLogger().debug("Command /wrr performed. Argument is \"inverter\"");
 						if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Inverter))
 						{
 							sign.getBlock().breakNaturally();

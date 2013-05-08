@@ -624,11 +624,10 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		
 		if(point instanceof WirelessReceiver)
 		{
-			signtype = "receiver";
-		}
-		else if(point instanceof WirelessReceiverInverter)
-		{
-			signtype = "receiver_inverter";
+			if(point instanceof WirelessReceiverInverter)
+				signtype = "receiver_inverter";
+			else
+				signtype = "receiver";
 		}
 		else if(point instanceof WirelessTransmitter)
 		{

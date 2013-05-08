@@ -176,8 +176,6 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		
 		channelConfig.set(channelName, channel);
 		
-		WirelessRedstone.cache.update();
-		
 		try
 		{
 			channelConfig.save(new File(channelFolder, channelName + ".yml"));
@@ -250,7 +248,20 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	{
 		WirelessChannel channel = getWirelessChannel(channelName);
 		if(point instanceof WirelessReceiver)
-			channel.addReceiver((WirelessReceiver) point);
+		{
+			WirelessRedstone.getWRLogger().debug("Yaml config : Creating a receiver of class "
+					+ point.getClass());
+			if(point instanceof WirelessReceiverInverter)
+			{
+				channel.addReceiver((WirelessReceiverInverter) point);
+				WirelessRedstone.getWRLogger().debug("Yaml Config : Adding an inverter");
+			}
+			else
+			{
+				channel.addReceiver((WirelessReceiver) point);
+				WirelessRedstone.getWRLogger().debug("Yaml Config : Adding a default receiver");
+			}
+		}
 		else if(point instanceof WirelessTransmitter)
 			channel.addTransmitter((WirelessTransmitter) point);
 		else if(point instanceof WirelessScreen)

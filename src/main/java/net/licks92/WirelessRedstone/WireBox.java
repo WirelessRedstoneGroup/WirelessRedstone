@@ -164,6 +164,7 @@ public class WireBox
 		}
 		if (channel == null)
 		{
+			WirelessRedstone.getWRLogger().debug("The channel doesn't exist. Creating it and adding the receiver in it.");
 			if(cname.contains("."))
 			{
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
@@ -176,12 +177,15 @@ public class WireBox
 			{
 			case Default:
 				receiver = new WirelessReceiver();
+				break;
 				
 			case Inverter:
 				receiver = new WirelessReceiverInverter();
+				break;
 				
 			default:
 				receiver = new WirelessReceiver();
+				break;
 			}
 			receiver.setOwner(player.getName());
 			receiver.setWorld(loc.getWorld().getName());
@@ -202,6 +206,7 @@ public class WireBox
 		}
 		else
 		{
+			WirelessRedstone.getWRLogger().debug("Channel " + cname + " exists. Adding a receiver in it.");
 			if(cname.contains("."))
 			{
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
@@ -212,12 +217,15 @@ public class WireBox
 			{
 			case Default:
 				receiver = new WirelessReceiver();
+				break;
 				
 			case Inverter:
 				receiver = new WirelessReceiverInverter();
+				break;
 				
 			default:
 				receiver = new WirelessReceiver();
+				break;
 			}
 			receiver.setOwner(player.getName());
 			receiver.setWorld(loc.getWorld().getName());
@@ -226,6 +234,7 @@ public class WireBox
 			receiver.setZ(loc.getBlockZ());
 			receiver.setDirection(cblock.getData());
 			receiver.setisWallSign(isWallSign);
+			channel.addReceiver(receiver);
 			WirelessRedstone.config.createWirelessPoint(cname, receiver);
 			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
 			WirelessRedstone.cache.update();
