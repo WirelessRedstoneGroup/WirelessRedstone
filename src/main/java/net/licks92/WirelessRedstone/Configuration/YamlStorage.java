@@ -41,7 +41,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 	}
 	
 	@Override
-	public boolean init()
+	public boolean initStorage()
 	{
 		return init(true);
 	}

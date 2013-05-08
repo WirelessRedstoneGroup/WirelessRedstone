@@ -36,13 +36,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		reloadConfig();
 	}
 	
-	public boolean init()
+	public boolean initStorage()
 	{
-		//Set the config header
-		getConfig().options().header("Wireless Redstone Configuration.\n" +
-				"If you want to change the language, then follow the instructions in the Configuration Section on dev.bukkit.org/server-mods/wireless-redstone/\n" +
-				"If you want to change any other setting, do the same.");
-		
 		//Create the channel folder
 		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
 		channelFolder.mkdir();
@@ -63,7 +58,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		else
 			storage = new YamlStorage(channelFolder, plugin);
 		
-		return storage.init();
+		return storage.initStorage();
 	}
 	
 	public boolean close()

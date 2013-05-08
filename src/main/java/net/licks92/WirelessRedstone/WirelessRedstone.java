@@ -106,7 +106,8 @@ public class WirelessRedstone extends JavaPlugin
 		{
 			logger = new WRLogger("[WirelessRedstone]", this.getServer().getConsoleSender(), false, config.getColourfulLogging());
 		}
-		config.init();
+		config.initStorage();
+		cache = new WirelessGlobalCache(this, config.getCacheRefreshFrequency());
 		
 		WirelessRedstone.logger.info(pdFile.getName() + " version " + pdFile.getVersion() + " is loading...");
 		
@@ -166,8 +167,6 @@ public class WirelessRedstone extends JavaPlugin
 		
 		permissions = new WirelessPermissions(this);
 		config.save();
-
-		cache = new WirelessGlobalCache(this, config.getCacheRefreshFrequency());
 
 		WirelessRedstone.logger.info("Registering commands...");
 		getCommand("wirelessredstone").setExecutor(new WirelessCommands(this));

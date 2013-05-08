@@ -32,7 +32,7 @@ public class ConfigurationUpdater
 			storage = new SQLStorage(channelFolder, plugin);
 		else
 			storage = new YamlStorage(channelFolder, plugin);
-		storage.init();
+		storage.initStorage();
 	}
 	
 	public boolean update()

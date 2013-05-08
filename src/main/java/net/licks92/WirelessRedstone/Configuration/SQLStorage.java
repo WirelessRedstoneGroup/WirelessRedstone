@@ -58,7 +58,7 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		sqlFile = new File(channelFolder.getAbsolutePath() + File.separator + "channels.db");
 	}
 	
-	public boolean init()
+	public boolean initStorage()
 	{
 		return init(true);
 	}
@@ -665,7 +665,6 @@ public class SQLStorage implements IWirelessStorageConfiguration
 					+ iswallsign
 					+ " ) ");
 			statement.close();
-			WirelessRedstone.cache.update();
 		}
 		catch (SQLException ex)
 		{
