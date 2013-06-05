@@ -6,6 +6,7 @@ import java.util.List;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
@@ -524,8 +525,14 @@ public class WirelessCommands implements CommandExecutor
 					sign.update(true);
 					if(type.equals("inverter") || type.equals("inv"))
 					{
-						WirelessRedstone.getWRLogger().debug("Command /wrr performed. Argument is \"inverter\"");
 						if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Inverter))
+						{
+							sign.getBlock().breakNaturally();
+						}
+					}
+					else if(type.equals("delayer") || type.equals("delay"))
+					{
+						if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Delayer));
 						{
 							sign.getBlock().breakNaturally();
 						}
@@ -829,10 +836,14 @@ public class WirelessCommands implements CommandExecutor
 			
 			for(WirelessReceiver receiver : channel.getReceivers())
 			{
-				Type type = Type.Default;
+				String type = Type.Default.toString();
 				if(receiver instanceof WirelessReceiverInverter)
 				{
-					type = Type.Inverter;
+					type = Type.Inverter.toString();
+				}
+				if(receiver instanceof WirelessReceiverDelayer)
+				{
+					type = Type.Delayer + " " + Integer.toString(((WirelessReceiverDelayer)(receiver)).getDelay());
 				}
 				lines.add("Receiver in the world " + receiver.getWorld()
 						+ " at location " + receiver.getX()

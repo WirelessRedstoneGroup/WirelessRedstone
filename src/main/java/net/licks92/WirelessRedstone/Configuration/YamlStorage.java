@@ -25,6 +25,7 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
@@ -54,6 +55,7 @@ public class YamlStorage implements IWirelessStorageConfiguration
 		ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
 		ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
 		ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
+		ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
 		
 		if(canConvert() && allowConvert)
 		{

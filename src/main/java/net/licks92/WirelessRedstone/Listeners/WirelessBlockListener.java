@@ -77,6 +77,14 @@ public class WirelessBlockListener implements Listener
 						event.getBlock().breakNaturally();
 					}
 				}
+				if(WirelessRedstone.WireBox.isReceiverDelayer(event.getLine(2)))
+				{
+					if(!WirelessRedstone.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer(), Type.Delayer))
+					{
+						event.setCancelled(true);
+						event.getBlock().breakNaturally();
+					}
+				}
 				else if(WirelessRedstone.WireBox.isReceiverDefault(event.getLine(2)))
 				{
 					if(!WirelessRedstone.WireBox.addWirelessReceiver(cname, event.getBlock(), event.getPlayer(), Type.Default))

@@ -6,6 +6,7 @@ import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
@@ -76,6 +77,7 @@ public class WireBox
 		}
 		return false;
 	}
+	
 	/**
 	 * @param data - The line of the sign
 	 * 
@@ -84,6 +86,23 @@ public class WireBox
 	public boolean isReceiverInverter(String data)
 	{
 		for(String tag : WirelessRedstone.strings.tagsReceiverInverterType)
+		{
+			if(data.toLowerCase().equals(tag.toLowerCase()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @param data - The line of the sign
+	 * 
+	 * @return true if the string corresponds to the tag of the delayer receiver type
+	 */
+	public boolean isReceiverDelayer(String data)
+	{
+		for(String tag : WirelessRedstone.strings.tagsReceiverDelayerType)
 		{
 			if(data.toLowerCase().equals(tag.toLowerCase()))
 			{
@@ -183,6 +202,18 @@ public class WireBox
 				receiver = new WirelessReceiverInverter();
 				break;
 				
+			case Delayer:
+				String delayStr = ((Sign)(cblock.getState())).getLine(3);
+				int delay;
+				try {
+					delay = Integer.parseInt(delayStr);
+				} catch (NumberFormatException ex) {
+					player.sendMessage("[WirelessRedstone] The delay must be a number!");
+					return false;
+				}
+				receiver = new WirelessReceiverDelayer(delay);
+				break;
+				
 			default:
 				receiver = new WirelessReceiver();
 				break;
@@ -221,6 +252,18 @@ public class WireBox
 				
 			case Inverter:
 				receiver = new WirelessReceiverInverter();
+				break;
+				
+			case Delayer:
+				String delayStr = ((Sign)(cblock.getState())).getLine(3);
+				int delay;
+				try {
+					delay = Integer.parseInt(delayStr);
+				} catch (NumberFormatException ex) {
+					player.sendMessage("[WirelessRedstone] The delay must be a number!");
+					return false;
+				}
+				receiver = new WirelessReceiverDelayer(delay);
 				break;
 				
 			default:

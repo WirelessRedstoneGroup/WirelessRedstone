@@ -21,6 +21,7 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Channel.WirelessScreen;
 import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
@@ -378,19 +379,39 @@ public class SQLStorage implements IWirelessStorageConfiguration
 							receiver.setZ(rs3.getInt(sql_signz));
 							receivers.add(receiver);
 						}
-						if(rs3.getString(sql_signtype).equals("receiver_inverter"))
+						else if(rs3.getString(sql_signtype).equals("receiver_inverter"))
 						{
-							WirelessReceiverInverter receiver = new WirelessReceiverInverter();
-							receiver.setDirection(rs3.getInt(sql_direction));
-							receiver.setisWallSign(rs3.getBoolean(sql_iswallsign));
-							receiver.setOwner(rs3.getString(sql_signowner));
-							receiver.setWorld(rs3.getString(sql_signworld));
-							receiver.setX(rs3.getInt(sql_signx));
-							receiver.setY(rs3.getInt(sql_signy));
-							receiver.setZ(rs3.getInt(sql_signz));
-							receivers.add(receiver);
+							WirelessReceiverInverter receiver_inverter = new WirelessReceiverInverter();
+							receiver_inverter.setDirection(rs3.getInt(sql_direction));
+							receiver_inverter.setisWallSign(rs3.getBoolean(sql_iswallsign));
+							receiver_inverter.setOwner(rs3.getString(sql_signowner));
+							receiver_inverter.setWorld(rs3.getString(sql_signworld));
+							receiver_inverter.setX(rs3.getInt(sql_signx));
+							receiver_inverter.setY(rs3.getInt(sql_signy));
+							receiver_inverter.setZ(rs3.getInt(sql_signz));
+							receivers.add(receiver_inverter);
 						}
-						if(rs3.getString(sql_signtype).equals("transmitter"))
+						else if(rs3.getString(sql_signtype).contains("receiver_delayer_"))
+						{
+							String signtype = rs3.getString(sql_signtype);
+							signtype = signtype.split("receiver_delayer_")[1];
+							int delay;
+							try {
+								delay = Integer.parseInt(signtype);
+							} catch (NumberFormatException ex) {
+								delay = 0;
+							}
+							WirelessReceiverDelayer receiver_delayer = new WirelessReceiverDelayer(delay);
+							receiver_delayer.setDirection(rs3.getInt(sql_direction));
+							receiver_delayer.setisWallSign(rs3.getBoolean(sql_iswallsign));
+							receiver_delayer.setOwner(rs3.getString(sql_signowner));
+							receiver_delayer.setWorld(rs3.getString(sql_signworld));
+							receiver_delayer.setX(rs3.getInt(sql_signx));
+							receiver_delayer.setY(rs3.getInt(sql_signy));
+							receiver_delayer.setZ(rs3.getInt(sql_signz));
+							receivers.add(receiver_delayer);
+						}
+						else if(rs3.getString(sql_signtype).equals("transmitter"))
 						{
 							WirelessTransmitter transmitter = new WirelessTransmitter();
 							transmitter.setDirection(rs3.getInt(sql_direction));
@@ -626,6 +647,8 @@ public class SQLStorage implements IWirelessStorageConfiguration
 		{
 			if(point instanceof WirelessReceiverInverter)
 				signtype = "receiver_inverter";
+			else if (point instanceof WirelessReceiverDelayer)
+				signtype = "receiver_delayer_" + ((WirelessReceiverDelayer)(point)).getDelay();
 			else
 				signtype = "receiver";
 		}

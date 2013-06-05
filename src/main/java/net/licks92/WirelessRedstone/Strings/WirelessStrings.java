@@ -65,6 +65,7 @@ public class WirelessStrings implements ConfigurationSerializable
 	//These tags corresponds to the receiver types.
 	public List<String> tagsReceiverDefaultType = new ArrayList<String>();
 	public List<String> tagsReceiverInverterType = new ArrayList<String>();
+	public List<String> tagsReceiverDelayerType = new ArrayList<String>();
 	
 	public WirelessStrings(Map<String, Object> lang)
 	{
@@ -113,6 +114,9 @@ public class WirelessStrings implements ConfigurationSerializable
 		tagsReceiverDefaultType.add("[default]");
 		tagsReceiverDefaultType.add("[normal]");
 		tagsReceiverInverterType.add("[inverter]");
+		tagsReceiverInverterType.add("[inv]");
+		tagsReceiverDelayerType.add("[delayer]");
+		tagsReceiverDelayerType.add("[delay]");
 	}
 	
 	@Override

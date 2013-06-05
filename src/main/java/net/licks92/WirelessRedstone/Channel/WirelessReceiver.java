@@ -27,7 +27,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 	private boolean iswallsign = false;
 
 	public enum Type{
-		Default, Inverter;
+		Default, Inverter, Delayer;
 	}
 	
 	public WirelessReceiver()
