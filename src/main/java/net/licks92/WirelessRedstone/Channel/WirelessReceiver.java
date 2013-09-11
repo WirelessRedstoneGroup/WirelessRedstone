@@ -10,9 +10,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.RedstoneTorch;
 
 @SerializableAs("WirelessReceiver")
 public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoint, Serializable
@@ -184,64 +187,26 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 			}
 			else
 			{
-				block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(), (byte) 0x5,true);
+				block.setType(Material.REDSTONE_TORCH_ON);
 				block.getState().update();
 			}
 		}
 		else if (block.getType() == Material.WALL_SIGN)
 		{
-			byte data = block.getData(); // Correspond to the direction of the wall sign
-			if (data == 0x2) //South
+			org.bukkit.material.Sign data = (org.bukkit.material.Sign) block.getState().getData();
+			
+			if (!WirelessRedstone.WireBox.isValidWallLocation(block))
 			{
-				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
-				{
-					WirelessRedstone.WireBox.signWarning(block, 1);
-				}
-				else
-				{
-					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x4, true);
-					block.getState().update();
-				}
+				WirelessRedstone.WireBox.signWarning(block, 1);
 			}
-			else if (data == 0x3) //North
+			else
 			{
-				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
-				{
-					WirelessRedstone.WireBox.signWarning(block, 1);
-				}
-				else
-				{
-					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x3, true);
-					block.getState().update();
-				}
-			}
-			else if (data == 0x4) //East
-			{
-				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
-				{
-					WirelessRedstone.WireBox.signWarning(block, 1);
-				}
-				else
-				{
-					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x2, true);
-					block.getState().update();
-				}
-			}
-			else if (data == 0x5) //West
-			{
-				if (!WirelessRedstone.WireBox.isValidWallLocation(block))
-				{
-					WirelessRedstone.WireBox.signWarning(block, 1);
-				}
-				else
-				{
-					block.setTypeIdAndData(Material.REDSTONE_TORCH_ON.getId(),(byte) 0x1, true);
-					block.getState().update();
-				}
-			}
-			else // Not West East North South ...
-			{
-				WirelessRedstone.getWRLogger().info("Strange Data !");
+				block.setType(Material.REDSTONE_TORCH_ON);
+				block.getState().setType(Material.REDSTONE_TORCH_ON);
+				RedstoneTorch torch = new RedstoneTorch();
+				torch.setFacingDirection(data.getFacing());
+				block.getState().setData(torch);
+				block.getState().update();
 			}
 		}
 	}
@@ -260,6 +225,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 		{
 			block.setType(Material.WALL_SIGN);
 			block.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) getDirection(), true);
+			
 			block.getState().update();
 		}
 		else
