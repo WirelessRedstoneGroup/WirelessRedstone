@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -41,7 +42,7 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 	public Map<String, Object> serialize()
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("direction", getDirection());
+		map.put("direction", this.direction);
 		map.put("isWallSign", getisWallSign());
 		map.put("owner", getOwner());
 		map.put("world", getWorld());
@@ -103,13 +104,32 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 	}
 
 	@Override
-	public int getDirection() {
-		return direction;
+	public BlockFace getDirection() {
+		if(this.direction == 2)
+			return BlockFace.SOUTH;
+		else if(this.direction == 3)
+			return BlockFace.NORTH;
+		else if(this.direction == 4)
+			return BlockFace.EAST;
+		else
+			return BlockFace.WEST;
 	}
 
 	@Override
 	public void setDirection(int direction) {
 		this.direction = direction;
+	}
+	
+	@Override
+	public void setDirection(BlockFace face) {
+		if(face == BlockFace.SOUTH)
+			setDirection(2);
+		else if(face == BlockFace.NORTH)
+			setDirection(3);
+		else if(face == BlockFace.EAST)
+			setDirection(4);
+		else
+			setDirection(5);
 	}
 
 	@Override
