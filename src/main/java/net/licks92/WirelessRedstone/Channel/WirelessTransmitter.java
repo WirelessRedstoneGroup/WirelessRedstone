@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.licks92.WirelessRedstone.WirelessRedstone;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -102,14 +104,7 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
 
 	@Override
 	public BlockFace getDirection() {
-		if(this.direction == 2)
-			return BlockFace.SOUTH;
-		else if(this.direction == 3)
-			return BlockFace.NORTH;
-		else if(this.direction == 4)
-			return BlockFace.EAST;
-		else
-			return BlockFace.WEST;
+		return WirelessRedstone.WireBox.intDirectionToBlockFace(direction);
 	}
 
 	@Override
@@ -119,14 +114,7 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
 	
 	@Override
 	public void setDirection(BlockFace face) {
-		if(face == BlockFace.SOUTH)
-			setDirection(2);
-		else if(face == BlockFace.NORTH)
-			setDirection(3);
-		else if(face == BlockFace.EAST)
-			setDirection(4);
-		else
-			setDirection(5);
+		setDirection(WirelessRedstone.WireBox.blockFace2IntDirection(face));
 	}
 
 	@Override

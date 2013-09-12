@@ -26,6 +26,30 @@ public class WireBox
 	{
 		this.plugin = wirelessRedstone;
 	}
+	
+	public int blockFace2IntDirection(BlockFace face)
+	{
+		if(face == BlockFace.SOUTH)
+			return 2;
+		else if(face == BlockFace.NORTH)
+			return 3;
+		else if(face == BlockFace.EAST)
+			return 4;
+		else
+			return 5;
+	}
+	
+	public BlockFace intDirectionToBlockFace(int dir)
+	{
+		if(dir == 2)
+			return BlockFace.SOUTH;
+		else if(dir == 3)
+			return BlockFace.NORTH;
+		else if(dir == 4)
+			return BlockFace.EAST;
+		else
+			return BlockFace.WEST;
+	}
 
 	/**
 	 * @param data - The line of the sign
@@ -223,7 +247,8 @@ public class WireBox
 			receiver.setX(loc.getBlockX());
 			receiver.setY(loc.getBlockY());
 			receiver.setZ(loc.getBlockZ());
-			receiver.setDirection(cblock.getData());
+			BlockFace bfaceDirection = ((org.bukkit.material.Sign)cblock.getState()).getFacing();
+			receiver.setDirection(blockFace2IntDirection(bfaceDirection));
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
 			if(!WirelessRedstone.config.createWirelessChannel(channel))
