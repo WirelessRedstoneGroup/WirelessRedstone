@@ -29,6 +29,7 @@ public class WirelessGlobalCache
 	private ArrayList<IWirelessPoint> allSigns;
 	private ArrayList<Location> allReceiverLocations;
 	private WirelessRedstone plugin;
+	@SuppressWarnings("unused") //Eclipse Motherfucker of course it is used
 	private BukkitTask refreshingTask;
 	
 	/**
