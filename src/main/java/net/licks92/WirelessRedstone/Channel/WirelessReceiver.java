@@ -14,7 +14,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
-import org.bukkit.material.MaterialData;
 import org.bukkit.material.RedstoneTorch;
 
 @SerializableAs("WirelessReceiver")
@@ -113,6 +112,11 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 	}
 
 	@Override
+	/**
+	 * You should ALWAYS use the setDirection(BlockFace) method.
+	 * 
+	 * @param direction
+	 */
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
@@ -231,21 +235,22 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 		Block block = loc.getBlock();
 
 		block.setType(Material.AIR);
-
+		
+		org.bukkit.material.Sign sign;
+		
 		if (getisWallSign())
 		{
+			sign = new org.bukkit.material.Sign(Material.WALL_SIGN);
 			block.setType(Material.WALL_SIGN);
-			block.setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) getDirection(), true);
-			
-			block.getState().update();
 		}
 		else
 		{
 			block.setType(Material.SIGN_POST);
-			block.setTypeIdAndData(Material.SIGN_POST.getId(),
-					(byte) getDirection(), true);
-			block.getState().update();
+			sign = new org.bukkit.material.Sign(Material.SIGN_POST);
 		}
+		sign.setFacingDirection(getDirection());
+		block.getState().setData(sign);
+		block.getState().update();
 
 		if (block.getState() instanceof Sign) {
 			Sign signtemp = (Sign) block.getState();

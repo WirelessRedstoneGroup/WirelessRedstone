@@ -15,11 +15,9 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
 
 public class WirelessBlockListener implements Listener
@@ -236,36 +234,8 @@ public class WirelessBlockListener implements Listener
 						
 						else if (WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getTransmitters().size() == 0)
 						{
-							event.getPlayer().sendMessage(ChatColor.GREEN + "[WirelessRedstone] No other Transmitters found, switching receivers to off.");
-							for (WirelessReceiver receiver : WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).getReceivers())
-							{
-								Location rloc = receiver.getLocation();
-								Block othersign = rloc.getBlock();
-								if (receiver.getisWallSign())
-								{
-									othersign.getWorld().getBlockAt(rloc).setTypeIdAndData(Material.WALL_SIGN.getId(),(byte) receiver.getDirection(),true);
-								}
-								else
-								{
-									othersign.getWorld().getBlockAt(rloc).setTypeIdAndData(Material.SIGN_POST.getId(),(byte) receiver.getDirection(),true);
-								}
-								if (othersign.getState() instanceof Sign)
-								{
-									Sign signtemp = (Sign) othersign.getState();
-									signtemp.setLine(0, "[WRr]");
-									signtemp.setLine(1, signObject.getLine(1));
-									
-									if (receiver.getisWallSign())
-									{
-										signtemp.setData(new MaterialData(Material.WALL_SIGN,(byte) receiver.getDirection()));
-									}
-									else
-									{
-										signtemp.setData(new MaterialData(Material.SIGN_POST,(byte) receiver.getDirection()));
-									}
-									signtemp.update(true);
-								}
-							}
+							event.getPlayer().sendMessage(ChatColor.GREEN + "[WirelessRedstone] No other Transmitters found, switching receivers off.");
+							WirelessRedstone.config.getWirelessChannel(signObject.getLine(1)).turnOff();
 						}
 					}
 					else 
@@ -371,14 +341,14 @@ public class WirelessBlockListener implements Listener
 
 	    Block b = event.getBlock();
 
-	    int lastType = b.getTypeId();
+	    Material lastType = b.getType();
 
 	    b.setType(Material.AIR);
 
 	    sendBlockBreakParticles(b, lastType, event.getPlayer());
 	}
 
-	private void sendBlockBreakParticles(Block b, int lastType, Player author)
+	private void sendBlockBreakParticles(Block b, Material lastType, Player author)
 	{
 	    int radius = 64;
 	    radius *= radius;
@@ -386,7 +356,7 @@ public class WirelessBlockListener implements Listener
 	    for (Player player : b.getWorld().getPlayers()) {
 	        int distance = (int)player.getLocation().distanceSquared(b.getLocation());
 	        if (distance <= radius && !player.equals(author)){
-	          player.playEffect(b.getLocation(), Effect.STEP_SOUND, lastType);
+	          player.playEffect(b.getLocation(), Effect.STEP_SOUND, null);
 	        }
 	    }
 	}
