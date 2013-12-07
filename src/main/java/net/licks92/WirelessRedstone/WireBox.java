@@ -30,22 +30,22 @@ public class WireBox
 	public int blockFace2IntDirection(BlockFace face)
 	{
 		if(face == BlockFace.SOUTH)
-			return 2;
-		else if(face == BlockFace.NORTH)
-			return 3;
-		else if(face == BlockFace.EAST)
-			return 4;
-		else
 			return 5;
+		else if(face == BlockFace.NORTH)
+			return 4;
+		else if(face == BlockFace.EAST)
+			return 2;
+		else
+			return 3;
 	}
 	
 	public BlockFace intDirectionToBlockFace(int dir)
 	{
-		if(dir == 2)
+		if(dir == 5)
 			return BlockFace.SOUTH;
-		else if(dir == 3)
-			return BlockFace.NORTH;
 		else if(dir == 4)
+			return BlockFace.NORTH;
+		else if(dir == 2)
 			return BlockFace.EAST;
 		else
 			return BlockFace.WEST;
@@ -247,9 +247,10 @@ public class WireBox
 			receiver.setX(loc.getBlockX());
 			receiver.setY(loc.getBlockY());
 			receiver.setZ(loc.getBlockZ());
-			org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
+			/*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
 			BlockFace bfaceDirection = sign.getFacing();
-			receiver.setDirection(blockFace2IntDirection(bfaceDirection));
+			receiver.setDirection(bfaceDirection);*/
+			receiver.setDirection(BlockFace.NORTH);
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
 			if(!WirelessRedstone.config.createWirelessChannel(channel))
@@ -301,9 +302,10 @@ public class WireBox
 			receiver.setX(loc.getBlockX());
 			receiver.setY(loc.getBlockY());
 			receiver.setZ(loc.getBlockZ());
-			org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
+			/*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
 			BlockFace bfaceDirection = sign.getFacing();
-			receiver.setDirection(blockFace2IntDirection(bfaceDirection));
+			receiver.setDirection(bfaceDirection);*/
+			receiver.setDirection(BlockFace.NORTH);
 			receiver.setisWallSign(isWallSign);
 			channel.addReceiver(receiver);
 			WirelessRedstone.config.createWirelessPoint(cname, receiver);
@@ -338,9 +340,10 @@ public class WireBox
 			transmitter.setX(loc.getBlockX());
 			transmitter.setY(loc.getBlockY());
 			transmitter.setZ(loc.getBlockZ());
-			org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
+			/*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
 			BlockFace bfaceDirection = sign.getFacing();
-			transmitter.setDirection(bfaceDirection);
+			transmitter.setDirection(bfaceDirection);*/
+			transmitter.setDirection(BlockFace.NORTH);
 			transmitter.setisWallSign(isWallSign);
 			channel.addTransmitter(transmitter);
 			if(!WirelessRedstone.config.createWirelessChannel(channel))
@@ -365,9 +368,10 @@ public class WireBox
 			transmitter.setX(loc.getBlockX());
 			transmitter.setY(loc.getBlockY());
 			transmitter.setZ(loc.getBlockZ());
-			org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
+			/*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
 			BlockFace bfaceDirection = sign.getFacing();
-			transmitter.setDirection(blockFace2IntDirection(bfaceDirection));
+			transmitter.setDirection(bfaceDirection);*/
+			transmitter.setDirection(BlockFace.NORTH);
 			transmitter.setisWallSign(isWallSign);
 			WirelessRedstone.config.createWirelessPoint(cname, transmitter);
 			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
@@ -402,9 +406,10 @@ public class WireBox
 			screen.setX(loc.getBlockX());
 			screen.setY(loc.getBlockY());
 			screen.setZ(loc.getBlockZ());
-			org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
+			/*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
 			BlockFace bfaceDirection = sign.getFacing();
-			screen.setDirection(blockFace2IntDirection(bfaceDirection));
+			screen.setDirection(bfaceDirection);*/
+			screen.setDirection(BlockFace.NORTH);
 			screen.setisWallSign(isWallSign);
 			channel.addScreen(screen);
 			if(!WirelessRedstone.config.createWirelessChannel(channel))
@@ -431,9 +436,10 @@ public class WireBox
 				screen.setX(loc.getBlockX());
 				screen.setY(loc.getBlockY());
 				screen.setZ(loc.getBlockZ());
-				org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
+				/*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
 				BlockFace bfaceDirection = sign.getFacing();
-				screen.setDirection(blockFace2IntDirection(bfaceDirection));
+				screen.setDirection(bfaceDirection);*/
+				screen.setDirection(BlockFace.NORTH);
 				screen.setisWallSign(isWallSign);
 				channel.addScreen(screen);
 				WirelessRedstone.config.createWirelessPoint(cname, screen);
