@@ -89,6 +89,10 @@ public class WirelessCommands implements CommandExecutor
 		{
 			return performActivateChannel(sender, args, player);
 		}
+		else if(commandName.equals("wrversion"))
+		{
+			return performWRVersion(sender, args, player);
+		}
 		return true;
 	}
 
@@ -211,6 +215,10 @@ public class WirelessCommands implements CommandExecutor
 					|| commandName.equals("toggle"))
 			{
 				return performActivateChannel(sender, args, player);
+			}
+			else if (commandName.equals("version"))
+			{
+				return performWRVersion(sender, args, player);
 			}
 			else
 			{
@@ -942,6 +950,18 @@ public class WirelessCommands implements CommandExecutor
 			return false;
 		}
 		channel.turnOn(time);
+		return true;
+	}
+	
+	private boolean performWRVersion(CommandSender sender, String[] args, Player player)
+	{
+		if(!plugin.permissions.canSeeVersion(player))
+		{
+			player.sendMessage(WirelessRedstone.strings.playerDoesntHavePermission);
+			return true;
+		}
+		player.sendMessage("You are currently running WirelessRedstone " + plugin.getDescription().getVersion() + " .");
+		player.sendMessage("The plugin will warn you if a newer version is released.");
 		return true;
 	}
 	

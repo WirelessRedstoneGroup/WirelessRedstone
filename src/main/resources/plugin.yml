@@ -67,6 +67,11 @@ commands:
       description: Temporarily turns on a channel for a given time in ms.
       usage: |
              Example: /<command> channel time
+   wrversion
+      aliases: [wrv]
+      description: Shows the version of Wireless-Redstone you have.
+      usage : |
+              Example: /<command>
 permissions:
     wirelessredstone.*:
         description: Gives access to all Wireless Redstone commands
@@ -96,6 +101,7 @@ permissions:
             wirelessredstone.commands.help: true
             wirelessredstone.commands.lock: true
             wirelessredstone.commands.activate: true
+            wirelessredstone.commands.version: true
     wirelessredstone.admin.*:
         description: Gives you access to all admin commands
         children:
@@ -139,6 +145,9 @@ permissions:
         default: op
     wirelessredstone.commands.activate:
         description: Allows you to temporarily turn on a channel.
+        default: op
+    wirelessredstone.commands.version:
+        description: Allows you to see which version of WirelessRedstone is installed.
         default: op
     wirelessredstone.admin.isAdmin:
         description: If you have this node, you're an owner of every channel.
