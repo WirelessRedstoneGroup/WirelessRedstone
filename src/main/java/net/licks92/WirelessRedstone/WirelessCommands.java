@@ -511,30 +511,47 @@ public class WirelessCommands implements CommandExecutor
 					Sign sign = (Sign) player.getLocation().getBlock().getState();
 					sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
 					sign.setLine(1, channelName);
-					if(type.equals("inverter") || type.equals("inv"))
-					{
-						sign.setLine(2, WirelessRedstone.strings.tagsReceiverInverterType.get(0));
-					}
-					else
-					{
-						//Nothing, this is a default receiver.
-					}
+
 					org.bukkit.material.Sign dataSign = new org.bukkit.material.Sign();
 					dataSign.setFacingDirection(getPlayerDirection(player).getOppositeFace());
 					sign.setData(dataSign);
 					sign.update(true);
 					if(type.equals("inverter") || type.equals("inv"))
 					{
+						sign.setLine(2, WirelessRedstone.strings.tagsReceiverInverterType.get(0));
+						sign.update();
 						if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Inverter))
 						{
 							sign.getBlock().breakNaturally();
 						}
 					}
-					else if(type.equals("delayer") || type.equals("delay"))
+					else if(type.equals("delayer") || type.equals("delay") || type.equals("del"))
 					{
-						if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Delayer));
+						if(args.length >= 3)
 						{
-							sign.getBlock().breakNaturally();
+							int delay;
+							try {
+								delay = Integer.parseInt(args[2]);
+							} catch (NumberFormatException ex) {
+								player.sendMessage("The delay must be a number!");
+								delay = 1000;
+							}
+							sign.setLine(2, WirelessRedstone.strings.tagsReceiverDelayerType.get(0));
+							sign.setLine(3, Integer.toString(delay));
+							sign.update();
+							if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Delayer));
+							{
+								sign.getBlock().breakNaturally();
+							}
+						}
+						if(args.length < 3)
+						{
+							player.sendMessage("Delayer created with the default value of 1000 ms!");
+							sign.setLine(3, Integer.toString(1000));
+							if(!WirelessRedstone.WireBox.addWirelessReceiver(channelName, player.getLocation().getBlock(), player, Type.Delayer));
+							{
+								sign.getBlock().breakNaturally();
+							}
 						}
 					}
 					else
