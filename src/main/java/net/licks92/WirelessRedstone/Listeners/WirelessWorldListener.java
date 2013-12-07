@@ -41,11 +41,7 @@ public class WirelessWorldListener implements Listener
 						{
 							continue;
 						}
-
-						/*
-						 * I'm starting to getting sick of this debug message!
-						 * WirelessRedstone.getWRLogger().debug("Chunk prevented from unloading!");
-						 */
+						
 						event.setCancelled(true);
 						return;
 					}
