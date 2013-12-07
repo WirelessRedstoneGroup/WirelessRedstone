@@ -960,7 +960,7 @@ public class WirelessCommands implements CommandExecutor
 			player.sendMessage(WirelessRedstone.strings.playerDoesntHavePermission);
 			return true;
 		}
-		player.sendMessage("You are currently running WirelessRedstone " + plugin.getDescription().getVersion() + " .");
+		player.sendMessage("You are currently running WirelessRedstone " + ChatColor.UNDERLINE + plugin.getDescription().getVersion() + ChatColor.RESET + " .");
 		player.sendMessage("The plugin will warn you if a newer version is released.");
 		return true;
 	}

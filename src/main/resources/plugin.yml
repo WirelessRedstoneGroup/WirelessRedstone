@@ -67,7 +67,7 @@ commands:
       description: Temporarily turns on a channel for a given time in ms.
       usage: |
              Example: /<command> channel time
-   wrversion
+   wrversion:
       aliases: [wrv]
       description: Shows the version of Wireless-Redstone you have.
       usage : |
