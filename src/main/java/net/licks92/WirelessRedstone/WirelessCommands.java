@@ -962,13 +962,13 @@ public class WirelessCommands implements CommandExecutor
 		int itemsonlist = list.size();
 		int maxitems = 5;
 		int currentpage = cpage;
-		int totalpages = 0;
+		int totalpages = 1;
 		if(currentpage < 1)
 		{
 			player.sendMessage(WirelessRedstone.strings.pageNumberInferiorToZero);
 		}
 		for(int i = 0; i < itemsonlist/maxitems; i++)
-			totalpages = i + 1;
+			totalpages++;
 		if(currentpage > totalpages)
 		{
 			player.sendMessage(ChatColor.RED + "[WirelessRedstone] There only are " + totalpages + " pages.");
