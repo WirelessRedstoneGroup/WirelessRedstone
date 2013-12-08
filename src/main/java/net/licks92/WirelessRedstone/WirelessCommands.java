@@ -853,11 +853,14 @@ public class WirelessCommands implements CommandExecutor
 		 *  }
 		 */
 		
-		if(category.equals("receivers") || category.equals("r"))
+		ArrayList<String> lines = new ArrayList<String>();
+		
+		switch(category)
 		{
+		case "receivers":
+		case "r":
 			//Let's show informations about receivers.
 			player.sendMessage(ChatColor.AQUA + "Wireless Receivers in the channel " + channel.getName());
-			ArrayList<String> lines = new ArrayList<String>();
 			
 			for(WirelessReceiver receiver : channel.getReceivers())
 			{
@@ -876,14 +879,12 @@ public class WirelessCommands implements CommandExecutor
 						+ "," + receiver.getZ()
 						+ " of type : " + type + ".");
 			}
-			ShowList(lines, page, player);
-			return true;
-		}
-		else if(category.equals("transmitters") || category.equals("t"))
-		{
+			break;
+			
+		case "transmitters":
+		case "t":
 			//Let's show informations about transmitters.
 			player.sendMessage(ChatColor.AQUA + "Wireless Transmitters in the channel " + channel.getName());
-			ArrayList<String> lines = new ArrayList<String>();
 			
 			for(WirelessTransmitter transmitter : channel.getTransmitters())
 			{
@@ -894,14 +895,12 @@ public class WirelessCommands implements CommandExecutor
 						+ " is " + (transmitter.isActive() ? (ChatColor.GREEN + "ACTIVE") : (ChatColor.RED + "INACTIVE"))
 						+ ".");
 			}
-			ShowList(lines, page, player);
-			return true;
-		}
-		else if(category.equals("screens") || category.equals("s"))
-		{
+			break;
+			
+		case "screens":
+		case "s":
 			//Let's show infos about screens.
 			player.sendMessage(ChatColor.AQUA + "Wireless Screens in the channel " + channel.getName());
-			ArrayList<String> lines = new ArrayList<String>();
 			
 			for(WirelessScreen screen : channel.getScreens())
 			{
@@ -911,13 +910,11 @@ public class WirelessCommands implements CommandExecutor
 						+ "," + screen.getZ()
 						+ ".");
 			}
-			ShowList(lines, page, player);
-			return true;
+			break;
 		}
-		else
-		{
-			return false;
-		}
+		ShowList(lines, page, player);
+		
+		return true;
 	}
 	
 	private boolean performActivateChannel(CommandSender sender, String[] args, Player player)
