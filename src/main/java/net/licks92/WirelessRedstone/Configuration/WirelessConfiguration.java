@@ -42,14 +42,6 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 		channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
 		channelFolder.mkdir();
 		
-		if(getConfig().isSet("WirelessChannels"))
-		{
-			WirelessRedstone.getWRLogger().info("Updating data into new format ! If there's an error, turn the debug mode on in the config.yml file and try again.");
-			ConfigurationUpdater updater = new ConfigurationUpdater(getConfig(), channelFolder, plugin);
-			updater.update();
-			WirelessRedstone.getWRLogger().info("Successfully transfered your channels into the new database format.");
-		}
-		
 		//Create the storage config
 		if(getSQLUsage())
 		{
