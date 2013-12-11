@@ -1,6 +1,9 @@
 package net.licks92.WirelessRedstone.Configuration;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
@@ -15,6 +18,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	private static final String CHANNEL_FOLDER = "/channels";
 	
 	private File channelFolder;
+	private File configFile;
 	private WirelessRedstone plugin;
 	private IWirelessStorageConfiguration storage;
 	
@@ -28,12 +32,71 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	public WirelessConfiguration(WirelessRedstone r_plugin)
 	{
 		plugin = r_plugin;
-				
+		configFile = new File(plugin.getDataFolder(), "config.yml");
+		if(!configFile.exists())
+		{
+			try
+			{
+				configFile.createNewFile();
+			} catch (IOException e) {
+				WirelessRedstone.getWRLogger().severe("Couldn't create the configuration file!");
+			}
+			createFromTemplate(plugin.getResource("config.yml"));
+		}
+		
 		//Loading and saving
+		/*
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
-		reloadConfig();
+		reloadConfig();*/
+	}
+	
+	private void createFromTemplate(InputStream input)
+	{
+		InputStream istr = input;
+		FileOutputStream ostr = null;
+		
+		try
+		{
+			if(istr == null)
+			{
+				WirelessRedstone.getWRLogger().severe("Could not find the configuration template in the archive."
+						+ " Please download the plugin again.");
+			}
+			ostr = new FileOutputStream(configFile);
+			byte[] buffer = new byte[1024];
+			int length = 0;
+			length = istr.read(buffer);
+			while (length > 0)
+			{
+				ostr.write(buffer, 0, length);
+				length = istr.read(buffer);
+			}
+		}
+		catch(IOException ex)
+		{
+			WirelessRedstone.getWRLogger().severe("Couldn't write the config!");
+		}
+		finally
+		{
+			try
+			{
+				istr.close();
+			}
+			catch(IOException ex)
+			{
+				WirelessRedstone.getWRLogger().severe("Couldn't close the resource config stream");
+			}
+			try
+			{
+				ostr.close();
+			}
+			catch(IOException ex)
+			{
+				WirelessRedstone.getWRLogger().severe("Couldn't close the config file.");
+			}
+		}
 	}
 	
 	public boolean initStorage()
