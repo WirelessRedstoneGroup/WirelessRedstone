@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Utils.Updater.UpdateResult;
 
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -29,18 +30,10 @@ public class WirelessPlayerListener implements Listener
 		
 		if(plugin.permissions.isWirelessAdmin(event.getPlayer()))
 		{
-			try
+			if(plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE)
 			{
-				double newversion = plugin.updateCheck(plugin.currentversion);
-				
-				if(newversion > plugin.currentversion)
-				{
-					event.getPlayer().sendMessage("[WirelessRedstone] A new update has been released ! You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
-				}
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
+				event.getPlayer().sendMessage("[WirelessRedstone] A new update has been released !"
+						+ " You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
 			}
 		}
 	}

@@ -1,11 +1,5 @@
 package net.licks92.WirelessRedstone;
 
-import java.net.SocketException;
-import java.net.URL;
-import java.net.UnknownHostException;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
@@ -18,6 +12,9 @@ import net.licks92.WirelessRedstone.Strings.WirelessStrings;
 import net.licks92.WirelessRedstone.Utils.Metrics;
 import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
 import net.licks92.WirelessRedstone.Utils.Metrics.Plotter;
+import net.licks92.WirelessRedstone.Utils.Updater;
+import net.licks92.WirelessRedstone.Utils.Updater.UpdateResult;
+import net.licks92.WirelessRedstone.Utils.Updater.UpdateType;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Chunk;
@@ -26,13 +23,6 @@ import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXParseException;
-
-
 
 /**
  * This class is the main class of the plugin. It controls the Configuration, the Listeners,
@@ -57,8 +47,7 @@ public class WirelessRedstone extends JavaPlugin
 	public WirelessPlayerListener playerlistener;
 	private static Metrics metrics;
 	private BukkitTask updateChecker;
-	public double currentversion;
-	public double newversion;
+	public Updater updater;
 	
 	/**
 	 * Wireless Redstone logger
@@ -111,15 +100,8 @@ public class WirelessRedstone extends JavaPlugin
 		
 		WirelessRedstone.logger.info(pdFile.getName() + " version " + pdFile.getVersion() + " is loading...");
 		
-		currentversion = Double.valueOf(getDescription().getVersion().split("b")[0].replaceFirst("\\.", ""));
+		updater = new Updater(this, 37345, getFile(), UpdateType.NO_DOWNLOAD, true);
 		
-		/*
-		 * Check for updates on the repository dev.bukkit
-		 * 
-		 * This code has been taken from the Vault plugin.
-		 * 
-		 * All credits to the developpers of Vault (http://dev.bukkit.org/server-mods/vault/);
-		 */
 		if(config.doCheckForUpdates())
 		{
 			updateChecker = this.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), new Runnable()
@@ -129,21 +111,9 @@ public class WirelessRedstone extends JavaPlugin
 				{
 					try
 					{
-						newversion = updateCheck(currentversion);
-						
-						logger.debug("Current version is " + currentversion + " where repository version is " + newversion);
-						
-						if(newversion > currentversion)
+						if(updater.getResult() == UpdateResult.UPDATE_AVAILABLE)
 						{
-							logger.info(strings.newUpdateAvailable);
-						}
-						else if(newversion < currentversion)
-						{
-							logger.debug("You are using a version that is higher than the repository version! Did you download it on the github code repo?");
-						}
-						else //If it's the same version...
-						{
-							logger.debug("You are using the same version as the official repository.");
+							getWRLogger().info(WirelessRedstone.strings.newUpdateAvailable);
 						}
 					}
 					catch (Exception e1)
@@ -151,7 +121,7 @@ public class WirelessRedstone extends JavaPlugin
 						e1.printStackTrace();
 					}
 				}
-			}, 0, 24000);
+			}, 0, 24000/50);
 		}
 		
 		//Load strings
@@ -403,42 +373,4 @@ public class WirelessRedstone extends JavaPlugin
 	{
 		return this;
 	}
-	
-	/**
-	 * Gets the number of the latest version on the bukkit repository
-	 * 
-	 * @param currentVersion
-	 * @return repoversion
-	 * @throws Exception
-	 */
-	public double updateCheck(double currentVersion) throws Exception {
-        String pluginUrlString = "http://dev.bukkit.org/server-mods/wireless-redstone/files.rss";
-        try {
-            URL url = new URL(pluginUrlString);
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
-            doc.getDocumentElement().normalize();
-            NodeList nodes = doc.getElementsByTagName("item");
-            Node firstNode = nodes.item(0);
-            if (firstNode.getNodeType() == 1) {
-                Element firstElement = (Element)firstNode;
-                NodeList firstElementTagName = firstElement.getElementsByTagName("title");
-                Element firstNameElement = (Element) firstElementTagName.item(0);
-                NodeList firstNodes = firstNameElement.getChildNodes();
-                return Double.valueOf(firstNodes.item(0).getNodeValue().replace("Wireless Redstone ", "").split("b")[0].replaceFirst("\\.", "").trim());
-            }
-        }
-        catch(SocketException ex)
-        {
-        	logger.warning("Could not get the informations about the latest version. Maybe your internet connection is broken?");
-        }
-        catch(UnknownHostException ex)
-        {
-        	logger.warning("Could not find the host dev.bukkit. Maybe your server can't connect to the internet.");
-        }
-        catch(SAXParseException ex)
-        {
-        	logger.warning("Could not connect to bukkitdev. It seems that something's blocking the plugin. Do you have an internet protection?");
-        }
-        return currentVersion;
-    }
 }
