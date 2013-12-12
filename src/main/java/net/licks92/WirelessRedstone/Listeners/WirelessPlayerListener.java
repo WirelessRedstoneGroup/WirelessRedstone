@@ -30,10 +30,9 @@ public class WirelessPlayerListener implements Listener
 		
 		if(plugin.permissions.isWirelessAdmin(event.getPlayer()))
 		{
-			if(plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE)
+			if(plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE && WirelessRedstone.config.doCheckForUpdates())
 			{
-				event.getPlayer().sendMessage("[WirelessRedstone] A new update has been released !"
-						+ " You can download it at http://dev.bukkit.org/server-mods/wireless-redstone/");
+				event.getPlayer().sendMessage(WirelessRedstone.strings.newUpdateAvailable);
 			}
 		}
 	}
