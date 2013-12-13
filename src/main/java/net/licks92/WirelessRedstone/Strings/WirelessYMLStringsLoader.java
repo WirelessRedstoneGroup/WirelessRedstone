@@ -19,7 +19,7 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
  * Loads the strings that are in a specific .yml file. If there isn't any file, then load the default strings.
  * 
  */
-public class WirelessStringLoader
+public class WirelessYMLStringsLoader
 {
 	private WirelessRedstone plugin;
 	private WirelessStrings strings;
@@ -33,7 +33,7 @@ public class WirelessStringLoader
 		FileNotFound , MissingStrings , NoError , UnknownError
 	}
 	
-	public WirelessStringLoader(WirelessRedstone plugin, String language)
+	public WirelessYMLStringsLoader(WirelessRedstone plugin, String language)
 	{
 		this.plugin = plugin;
 		this.strings = WirelessRedstone.strings;

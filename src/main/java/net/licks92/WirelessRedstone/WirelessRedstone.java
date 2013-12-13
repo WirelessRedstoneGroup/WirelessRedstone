@@ -7,7 +7,7 @@ import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
-import net.licks92.WirelessRedstone.Strings.WirelessStringLoader;
+import net.licks92.WirelessRedstone.Strings.WirelessYMLStringsLoader;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
 import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
 import net.licks92.WirelessRedstone.Utils.Metrics;
