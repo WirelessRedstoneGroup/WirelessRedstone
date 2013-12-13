@@ -24,10 +24,6 @@ public class WirelessStringLoader
 	private WirelessRedstone plugin;
 	private WirelessStrings strings;
 	
-	private final String STRINGS_FOLDER = "/languages";
-	private File stringsFolder;
-	private final String defaultLanguage = "default";
-	
 	private enum LoadingError
 	{
 		FileNotFound , MissingStrings , NoError , UnknownError

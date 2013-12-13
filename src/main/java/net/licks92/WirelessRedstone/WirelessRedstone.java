@@ -9,6 +9,7 @@ import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Strings.WirelessStringLoader;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
+import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
 import net.licks92.WirelessRedstone.Utils.Metrics;
 import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
 import net.licks92.WirelessRedstone.Utils.Metrics.Plotter;
@@ -37,7 +38,7 @@ public class WirelessRedstone extends JavaPlugin
 	public static WirelessConfiguration config;
 	public static WirelessStrings strings;
 	public static WirelessGlobalCache cache;
-	private WirelessStringLoader stringLoader;
+	private WirelessXMLStringsLoader stringLoader;
 	private static WRLogger logger;
 	public static WireBox WireBox;
 	public WirelessPermissions permissions;
@@ -125,7 +126,7 @@ public class WirelessRedstone extends JavaPlugin
 		}
 		
 		//Load strings
-		stringLoader = new WirelessStringLoader(this, config.getLanguage());
+		stringLoader = new WirelessXMLStringsLoader(this, config.getLanguage());
 		strings = stringLoader.getStrings();
 		
 		//Load listeners
