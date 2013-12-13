@@ -8,7 +8,7 @@ public class WirelessXMLStringsLoader
 {
 	private final String STRINGS_FOLDER = "/languages";
 	private File stringsFolder;
-	private final String defaultLanguage = "default";
+	private final String defaultLanguage = "english";
 	
 	public WirelessXMLStringsLoader(WirelessRedstone plugin, String language)
 	{
