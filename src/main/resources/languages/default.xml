@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<language>english</language>
-<wrstringsversion>0.1</wrstringsversion>
-<strings>
+<strings version="0.1">
 	<tags>
 		<chatTag>WirelessRedstone</chatTag>
 	</tags>
