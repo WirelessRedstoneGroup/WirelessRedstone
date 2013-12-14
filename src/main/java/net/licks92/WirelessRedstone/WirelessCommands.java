@@ -45,52 +45,42 @@ public class WirelessCommands implements CommandExecutor
 		}
 		
 		player = (Player) sender;
-		if (commandName.equals("wirelessredstone"))
+		switch(commandName)
 		{
+		case "wirelessredstone":
 			return performWR(sender, args, player);
-		}
-		if (commandName.equals("wrhelp"))
-		{
+			
+		case "wrhelp":
 			return performHelp(sender, args, player);
-		}
-		else if(commandName.equals("wrt"))
-		{
+			
+		case "wrt":
 			return performCreateTransmitter(sender, args, player);
-		}
-		else if(commandName.equals("wrr"))
-		{
+			
+		case "wrr":
 			return performCreateReceiver(sender, args, player);
-		}
-		else if (commandName.equals("wrs"))
-		{
+			
+		case "wrs":
 			return performCreateScreen(sender, args, player);
-		}
-		else if (commandName.equals("wri"))
-		{
+			
+		case "wri":
 			return performShowInfo(sender,args,player);
-		}
-		else if(commandName.equals("wra"))
-		{
+			
+		case "wra":
 			return performChannelAdmin(sender, args, player);
-		}
-		else if (commandName.equals("wrremove"))
-		{
+			
+		case "wrremove":
 			return performRemoveChannel(sender, args, player);
-		}
-		else if (commandName.equals("wrlist"))
-		{
+			
+		case "wrlist":
 			return performWRlist(sender, args, player);
-		}
-		else if (commandName.equals("wrlock"))
-		{
+			
+		case "wrlock":
 			return performLockChannel(sender, args, player);
-		}
-		else if(commandName.equals("wractivate"))
-		{
+			
+		case "wractivate":
 			return performActivateChannel(sender, args, player);
-		}
-		else if(commandName.equals("wrversion"))
-		{
+			
+		case "wrversion":
 			return performWRVersion(sender, args, player);
 		}
 		return true;
