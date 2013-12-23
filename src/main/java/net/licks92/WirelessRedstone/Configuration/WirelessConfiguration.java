@@ -33,6 +33,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration
 	{
 		plugin = r_plugin;
 		configFile = new File(plugin.getDataFolder(), "config.yml");
+		configFile.getParentFile().mkdirs();
 		if(!configFile.exists())
 		{
 			try
