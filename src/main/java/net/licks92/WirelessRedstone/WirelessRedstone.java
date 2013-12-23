@@ -9,7 +9,6 @@ import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Strings.WirelessYMLStringsLoader;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
-import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
 import net.licks92.WirelessRedstone.Utils.Metrics;
 import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
 import net.licks92.WirelessRedstone.Utils.Metrics.Plotter;
