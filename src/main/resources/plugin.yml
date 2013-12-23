@@ -2,7 +2,7 @@ name: WirelessRedstone
 main: net.licks92.WirelessRedstone.WirelessRedstone
 website: http://dev.bukkit.org/server-mods/wireless-redstone/
 author: licks92
-version: 1.9.1
+version: 1.9.2
 description: The reference in long-distance redstone connections! Create your own wifi-redstone network with WirelessRedstone!
 softdepend: [Vault]
 loadbefore: [Vault]
