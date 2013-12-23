@@ -38,7 +38,7 @@ public class WirelessRedstone extends JavaPlugin
 	public static WirelessConfiguration config;
 	public static WirelessStrings strings;
 	public static WirelessGlobalCache cache;
-	private WirelessXMLStringsLoader stringLoader;
+	private WirelessYMLStringsLoader stringLoader;
 	private static WRLogger logger;
 	public static WireBox WireBox;
 	public WirelessPermissions permissions;
@@ -126,7 +126,7 @@ public class WirelessRedstone extends JavaPlugin
 		}
 		
 		//Load strings
-		stringLoader = new WirelessXMLStringsLoader(this, config.getLanguage());
+		stringLoader = new WirelessYMLStringsLoader(this, config.getLanguage());
 		strings = stringLoader.getStrings();
 		
 		//Load listeners
