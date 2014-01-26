@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!-- Перевел на русский язык - MySt1k -->
+<strings version="0.1">
+    <tags>
+        <chatTag>WirelessRedstone</chatTag>
+    </tags>
+    <playermessages>
+        <backupDone>Backup был создан в папку плагина!</backupDone>
+        <backupFailed>Backup не удался!</backupFailed>
+        <channelDoesNotExist>Этот канал не существует!</channelDoesNotExist>
+        <channelLocked>Канал закрыт !</channelLocked>
+        <channelNameContainsInvalidCaracters>Это название канала содержит недопустимые символы !</channelNameContainsInvalidCaracters>
+        <channelRemoved>Канал был удален!</channelRemoved>
+        <channelRemovedCauseNoSign>Канал удален, не более знаков в миров</channelRemovedCauseNoSign>
+        <channelUnlocked>Канал открыт !</channelUnlocked>
+        <commandDoesNotExist>Эта команда не существует!</commandDoesNotExist>
+        <commandForNextPage> Введите /wr list для перехода на слд. страницу!</commandForNextPage>
+        <customizedLanguageSuccessfullyLoaded>Вы успешно загрузили настроенный язык для WirelessRedstone!</customizedLanguageSuccessfullyLoaded>
+        <DBAboutToBeDeleted>Вы собираетесь удалить всю базу данных. Резерв будет сделан прежде чем начнется удаление. Если вы уверены, чтобы сделать это, тогда у вас есть 15 секунд, чтобы ввести эту команду еще раз.</DBAboutToBeDeleted>
+        <DBDeleted>База данных была успешно уничтожена!</DBDeleted>
+        <DBNotDeleted>База данных не была уничтожена.</DBNotDeleted>
+        <forMoreInfosPerformWRInfo>Чтобы получить больше информации о канале, выполните /wr info [channel]</forMoreInfosPerformWRInfo>
+        <listEmpty>Список в пустой!</listEmpty>
+        <ownersOfTheChannelAre>Владельцы этого канала являются</ownersOfTheChannelAre>
+        <pageEmpty>Эта страница пуста!</pageEmpty>
+        <playerCannotCreateChannel>Вы не можете создать канал.</playerCannotCreateChannel>
+        <playerCannotCreateReceiverOnBlock>Вы не можете создать беспроводной приемник на этом блоке!</playerCannotCreateReceiverOnBlock>
+        <playerCannotCreateSign>Вы не имеете разрешения на создание этого знака!</playerCannotCreateSign>
+        <playerCannotDestroyReceiverTorch>Вы не можете сломать мой магический факел, друг!</playerCannotDestroyReceiverTorch>
+        <playerCannotDestroySign>Вы не можете уничтожить этот знак!</playerCannotDestroySign>
+        <playerCreatedChannel>Вы только что создали новый канал!</playerCreatedChannel>
+        <playerDoesntHaveAccessToChannel>Вы не имеете доступ к этому каналу.</playerDoesntHaveAccessToChannel>
+        <playerDoesntHavePermission>Вы не имеете права делать это.</playerDoesntHavePermission>
+        <pageNumberInferiorToZero>Номер страницы не может быть ниже 0!</pageNumberInferiorToZero>
+        <playerExtendedChannel>Канал продлен!</playerExtendedChannel>
+        <signDestroyed>Успешно удален знак !</signDestroyed>
+        <subCommandDoesNotExist>Эта команда не существует!</subCommandDoesNotExist>
+        <thisChannelContains>Этот канал содержит</thisChannelContains>
+        <tooFewArguments>Слишком мало аргументов !</tooFewArguments>
+    </playermessages>
+    <logmessages>
+        <newUpdateAvailable>Новая версия была загружена в хранилище! Я настоятельно рекомендую вам скачать его сейчас на http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+    </logmessages>
+</strings>
+
