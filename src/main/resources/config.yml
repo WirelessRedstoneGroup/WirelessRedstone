@@ -2,7 +2,7 @@
 # If you want to modify some of these lines, I highly recommend you to read this page : http://dev.bukkit.org/server-mods/wireless-redstone/pages/setup/configuration/
 
 # Corresponds to the language used by the plugin. In order to get it working, you must have the corresponding file <language>.yml in the folder strings/
-Language: default
+Language: en
 
 # Set this value to true if you want the log in the console to be written with colors (it's easier to see what's wrong)
 ColourfulLogging: true
