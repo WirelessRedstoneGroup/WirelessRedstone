@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<strings version="0.1">
+	<tags>
+		<chatTag>Vezeték Nélküli Redstone</chatTag>
+	</tags>
+	<playermessages>
+		<backupDone>Egy visszaállítási pont készült a "plugin" mappába!</backupDone>
+		<backupFailed>Sikertelen kisérlet visszaállítási pont létrehozására!</backupFailed>
+		<channelDoesNotExist>Nem létezik ilyen nevű csatorna!</channelDoesNotExist>
+		<channelLocked>Csatorna lezárva!</channelLocked>
+		<channelNameContainsInvalidCaracters>A csatorna neve nem megfelelő karaktereket tartalmaz!</channelNameContainsInvalidCaracters>
+		<channelRemoved>A csatorna már elvan távolítva!</channelRemoved>
+		<channelRemovedCauseNoSign>Csatorna eltávolítva, nincs több tábla a világokban.</channelRemovedCauseNoSign>
+		<channelUnlocked>Csatorna zárolás feloldva!</channelUnlocked>
+		<commandDoesNotExist>Ilyen parancs nem létezik!</commandDoesNotExist>
+		<commandForNextPage> Ird be: /wr list <oldalszám>  a következő oldalért!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>Sikeresen betöltötted az általad készített nyelvet!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Törölni készülöd az egész adatbázist.Egy visszaállítási pont készül mielőtt ez megtörténik.Ha biztosan ki akarod törölni írd be újra a parancsot 15 másodpercen belül!</DBAboutToBeDeleted>
+		<DBDeleted>Adatbázis sikeresen törölve!</DBDeleted>
+		<DBNotDeleted>Az adatbázis nincs törölve.</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>ha több információt akarsz látni egy csatornáról írd be: /wr info <csatorna neve></forMoreInfosPerformWRInfo>
+		<listEmpty>A lista üres!</listEmpty>
+		<ownersOfTheChannelAre>A csatorna tulajdonosa(i):</ownersOfTheChannelAre>
+		<pageEmpty>Az oldal üres!</pageEmpty>
+		<playerCannotCreateChannel>Neked nincs engedélyed arra hogy csinálj egy csatornát!</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>Erre a blockra nem hozhatsz létre egy vevőegységet!</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>Nincs rá jogod hogy csinálj ilyen táblát!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>Nem ütheted ki az én mágikus fáklyáimat, ők az én barátaim! :)</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>Nem ütheted ki ezt a táblát!</playerCannotDestroySign>
+		<playerCreatedChannel>Készítettél egy új csatornát!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>Nincs jogod ehez a csatornához!</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>Nincs jogod ahoz, hogy ezt csináld!</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>Az oldalszám nem lehet kisseb, mint 0!</pageNumberInferiorToZero>
+		<playerExtendedChannel>Kiterjesztetted a csatornát!</playerExtendedChannel>
+		<signDestroyed>Sikeresen eltávolítva a tábla!</signDestroyed>
+		<subCommandDoesNotExist>Ez a parancs nem létezik!</subCommandDoesNotExist>
+		<thisChannelContains>Ez a csatorna tartalmazza a(z):</thisChannelContains>
+		<tooFewArguments>Túl kevés argumentum!</tooFewArguments>
+	</playermessages>
+	<logmessages>
+		<newUpdateAvailable>Egy új verzió van feltöltve! Javasolt hogy tölsd le az alábbi linkről: http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+	</logmessages>
+</strings>
+  
+  

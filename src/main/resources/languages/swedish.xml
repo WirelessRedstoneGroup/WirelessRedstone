@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<strings version="0.1">
+	<tags>
+		<chatTag>Trådlös Rödsten</chatTag>
+	</tags>
+	<playermessages>
+		<backupDone>En säkerhetskopia har blivit skapad i plugin foldern!</backupDone>
+		<backupFailed>Säkerhetskopieringen misslyckades!</backupFailed>
+		<channelDoesNotExist>Den här kanalen finns inte!</channelDoesNotExist>
+		<channelLocked>Kanalen är låst!</channelLocked>
+		<channelNameContainsInvalidCaracters>Detta kanalnamn har ogiltiga bokstäver!</channelNameContainsInvalidCaracters>
+		<channelRemoved>Denna kanal har tagits bort!</channelRemoved>
+		<channelRemovedCauseNoSign>Kanalen har blivit borttagen, inga fler skyltar i världarna</channelRemovedCauseNoSign>
+		<channelUnlocked>Kanalen är nu olåst!</channelUnlocked>
+		<commandDoesNotExist>Detta kommando finns inte!</commandDoesNotExist>
+		<commandForNextPage> Skriv /wr list sidonummer för nästa sida!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>Du har nu bytt till ditt specifika språkval i Trådlös Rödsten!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Du är nu på väg att ta bort hela databasen. En säkerhetskopia kommer att skapas innan du gör det. Om du är säker på att göra det, så har du 15 sekunder på dig att skriva detta kommando igen.</DBAboutToBeDeleted>
+		<DBDeleted>Databasen har blivit borttagen utan problem!</DBDeleted>
+		<DBNotDeleted>Databasen har inte blivit borttagen.</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>För att få mer information om en kanal, skriv /wr info [kanal]</forMoreInfosPerformWRInfo>
+		<listEmpty>Listan är tom!</listEmpty>
+		<ownersOfTheChannelAre>Ägarna av denna kanal är</ownersOfTheChannelAre>
+		<pageEmpty>Denna sida är tom!</pageEmpty>
+		<playerCannotCreateChannel>Du har inte tillåtelse att skapa en kanal.</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>Du kan inte skapa en trådlös mottagare på detta block !</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>Du har inte behörighet att skapa denna skylt!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>Du kan inte förstöra mina magiska facklor min vän!</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>Du har inte tillåtelse att förstöra denna skylt!</playerCannotDestroySign>
+		<playerCreatedChannel>Du skapade just en ny kanal!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>Du har inte behörighet till denna kanal.</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>Du har inte behörighet att göra detta.</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>Sidnummer kan inte vara lägre än 0!</pageNumberInferiorToZero>
+		<playerExtendedChannel>Du utökade en kanal!</playerExtendedChannel>
+		<signDestroyed>Du förstörde denna skylt utan problem!</signDestroyed>
+		<subCommandDoesNotExist>Detta underkommandot finns inte!</subCommandDoesNotExist>
+		<thisChannelContains>Denna kanal innehåller</thisChannelContains>
+		<tooFewArguments>Alltför få argument!</tooFewArguments>
+	</playermessages>
+	<logmessages>
+		<newUpdateAvailable>En ny version har släppts! Jag rekommenderar dig att ladda ner den nu på:                             http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+	</logmessages>
+</strings>
+  
+  

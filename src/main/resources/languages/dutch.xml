@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<strings version="0.1">
+	<tags>
+		<chatTag>WirelessRedstone</chatTag>
+	</tags>
+	<playermessages>
+		<backupDone>Een Backup is gemaakt van de plugin map!</backupDone>
+		<backupFailed>Backup gefaald!</backupFailed>
+		<channelDoesNotExist>Dit kanaal bestaat niet!</channelDoesNotExist>
+		<channelLocked>Kanaal beveiligd!</channelLocked>
+		<channelNameContainsInvalidCaracters>Dit kanaal naam bevat foute letters</channelNameContainsInvalidCaracters>
+		<channelRemoved>Dit kanaal is verwijderd</channelRemoved>
+		<channelRemovedCauseNoSign>Kanaal verwijderd. Het kanaal bevat geen borden meer in deze wereld.</channelRemovedCauseNoSign>
+		<channelUnlocked>Kanaal gedeblokkeerd!</channelUnlocked>
+		<commandDoesNotExist>Dit commando bestaat niet!</commandDoesNotExist>
+		<commandForNextPage> Type /wr list paginanummer voor de volgende pagina!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>Je hebt succesvol jouw taal geïnstaleert voor wireless redstone!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Je staat op het punt om je opgeslagen gegevens te verwijderen. Eerst zal er een backup gemaakt worden. Als je zeker weet dat je de database wilt verwijderen moet je dit command binnen 15 seconden opnieuw intypen.</DBAboutToBeDeleted>
+		<DBDeleted>Database is succesvol verwijderd</DBDeleted>
+		<DBNotDeleted>Database is niet verwijderd</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>Om meer informatie over dit kanaal te krijgen kun je /wr info [kanaalnaam] gebruiken</forMoreInfosPerformWRInfo>
+		<listEmpty>Deze lijst is leeg!</listEmpty>
+		<ownersOfTheChannelAre>De eigenaren van dit kanaal zijn</ownersOfTheChannelAre>
+		<pageEmpty>Deze pagina is leeg!</pageEmpty>
+		<playerCannotCreateChannel>Je hebt geen permissie om een kanaal te maken.</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>Op dit blok kan geen draadloze ontvanger geplaatst worden!</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>Je hebt geen permissie om dit bord te maken!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>Je kan mijn magische lampen niet kapot maken, mijn vriend! Zet het kanaal eerst uit!</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>Je hebt geen permissie om dit bordje te slopen!</playerCannotDestroySign>
+		<playerCreatedChannel>Je hebt een nieuw kanaal aangemaakt!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>Je hebt geen permissie voor dit kanaal.</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>Je hebt niet de permissie om dit uit te voeren.</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>Paginanummer kan niet gelijk zijn aan 0!</pageNumberInferiorToZero>
+		<playerExtendedChannel>Je hebt het kanaal zojuist uitgebreid!</playerExtendedChannel>
+		<signDestroyed>Dit bordje is succesvol uit de database van Wireless Redstone verwijderd!</signDestroyed>
+		<subCommandDoesNotExist>Deze sub-opracht bestaat niet!</subCommandDoesNotExist>
+		<thisChannelContains>Dit kanaal bevat</thisChannelContains>
+		<tooFewArguments>Te weinig argumenten!</tooFewArguments>
+	</playermessages>
+	<logmessages>
+		<newUpdateAvailable>Wireless Redstone is geüpdatet! Ik raad je sterk aan om deze te downloaden op http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+	</logmessages>
+</strings>
+  
+  

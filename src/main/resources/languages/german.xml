@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<strings version="0.1">
+	<tags>
+		<chatTag>WirelessRedstone</chatTag>
+	</tags>
+	<playermessages>
+		<backupDone>Eine Sicherung wurde im Plugin Ordner erstellt!</backupDone>
+		<backupFailed>Sicherung fehlgeschlagen!</backupFailed>
+		<channelDoesNotExist>Dieser Kanal existiert nicht!</channelDoesNotExist>
+		<channelLocked>Kanal gesperrt!</channelLocked>
+		<channelNameContainsInvalidCaracters>Dieser Kanal enthält ungültige Zeichen!</channelNameContainsInvalidCaracters>
+		<channelRemoved>Dieser Kanal wurde entfernt!</channelRemoved>
+		<channelRemovedCauseNoSign>Kanal entfernt, keine Schilder in der Welt</channelRemovedCauseNoSign>
+		<channelUnlocked>Kanal freigeschaltet!</channelUnlocked>
+		<commandDoesNotExist>Dieser Befehl ist nicht vorhanden!</commandDoesNotExist>
+		<commandForNextPage> Tippe /wr list Seitennummer für die nächste Seite!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>Deine angepasste Sprache für Wireless Redstone wurde erfolgreich geladen!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Du bist dabei, die gesamte Datenbank zu löschen. Ein Backup wird erstellt, bevor dies geschiet. Wenn du sicher bist, dies zu tun, hast du 15 Sekunden, um diesen Befehl erneut einzugeben.</DBAboutToBeDeleted>
+		<DBDeleted>Datenbank wurde erfolgreich gelöscht!</DBDeleted>
+		<DBNotDeleted>Datenbank wurde nicht gelöscht.</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>Für mehr Informationen zu diesem Kanal, tippe /wr info [Kanal]</forMoreInfosPerformWRInfo>
+		<listEmpty>Diese Liste ist leer!</listEmpty>
+		<ownersOfTheChannelAre>Der Besitzer des Kanals ist</ownersOfTheChannelAre>
+		<pageEmpty>Diese Seite ist leer!</pageEmpty>
+		<playerCannotCreateChannel>Du bist nicht berechtigt, einen Kanal zu erstellen.</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>Auf diesem Block kannst du keinen Wireless Receiver erstellen!</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>Du hast keine Berechtigung dieses Schild zu erstellen!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>Du kannst keine magischen Fackeln zerstören, mein Freund!</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>Du hast keine Berechtigung dieses Schild zu zerstören!</playerCannotDestroySign>
+		<playerCreatedChannel>Du hast einen neuen Kanal erstellt!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>Du hast keinen Zutritt zu diesem Kanal.</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>Du hast keine nötigen Rechte um dies zu tun.</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>Seitenzahl kann nicht kleiner als 0 sein!</pageNumberInferiorToZero>
+		<playerExtendedChannel>Du hast einen Kanal verlängert!</playerExtendedChannel>
+		<signDestroyed>Schild erfolgreich entfernt!</signDestroyed>
+		<subCommandDoesNotExist>Dieser Unterbefehl existiert nicht!</subCommandDoesNotExist>
+		<thisChannelContains>Dieser Kanal enthält</thisChannelContains>
+		<tooFewArguments>Zu wenig Argumente!</tooFewArguments>
+	</playermessages>
+	<logmessages>
+		<newUpdateAvailable>Eine neue Version wurde auf dem Repository hochgeladen! Ich empfehle dir, es jetzt zu downloaden:
+http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+	</logmessages>
+</strings>
+  
+  
