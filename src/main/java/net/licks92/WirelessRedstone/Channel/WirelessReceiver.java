@@ -193,6 +193,15 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 			if (!WirelessRedstone.WireBox.isValidLocation(block))
 			{
 				WirelessRedstone.WireBox.signWarning(block, 1);
+				for(WirelessReceiver receiver : receivers)
+		{
+			if(receiver.getX() == loc.getBlockX() && receiver.getZ() == loc.getBlockZ() && receiver.getY() == loc.getBlockY())
+			{
+				receivers.remove(receiver);
+				return;
+			}
+		}
+	}
 			}
 			else
 			{
@@ -206,7 +215,16 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 			
 			if (!WirelessRedstone.WireBox.isValidWallLocation(block))
 			{
-				WirelessRedstone.WireBox.signWarning(block, 1);
+				WirelessRedstone.WireBox.signWarning(block, 1);	
+			for(WirelessReceiver receiver : receivers)
+		{
+			if(receiver.getX() == loc.getBlockX() && receiver.getZ() == loc.getBlockZ() && receiver.getY() == loc.getBlockY())
+			{
+				receivers.remove(receiver);
+				return;
+			}
+		}
+	}
 			}
 			else
 			{
