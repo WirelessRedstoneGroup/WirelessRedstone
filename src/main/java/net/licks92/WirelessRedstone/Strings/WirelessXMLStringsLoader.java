@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
@@ -25,6 +26,10 @@ public class WirelessXMLStringsLoader
 	public WirelessXMLStringsLoader(WirelessRedstone plugin, String language)
 	{
 		stringsFolder = new File(plugin.getDataFolder() + STRINGS_FOLDER);
+		try
+		{
+			
+		}
 	}
 	
 	private void loadFromFile(File file)
@@ -32,7 +37,7 @@ public class WirelessXMLStringsLoader
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		DocumentBuilder db;
-		Document document;
+		Document document = null;
 		
 		//At first let's load and parse the xml language file.
 		try
@@ -49,9 +54,8 @@ public class WirelessXMLStringsLoader
 		//If the document was successfully parsed.
 		finally
 		{
-			
+			NodeList tags = document.getElementsByTagName("tags");
+			strings.chatTag = tags.item(0).getNodeValue();
 		}
-		
-		
 	}
 }
