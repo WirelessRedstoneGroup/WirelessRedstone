@@ -30,6 +30,8 @@ public class WirelessXMLStringsLoader
 		{
 			
 		}
+		finally
+		{}
 	}
 	
 	private void loadFromFile(File file)

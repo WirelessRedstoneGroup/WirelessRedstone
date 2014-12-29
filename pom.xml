@@ -16,6 +16,32 @@
           <target>1.7</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <artifactSet>
+            <includes>
+              <include>org.mcstats.*:*</include>
+            </includes>
+          </artifactSet>
+          <relocations>
+            <relocation>
+              <pattern>org.mcstats</pattern>
+              <shadedPattern>net.licks92.WirelessRedstone</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -38,22 +64,32 @@
       <systemPath>${basedir}/lib/WorldEdit.jar</systemPath>
       <version>1.5.5</version>
     </dependency>
+    <dependency>
+      <groupId>org.mcstats.bukkit</groupId>
+      <artifactId>metrics</artifactId>
+      <version>R8-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
  
   <repositories>
     <repository>
-      <id>repobo-snap</id>
-      <url>http://repo.bukkit.org/content/groups/public</url>
+      <id>Bukkit</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>Plugin Metrics</id>
+      <url>http://repo.mcstats.org/content/repositories/public</url>
     </repository>
   </repositories>
 
   <dependencyManagement>
   	<dependencies>
   		<dependency>
-  			<groupId>org.bukkit</groupId>
+ 			<groupId>org.bukkit</groupId>
   			<artifactId>bukkit</artifactId>
-  			<version>1.7.2-R0.2</version>
-  		</dependency>
+  			<version>1.8-R0.1-SNAPSHOT</version>
+		</dependency>
    	</dependencies>
   </dependencyManagement>
   <url>http://dev.bukkit.org/server-mods/wireless-redstone/</url>

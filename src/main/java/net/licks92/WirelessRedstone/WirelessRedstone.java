@@ -9,9 +9,6 @@ import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Strings.WirelessYMLStringsLoader;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
-import net.licks92.WirelessRedstone.Utils.Metrics;
-import net.licks92.WirelessRedstone.Utils.Metrics.Graph;
-import net.licks92.WirelessRedstone.Utils.Metrics.Plotter;
 import net.licks92.WirelessRedstone.Utils.Updater;
 import net.licks92.WirelessRedstone.Utils.Updater.UpdateResult;
 import net.licks92.WirelessRedstone.Utils.Updater.UpdateType;
@@ -23,6 +20,9 @@ import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.mcstats.Metrics;
+import org.mcstats.Metrics.Graph;
+import org.mcstats.Metrics.Plotter;
 
 /**
  * This class is the main class of the plugin. It controls the Configuration, the Listeners,
@@ -161,7 +161,7 @@ public class WirelessRedstone extends JavaPlugin
 			metrics = new Metrics(this);
 			
 			// Channel metrics
-			final net.licks92.WirelessRedstone.Utils.Metrics.Graph channelGraph = metrics.createGraph("Channel metrics");
+			final Graph channelGraph = metrics.createGraph("Channel metrics");
 			channelGraph.addPlotter(new Plotter("Total channels")
 			{
 				@Override
