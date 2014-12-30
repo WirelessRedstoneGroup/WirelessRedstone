@@ -4,41 +4,41 @@
 		<chatTag>WirelessRedstone</chatTag>
 	</tags>
 	<playermessages>
-		<backupDone>A backup has been created into the plugin folder!</backupDone>
-		<backupFailed>Backup failed!</backupFailed>
-		<channelDoesNotExist>This channel doesn't exist!</channelDoesNotExist>
-		<channelLocked>Channel locked !</channelLocked>
-		<channelNameContainsInvalidCaracters>This channel name contains invalid caracters !</channelNameContainsInvalidCaracters>
-		<channelRemoved>This channel has been removed!</channelRemoved>
-		<channelRemovedCauseNoSign>Channel removed, no more signs in the worlds</channelRemovedCauseNoSign>
-		<channelUnlocked>Channel unlocked !</channelUnlocked>
-		<commandDoesNotExist>This command does not exist!</commandDoesNotExist>
-		<commandForNextPage> Type /wr list pagenumber for next page!</commandForNextPage>
-		<customizedLanguageSuccessfullyLoaded>You've successfully loaded your customized language for Wireless Redstone!</customizedLanguageSuccessfullyLoaded>
-		<DBAboutToBeDeleted>You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.</DBAboutToBeDeleted>
-		<DBDeleted>Database has been succesfully wiped!</DBDeleted>
-		<DBNotDeleted>Database hasn't been wiped.</DBNotDeleted>
-		<forMoreInfosPerformWRInfo>To get more informations about a channel, perform /wr info [channel]</forMoreInfosPerformWRInfo>
-		<listEmpty>The list in empty!</listEmpty>
-		<ownersOfTheChannelAre>The owners of this channel are</ownersOfTheChannelAre>
-		<pageEmpty>This page is empty!</pageEmpty>
-		<playerCannotCreateChannel>You are not allowed to create a channel.</playerCannotCreateChannel>
-		<playerCannotCreateReceiverOnBlock>You cannot create a wireless receiver on this block !</playerCannotCreateReceiverOnBlock>
-		<playerCannotCreateSign>You don't have the permission to create this sign!</playerCannotCreateSign>
-		<playerCannotDestroyReceiverTorch>You cannot break my magic torches my friend!</playerCannotDestroyReceiverTorch>
-		<playerCannotDestroySign>You are not allowed to destroy this sign!</playerCannotDestroySign>
-		<playerCreatedChannel>You just created a new channel!</playerCreatedChannel>
-		<playerDoesntHaveAccessToChannel>You don't have access to this channel.</playerDoesntHaveAccessToChannel>
-		<playerDoesntHavePermission>You don't have the permissions to do this.</playerDoesntHavePermission>
-		<pageNumberInferiorToZero>Page number cannot be inferior to 0!</pageNumberInferiorToZero>
-		<playerExtendedChannel>You just extended a channel!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign !</signDestroyed>
-		<subCommandDoesNotExist>This subcommand doesn't exist!</subCommandDoesNotExist>
-		<thisChannelContains>This channel contains</thisChannelContains>
-		<tooFewArguments>Too few arguments !</tooFewArguments>
+		<backupDone>Una còpia de seguretat s'ha creat a la carpeta de plugin!</backupDone>
+		<backupFailed>Error en la còpia de seguretat!</backupFailed>
+		<channelDoesNotExist>Aquest canal no existeix!</channelDoesNotExist>
+		<channelLocked>Canal tancat!</channelLocked>
+		<channelNameContainsInvalidCaracters>El nom del canal té caràcters invalids!</channelNameContainsInvalidCaracters>
+		<channelRemoved>Aquest canal s'ha eliminat!</channelRemoved>
+		<channelRemovedCauseNoSign>Canal eliminat, no hi ha més signes en els mons</channelRemovedCauseNoSign>
+		<channelUnlocked>Canal desbloquejat!</channelUnlocked>
+		<commandDoesNotExist>Aquesta comanda no existeix!</commandDoesNotExist>
+		<commandForNextPage> Tipus /wr llista número de pàgina per a la pàgina següent!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>S'ha carregat el teu llenguatge per wirlessredstone!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Esteu a punt de suprimir la base de dades sencera. Es farà una còpia de seguretat abans de fer-ho. Si esteu segurs de fer-ho, tens 15 segons per escriure aquesta comanda una altra vegada.</DBAboutToBeDeleted>
+		<DBDeleted>Base de dades ha estat esborrada correctament!</DBDeleted>
+		<DBNotDeleted>La Base de dades no ha estat esborrat.</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>Per obtenir més informacions sobre un canal, escriu /wr info [canal]</forMoreInfosPerformWRInfo>
+		<listEmpty>La llista de buit!</listEmpty>
+		<ownersOfTheChannelAre>Els propietaris d'aquest canal són</ownersOfTheChannelAre>
+		<pageEmpty>Aquesta pàgina és buida!</pageEmpty>
+		<playerCannotCreateChannel>No podeu crear un canal.</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>No pots crear un receptor de redstone en aquest bloc!</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>No tens permís per crear aquest signe!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>No pots trencar les meves torxes màgiques amic meu!</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>No tens permís per destruir aquest signe!</playerCannotDestroySign>
+		<playerCreatedChannel>Has creat un nou canal!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>No teniu accés a aquest canal.</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>No teniu els permisos per fer-ho.</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>Número de pàgina no pot ser inferior a 0!</pageNumberInferiorToZero>
+		<playerExtendedChannel>Es va allargar un canal!</playerExtendedChannel>
+		<signDestroyed>Has tret aquest signe!</signDestroyed>
+		<subCommandDoesNotExist>Aquest subcommand no existeix!</subCommandDoesNotExist>
+		<thisChannelContains>Aquest canal conté</thisChannelContains>
+		<tooFewArguments>També alguns arguments!</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
+		<newUpdateAvailable>Una nova versió s'ha pujat al dipòsit! Li recomano que per descarregar-lo ara en http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   

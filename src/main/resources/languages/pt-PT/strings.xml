@@ -5,40 +5,40 @@
 	</tags>
 	<playermessages>
 		<backupDone>A backup has been created into the plugin folder!</backupDone>
-		<backupFailed>Backup failed!</backupFailed>
-		<channelDoesNotExist>This channel doesn't exist!</channelDoesNotExist>
-		<channelLocked>Channel locked !</channelLocked>
-		<channelNameContainsInvalidCaracters>This channel name contains invalid caracters !</channelNameContainsInvalidCaracters>
-		<channelRemoved>This channel has been removed!</channelRemoved>
-		<channelRemovedCauseNoSign>Channel removed, no more signs in the worlds</channelRemovedCauseNoSign>
-		<channelUnlocked>Channel unlocked !</channelUnlocked>
-		<commandDoesNotExist>This command does not exist!</commandDoesNotExist>
-		<commandForNextPage> Type /wr list pagenumber for next page!</commandForNextPage>
-		<customizedLanguageSuccessfullyLoaded>You've successfully loaded your customized language for Wireless Redstone!</customizedLanguageSuccessfullyLoaded>
-		<DBAboutToBeDeleted>You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.</DBAboutToBeDeleted>
-		<DBDeleted>Database has been succesfully wiped!</DBDeleted>
-		<DBNotDeleted>Database hasn't been wiped.</DBNotDeleted>
-		<forMoreInfosPerformWRInfo>To get more informations about a channel, perform /wr info [channel]</forMoreInfosPerformWRInfo>
-		<listEmpty>The list in empty!</listEmpty>
-		<ownersOfTheChannelAre>The owners of this channel are</ownersOfTheChannelAre>
-		<pageEmpty>This page is empty!</pageEmpty>
-		<playerCannotCreateChannel>You are not allowed to create a channel.</playerCannotCreateChannel>
-		<playerCannotCreateReceiverOnBlock>You cannot create a wireless receiver on this block !</playerCannotCreateReceiverOnBlock>
-		<playerCannotCreateSign>You don't have the permission to create this sign!</playerCannotCreateSign>
-		<playerCannotDestroyReceiverTorch>You cannot break my magic torches my friend!</playerCannotDestroyReceiverTorch>
-		<playerCannotDestroySign>You are not allowed to destroy this sign!</playerCannotDestroySign>
-		<playerCreatedChannel>You just created a new channel!</playerCreatedChannel>
-		<playerDoesntHaveAccessToChannel>You don't have access to this channel.</playerDoesntHaveAccessToChannel>
-		<playerDoesntHavePermission>You don't have the permissions to do this.</playerDoesntHavePermission>
-		<pageNumberInferiorToZero>Page number cannot be inferior to 0!</pageNumberInferiorToZero>
-		<playerExtendedChannel>You just extended a channel!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign !</signDestroyed>
-		<subCommandDoesNotExist>This subcommand doesn't exist!</subCommandDoesNotExist>
-		<thisChannelContains>This channel contains</thisChannelContains>
-		<tooFewArguments>Too few arguments !</tooFewArguments>
+		<backupFailed>backup falhou!</backupFailed>
+		<channelDoesNotExist>Este canal não existe!</channelDoesNotExist>
+		<channelLocked>canal bloqueado!</channelLocked>
+		<channelNameContainsInvalidCaracters>Este canal contém caracteres inválidos!</channelNameContainsInvalidCaracters>
+		<channelRemoved>Este canal foi removido!</channelRemoved>
+		<channelRemovedCauseNoSign>Canal removido, não há mais placas nos mundos</channelRemovedCauseNoSign>
+		<channelUnlocked>Canal desbloqueado!</channelUnlocked>
+		<commandDoesNotExist>Este comando não existe!</commandDoesNotExist>
+		<commandForNextPage> Escreve /wr lista nºDaPágina para a próxima página!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>Você carregou a sua linguagem costumizada para Redstone Sem Fios com sucesso!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Você está prestes a eliminar toda a base de dados. Um backup será feito antes de o fazer. Se tem certeza de o fazer, tem 15 segundos para escrever este comando de novo.</DBAboutToBeDeleted>
+		<DBDeleted>Base de dados foi eliminada com sucesso!</DBDeleted>
+		<DBNotDeleted>Base de dados não foi eliminada.</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>Para obter mais informações sobre o canal, use /wr [canal]</forMoreInfosPerformWRInfo>
+		<listEmpty>A lista está vazia!</listEmpty>
+		<ownersOfTheChannelAre>Os donos deste canal são</ownersOfTheChannelAre>
+		<pageEmpty>Esta página está vazia!</pageEmpty>
+		<playerCannotCreateChannel>Você não tem permissão para criar um canal.</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>Você não pode criar um recetor sem fios neste bloco!</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>Você não tem permissão para criar esta placa!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>Você não pode partir minhas tochas mágicas meu amigo!</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>Você não tem permissão para destruir esta placa!</playerCannotDestroySign>
+		<playerCreatedChannel>Você acabou de criar um novo canal!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>Você não tem acesso a este canal.</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>Você não tem permissões para fazer isto.</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>Número da página não pode ser inferior a 0!</pageNumberInferiorToZero>
+		<playerExtendedChannel>Você acabou de aumentar um canal!</playerExtendedChannel>
+		<signDestroyed>Removeu esta placa com sucesso!</signDestroyed>
+		<subCommandDoesNotExist>Este sub-comando não existe!</subCommandDoesNotExist>
+		<thisChannelContains>Este canal contém</thisChannelContains>
+		<tooFewArguments>Muito poucos argumentos!</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
+		<newUpdateAvailable>Uma nova versão foi postada no repositório! Eu recomendo que você faça download dela agora em http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   

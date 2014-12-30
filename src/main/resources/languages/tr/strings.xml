@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <strings version="0.1">
 	<tags>
-		<chatTag>WirelessRedstone</chatTag>
+		<chatTag>KablosuzKızıltaş</chatTag>
 	</tags>
 	<playermessages>
-		<backupDone>A backup has been created into the plugin folder!</backupDone>
-		<backupFailed>Backup failed!</backupFailed>
-		<channelDoesNotExist>This channel doesn't exist!</channelDoesNotExist>
-		<channelLocked>Channel locked !</channelLocked>
-		<channelNameContainsInvalidCaracters>This channel name contains invalid caracters !</channelNameContainsInvalidCaracters>
-		<channelRemoved>This channel has been removed!</channelRemoved>
-		<channelRemovedCauseNoSign>Channel removed, no more signs in the worlds</channelRemovedCauseNoSign>
-		<channelUnlocked>Channel unlocked !</channelUnlocked>
-		<commandDoesNotExist>This command does not exist!</commandDoesNotExist>
-		<commandForNextPage> Type /wr list pagenumber for next page!</commandForNextPage>
-		<customizedLanguageSuccessfullyLoaded>You've successfully loaded your customized language for Wireless Redstone!</customizedLanguageSuccessfullyLoaded>
-		<DBAboutToBeDeleted>You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.</DBAboutToBeDeleted>
-		<DBDeleted>Database has been succesfully wiped!</DBDeleted>
-		<DBNotDeleted>Database hasn't been wiped.</DBNotDeleted>
-		<forMoreInfosPerformWRInfo>To get more informations about a channel, perform /wr info [channel]</forMoreInfosPerformWRInfo>
-		<listEmpty>The list in empty!</listEmpty>
-		<ownersOfTheChannelAre>The owners of this channel are</ownersOfTheChannelAre>
-		<pageEmpty>This page is empty!</pageEmpty>
-		<playerCannotCreateChannel>You are not allowed to create a channel.</playerCannotCreateChannel>
-		<playerCannotCreateReceiverOnBlock>You cannot create a wireless receiver on this block !</playerCannotCreateReceiverOnBlock>
-		<playerCannotCreateSign>You don't have the permission to create this sign!</playerCannotCreateSign>
-		<playerCannotDestroyReceiverTorch>You cannot break my magic torches my friend!</playerCannotDestroyReceiverTorch>
-		<playerCannotDestroySign>You are not allowed to destroy this sign!</playerCannotDestroySign>
-		<playerCreatedChannel>You just created a new channel!</playerCreatedChannel>
-		<playerDoesntHaveAccessToChannel>You don't have access to this channel.</playerDoesntHaveAccessToChannel>
-		<playerDoesntHavePermission>You don't have the permissions to do this.</playerDoesntHavePermission>
-		<pageNumberInferiorToZero>Page number cannot be inferior to 0!</pageNumberInferiorToZero>
-		<playerExtendedChannel>You just extended a channel!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign !</signDestroyed>
-		<subCommandDoesNotExist>This subcommand doesn't exist!</subCommandDoesNotExist>
-		<thisChannelContains>This channel contains</thisChannelContains>
-		<tooFewArguments>Too few arguments !</tooFewArguments>
+		<backupDone>Yedeğiniz plugin klasöründe oluşturuldu!</backupDone>
+		<backupFailed>Yedekleme başarısız!</backupFailed>
+		<channelDoesNotExist>Bu kanal bulunamadı!</channelDoesNotExist>
+		<channelLocked>Kanal kilitlendi!</channelLocked>
+		<channelNameContainsInvalidCaracters>Kanal ismi yanlış karakter içeriyor!</channelNameContainsInvalidCaracters>
+		<channelRemoved>Bu kanal silindi!</channelRemoved>
+		<channelRemovedCauseNoSign>Kanal silindi , bu dünyada başka tabela yok</channelRemovedCauseNoSign>
+		<channelUnlocked>Kanalın kilidi açıldı!</channelUnlocked>
+		<commandDoesNotExist>Böyle bir komut yok!</commandDoesNotExist>
+		<commandForNextPage> Yeni sayfa için /wr list pagenumber yazın!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>Kablosuz Kızıltaş için dil çevirisi başarıyla yüklendi!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Veri tabanını silmek istiyorsunuz. Yedek dosyası silme işleminden önce oluşturulacaktır. Eğer bunu yapmak istediğinize eminseniz komutu tekrar yazmak için 15 saniyeniz var.</DBAboutToBeDeleted>
+		<DBDeleted>Veri tabanı temizlendi!</DBDeleted>
+		<DBNotDeleted>Veri tabanı temizlenemedi.</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>Kanal hakkında bilgi almak için,  /wr info [kanal ismi] yazın.</forMoreInfosPerformWRInfo>
+		<listEmpty>Liste boş!</listEmpty>
+		<ownersOfTheChannelAre>Bu kanalın sahipleri</ownersOfTheChannelAre>
+		<pageEmpty>Bu sayfa boş!</pageEmpty>
+		<playerCannotCreateChannel>Kanal yaratma yetkiniz yok.</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>Bu bloğa kablosuz alıcı yerleştiremezsiniz!</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>Bu tabelayı oluşturmaya yetkiniz yok!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>Dostum benim sihirli meşalemi kıramazsın!</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>Bu tabelayı kırmaya yetkiniz yoktur!</playerCannotDestroySign>
+		<playerCreatedChannel>Yeni bir kanal oluşturuldu!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>Bu kanala erişiminiz yasaktır.</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>Bunu yapmak için yetkiniz yok.</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>Sayfa numarası 0 dan az olamaz!</pageNumberInferiorToZero>
+		<playerExtendedChannel>Kanalı genişlettiniz!</playerExtendedChannel>
+		<signDestroyed>Bu tabela başarıyla silindi!</signDestroyed>
+		<subCommandDoesNotExist>Bu alt komut bulunamadı!</subCommandDoesNotExist>
+		<thisChannelContains>Bu kanaldakiler</thisChannelContains>
+		<tooFewArguments>Çok fazla argüman var!</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
+		<newUpdateAvailable>Yeni versiyon depoya yüklendi. Bizce kesinlikle  http://dev.bukkit.org/server-mods/wireless-redstone/ adresinden güncelleme yapmalısınız</newUpdateAvailable>
 	</logmessages>
 </strings>
   

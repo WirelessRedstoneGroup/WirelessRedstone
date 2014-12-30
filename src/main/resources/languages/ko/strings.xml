@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <strings version="0.1">
 	<tags>
-		<chatTag>WirelessRedstone</chatTag>
+		<chatTag>무선 레드스톤</chatTag>
 	</tags>
 	<playermessages>
-		<backupDone>A backup has been created into the plugin folder!</backupDone>
-		<backupFailed>Backup failed!</backupFailed>
-		<channelDoesNotExist>This channel doesn't exist!</channelDoesNotExist>
-		<channelLocked>Channel locked !</channelLocked>
-		<channelNameContainsInvalidCaracters>This channel name contains invalid caracters !</channelNameContainsInvalidCaracters>
-		<channelRemoved>This channel has been removed!</channelRemoved>
-		<channelRemovedCauseNoSign>Channel removed, no more signs in the worlds</channelRemovedCauseNoSign>
-		<channelUnlocked>Channel unlocked !</channelUnlocked>
-		<commandDoesNotExist>This command does not exist!</commandDoesNotExist>
-		<commandForNextPage> Type /wr list pagenumber for next page!</commandForNextPage>
-		<customizedLanguageSuccessfullyLoaded>You've successfully loaded your customized language for Wireless Redstone!</customizedLanguageSuccessfullyLoaded>
-		<DBAboutToBeDeleted>You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.</DBAboutToBeDeleted>
-		<DBDeleted>Database has been succesfully wiped!</DBDeleted>
-		<DBNotDeleted>Database hasn't been wiped.</DBNotDeleted>
-		<forMoreInfosPerformWRInfo>To get more informations about a channel, perform /wr info [channel]</forMoreInfosPerformWRInfo>
-		<listEmpty>The list in empty!</listEmpty>
-		<ownersOfTheChannelAre>The owners of this channel are</ownersOfTheChannelAre>
-		<pageEmpty>This page is empty!</pageEmpty>
-		<playerCannotCreateChannel>You are not allowed to create a channel.</playerCannotCreateChannel>
-		<playerCannotCreateReceiverOnBlock>You cannot create a wireless receiver on this block !</playerCannotCreateReceiverOnBlock>
-		<playerCannotCreateSign>You don't have the permission to create this sign!</playerCannotCreateSign>
-		<playerCannotDestroyReceiverTorch>You cannot break my magic torches my friend!</playerCannotDestroyReceiverTorch>
-		<playerCannotDestroySign>You are not allowed to destroy this sign!</playerCannotDestroySign>
-		<playerCreatedChannel>You just created a new channel!</playerCreatedChannel>
-		<playerDoesntHaveAccessToChannel>You don't have access to this channel.</playerDoesntHaveAccessToChannel>
-		<playerDoesntHavePermission>You don't have the permissions to do this.</playerDoesntHavePermission>
-		<pageNumberInferiorToZero>Page number cannot be inferior to 0!</pageNumberInferiorToZero>
-		<playerExtendedChannel>You just extended a channel!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign !</signDestroyed>
-		<subCommandDoesNotExist>This subcommand doesn't exist!</subCommandDoesNotExist>
-		<thisChannelContains>This channel contains</thisChannelContains>
-		<tooFewArguments>Too few arguments !</tooFewArguments>
+		<backupDone>플러그인 폴더에 백업 완료되었습니다!</backupDone>
+		<backupFailed>백업 실패!</backupFailed>
+		<channelDoesNotExist>이 채널은 존재하지 않습니다!</channelDoesNotExist>
+		<channelLocked>채널을 잠궜습니다 !</channelLocked>
+		<channelNameContainsInvalidCaracters>채널 이름에 잘못된 문자가 있습니다!</channelNameContainsInvalidCaracters>
+		<channelRemoved>채널이 제거되었습니다!</channelRemoved>
+		<channelRemovedCauseNoSign>채널이 제거되었습니다, 월드에 표지판이 없습니다</channelRemovedCauseNoSign>
+		<channelUnlocked>채널을 잠금해제하였습니다 !</channelUnlocked>
+		<commandDoesNotExist>명령어가 존재하지 않습니다!</commandDoesNotExist>
+		<commandForNextPage> 다음 페이지는 /wr list 에 있습니다!</commandForNextPage>
+		<customizedLanguageSuccessfullyLoaded>Wireless Redstone(무선 레드스톤) 사용자 지정 언어를 성공적으로 로드 했습니다!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>전체 데이터베이스를 삭제하려고 합니다. 삭제되기 전에 백업될것입니다. 정말로 삭제하려면 15초 안에 이 명령어를 다시 치십시오.</DBAboutToBeDeleted>
+		<DBDeleted>데이터베이스를 성공적으로 삭제했습니다!</DBDeleted>
+		<DBNotDeleted>데이터베이스는 삭제되지 않았습니다.</DBNotDeleted>
+		<forMoreInfosPerformWRInfo>채널에 대한 더 많은 정보를 얻으려면 /wr info [채널] 을 치십시오.</forMoreInfosPerformWRInfo>
+		<listEmpty>목록이 비었습니다!</listEmpty>
+		<ownersOfTheChannelAre>이 채널의 소유자들은</ownersOfTheChannelAre>
+		<pageEmpty>이 페이지는 비었습니다!</pageEmpty>
+		<playerCannotCreateChannel>채널을 만들 수 없습니다.</playerCannotCreateChannel>
+		<playerCannotCreateReceiverOnBlock>이 블록에 무선 수신기를 만들 수 없습니다 !</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>이 표지판을 만들 수 있는 권한이 없습니다!</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>넌 내 마법 횃불을 못 부숴 친구야</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>이 표지판을 파괴할 수 없습니다!</playerCannotDestroySign>
+		<playerCreatedChannel>채널을 만들었습니다!</playerCreatedChannel>
+		<playerDoesntHaveAccessToChannel>채널에 접근할 수 없습니다.</playerDoesntHaveAccessToChannel>
+		<playerDoesntHavePermission>이 작업을 할 권한이 없습니다.</playerDoesntHavePermission>
+		<pageNumberInferiorToZero>페이지 수는 0 이하일 수 없습니다!</pageNumberInferiorToZero>
+		<playerExtendedChannel>채널을 확장하였습니다!</playerExtendedChannel>
+		<signDestroyed>표지판을 성공적으로 제거하였습니다 !</signDestroyed>
+		<subCommandDoesNotExist>이 하위 명령어는 존재하지 않습니다!</subCommandDoesNotExist>
+		<thisChannelContains>이 채널에 포함되는 것은</thisChannelContains>
+		<tooFewArguments>너무 적은 인수 !</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
+		<newUpdateAvailable>새로운 버전이 저장소에 업로드되었습니다! http://dev.bukkit.org/server-mods/wireless-redstone/ 에서 다운로드하는 것을 적극적으로 추천합니다</newUpdateAvailable>
 	</logmessages>
 </strings>
   
