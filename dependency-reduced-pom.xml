@@ -29,15 +29,24 @@
           </execution>
         </executions>
         <configuration>
+          <minimizeJar>true</minimizeJar>
           <artifactSet>
             <includes>
-              <include>org.mcstats.*:*</include>
+              <include>net.gravitydevelopment.updater.*</include>
+              <include>org.mcstats.*</include>
             </includes>
           </artifactSet>
           <relocations>
             <relocation>
               <pattern>org.mcstats</pattern>
               <shadedPattern>net.licks92.WirelessRedstone</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>net.gravitydevelopment.updater</pattern>
+              <shadedPattern>net.licks92.WirelessRedstone</shadedPattern>
+              <includes>
+                <include>net.gravitydevelopment.updater.*</include>
+              </includes>
             </relocation>
           </relocations>
         </configuration>
@@ -52,6 +61,10 @@
     <repository>
       <id>Plugin Metrics</id>
       <url>http://repo.mcstats.org/content/repositories/public</url>
+    </repository>
+    <repository>
+      <id>gravity-repo</id>
+      <url>http://repo.gravitydevelopment.net</url>
     </repository>
   </repositories>
   <dependencies>
@@ -74,6 +87,12 @@
       <version>1.5.5</version>
       <scope>system</scope>
       <systemPath>C:\Users\LeaX\Github\WirelessRedstone/lib/WorldEdit.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>net.gravitydevelopment.updater</groupId>
+      <artifactId>updater</artifactId>
+      <version>2.3</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>

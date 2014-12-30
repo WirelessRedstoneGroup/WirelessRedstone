@@ -1,5 +1,8 @@
 package net.licks92.WirelessRedstone;
 
+import net.gravitydevelopment.updater.Updater;
+import net.gravitydevelopment.updater.Updater.UpdateResult;
+import net.gravitydevelopment.updater.Updater.UpdateType;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
@@ -9,9 +12,6 @@ import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Strings.WirelessYMLStringsLoader;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
-import net.licks92.WirelessRedstone.Utils.Updater;
-import net.licks92.WirelessRedstone.Utils.Updater.UpdateResult;
-import net.licks92.WirelessRedstone.Utils.Updater.UpdateType;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Chunk;

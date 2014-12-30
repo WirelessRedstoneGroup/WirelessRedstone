@@ -1,8 +1,8 @@
 package net.licks92.WirelessRedstone.Listeners;
 
+import net.gravitydevelopment.updater.Updater.UpdateResult;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Utils.Updater.UpdateResult;
 
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
