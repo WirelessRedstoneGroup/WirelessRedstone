@@ -24,12 +24,18 @@ public class WirelessXMLStringsLoader extends WirelessStrings
 	
 	public WirelessXMLStringsLoader(WirelessRedstone plugin, String language)
 	{
-		String location = STRINGS_FOLDER + language + "/strings.xml";
-		InputStream stream = plugin.getResource(location);
-		if(stream != null)
+		String defaultLocation = STRINGS_FOLDER + defaultLanguage + "/strings.xml";
+		InputStream stream = plugin.getResource(STRINGS_FOLDER + language + "/strings.xml");
+		if(stream != null) {
 			loadFromStream(stream);
-		else
-			WirelessRedstone.getWRLogger().severe("Could not load the strings in " + location + ". Your jar file is probably corrupted. Please download it again from dev.bukkit.org/bukkit-plugins/wireless-redstone/");
+		} else {
+			WirelessRedstone.getWRLogger().warning("You've set the language to " + language + " in your configuration. This language is not available. The plugin will now load the default english strings.");
+			stream = plugin.getResource(STRINGS_FOLDER + defaultLanguage + "/strings.xml");
+			if(stream != null)
+				loadFromStream(stream);
+			else
+				WirelessRedstone.getWRLogger().severe("Could not load the strings in " + defaultLocation + ". Your jar file is probably corrupted. Please download it again from dev.bukkit.org/bukkit-plugins/wireless-redstone/");
+		}
 	}
 	
 	private void loadFromStream(InputStream stream)
