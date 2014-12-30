@@ -38,7 +38,7 @@
 		<tooFewArguments>Muy pocos argumentos!</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>Una nueva versión ha salido! Recomiendo descargarlo ahora en http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+		<newUpdateAvailable>Una nueva versión ha salido! Recomiendo descargarlo ahora en http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   

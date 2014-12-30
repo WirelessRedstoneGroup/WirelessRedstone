@@ -38,7 +38,7 @@
 		<tooFewArguments>参数太少！</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>新版本已上载于资源库！我强烈建议你下载它的http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+		<newUpdateAvailable>新版本已上载于资源库！我强烈建议你下载它的http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   

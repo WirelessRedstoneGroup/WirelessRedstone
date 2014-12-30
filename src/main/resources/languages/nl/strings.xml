@@ -38,7 +38,7 @@
 		<tooFewArguments>Te weinig argumenten!</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>Wireless Redstone is geüpdatet! Ik raad je sterk aan om deze te downloaden op http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+		<newUpdateAvailable>Wireless Redstone is geüpdatet! Ik raad je sterk aan om deze te downloaden op http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   

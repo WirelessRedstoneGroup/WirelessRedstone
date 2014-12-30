@@ -10,7 +10,7 @@ import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
-import net.licks92.WirelessRedstone.Strings.WirelessYMLStringsLoader;
+import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
 import net.milkbowl.vault.permission.Permission;
 
@@ -29,15 +29,13 @@ import org.mcstats.Metrics.Plotter;
  * it sends the metrics and controls the actions when enabling / disabling.
  * 
  * @author licks92
- * 
- * @version 1.8.4b
  */
 public class WirelessRedstone extends JavaPlugin
 {
 	public static WirelessConfiguration config;
 	public static WirelessStrings strings;
 	public static WirelessGlobalCache cache;
-	private WirelessYMLStringsLoader stringLoader;
+	private WirelessXMLStringsLoader stringLoader;
 	private static WRLogger logger;
 	public static WireBox WireBox;
 	public WirelessPermissions permissions;
@@ -125,7 +123,7 @@ public class WirelessRedstone extends JavaPlugin
 		}
 		
 		//Load strings
-		stringLoader = new WirelessYMLStringsLoader(this, config.getLanguage());
+		stringLoader = new WirelessXMLStringsLoader(this, config.getLanguage());
 		strings = stringLoader.getStrings();
 		
 		//Load listeners

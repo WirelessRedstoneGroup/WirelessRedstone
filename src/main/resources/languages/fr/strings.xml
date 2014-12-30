@@ -38,7 +38,7 @@
 		<tooFewArguments>Il manque des arguments!</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>Une nouvelle a été publiée! Je vous recommande fortement de la télécharger dès maintenant à partir de ce lien : http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+		<newUpdateAvailable>Une nouvelle a été publiée! Je vous recommande fortement de la télécharger dès maintenant à partir de ce lien : http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   

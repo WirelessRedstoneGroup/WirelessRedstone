@@ -38,7 +38,7 @@
 		<tooFewArguments>Túl kevés argumentum!</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>Egy új verzió van feltöltve! Javasolt hogy tölsd le az alábbi linkről: http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+		<newUpdateAvailable>Egy új verzió van feltöltve! Javasolt hogy tölsd le az alábbi linkről: http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   

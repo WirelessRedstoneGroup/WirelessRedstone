@@ -38,7 +38,7 @@
 		<tooFewArguments>Слишком мало аргументов !</tooFewArguments>
 	</playermessages>
 	<logmessages>
-		<newUpdateAvailable>Новая версия была загружена в хранилище! Я настоятельно рекомендую вам скачать его сейчас на http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailableoad>
+		<newUpdateAvailable>Новая версия была загружена в хранилище! Я настоятельно рекомендую вам скачать его сейчас на http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
   
