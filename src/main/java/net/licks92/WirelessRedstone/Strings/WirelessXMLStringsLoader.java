@@ -17,24 +17,19 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 /**
  * Loads the strings from a specific file. If some strings are missing, it will replace them by the one in the default english file.
  */
-public class WirelessXMLStringsLoader
+public class WirelessXMLStringsLoader extends WirelessStrings
 {
-	private WirelessStrings strings;
 	private final String STRINGS_FOLDER = "languages/";
 	private final String defaultLanguage = "en";
 	
 	public WirelessXMLStringsLoader(WirelessRedstone plugin, String language)
 	{
-		this.strings = WirelessRedstone.strings;
-		try {
-			InputStream stream = plugin.getResource(STRINGS_FOLDER + language + "/strings.xml");
-			if(stream != null)
-				loadFromStream(stream);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			//Well.
-		}
+		String location = STRINGS_FOLDER + language + "/strings.xml";
+		InputStream stream = plugin.getResource(location);
+		if(stream != null)
+			loadFromStream(stream);
+		else
+			WirelessRedstone.getWRLogger().severe("Could not load the strings in " + location + ". Your jar file is probably corrupted. Please download it again from dev.bukkit.org/bukkit-plugins/wireless-redstone/");
 	}
 	
 	private void loadFromStream(InputStream stream)
@@ -52,55 +47,54 @@ public class WirelessXMLStringsLoader
 				{
 				case "tags": // Load the tags
 					final Element tagsElement = (Element)rootNodes.item(i);
-					WirelessRedstone.getWRLogger().debug("Loading the tags strings...");
+					WirelessRedstone.getWRLogger().debug("Loading the tags ..");
 					
-					strings.chatTag = tagsElement.getElementsByTagName("chatTag").item(0).getTextContent();
-					WirelessRedstone.getWRLogger().debug(strings.chatTag);
+					chatTag = tagsElement.getElementsByTagName("chatTag").item(0).getTextContent();
 					break;
 					
 				case "playermessages": // Load the PM strings
 					Element PMElement = (Element)rootNodes.item(i);
-					WirelessRedstone.getWRLogger().debug("Loading the player messages strings...");
+					WirelessRedstone.getWRLogger().debug("Loading the player messages ..");
 					
-					strings.backupDone = PMElement.getElementsByTagName("backupDone").item(0).getTextContent();
-					strings.backupFailed = PMElement.getElementsByTagName("backupFailed").item(0).getTextContent();
-					strings.channelDoesNotExist = PMElement.getElementsByTagName("channelDoesNotExist").item(0).getTextContent();
-					strings.channelLocked = PMElement.getElementsByTagName("channelLocked").item(0).getTextContent();
-					strings.channelNameContainsInvalidCaracters = PMElement.getElementsByTagName("channelNameContainsInvalidCaracters").item(0).getTextContent();
-					strings.channelRemoved = PMElement.getElementsByTagName("channelRemoved").item(0).getTextContent();
-					strings.channelRemovedCauseNoSign = PMElement.getElementsByTagName("channelRemovedCauseNoSign").item(0).getTextContent();
-					strings.channelUnlocked = PMElement.getElementsByTagName("channelUnlocked").item(0).getTextContent();
-					strings.commandDoesNotExist = PMElement.getElementsByTagName("commandDoesNotExist").item(0).getTextContent();
-					strings.commandForNextPage = PMElement.getElementsByTagName("commandForNextPage").item(0).getTextContent();
-					strings.customizedLanguageSuccessfullyLoaded = PMElement.getElementsByTagName("customizedLanguageSuccessfullyLoaded").item(0).getTextContent();
-					strings.DBAboutToBeDeleted = PMElement.getElementsByTagName("DBAboutToBeDeleted").item(0).getTextContent();
-					strings.DBDeleted = PMElement.getElementsByTagName("DBDeleted").item(0).getTextContent();
-					strings.DBNotDeleted = PMElement.getElementsByTagName("DBNotDeleted").item(0).getTextContent();
-					strings.forMoreInfosPerformWRInfo = PMElement.getElementsByTagName("forMoreInfosPerformWRInfo").item(0).getTextContent();
-					strings.listEmpty = PMElement.getElementsByTagName("listEmpty").item(0).getTextContent();
-					strings.ownersOfTheChannelAre = PMElement.getElementsByTagName("ownersOfTheChannelAre").item(0).getTextContent();
-					strings.pageEmpty = PMElement.getElementsByTagName("pageEmpty").item(0).getTextContent();
-					strings.pageNumberInferiorToZero = PMElement.getElementsByTagName("pageNumberInferiorToZero").item(0).getTextContent();
-					strings.playerCannotCreateChannel = PMElement.getElementsByTagName("playerCannotCreateChannel").item(0).getTextContent();
-					strings.playerCannotCreateReceiverOnBlock = PMElement.getElementsByTagName("playerCannotCreateReceiverOnBlock").item(0).getTextContent();
-					strings.playerCannotCreateSign = PMElement.getElementsByTagName("playerCannotCreateSign").item(0).getTextContent();
-					strings.playerCannotDestroyReceiverTorch = PMElement.getElementsByTagName("playerCannotDestroyReceiverTorch").item(0).getTextContent();
-					strings.playerCannotDestroySign = PMElement.getElementsByTagName("playerCannotDestroySign").item(0).getTextContent();
-					strings.playerCreatedChannel = PMElement.getElementsByTagName("playerCreatedChannel").item(0).getTextContent();
-					strings.playerDoesntHaveAccessToChannel = PMElement.getElementsByTagName("playerDoesntHaveAccessToChannel").item(0).getTextContent();
-					strings.playerDoesntHavePermission = PMElement.getElementsByTagName("playerDoesntHavePermission").item(0).getTextContent();
-					strings.playerExtendedChannel = PMElement.getElementsByTagName("playerExtendedChannel").item(0).getTextContent();
-					strings.signDestroyed = PMElement.getElementsByTagName("signDestroyed").item(0).getTextContent();
-					strings.subCommandDoesNotExist = PMElement.getElementsByTagName("subCommandDoesNotExist").item(0).getTextContent();
-					strings.thisChannelContains = PMElement.getElementsByTagName("thisChannelContains").item(0).getTextContent();
-					strings.tooFewArguments = PMElement.getElementsByTagName("tooFewArguments").item(0).getTextContent();
+					backupDone = PMElement.getElementsByTagName("backupDone").item(0).getTextContent();
+					backupFailed = PMElement.getElementsByTagName("backupFailed").item(0).getTextContent();
+					channelDoesNotExist = PMElement.getElementsByTagName("channelDoesNotExist").item(0).getTextContent();
+					channelLocked = PMElement.getElementsByTagName("channelLocked").item(0).getTextContent();
+					channelNameContainsInvalidCaracters = PMElement.getElementsByTagName("channelNameContainsInvalidCaracters").item(0).getTextContent();
+					channelRemoved = PMElement.getElementsByTagName("channelRemoved").item(0).getTextContent();
+					channelRemovedCauseNoSign = PMElement.getElementsByTagName("channelRemovedCauseNoSign").item(0).getTextContent();
+					channelUnlocked = PMElement.getElementsByTagName("channelUnlocked").item(0).getTextContent();
+					commandDoesNotExist = PMElement.getElementsByTagName("commandDoesNotExist").item(0).getTextContent();
+					commandForNextPage = PMElement.getElementsByTagName("commandForNextPage").item(0).getTextContent();
+					customizedLanguageSuccessfullyLoaded = PMElement.getElementsByTagName("customizedLanguageSuccessfullyLoaded").item(0).getTextContent();
+					DBAboutToBeDeleted = PMElement.getElementsByTagName("DBAboutToBeDeleted").item(0).getTextContent();
+					DBDeleted = PMElement.getElementsByTagName("DBDeleted").item(0).getTextContent();
+					DBNotDeleted = PMElement.getElementsByTagName("DBNotDeleted").item(0).getTextContent();
+					forMoreInfosPerformWRInfo = PMElement.getElementsByTagName("forMoreInfosPerformWRInfo").item(0).getTextContent();
+					listEmpty = PMElement.getElementsByTagName("listEmpty").item(0).getTextContent();
+					ownersOfTheChannelAre = PMElement.getElementsByTagName("ownersOfTheChannelAre").item(0).getTextContent();
+					pageEmpty = PMElement.getElementsByTagName("pageEmpty").item(0).getTextContent();
+					pageNumberInferiorToZero = PMElement.getElementsByTagName("pageNumberInferiorToZero").item(0).getTextContent();
+					playerCannotCreateChannel = PMElement.getElementsByTagName("playerCannotCreateChannel").item(0).getTextContent();
+					playerCannotCreateReceiverOnBlock = PMElement.getElementsByTagName("playerCannotCreateReceiverOnBlock").item(0).getTextContent();
+					playerCannotCreateSign = PMElement.getElementsByTagName("playerCannotCreateSign").item(0).getTextContent();
+					playerCannotDestroyReceiverTorch = PMElement.getElementsByTagName("playerCannotDestroyReceiverTorch").item(0).getTextContent();
+					playerCannotDestroySign = PMElement.getElementsByTagName("playerCannotDestroySign").item(0).getTextContent();
+					playerCreatedChannel = PMElement.getElementsByTagName("playerCreatedChannel").item(0).getTextContent();
+					playerDoesntHaveAccessToChannel = PMElement.getElementsByTagName("playerDoesntHaveAccessToChannel").item(0).getTextContent();
+					playerDoesntHavePermission = PMElement.getElementsByTagName("playerDoesntHavePermission").item(0).getTextContent();
+					playerExtendedChannel = PMElement.getElementsByTagName("playerExtendedChannel").item(0).getTextContent();
+					signDestroyed = PMElement.getElementsByTagName("signDestroyed").item(0).getTextContent();
+					subCommandDoesNotExist = PMElement.getElementsByTagName("subCommandDoesNotExist").item(0).getTextContent();
+					thisChannelContains = PMElement.getElementsByTagName("thisChannelContains").item(0).getTextContent();
+					tooFewArguments = PMElement.getElementsByTagName("tooFewArguments").item(0).getTextContent();
 					break;
 					
 				case "logmessages": // Load the LM strings
 					Element LMElement = (Element)rootNodes.item(i);
-					WirelessRedstone.getWRLogger().debug("Loading the log messages strings...");
+					WirelessRedstone.getWRLogger().debug("Loading the log messages ..");
 					
-					strings.newUpdateAvailable = LMElement.getElementsByTagName("newUpdateAvailable").item(0).getTextContent();
+					newUpdateAvailable = LMElement.getElementsByTagName("newUpdateAvailable").item(0).getTextContent();
 					break;
 				}
 			}
@@ -114,15 +108,11 @@ public class WirelessXMLStringsLoader
 		}
 		
 		//Here we load the tags
-		/*strings.tagsTransmitter.add("[transmitter]");
-		strings.tagsTransmitter.add("[wrt]");
-		strings.tagsReceiver.add("[receiver]");
-		strings.tagsReceiver.add("[wrr]");
-		strings.tagsScreen.add("[screen]");
-		strings.tagsScreen.add("[wrs]");*/
-	}
-	
-	public WirelessStrings getStrings() {
-		return strings;
+		/*tagsTransmitter.add("[transmitter]");
+		tagsTransmitter.add("[wrt]");
+		tagsReceiver.add("[receiver]");
+		tagsReceiver.add("[wrr]");
+		tagsScreen.add("[screen]");
+		tagsScreen.add("[wrs]");*/
 	}
 }
