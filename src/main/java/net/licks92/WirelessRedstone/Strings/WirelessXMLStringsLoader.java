@@ -26,26 +26,6 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
     public WirelessXMLStringsLoader(final WirelessRedstone plugin,
                                     final String language) {
 
-        tagsTransmitter = new ArrayList<String>();
-        tagsReceiver = new ArrayList<String>();
-        tagsScreen = new ArrayList<String>();
-        tagsReceiverDefaultType = new ArrayList<String>();
-        tagsReceiverInverterType = new ArrayList<String>();
-        tagsReceiverDelayerType = new ArrayList<String>();
-
-        tagsTransmitter.add("[transmitter]");
-        tagsTransmitter.add("[wrt]");
-        tagsReceiver.add("[receiver]");
-        tagsReceiver.add("[wrr]");
-        tagsScreen.add("[screen]");
-        tagsScreen.add("[wrs]");
-        tagsReceiverDefaultType.add("[default]");
-        tagsReceiverDefaultType.add("[normal]");
-        tagsReceiverInverterType.add("[inverter]");
-        tagsReceiverInverterType.add("[inv]");
-        tagsReceiverDelayerType.add("[delayer]");
-        tagsReceiverDelayerType.add("[delay]");
-
         String defaultLocation = STRINGS_FOLDER + defaultLanguage
                 + "/strings.xml";
         InputStream stream = plugin.getResource(STRINGS_FOLDER + language

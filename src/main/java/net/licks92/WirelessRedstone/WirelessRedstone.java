@@ -96,6 +96,10 @@ public class WirelessRedstone extends JavaPlugin {
 		updater = new Updater(this, 37345, getFile(), UpdateType.NO_DOWNLOAD,
 				true);
 
+		// Load strings
+		strings = new WirelessXMLStringsLoader(this, config.getLanguage());
+		// strings = new WirelessStrings();
+
 		if (config.doCheckForUpdates()) {
 			updateChecker = this.getServer().getScheduler()
 					.runTaskTimerAsynchronously(getPlugin(), new Runnable() {
@@ -112,10 +116,6 @@ public class WirelessRedstone extends JavaPlugin {
 						}
 					}, 0, 24000 / 50);
 		}
-
-		// Load strings
-		strings = new WirelessXMLStringsLoader(this, config.getLanguage());
-		// strings = new WirelessStrings();
 
 		// Load listeners
 		worldlistener = new WirelessWorldListener(this);
