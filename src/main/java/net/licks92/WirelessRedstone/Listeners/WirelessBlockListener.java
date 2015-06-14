@@ -158,14 +158,6 @@ public class WirelessBlockListener implements Listener {
 									.getRelative(b.getAttachedFace()), event
 									.getOldCurrent(), event.getNewCurrent()));
 		}
-//		if (event.getBlock().getType() == Material.REDSTONE_WIRE) {
-//			Bukkit.getServer()
-//					.getPluginManager()
-//					.callEvent(
-//							new BlockRedstoneEvent(event.getBlock()
-//									.getRelative(BlockFace.DOWN), event
-//									.getOldCurrent(), event.getNewCurrent()));
-//		}
 
 		ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
 		possibleBlockface.add(BlockFace.NORTH);
@@ -200,10 +192,6 @@ public class WirelessBlockListener implements Listener {
 			return;
 		}
 
-		// if (!(event.getBlock().getState() instanceof Sign)) {
-		// return;
-		// }
-
 		Sign signObject = (Sign) event.getBlock().getRelative(bf).getState();
 		// final WirelessChannel channel;
 
@@ -229,10 +217,6 @@ public class WirelessBlockListener implements Listener {
 
 			@Override
 			public void run() {
-//				Bukkit.broadcastMessage(ChatColor.RED.toString()
-//						+ event.getBlock().isBlockPowered() + " - "
-//						+ event.getBlock().isBlockIndirectlyPowered());
-
 				if (event.getBlock().isBlockPowered()
 						|| event.getBlock().isBlockIndirectlyPowered()) {
 					channel.turnOn();

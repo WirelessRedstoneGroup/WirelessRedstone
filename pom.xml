@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.licks92</groupId>
     <artifactId>WirelessRedstone</artifactId>
-    <version>1.9.3</version>
+    <version>1.9.5</version>
     <name>WirelessRedstone</name>
     <build>
         <plugins>
@@ -53,35 +53,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-dependency-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>copy</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>copy</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<artifactItems>-->
-                                <!--<artifactItem>-->
-                                    <!--<groupId>net.licks92.WirelessRedstone</groupId>-->
-                                    <!--<artifactId>WirelessRedstone</artifactId>-->
-                                    <!--<version>${project.version}</version>-->
-                                    <!--<type>jar</type>-->
-                                    <!--<overWrite>true</overWrite>-->
-                                    <!--<outputDirectory>${project.build.directory}</outputDirectory>-->
-                                    <!--<destFileName>${project.name}.jar</destFileName>-->
-                                <!--</artifactItem>-->
-                            <!--</artifactItems>-->
-                            <!--<overWriteReleases>false</overWriteReleases>-->
-                            <!--<overWriteSnapshots>true</overWriteSnapshots>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 
