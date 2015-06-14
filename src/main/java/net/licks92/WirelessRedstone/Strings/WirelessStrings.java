@@ -5,9 +5,8 @@ import java.util.List;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 
-public class WirelessStrings
-{
-	//Strings in alphabetical order.
+public class WirelessStrings {
+	// Strings in alphabetical order.
 	public String chatTag;
 	public String backupDone;
 	public String backupFailed;
@@ -50,7 +49,7 @@ public class WirelessStrings
 	public List<String> tagsReceiverInverterType;
 	public List<String> tagsReceiverDelayerType;
 
-	public WirelessStrings(){
+	public WirelessStrings() {
 		tagsTransmitter = new ArrayList<String>();
 		tagsReceiver = new ArrayList<String>();
 		tagsScreen = new ArrayList<String>();
@@ -58,7 +57,7 @@ public class WirelessStrings
 		tagsReceiverInverterType = new ArrayList<String>();
 		tagsReceiverDelayerType = new ArrayList<String>();
 
-		WirelessRedstone.getWRLogger().info("Loading the tags...");
+		WirelessRedstone.getWRLogger().debug("Loading the tags...");
 		chatTag = "WirelessRedstone";
 		backupDone = "A backup has been created into the plugin folder!";
 		backupFailed = "Backup failed!";
@@ -109,17 +108,13 @@ public class WirelessStrings
 }
 
 /*
-//The signtags must be always the same
-		tagsTransmitter.add("[transmitter]");
-		tagsTransmitter.add("[wrt]");
-		tagsReceiver.add("[receiver]");
-		tagsReceiver.add("[wrr]");
-		tagsScreen.add("[screen]");
-		tagsScreen.add("[wrs]");
-		tagsReceiverDefaultType.add("[default]");
-		tagsReceiverDefaultType.add("[normal]");
-		tagsReceiverInverterType.add("[inverter]");
-		tagsReceiverInverterType.add("[inv]");
-		tagsReceiverDelayerType.add("[delayer]");
-		tagsReceiverDelayerType.add("[delay]");
-*/
+ * //The signtags must be always the same tagsTransmitter.add("[transmitter]");
+ * tagsTransmitter.add("[wrt]"); tagsReceiver.add("[receiver]");
+ * tagsReceiver.add("[wrr]"); tagsScreen.add("[screen]");
+ * tagsScreen.add("[wrs]"); tagsReceiverDefaultType.add("[default]");
+ * tagsReceiverDefaultType.add("[normal]");
+ * tagsReceiverInverterType.add("[inverter]");
+ * tagsReceiverInverterType.add("[inv]");
+ * tagsReceiverDelayerType.add("[delayer]");
+ * tagsReceiverDelayerType.add("[delay]");
+ */

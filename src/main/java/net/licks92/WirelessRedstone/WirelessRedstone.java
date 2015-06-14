@@ -1,5 +1,8 @@
 package net.licks92.WirelessRedstone;
 
+import net.gravitydevelopment.updater.Updater;
+import net.gravitydevelopment.updater.Updater.UpdateResult;
+import net.gravitydevelopment.updater.Updater.UpdateType;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
@@ -8,6 +11,7 @@ import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
+import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Chunk;
@@ -21,13 +25,13 @@ import org.mcstats.Metrics.Graph;
 import org.mcstats.Metrics.Plotter;
 
 /**
- * This class is the main class of the plugin. It controls the Configuration, the Listeners,
- * it sends the metrics and controls the actions when enabling / disabling.
+ * This class is the main class of the plugin. It controls the Configuration,
+ * the Listeners, it sends the metrics and controls the actions when enabling /
+ * disabling.
  *
  * @author licks92
  */
-public class WirelessRedstone extends JavaPlugin
-{
+public class WirelessRedstone extends JavaPlugin {
 	public static WirelessConfiguration config;
 	public static WirelessStrings strings;
 	public static WirelessGlobalCache cache;
@@ -40,27 +44,23 @@ public class WirelessRedstone extends JavaPlugin
 	public WirelessPlayerListener playerlistener;
 	private static Metrics metrics;
 	private BukkitTask updateChecker;
-//	public Updater updater;
+	public Updater updater;
 
 	/**
 	 * Wireless Redstone logger
 	 *
 	 * @return logger
 	 */
-	public static WRLogger getWRLogger()
-	{
+	public static WRLogger getWRLogger() {
 		return logger;
 	}
-
 
 	/**
 	 * Calls the actions to do when disabling the plugin.
 	 */
 	@Override
-	public void onDisable()
-	{
-		try
-		{
+	public void onDisable() {
+		try {
 			config.close();
 			updateChecker.cancel();
 		} catch (NullPointerException ex) {
@@ -69,59 +69,55 @@ public class WirelessRedstone extends JavaPlugin
 	}
 
 	/**
-	 * Calls the actions to do when enabling the plugin (i.e when starting the server)
+	 * Calls the actions to do when enabling the plugin (i.e when starting the
+	 * server)
 	 */
 	@Override
-	public void onEnable()
-	{
+	public void onEnable() {
 		PluginDescriptionFile pdFile = getDescription();
 
 		WireBox = new WireBox(this);
 		config = new WirelessConfiguration(this);
-		if(config.getDebugMode())
-		{
-			logger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), true, config.getColourfulLogging());
+		if (config.getDebugMode()) {
+			logger = new WRLogger("[WirelessRedstone]", getServer()
+					.getConsoleSender(), true, config.getColourfulLogging());
 			logger.info("Debug Mode activated !");
 			logger.info("Log level set to FINEST because of the debug mode");
-		}
-		else
-		{
-			logger = new WRLogger("[WirelessRedstone]", this.getServer().getConsoleSender(), false, config.getColourfulLogging());
+		} else {
+			logger = new WRLogger("[WirelessRedstone]", this.getServer()
+					.getConsoleSender(), false, config.getColourfulLogging());
 		}
 		config.initStorage();
 		cache = new WirelessGlobalCache(this, config.getCacheRefreshFrequency());
 
-		WirelessRedstone.logger.info(pdFile.getName() + " version " + pdFile.getVersion() + " is loading...");
+		WirelessRedstone.logger.info(pdFile.getName() + " version "
+				+ pdFile.getVersion() + " is loading...");
 
-//		updater = new Updater(this, 37345, getFile(), UpdateType.NO_DOWNLOAD, true);
-//
-//		if(config.doCheckForUpdates())
-//		{
-//			updateChecker = this.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), new Runnable()
-//			{
-//				@Override
-//				public void run()
-//				{
-//					try
-//					{
-//						if(updater.getResult() == UpdateResult.UPDATE_AVAILABLE)
-//						{
-//							getWRLogger().info(WirelessRedstone.strings.newUpdateAvailable);
-//						}
-//					}
-//					catch (Exception e1)
-//					{
-//						e1.printStackTrace();
-//					}
-//				}
-//			}, 0, 24000/50);
-//		}
+		updater = new Updater(this, 37345, getFile(), UpdateType.NO_DOWNLOAD,
+				true);
 
-		//Load strings
-//		strings = new WirelessXMLStringsLoader(this, config.getLanguage());
-		strings = new WirelessStrings();
+		if (config.doCheckForUpdates()) {
+			updateChecker = this.getServer().getScheduler()
+					.runTaskTimerAsynchronously(getPlugin(), new Runnable() {
+						@Override
+						public void run() {
+							try {
+								if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+									getWRLogger()
+											.info(WirelessRedstone.strings.newUpdateAvailable);
+								}
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+					}, 0, 24000 / 50);
+		}
 
-		//Load listeners
+		// Load strings
+		strings = new WirelessXMLStringsLoader(this, config.getLanguage());
+		// strings = new WirelessStrings();
+
+		// Load listeners
 		worldlistener = new WirelessWorldListener(this);
 		blocklistener = new WirelessBlockListener(this);
 		playerlistener = new WirelessPlayerListener(this);
@@ -148,160 +144,127 @@ public class WirelessRedstone extends JavaPlugin
 		WirelessRedstone.logger.info("Loading Chunks...");
 		LoadChunks();
 
-		//Metrics
-		try
-		{
+		// Metrics
+		try {
 			metrics = new Metrics(this);
 
 			// Channel metrics
 			final Graph channelGraph = metrics.createGraph("Channel metrics");
-			channelGraph.addPlotter(new Plotter("Total channels")
-			{
+			channelGraph.addPlotter(new Plotter("Total channels") {
 				@Override
-				public int getValue()
-				{
+				public int getValue() {
 					return config.getAllChannels().size();
 				}
 			});
-			channelGraph.addPlotter(new Plotter("Total signs")
-			{
+			channelGraph.addPlotter(new Plotter("Total signs") {
 				@Override
-				public int getValue()
-				{
+				public int getValue() {
 					return cache.getAllSigns().size();
 				}
 			});
 
 			// Sign Metrics
 			final Graph signGraph = metrics.createGraph("Sign metrics");
-			signGraph.addPlotter(new Plotter("Transmitters")
-			{
+			signGraph.addPlotter(new Plotter("Transmitters") {
 				@Override
-				public int getValue()
-				{
+				public int getValue() {
 					int total = 0;
-					for(WirelessChannel channel : config.getAllChannels())
-					{
-						total+=channel.getTransmitters().size();
+					for (WirelessChannel channel : config.getAllChannels()) {
+						total += channel.getTransmitters().size();
 					}
 					return total;
 				}
 			});
-			signGraph.addPlotter(new Plotter("Receivers")
-			{
+			signGraph.addPlotter(new Plotter("Receivers") {
 				@Override
-				public int getValue()
-				{
+				public int getValue() {
 					int total = 0;
-					for(WirelessChannel channel : config.getAllChannels())
-					{
-						total+=channel.getReceivers().size();
+					for (WirelessChannel channel : config.getAllChannels()) {
+						total += channel.getReceivers().size();
 					}
 					return total;
 				}
 			});
-			signGraph.addPlotter(new Plotter("Screens")
-			{
+			signGraph.addPlotter(new Plotter("Screens") {
 				@Override
-				public int getValue()
-				{
+				public int getValue() {
 					int total = 0;
-					for(WirelessChannel channel : config.getAllChannels())
-					{
-						total+=channel.getScreens().size();
+					for (WirelessChannel channel : config.getAllChannels()) {
+						total += channel.getScreens().size();
 					}
 					return total;
 				}
 			});
 
 			final Graph storageGraph = metrics.createGraph("Storage used");
-			storageGraph.addPlotter(new Plotter("SQL")
-			{
+			storageGraph.addPlotter(new Plotter("SQL") {
 				@Override
-				public int getValue()
-				{
-					if(config.getSQLUsage())
-					{
+				public int getValue() {
+					if (config.getSQLUsage()) {
 						return 1;
-					}
-					else
-					{
+					} else {
 						return 0;
 					}
 				}
 			});
 
-			storageGraph.addPlotter(new Plotter("Yaml files")
-			{
+			storageGraph.addPlotter(new Plotter("Yaml files") {
 				@Override
-				public int getValue()
-				{
-					if(!config.getSQLUsage())
-					{
+				public int getValue() {
+					if (!config.getSQLUsage()) {
 						return 1;
-					}
-					else
-					{
+					} else {
 						return 0;
 					}
 				}
 			});
 
-			final Graph permissionsGraph = metrics.createGraph("Plugin used for Permissions");
-			permissionsGraph.addPlotter(new Plotter("Vault")
-			{
+			final Graph permissionsGraph = metrics
+					.createGraph("Plugin used for Permissions");
+			permissionsGraph.addPlotter(new Plotter("Vault") {
 				@Override
-				public int getValue()
-				{
-					if(permissions.permPlugin == "Vault")
+				public int getValue() {
+					if (permissions.permPlugin == "Vault")
 						return 1;
 					else
 						return 0;
 				}
 			});
 
-			permissionsGraph.addPlotter(new Plotter("PermissionsEx")
-			{
+			permissionsGraph.addPlotter(new Plotter("PermissionsEx") {
 				@Override
-				public int getValue()
-				{
-					if(permissions.permPlugin == "PermissionsEx")
+				public int getValue() {
+					if (permissions.permPlugin == "PermissionsEx")
 						return 1;
 					else
 						return 0;
 				}
 			});
 
-			permissionsGraph.addPlotter(new Plotter("PermissionsBukkit")
-			{
+			permissionsGraph.addPlotter(new Plotter("PermissionsBukkit") {
 				@Override
-				public int getValue()
-				{
-					if(permissions.permPlugin == "PermissionsBukkit")
+				public int getValue() {
+					if (permissions.permPlugin == "PermissionsBukkit")
 						return 1;
 					else
 						return 0;
 				}
 			});
 
-			permissionsGraph.addPlotter(new Plotter("bPermissions")
-			{
+			permissionsGraph.addPlotter(new Plotter("bPermissions") {
 				@Override
-				public int getValue()
-				{
-					if(permissions.permPlugin == "bPermissions")
+				public int getValue() {
+					if (permissions.permPlugin == "bPermissions")
 						return 1;
 					else
 						return 0;
 				}
 			});
 
-			permissionsGraph.addPlotter(new Plotter("GroupManager")
-			{
+			permissionsGraph.addPlotter(new Plotter("GroupManager") {
 				@Override
-				public int getValue()
-				{
-					if(permissions.permPlugin == "GroupManager")
+				public int getValue() {
+					if (permissions.permPlugin == "GroupManager")
 						return 1;
 					else
 						return 0;
@@ -309,38 +272,32 @@ public class WirelessRedstone extends JavaPlugin
 			});
 			metrics.start();
 
-			permissionsGraph.addPlotter(new Plotter("Bukkit OP Permissions")
-			{
+			permissionsGraph.addPlotter(new Plotter("Bukkit OP Permissions") {
 				@Override
-				public int getValue()
-				{
-					if(permissions.permPlugin == "Bukkit OP Permissions")
+				public int getValue() {
+					if (permissions.permPlugin == "Bukkit OP Permissions")
 						return 1;
 					else
 						return 0;
 				}
 			});
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		//Loading finished !
-		System.out.println(pdFile.getName() + " version " + pdFile.getVersion() + " is enabled!");
+		// Loading finished !
+		System.out.println(pdFile.getName() + " version " + pdFile.getVersion()
+				+ " is enabled!");
 	}
 
 	/**
 	 * Load the chunks which contain a wireless sign.
 	 */
-	public void LoadChunks()
-	{
-		if (WirelessRedstone.config.isCancelChunkUnloads())
-		{
-			for (IWirelessPoint point : cache.getAllSigns())
-			{
+	public void LoadChunks() {
+		if (WirelessRedstone.config.isCancelChunkUnloads()) {
+			for (IWirelessPoint point : cache.getAllSigns()) {
 				Location location = point.getLocation();
-				if(location.getWorld() == null)
+				if (location.getWorld() == null)
 					continue; // world currently not loaded.
 
 				Chunk center = location.getBlock().getChunk();
@@ -362,8 +319,7 @@ public class WirelessRedstone extends JavaPlugin
 	 *
 	 * @return plugin
 	 */
-	public WirelessRedstone getPlugin()
-	{
+	public WirelessRedstone getPlugin() {
 		return this;
 	}
 }
