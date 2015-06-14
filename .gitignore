@@ -8,3 +8,9 @@ target/*
 *.so
 *.com
 /target
+*.name
+.idea/*
+.out/*
+WirelessRedstone.iml
+*.jar
+*.classpath

@@ -9,24 +9,24 @@ public class WirelessPermissions
 {
 	public IPermissions permissionsHandler;
 	public String permPlugin;
-	private String canCreateReceiver = "wirelessredstone.create.receiver";
-	private String canCreateTransmitter = "wirelessredstone.create.transmitter";
-	private String canCreateScreen = "wirelessredstone.create.screen";
-	private String canRemoveReceiver = "wirelessredstone.remove.receiver";
-	private String canRemoveTransmitter = "wirelessredstone.remove.transmitter";
-	private String canRemoveScreen = "wirelessredstone.remove.screen";
-	private String isWirelessAdmin = "wirelessredstone.admin.isAdmin";
-	private String canRemoveChannel = "wirelessredstone.commands.removechannel";
-	private String canUseListCommand = "wirelessredstone.commands.list";
-	private String canSeeHelp = "wirelessredstone.commands.help";
-	private String canSeeChannelInfo = "wirelessredstone.commands.info";
-	private String canLockChannel = "wirelessredstone.commands.lock";
-	private String canWipeData = "wirelessredstone.admin.wipedata";
-	private String canBackupData = "wirelessredstone.admin.backupdata";
-	private String canActivateChannel = "wirelessredstone.commands.activate";
-	private String canSeeVersion = "wirelessredstone.commands.version";
-	
-	public WirelessPermissions(WirelessRedstone plugin)
+	private final String canCreateReceiver = "wirelessredstone.create.receiver";
+	private final String canCreateTransmitter = "wirelessredstone.create.transmitter";
+	private final String canCreateScreen = "wirelessredstone.create.screen";
+	private final String canRemoveReceiver = "wirelessredstone.remove.receiver";
+	private final String canRemoveTransmitter = "wirelessredstone.remove.transmitter";
+	private final String canRemoveScreen = "wirelessredstone.remove.screen";
+	private final String isWirelessAdmin = "wirelessredstone.admin.isAdmin";
+	private final String canRemoveChannel = "wirelessredstone.commands.removechannel";
+	private final String canUseListCommand = "wirelessredstone.commands.list";
+	private final String canSeeHelp = "wirelessredstone.commands.help";
+	private final String canSeeChannelInfo = "wirelessredstone.commands.info";
+	private final String canLockChannel = "wirelessredstone.commands.lock";
+	private final String canWipeData = "wirelessredstone.admin.wipedata";
+	private final String canBackupData = "wirelessredstone.admin.backupdata";
+	private final String canActivateChannel = "wirelessredstone.commands.activate";
+	private final String canSeeVersion = "wirelessredstone.commands.version";
+
+	public WirelessPermissions(final WirelessRedstone plugin)
 	{
 		PluginManager pm = plugin.getServer().getPluginManager();
 
@@ -69,85 +69,85 @@ public class WirelessPermissions
 			this.permissionsHandler = new opPermissions(plugin);
 		}
 
-		WirelessRedstone.getWRLogger().info("Loaded Permissions...");
+		WirelessRedstone.getWRLogger().debug("Loaded Permissions...");
 	}
-	
-	public boolean canCreateReceiver(Player player)
+
+	public boolean canCreateReceiver(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canCreateReceiver);
 	}
-	
-	public boolean canCreateTransmitter(Player player)
+
+	public boolean canCreateTransmitter(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canCreateTransmitter);
 	}
-	
-	public boolean canCreateScreen(Player player)
+
+	public boolean canCreateScreen(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canCreateScreen);
 	}
-	
-	public boolean canRemoveReceiver(Player player)
+
+	public boolean canRemoveReceiver(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canRemoveReceiver);
 	}
 
-	public boolean canRemoveTransmitter(Player player)
+	public boolean canRemoveTransmitter(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canRemoveTransmitter);
 	}
 
-	public boolean canRemoveScreen(Player player)
+	public boolean canRemoveScreen(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canRemoveScreen);
 	}
-	
-	public boolean isWirelessAdmin(Player player)
+
+	public boolean isWirelessAdmin(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, isWirelessAdmin);
 	}
-	
-	public boolean canRemoveChannel(Player player)
+
+	public boolean canRemoveChannel(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canRemoveChannel);
 	}
-	
-	public boolean canUseListCommand(Player player)
+
+	public boolean canUseListCommand(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canUseListCommand);
 	}
-	
-	public boolean canSeeHelp(Player player)
+
+	public boolean canSeeHelp(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canSeeHelp);
 	}
-	
-	public boolean canSeeChannelInfo(Player player)
+
+	public boolean canSeeChannelInfo(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canSeeChannelInfo);
 	}
-	
-	public boolean canLockChannel(Player player)
+
+	public boolean canLockChannel(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canLockChannel);
 	}
-	
-	public boolean canWipeData(Player player)
+
+	public boolean canWipeData(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canWipeData);
 	}
-	
-	public boolean canBackupData(Player player)
+
+	public boolean canBackupData(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canBackupData);
 	}
 
-	public boolean canActivateChannel(Player player)
+	public boolean canActivateChannel(final Player player)
 	{
 		return permissionsHandler.hasPermission(player, canActivateChannel);
 	}
 
-	public boolean canSeeVersion(Player player)
+	public boolean canSeeVersion(final Player player)
 	{
 		return permissionsHandler.hasPermission(player,  canSeeVersion);
 	}
