@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Class-Path: metrics-R8-20150522.102737-8.jar updater-2.3.jar json-simp
+ le-1.1.1.jar hamcrest-core-1.1.jar ebean-2.8.1.jar commons-lang-2.6.j
+ ar snakeyaml-1.14.jar persistence-api-1.0.jar junit-4.10.jar Vault.ja
+ r guava-17.0.jar WorldEdit.jar bukkit-1.8-R0.1-20150227.224714-194.ja
+ r
+
