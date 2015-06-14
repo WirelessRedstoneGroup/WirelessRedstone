@@ -13,4 +13,4 @@ target/*
 .out/*
 WirelessRedstone.iml
 *.jar
-.classpath
+*.classpath

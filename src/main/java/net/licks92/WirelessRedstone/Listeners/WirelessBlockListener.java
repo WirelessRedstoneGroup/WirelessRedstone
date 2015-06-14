@@ -164,28 +164,16 @@ public class WirelessBlockListener implements Listener {
 		possibleBlockface.add(BlockFace.EAST);
 		possibleBlockface.add(BlockFace.SOUTH);
 		possibleBlockface.add(BlockFace.WEST);
+		possibleBlockface.add(BlockFace.UP);
+		possibleBlockface.add(BlockFace.DOWN);
 		boolean canContinue = false;
 		BlockFace bf = null;
-		Block block = null;
 
-		if (event.getBlock().getRelative(BlockFace.NORTH).getState() instanceof Sign) {
-			canContinue = true;
-			bf = BlockFace.NORTH;
-		} else if (event.getBlock().getRelative(BlockFace.EAST).getState() instanceof Sign) {
-			canContinue = true;
-			bf = BlockFace.EAST;
-		} else if (event.getBlock().getRelative(BlockFace.SOUTH).getState() instanceof Sign) {
-			canContinue = true;
-			bf = BlockFace.SOUTH;
-		} else if (event.getBlock().getRelative(BlockFace.WEST).getState() instanceof Sign) {
-			canContinue = true;
-			bf = BlockFace.WEST;
-		} else if (event.getBlock().getRelative(BlockFace.UP).getState() instanceof Sign) {
-			canContinue = true;
-			bf = BlockFace.UP;
-		} else if (event.getBlock().getRelative(BlockFace.DOWN).getState() instanceof Sign) {
-			canContinue = true;
-			bf = BlockFace.DOWN;
+		for (BlockFace blockFace : possibleBlockface) {
+			if(event.getBlock().getRelative(blockFace).getState() instanceof Sign){
+				canContinue = true;
+				bf = blockFace;
+			}
 		}
 
 		if (!canContinue) {
