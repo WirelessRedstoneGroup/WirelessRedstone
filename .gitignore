@@ -8,3 +8,6 @@ target/*
 *.so
 *.com
 /target
+*.name
+.idea/*
+WirelessRedstone.iml

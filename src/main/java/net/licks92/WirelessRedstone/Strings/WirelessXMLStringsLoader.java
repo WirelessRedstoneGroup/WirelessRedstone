@@ -2,17 +2,18 @@ package net.licks92.WirelessRedstone.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.licks92.WirelessRedstone.WirelessRedstone;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import net.licks92.WirelessRedstone.WirelessRedstone;
 
 /**
  * Loads the strings from a specific file. If some strings are missing, it will replace them by the one in the default english file.
@@ -21,9 +22,66 @@ public class WirelessXMLStringsLoader extends WirelessStrings
 {
 	private final String STRINGS_FOLDER = "languages/";
 	private final String defaultLanguage = "en";
-	
-	public WirelessXMLStringsLoader(WirelessRedstone plugin, String language)
+
+	public WirelessXMLStringsLoader(final WirelessRedstone plugin, final String language)
 	{
+//		WirelessRedstone.getWRLogger().warning("I can't fix the translation so it will only be in english!");
+//
+//		WirelessRedstone.getWRLogger().info("Loading the tags...");
+//		chatTag = "WirelessRedstone";
+//		backupDone = "A backup has been created into the plugin folder!";
+//		backupFailed = "Backup failed!";
+//		channelDoesNotExist = "This channel doesn't exist!";
+//		channelLocked = "Channel locked !";
+//		channelNameContainsInvalidCaracters = "This channel name contains invalid caracters !";
+//		channelRemoved = "This channel has been removed!";
+//		channelRemovedCauseNoSign = "Channel removed, no more signs in the worlds";
+//		channelUnlocked = "Channel unlocked !";
+//		commandDoesNotExist = "This command does not exist!";
+//		commandForNextPage = "Type /wr list pagenumber for next page!";
+//		customizedLanguageSuccessfullyLoaded = "You've successfully loaded your customized language for Wireless Redstone!";
+//		DBAboutToBeDeleted = "You are about to delete the entire database. A backup will be done before you do it. If you are sure to do it, you have 15 seconds to type this command again.";
+//		DBDeleted = "Database has been succesfully wiped!";
+//		DBNotDeleted = "Database hasn't been wiped.";
+//		forMoreInfosPerformWRInfo = "To get more informations about a channel, perform /wr info [channel]";
+//		listEmpty = "The list in empty!";
+//		ownersOfTheChannelAre = "The owners of this channel are";
+//		pageEmpty = "This page is empty!";
+//		pageNumberInferiorToZero = "Page number cannot be inferior to 0!";
+//		playerCannotCreateChannel = "You are not allowed to create a channel.";
+//		playerCannotCreateReceiverOnBlock = "You cannot create a wireless receiver on this block !";
+//		playerCannotCreateSign = "You don't have the permission to create this sign!";
+//		playerCannotDestroyReceiverTorch = "You cannot break my magic torches my friend!";
+//		playerCannotDestroySign = "You are not allowed to destroy this sign!";
+//		playerCreatedChannel = "You just created a new channel!";
+//		playerDoesntHaveAccessToChannel = "You don't have access to this channel.";
+//		playerDoesntHavePermission = "You don't have the permissions to do this.";
+//		playerExtendedChannel = "You just extended a channel!";
+//		signDestroyed = "Succesfully removed this sign !";
+//		subCommandDoesNotExist = "This subcommand doesn't exist!";
+//		thisChannelContains = "This channel contains";
+//		tooFewArguments = "Too few arguments !";
+
+		tagsTransmitter = new ArrayList<String>();
+		tagsReceiver = new ArrayList<String>();
+		tagsScreen = new ArrayList<String>();
+		tagsReceiverDefaultType = new ArrayList<String>();
+		tagsReceiverInverterType = new ArrayList<String>();
+		tagsReceiverDelayerType = new ArrayList<String>();
+
+		tagsTransmitter.add("[transmitter]");
+		tagsTransmitter.add("[wrt]");
+		tagsReceiver.add("[receiver]");
+		tagsReceiver.add("[wrr]");
+		tagsScreen.add("[screen]");
+		tagsScreen.add("[wrs]");
+		tagsReceiverDefaultType.add("[default]");
+		tagsReceiverDefaultType.add("[normal]");
+		tagsReceiverInverterType.add("[inverter]");
+		tagsReceiverInverterType.add("[inv]");
+		tagsReceiverDelayerType.add("[delayer]");
+		tagsReceiverDelayerType.add("[delay]");
+
 		String defaultLocation = STRINGS_FOLDER + defaultLanguage + "/strings.xml";
 		InputStream stream = plugin.getResource(STRINGS_FOLDER + language + "/strings.xml");
 		if(stream != null) {
@@ -37,15 +95,15 @@ public class WirelessXMLStringsLoader extends WirelessStrings
 				WirelessRedstone.getWRLogger().severe("Could not load the strings in " + defaultLocation + ". Your jar file is probably corrupted. Please download it again from dev.bukkit.org/bukkit-plugins/wireless-redstone/");
 		}
 	}
-	
-	private void loadFromStream(InputStream stream)
+
+	private void loadFromStream(final InputStream stream)
 	{
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		
+
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document document = db.parse(stream);
-			
+
 			final Element root = document.getDocumentElement();
 			final NodeList rootNodes = root.getChildNodes();
 			for(int i = 0; i < rootNodes.getLength(); i++) {
@@ -53,15 +111,15 @@ public class WirelessXMLStringsLoader extends WirelessStrings
 				{
 				case "tags": // Load the tags
 					final Element tagsElement = (Element)rootNodes.item(i);
-					WirelessRedstone.getWRLogger().debug("Loading the tags ..");
-					
+					WirelessRedstone.getWRLogger().info("Loading the tags...");
+
 					chatTag = tagsElement.getElementsByTagName("chatTag").item(0).getTextContent();
 					break;
-					
+
 				case "playermessages": // Load the PM strings
 					Element PMElement = (Element)rootNodes.item(i);
-					WirelessRedstone.getWRLogger().debug("Loading the player messages ..");
-					
+					WirelessRedstone.getWRLogger().info("Loading the player messages ..");
+
 					backupDone = PMElement.getElementsByTagName("backupDone").item(0).getTextContent();
 					backupFailed = PMElement.getElementsByTagName("backupFailed").item(0).getTextContent();
 					channelDoesNotExist = PMElement.getElementsByTagName("channelDoesNotExist").item(0).getTextContent();
@@ -95,11 +153,11 @@ public class WirelessXMLStringsLoader extends WirelessStrings
 					thisChannelContains = PMElement.getElementsByTagName("thisChannelContains").item(0).getTextContent();
 					tooFewArguments = PMElement.getElementsByTagName("tooFewArguments").item(0).getTextContent();
 					break;
-					
+
 				case "logmessages": // Load the LM strings
 					Element LMElement = (Element)rootNodes.item(i);
-					WirelessRedstone.getWRLogger().debug("Loading the log messages ..");
-					
+					WirelessRedstone.getWRLogger().info("Loading the log messages ..");
+
 					newUpdateAvailable = LMElement.getElementsByTagName("newUpdateAvailable").item(0).getTextContent();
 					break;
 				}
@@ -112,7 +170,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings
 			WirelessRedstone.getWRLogger().severe("Your strings file is not correctly written.");
 			e.printStackTrace();
 		}
-		
+
 		//Here we load the tags
 		/*tagsTransmitter.add("[transmitter]");
 		tagsTransmitter.add("[wrt]");
