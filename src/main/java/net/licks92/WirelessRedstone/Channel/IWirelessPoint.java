@@ -4,35 +4,35 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 
 public interface IWirelessPoint {
-	String getOwner();
+    String getOwner();
 
-	int getX();
+    int getX();
 
-	int getY();
+    int getY();
 
-	int getZ();
+    int getZ();
 
-	String getWorld();
+    String getWorld();
 
-	BlockFace getDirection();
+    BlockFace getDirection();
 
-	boolean getisWallSign();
+    boolean getisWallSign();
 
-	void setOwner(String owner);
+    void setOwner(String owner);
 
-	void setX(int x);
+    void setX(int x);
 
-	void setY(int y);
+    void setY(int y);
 
-	void setZ(int z);
+    void setZ(int z);
 
-	void setWorld(String world);
+    void setWorld(String world);
 
-	void setDirection(int direction);
-	
-	void setDirection(BlockFace face);
+    void setDirection(int direction);
 
-	void setisWallSign(boolean iswallsign);
-	
-	Location getLocation();
+    void setDirection(BlockFace face);
+
+    void setisWallSign(boolean iswallsign);
+
+    Location getLocation();
 }
