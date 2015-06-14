@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone.Listeners;
 
+import net.gravitydevelopment.updater.Updater.UpdateResult;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 
@@ -25,11 +26,11 @@ public class WirelessPlayerListener implements Listener {
 		 */
 
 		if (plugin.permissions.isWirelessAdmin(event.getPlayer())) {
-			// if(plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE &&
-			// WirelessRedstone.config.doCheckForUpdates())
-			// {
-			// event.getPlayer().sendMessage(WirelessRedstone.strings.newUpdateAvailable);
-			// }
+			if (plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE
+					&& WirelessRedstone.config.doCheckForUpdates()) {
+				event.getPlayer().sendMessage(
+						WirelessRedstone.strings.newUpdateAvailable);
+			}
 		}
 	}
 
