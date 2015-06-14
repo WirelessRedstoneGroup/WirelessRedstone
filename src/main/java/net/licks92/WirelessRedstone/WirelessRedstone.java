@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
@@ -15,6 +16,9 @@ import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.mcstats.Metrics;
+import org.mcstats.Metrics.Graph;
+import org.mcstats.Metrics.Plotter;
 
 /**
  * This class is the main class of the plugin. It controls the Configuration, the Listeners,
@@ -34,7 +38,7 @@ public class WirelessRedstone extends JavaPlugin
 	public WirelessWorldListener worldlistener;
 	public WirelessBlockListener blocklistener;
 	public WirelessPlayerListener playerlistener;
-//	private static Metrics metrics;
+	private static Metrics metrics;
 	private BukkitTask updateChecker;
 //	public Updater updater;
 
@@ -145,182 +149,182 @@ public class WirelessRedstone extends JavaPlugin
 		LoadChunks();
 
 		//Metrics
-//		try
-//		{
-//			metrics = new Metrics(this);
-//
-//			// Channel metrics
-//			final Graph channelGraph = metrics.createGraph("Channel metrics");
-//			channelGraph.addPlotter(new Plotter("Total channels")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					return config.getAllChannels().size();
-//				}
-//			});
-//			channelGraph.addPlotter(new Plotter("Total signs")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					return cache.getAllSigns().size();
-//				}
-//			});
-//
-//			// Sign Metrics
-//			final Graph signGraph = metrics.createGraph("Sign metrics");
-//			signGraph.addPlotter(new Plotter("Transmitters")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					int total = 0;
-//					for(WirelessChannel channel : config.getAllChannels())
-//					{
-//						total+=channel.getTransmitters().size();
-//					}
-//					return total;
-//				}
-//			});
-//			signGraph.addPlotter(new Plotter("Receivers")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					int total = 0;
-//					for(WirelessChannel channel : config.getAllChannels())
-//					{
-//						total+=channel.getReceivers().size();
-//					}
-//					return total;
-//				}
-//			});
-//			signGraph.addPlotter(new Plotter("Screens")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					int total = 0;
-//					for(WirelessChannel channel : config.getAllChannels())
-//					{
-//						total+=channel.getScreens().size();
-//					}
-//					return total;
-//				}
-//			});
-//
-//			final Graph storageGraph = metrics.createGraph("Storage used");
-//			storageGraph.addPlotter(new Plotter("SQL")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(config.getSQLUsage())
-//					{
-//						return 1;
-//					}
-//					else
-//					{
-//						return 0;
-//					}
-//				}
-//			});
-//
-//			storageGraph.addPlotter(new Plotter("Yaml files")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(!config.getSQLUsage())
-//					{
-//						return 1;
-//					}
-//					else
-//					{
-//						return 0;
-//					}
-//				}
-//			});
-//
-//			final Graph permissionsGraph = metrics.createGraph("Plugin used for Permissions");
-//			permissionsGraph.addPlotter(new Plotter("Vault")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(permissions.permPlugin == "Vault")
-//						return 1;
-//					else
-//						return 0;
-//				}
-//			});
-//
-//			permissionsGraph.addPlotter(new Plotter("PermissionsEx")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(permissions.permPlugin == "PermissionsEx")
-//						return 1;
-//					else
-//						return 0;
-//				}
-//			});
-//
-//			permissionsGraph.addPlotter(new Plotter("PermissionsBukkit")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(permissions.permPlugin == "PermissionsBukkit")
-//						return 1;
-//					else
-//						return 0;
-//				}
-//			});
-//
-//			permissionsGraph.addPlotter(new Plotter("bPermissions")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(permissions.permPlugin == "bPermissions")
-//						return 1;
-//					else
-//						return 0;
-//				}
-//			});
-//
-//			permissionsGraph.addPlotter(new Plotter("GroupManager")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(permissions.permPlugin == "GroupManager")
-//						return 1;
-//					else
-//						return 0;
-//				}
-//			});
-//			metrics.start();
-//
-//			permissionsGraph.addPlotter(new Plotter("Bukkit OP Permissions")
-//			{
-//				@Override
-//				public int getValue()
-//				{
-//					if(permissions.permPlugin == "Bukkit OP Permissions")
-//						return 1;
-//					else
-//						return 0;
-//				}
-//			});
-//		}
-//		catch(Exception e)
-//		{
-//			e.printStackTrace();
-//		}
+		try
+		{
+			metrics = new Metrics(this);
+
+			// Channel metrics
+			final Graph channelGraph = metrics.createGraph("Channel metrics");
+			channelGraph.addPlotter(new Plotter("Total channels")
+			{
+				@Override
+				public int getValue()
+				{
+					return config.getAllChannels().size();
+				}
+			});
+			channelGraph.addPlotter(new Plotter("Total signs")
+			{
+				@Override
+				public int getValue()
+				{
+					return cache.getAllSigns().size();
+				}
+			});
+
+			// Sign Metrics
+			final Graph signGraph = metrics.createGraph("Sign metrics");
+			signGraph.addPlotter(new Plotter("Transmitters")
+			{
+				@Override
+				public int getValue()
+				{
+					int total = 0;
+					for(WirelessChannel channel : config.getAllChannels())
+					{
+						total+=channel.getTransmitters().size();
+					}
+					return total;
+				}
+			});
+			signGraph.addPlotter(new Plotter("Receivers")
+			{
+				@Override
+				public int getValue()
+				{
+					int total = 0;
+					for(WirelessChannel channel : config.getAllChannels())
+					{
+						total+=channel.getReceivers().size();
+					}
+					return total;
+				}
+			});
+			signGraph.addPlotter(new Plotter("Screens")
+			{
+				@Override
+				public int getValue()
+				{
+					int total = 0;
+					for(WirelessChannel channel : config.getAllChannels())
+					{
+						total+=channel.getScreens().size();
+					}
+					return total;
+				}
+			});
+
+			final Graph storageGraph = metrics.createGraph("Storage used");
+			storageGraph.addPlotter(new Plotter("SQL")
+			{
+				@Override
+				public int getValue()
+				{
+					if(config.getSQLUsage())
+					{
+						return 1;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+			});
+
+			storageGraph.addPlotter(new Plotter("Yaml files")
+			{
+				@Override
+				public int getValue()
+				{
+					if(!config.getSQLUsage())
+					{
+						return 1;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+			});
+
+			final Graph permissionsGraph = metrics.createGraph("Plugin used for Permissions");
+			permissionsGraph.addPlotter(new Plotter("Vault")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "Vault")
+						return 1;
+					else
+						return 0;
+				}
+			});
+
+			permissionsGraph.addPlotter(new Plotter("PermissionsEx")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "PermissionsEx")
+						return 1;
+					else
+						return 0;
+				}
+			});
+
+			permissionsGraph.addPlotter(new Plotter("PermissionsBukkit")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "PermissionsBukkit")
+						return 1;
+					else
+						return 0;
+				}
+			});
+
+			permissionsGraph.addPlotter(new Plotter("bPermissions")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "bPermissions")
+						return 1;
+					else
+						return 0;
+				}
+			});
+
+			permissionsGraph.addPlotter(new Plotter("GroupManager")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "GroupManager")
+						return 1;
+					else
+						return 0;
+				}
+			});
+			metrics.start();
+
+			permissionsGraph.addPlotter(new Plotter("Bukkit OP Permissions")
+			{
+				@Override
+				public int getValue()
+				{
+					if(permissions.permPlugin == "Bukkit OP Permissions")
+						return 1;
+					else
+						return 0;
+				}
+			});
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 
 		//Loading finished !
 		System.out.println(pdFile.getName() + " version " + pdFile.getVersion() + " is enabled!");
