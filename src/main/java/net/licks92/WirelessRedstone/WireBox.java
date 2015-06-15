@@ -278,6 +278,18 @@ public class WireBox {
                     receiver = new WirelessReceiverDelayer(delay);
                     break;
 
+                case Clock:
+                    String clockDelayStr = ((Sign) (cblock.getState())).getLine(3);
+                    int clockDelay;
+                    try {
+                        clockDelay = Integer.parseInt(clockDelayStr);
+                    } catch (NumberFormatException ex) {
+                        player.sendMessage("[WirelessRedstone] The delay must be a number!");
+                        return false;
+                    }
+                    receiver = new WirelessReceiverClock(clockDelay);
+                    break;
+
                 default:
                     receiver = new WirelessReceiver();
                     break;
