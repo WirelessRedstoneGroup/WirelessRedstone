@@ -10,7 +10,6 @@ import java.util.Map;
 
 @SerializableAs("WirelessReceiverClock")
 public class WirelessReceiverClock extends WirelessReceiver {
-    private static final long serialVersionUID = -2955411933245551990L;
     int delay;
     BukkitTask task;
 
@@ -25,9 +24,11 @@ public class WirelessReceiverClock extends WirelessReceiver {
 
     @Override
     public void turnOn(final String channelName) {
+        Bukkit.broadcastMessage("Clock runner started:" + channelName);
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
+                Bukkit.broadcastMessage("Clock run: " + channelName);
                 if(getState()){
                     superTurnOff(channelName);
                 } else {
@@ -45,6 +46,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
     public void turnOff(final String channelName) {
         task.cancel();
         task = null;
+        Bukkit.broadcastMessage("Clock runner stopped:" + channelName);
         superTurnOff(channelName);
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
             @Override
