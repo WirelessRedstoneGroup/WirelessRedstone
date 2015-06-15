@@ -649,17 +649,6 @@ public class WirelessCommands implements CommandExecutor {
         }
 
         String category = args[1];
-		
-		/*
-		 *  If someday I decide to use JRE 1.7, I should use a switch block here with the str category.
-		 *  In exemple :
-		 *  switch(category)
-		 *  {
-		 *  case "receivers":
-		 *  	code;
-		 *  	break;
-		 *  }
-		 */
 
         ArrayList<String> lines = new ArrayList<String>();
 
@@ -681,6 +670,7 @@ public class WirelessCommands implements CommandExecutor {
                             + " at location " + receiver.getX()
                             + "," + receiver.getY()
                             + "," + receiver.getZ()
+                            + ", facing " + receiver.getDirection()
                             + " of type : " + type + ".");
                 }
                 break;

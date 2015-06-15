@@ -268,7 +268,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 
             while (rs.next()) {
                 channels.add(getNormalName(rs.getString("name")));
-                WirelessRedstone.getWRLogger().debug("Action on the SQL DB : " + getNormalName(rs.getString("name")) + " is in the list of channels.");
+                //WirelessRedstone.getWRLogger().debug("Action on the SQL DB : " + getNormalName(rs.getString("name")) + " is in the list of channels.");
             }
             rs.close(); //Always close the ResultSet
 

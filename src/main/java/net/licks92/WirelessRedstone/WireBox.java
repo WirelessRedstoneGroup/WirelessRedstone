@@ -14,8 +14,8 @@ import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 public class WireBox {
@@ -140,10 +140,12 @@ public class WireBox {
     }
 
     public boolean addWirelessReceiver(String cname, Block cblock, Player player, Type type) {
+        org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
         WirelessRedstone.getWRLogger().debug("Adding a receiver at location "
                 + cblock.getLocation().getBlockX() + ","
                 + cblock.getLocation().getBlockY() + ","
-                + cblock.getLocation().getBlockZ() + " in the world "
+                + cblock.getLocation().getBlockZ() + ", facing "
+                + sign.getFacing() +" in the world "
                 + cblock.getLocation().getWorld().getName() + " with the channel name "
                 + cname + " and with the type " + type
                 + " by the player " + player.getName());
@@ -202,10 +204,8 @@ public class WireBox {
             receiver.setX(loc.getBlockX());
             receiver.setY(loc.getBlockY());
             receiver.setZ(loc.getBlockZ());
-            /*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
-			BlockFace bfaceDirection = sign.getFacing();
-			receiver.setDirection(bfaceDirection);*/
-            receiver.setDirection(BlockFace.NORTH);
+            BlockFace bfaceDirection = sign.getFacing();
+			receiver.setDirection(bfaceDirection);
             receiver.setisWallSign(isWallSign);
             channel.addReceiver(receiver);
             if (!WirelessRedstone.config.createWirelessChannel(channel)) {
@@ -252,10 +252,8 @@ public class WireBox {
             receiver.setX(loc.getBlockX());
             receiver.setY(loc.getBlockY());
             receiver.setZ(loc.getBlockZ());
-			/*org.bukkit.material.Sign sign = new org.bukkit.material.Sign(cblock.getState().getType());
 			BlockFace bfaceDirection = sign.getFacing();
-			receiver.setDirection(bfaceDirection);*/
-            receiver.setDirection(BlockFace.NORTH);
+			receiver.setDirection(bfaceDirection);
             receiver.setisWallSign(isWallSign);
             channel.addReceiver(receiver);
             WirelessRedstone.config.createWirelessPoint(cname, receiver);
@@ -384,28 +382,16 @@ public class WireBox {
         return false;
     }
 
+    /**
+     * This method gets the block the sign is attached to,
+     * and checks that a redstone torch can be put on the side of this block.
+     *
+     * @param block - The sign block
+     * @return true if a torch can be put there.
+     */
     public boolean isValidWallLocation(Block block) {
-        BlockFace face = BlockFace.DOWN;
-
-        switch (block.getData()) {
-            // Remember that here is the face where the text can be seen, not the face of the block on where the sign is.
-
-            case 0x2: //North
-                face = BlockFace.SOUTH;
-                break;
-
-            case 0x3: //South
-                face = BlockFace.NORTH;
-                break;
-
-            case 0x4: //West
-                face = BlockFace.EAST;
-                break;
-
-            case 0x5: //East
-                face = BlockFace.WEST;
-                break;
-        }
+        org.bukkit.material.Sign sign = (org.bukkit.material.Sign) block.getState().getData();
+        BlockFace face = sign.getAttachedFace();
         Block tempBlock = block.getRelative(face);
 
         if (tempBlock.getType() == Material.AIR

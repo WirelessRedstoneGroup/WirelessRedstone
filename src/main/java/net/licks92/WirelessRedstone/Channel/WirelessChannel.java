@@ -99,7 +99,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                 screen.turnOn();
             }
         } catch (RuntimeException e) {
-            WirelessRedstone.getWRLogger().severe("Error while updating redstone event onBlockRedstoneChange for Receivers. Turn on the Debug Mode to get more informations.");
+            WirelessRedstone.getWRLogger().severe("Error while turning on the receivers of channel " + name + ". Please turn the debug mode on to get more informations.");
             if (WirelessRedstone.config.getDebugMode())
                 e.printStackTrace();
             return;

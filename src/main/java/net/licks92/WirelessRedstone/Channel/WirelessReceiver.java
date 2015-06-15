@@ -183,24 +183,22 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                 block.setType(Material.REDSTONE_TORCH_ON);
                 block.getState().update();
             }
-        } else if (block.getType() == Material.WALL_SIGN) {
-            org.bukkit.material.Sign data = (org.bukkit.material.Sign) block.getState().getData();
+        } else {
+            if (block.getType() == Material.WALL_SIGN) {
+                org.bukkit.material.Sign data = (org.bukkit.material.Sign) block.getState().getData();
 
-            if (!WirelessRedstone.WireBox.isValidWallLocation(block)) {
-                WirelessRedstone.WireBox.signWarning(block, 1);
-            } else {
-                /**
-                 * Here we have a problem with bukkit. The wall sign is not facing the same direction in game as the torch,
-                 * but the torch should be facing the same direction. It's currently a bug of bukkit (1.6.2-R1.0)
-                 */
-                block.setType(Material.REDSTONE_TORCH_ON);
-                block.getState().setType(Material.REDSTONE_TORCH_ON);
-                RedstoneTorch torch = new RedstoneTorch();
-                torch.setFacingDirection(data.getFacing());
-                block.getState().setData(torch);
-                block.getState().update();
-                WirelessRedstone.getWRLogger().debug("Wall_sign facing to " + data.getFacing() + " and attached face " + data.getAttachedFace());
-                WirelessRedstone.getWRLogger().debug("Torch on the wall facing to " + torch.getFacing() + " and attached face " + torch.getAttachedFace());
+                if (!WirelessRedstone.WireBox.isValidWallLocation(block)) {
+                    WirelessRedstone.WireBox.signWarning(block, 1);
+                } else {
+                    block.setType(Material.REDSTONE_TORCH_ON);
+                    block.getState().setType(Material.REDSTONE_TORCH_ON);
+                    RedstoneTorch torch = new RedstoneTorch();
+                    torch.setFacingDirection(data.getAttachedFace().getOppositeFace());
+                    block.getState().setData(torch);
+                    block.getState().update();
+                    WirelessRedstone.getWRLogger().debug("Wall_sign facing to " + data.getFacing() + " and attached face " + data.getAttachedFace());
+                    WirelessRedstone.getWRLogger().debug("Torch on the wall facing to " + torch.getFacing() + " and attached face " + torch.getAttachedFace());
+                }
             }
         }
     }
