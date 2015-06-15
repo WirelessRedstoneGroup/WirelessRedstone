@@ -114,7 +114,7 @@ public class WirelessRedstone extends JavaPlugin {
 								e1.printStackTrace();
 							}
 						}
-					}, 0, 24000 / 50);
+					}, 0, 24000 * 20);
 		}
 
 		// Load listeners

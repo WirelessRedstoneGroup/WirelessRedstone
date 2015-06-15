@@ -25,7 +25,7 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
 
     @Override
     public void turnOn(final String channelName) {
-        int delayInTicks = delay / 50;
+        int delayInTicks = delay * 20;
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable() {
             @Override
             public void run() {
@@ -40,7 +40,7 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
 
     @Override
     public void turnOff(final String channelName) {
-        int delayInTicks = delay / 50;
+        int delayInTicks = delay * 20;
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable() {
             @Override
             public void run() {

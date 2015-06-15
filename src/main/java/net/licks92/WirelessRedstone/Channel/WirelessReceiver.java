@@ -196,7 +196,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                     torch.setFacingDirection(getDirection());
                     //block.getState().setRawData(torch.getData());
                     byte directionByte;
-                    switch(getDirection()) {
+                    switch (getDirection()) {
                         case EAST:
                             directionByte = 1;
                             break;
@@ -217,7 +217,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                             directionByte = 1;
 
                     }
-                    block.setTypeIdAndData(76,directionByte,true);
+                    block.setTypeIdAndData(76, directionByte, true);
                     //block.getState().update();
                     WirelessRedstone.getWRLogger().debug("Wall_sign facing to " + data.getFacing() + " and attached face " + data.getAttachedFace());
                     //WirelessRedstone.getWRLogger().debug("Torch on the wall facing to " + ((org.bukkit.material.Sign) block.getState().getData()).getFacing() + " and attached face " + ((org.bukkit.material.Sign) block.getState().getData()).getAttachedFace());
@@ -248,7 +248,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
             itemID = 63;
         }
         byte directionByte;
-        switch(getDirection()) {
+        switch (getDirection()) {
             case NORTH:
                 directionByte = 2;
                 break;
@@ -269,7 +269,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                 directionByte = 2;
 
         }
-        block.setTypeIdAndData(itemID,directionByte,true);
+        block.setTypeIdAndData(itemID, directionByte, true);
 
         if (block.getState() instanceof Sign) {
             Sign signtemp = (Sign) block.getState();
