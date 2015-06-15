@@ -35,7 +35,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
                     superTurnOn(channelName);
                 }
             }
-        }, 0L, delay);
+        }, 0L, delay * 20);
     }
 
     private void superTurnOn(String channelName) {
