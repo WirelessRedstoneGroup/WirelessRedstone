@@ -45,6 +45,7 @@ public class WirelessRedstone extends JavaPlugin {
 	private static Metrics metrics;
 	private BukkitTask updateChecker;
 	public Updater updater;
+	private static WirelessRedstone instance;
 
 	/**
 	 * Wireless Redstone logger
@@ -63,7 +64,8 @@ public class WirelessRedstone extends JavaPlugin {
 		try {
 			config.close();
 			updateChecker.cancel();
-		} catch (NullPointerException ex) {
+			instance = null;
+		} catch (Exception ex) {
 
 		}
 	}
@@ -74,6 +76,7 @@ public class WirelessRedstone extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
+		instance = this;
 		PluginDescriptionFile pdFile = getDescription();
 
 		WireBox = new WireBox(this);
@@ -321,5 +324,14 @@ public class WirelessRedstone extends JavaPlugin {
 	 */
 	public WirelessRedstone getPlugin() {
 		return this;
+	}
+
+	/**
+	 * Returns this object
+	 *
+	 * @return plugin
+	 */
+	public static WirelessRedstone getInstance() {
+		return instance;
 	}
 }

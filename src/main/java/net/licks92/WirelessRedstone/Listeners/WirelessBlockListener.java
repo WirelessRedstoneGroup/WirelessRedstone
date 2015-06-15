@@ -40,92 +40,97 @@ public class WirelessBlockListener implements Listener {
     // is created, and
     // the text edited
     {
-        if (WirelessRedstone.WireBox.isReceiver(event.getLine(0))
-                || WirelessRedstone.WireBox.isTransmitter(event.getLine(0))
-                || WirelessRedstone.WireBox.isScreen(event.getLine(0))) {
+        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                if (WirelessRedstone.WireBox.isReceiver(event.getLine(0))
+                        || WirelessRedstone.WireBox.isTransmitter(event.getLine(0))
+                        || WirelessRedstone.WireBox.isScreen(event.getLine(0))) {
 
-            if (!plugin.permissions.canCreateReceiver(event.getPlayer())
-                    || !plugin.permissions.canCreateTransmitter(event
-                    .getPlayer())
-                    || !plugin.permissions.canCreateScreen(event.getPlayer())) {
-                event.getBlock().setType(Material.AIR);
-                event.getPlayer()
-                        .getWorld()
-                        .dropItemNaturally(event.getBlock().getLocation(),
-                                new ItemStack(Material.SIGN, 1));
-                event.getPlayer().sendMessage(
-                        WirelessRedstone.strings.playerCannotCreateSign);
-                return;
-            }
-            if (event.getLine(1) == null) {
-                event.getBlock().setType(Material.AIR);
-                event.getPlayer()
-                        .getWorld()
-                        .dropItemNaturally(event.getBlock().getLocation(),
-                                new ItemStack(Material.SIGN, 1));
-                event.getPlayer().sendMessage(
-                        "[WirelessRedstone] No Channelname given!");
-                return;
-            }
+                    if (!plugin.permissions.canCreateReceiver(event.getPlayer())
+                            || !plugin.permissions.canCreateTransmitter(event
+                            .getPlayer())
+                            || !plugin.permissions.canCreateScreen(event.getPlayer())) {
+                        event.getBlock().setType(Material.AIR);
+                        event.getPlayer()
+                                .getWorld()
+                                .dropItemNaturally(event.getBlock().getLocation(),
+                                        new ItemStack(Material.SIGN, 1));
+                        event.getPlayer().sendMessage(
+                                WirelessRedstone.strings.playerCannotCreateSign);
+                        return;
+                    }
+                    if (event.getLine(1) == null) {
+                        event.getBlock().setType(Material.AIR);
+                        event.getPlayer()
+                                .getWorld()
+                                .dropItemNaturally(event.getBlock().getLocation(),
+                                        new ItemStack(Material.SIGN, 1));
+                        event.getPlayer().sendMessage(
+                                "[WirelessRedstone] No Channelname given!");
+                        return;
+                    }
 
-            String cname = event.getLine(1);
+                    String cname = event.getLine(1);
 
-            if (!WirelessRedstone.WireBox.hasAccessToChannel(event.getPlayer(),
-                    cname)) {
-                event.getBlock().setType(Material.AIR);
-                event.getPlayer()
-                        .getWorld()
-                        .dropItemNaturally(event.getBlock().getLocation(),
-                                new ItemStack(Material.SIGN, 1));
-                event.getPlayer().sendMessage(
-                        WirelessRedstone.strings.playerCannotCreateSign);
-                return;
-            }
+                    if (!WirelessRedstone.WireBox.hasAccessToChannel(event.getPlayer(),
+                            cname)) {
+                        event.getBlock().setType(Material.AIR);
+                        event.getPlayer()
+                                .getWorld()
+                                .dropItemNaturally(event.getBlock().getLocation(),
+                                        new ItemStack(Material.SIGN, 1));
+                        event.getPlayer().sendMessage(
+                                WirelessRedstone.strings.playerCannotCreateSign);
+                        return;
+                    }
 
-            if (WirelessRedstone.WireBox.isReceiver(event.getLine(0))) {
-                if (WirelessRedstone.WireBox.isReceiverInverter(event
-                        .getLine(2))) {
-                    if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
-                            event.getBlock(), event.getPlayer(), Type.Inverter)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
+                    if (WirelessRedstone.WireBox.isReceiver(event.getLine(0))) {
+                        if (WirelessRedstone.WireBox.isReceiverInverter(event
+                                .getLine(2))) {
+                            if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
+                                    event.getBlock(), event.getPlayer(), Type.Inverter)) {
+                                event.setCancelled(true);
+                                event.getBlock().breakNaturally();
+                            }
+                        }
+                        if (WirelessRedstone.WireBox
+                                .isReceiverDelayer(event.getLine(2))) {
+                            if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
+                                    event.getBlock(), event.getPlayer(), Type.Delayer)) {
+                                event.setCancelled(true);
+                                event.getBlock().breakNaturally();
+                            }
+                        } else if (WirelessRedstone.WireBox.isReceiverDefault(event
+                                .getLine(2))) {
+                            if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
+                                    event.getBlock(), event.getPlayer(), Type.Default)) {
+                                event.setCancelled(true);
+                                event.getBlock().breakNaturally();
+                            }
+                        } else {
+                            if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
+                                    event.getBlock(), event.getPlayer(), Type.Default)) {
+                                event.setCancelled(true);
+                                event.getBlock().breakNaturally();
+                            }
+                        }
+                    } else if (WirelessRedstone.WireBox.isTransmitter(event.getLine(0))) {
+                        if (!WirelessRedstone.WireBox.addWirelessTransmitter(cname,
+                                event.getBlock(), event.getPlayer())) {
+                            event.setCancelled(true);
+                            event.getBlock().breakNaturally();
+                        }
+                    } else if (WirelessRedstone.WireBox.isScreen(event.getLine(0))) {
+                        if (!WirelessRedstone.WireBox.addWirelessScreen(cname,
+                                event.getBlock(), event.getPlayer())) {
+                            event.setCancelled(true);
+                            event.getBlock().breakNaturally();
+                        }
                     }
                 }
-                if (WirelessRedstone.WireBox
-                        .isReceiverDelayer(event.getLine(2))) {
-                    if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
-                            event.getBlock(), event.getPlayer(), Type.Delayer)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                } else if (WirelessRedstone.WireBox.isReceiverDefault(event
-                        .getLine(2))) {
-                    if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
-                            event.getBlock(), event.getPlayer(), Type.Default)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                } else {
-                    if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
-                            event.getBlock(), event.getPlayer(), Type.Default)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                }
-            } else if (WirelessRedstone.WireBox.isTransmitter(event.getLine(0))) {
-                if (!WirelessRedstone.WireBox.addWirelessTransmitter(cname,
-                        event.getBlock(), event.getPlayer())) {
-                    event.setCancelled(true);
-                    event.getBlock().breakNaturally();
-                }
-            } else if (WirelessRedstone.WireBox.isScreen(event.getLine(0))) {
-                if (!WirelessRedstone.WireBox.addWirelessScreen(cname,
-                        event.getBlock(), event.getPlayer())) {
-                    event.setCancelled(true);
-                    event.getBlock().breakNaturally();
-                }
             }
-        }
+        }, 2L);
     }
 
     @EventHandler
