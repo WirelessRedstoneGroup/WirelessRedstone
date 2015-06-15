@@ -228,6 +228,7 @@ public class WireBox {
                         return false;
                     }
                     receiver = new WirelessReceiverClock(clockDelay);
+                    WirelessRedstone.getWRLogger().debug("Created clock");
                     break;
 
                 default:
@@ -288,6 +289,7 @@ public class WireBox {
                         return false;
                     }
                     receiver = new WirelessReceiverClock(clockDelay);
+                    WirelessRedstone.getWRLogger().debug("Created clock");
                     break;
 
                 default:
