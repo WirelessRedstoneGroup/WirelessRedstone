@@ -1,11 +1,6 @@
 package net.licks92.WirelessRedstone.Channel;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.licks92.WirelessRedstone.WirelessRedstone;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,6 +11,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.material.RedstoneTorch;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 @SerializableAs("WirelessReceiver")
 public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoint, Serializable {
     private static final long serialVersionUID = -7291500732787558150L;
@@ -25,10 +24,10 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
     private int z;
     private String world;
     private int direction = 0;
-    private boolean iswallsign = false;
+    private boolean iswallsign = false, isON = false;
 
     public enum Type {
-        Default, Inverter, Delayer;
+        Default, Inverter, Delayer, Clock;
     }
 
     public WirelessReceiver() {
@@ -219,6 +218,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                     }
                     block.setTypeIdAndData(76, directionByte, true);
                     //block.getState().update();
+                    isON = true;
                     WirelessRedstone.getWRLogger().debug("Wall_sign facing to " + data.getFacing() + " and attached face " + data.getAttachedFace());
                     //WirelessRedstone.getWRLogger().debug("Torch on the wall facing to " + ((org.bukkit.material.Sign) block.getState().getData()).getFacing() + " and attached face " + ((org.bukkit.material.Sign) block.getState().getData()).getAttachedFace());
                 }
@@ -278,5 +278,10 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
             signtemp.setLine(2, WirelessRedstone.strings.tagsReceiverDefaultType.get(0));
             signtemp.update(true);
         }
+        isON = false;
+    }
+
+    public boolean getState() {
+        return isON;
     }
 }

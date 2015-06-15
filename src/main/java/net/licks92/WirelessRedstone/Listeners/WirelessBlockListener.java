@@ -93,11 +93,17 @@ public class WirelessBlockListener implements Listener {
                                 event.setCancelled(true);
                                 event.getBlock().breakNaturally();
                             }
-                        }
-                        if (WirelessRedstone.WireBox
+                        } else if (WirelessRedstone.WireBox
                                 .isReceiverDelayer(event.getLine(2))) {
                             if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
                                     event.getBlock(), event.getPlayer(), Type.Delayer)) {
+                                event.setCancelled(true);
+                                event.getBlock().breakNaturally();
+                            }
+                        } else if (WirelessRedstone.WireBox
+                                .isReceiverClock(event.getLine(2))) {
+                            if (!WirelessRedstone.WireBox.addWirelessReceiver(cname,
+                                    event.getBlock(), event.getPlayer(), Type.Clock)) {
                                 event.setCancelled(true);
                                 event.getBlock().breakNaturally();
                             }
@@ -402,7 +408,7 @@ public class WirelessBlockListener implements Listener {
 
     private void cancelEvent(final BlockBreakEvent event) {
         /*
-		 * Methods cancelEvent and sendBlockBreakParticles, taken from
+         * Methods cancelEvent and sendBlockBreakParticles, taken from
 		 * http://www
 		 * .bukkit.fr/index.php?threads/enlever-le-drop-dun-block.850/page
 		 * -2#post-11582 All credits to richie3366.

@@ -17,14 +17,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -353,6 +347,24 @@ public class SQLStorage implements IWirelessStorageConfiguration {
                             receiver_delayer.setY(rs3.getInt(sql_signy));
                             receiver_delayer.setZ(rs3.getInt(sql_signz));
                             receivers.add(receiver_delayer);
+                        }else if (rs3.getString(sql_signtype).contains("receiver_clock_")) {
+                            String signtype = rs3.getString(sql_signtype);
+                            signtype = signtype.split("receiver_clock_")[1];
+                            int delay;
+                            try {
+                                delay = Integer.parseInt(signtype);
+                            } catch (NumberFormatException ex) {
+                                delay = 20;
+                            }
+                            WirelessReceiverClock receiver_clock = new WirelessReceiverClock(delay);
+                            receiver_clock.setDirection(WirelessRedstone.WireBox.intDirectionToBlockFace(rs3.getInt(sql_direction)));
+                            receiver_clock.setisWallSign(rs3.getBoolean(sql_iswallsign));
+                            receiver_clock.setOwner(rs3.getString(sql_signowner));
+                            receiver_clock.setWorld(rs3.getString(sql_signworld));
+                            receiver_clock.setX(rs3.getInt(sql_signx));
+                            receiver_clock.setY(rs3.getInt(sql_signy));
+                            receiver_clock.setZ(rs3.getInt(sql_signz));
+                            receivers.add(receiver_clock);
                         } else if (rs3.getString(sql_signtype).equals("transmitter")) {
                             WirelessTransmitter transmitter = new WirelessTransmitter();
                             transmitter.setDirection(WirelessRedstone.WireBox.intDirectionToBlockFace(rs3.getInt(sql_direction)));
@@ -556,6 +568,8 @@ public class SQLStorage implements IWirelessStorageConfiguration {
                 signtype = "receiver_inverter";
             else if (point instanceof WirelessReceiverDelayer)
                 signtype = "receiver_delayer_" + ((WirelessReceiverDelayer) (point)).getDelay();
+            else if (point instanceof WirelessReceiverDelayer)
+                signtype = "receiver_clock_" + ((WirelessReceiverDelayer) (point)).getDelay();
             else
                 signtype = "receiver";
         } else if (point instanceof WirelessTransmitter) {

@@ -48,6 +48,7 @@ public class WirelessStrings {
     public List<String> tagsReceiverDefaultType;
     public List<String> tagsReceiverInverterType;
     public List<String> tagsReceiverDelayerType;
+    public List<String> tagsReceiverClockType;
 
     public WirelessStrings() {
         tagsTransmitter = new ArrayList<String>();
@@ -56,6 +57,7 @@ public class WirelessStrings {
         tagsReceiverDefaultType = new ArrayList<String>();
         tagsReceiverInverterType = new ArrayList<String>();
         tagsReceiverDelayerType = new ArrayList<String>();
+        tagsReceiverClockType = new ArrayList<String>();
 
         WirelessRedstone.getWRLogger().debug("Loading the tags...");
         chatTag = "WirelessRedstone";
@@ -104,6 +106,7 @@ public class WirelessStrings {
         tagsReceiverInverterType.add("[inv]");
         tagsReceiverDelayerType.add("[delayer]");
         tagsReceiverDelayerType.add("[delay]");
+        tagsReceiverDelayerType.add("[clock]");
     }
 }
 

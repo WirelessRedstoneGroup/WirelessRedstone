@@ -2,14 +2,8 @@ package net.licks92.WirelessRedstone;
 
 import java.util.ArrayList;
 
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -130,6 +124,19 @@ public class WireBox {
 
     /**
      * @param data - The line of the sign
+     * @return true if the string corresponds to the tag of the delayer receiver type
+     */
+    public boolean isReceiverClock(String data) {
+        for (String tag : WirelessRedstone.strings.tagsReceiverClockType) {
+            if (data.toLowerCase().equals(tag.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param data - The line of the sign
      * @return true if the string corresponds to the tag of the default receiver type
      */
     public boolean isReceiverDefault(String data) {
@@ -209,6 +216,18 @@ public class WireBox {
                         return false;
                     }
                     receiver = new WirelessReceiverDelayer(delay);
+                    break;
+
+                case Clock:
+                    String clockDelayStr = ((Sign) (cblock.getState())).getLine(3);
+                    int clockDelay;
+                    try {
+                        clockDelay = Integer.parseInt(clockDelayStr);
+                    } catch (NumberFormatException ex) {
+                        player.sendMessage("[WirelessRedstone] The delay must be a number!");
+                        return false;
+                    }
+                    receiver = new WirelessReceiverClock(clockDelay);
                     break;
 
                 default:

@@ -1,17 +1,15 @@
 package net.licks92.WirelessRedstone.Channel;
 
-import java.util.Map;
-
 import net.licks92.WirelessRedstone.WirelessRedstone;
-
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.SerializableAs;
 
+import java.util.Map;
+
 @SerializableAs("WirelessReceiverDelayer")
 public class WirelessReceiverDelayer extends WirelessReceiver {
     private static final long serialVersionUID = -2955411933245551990L;
-    // In ms
     int delay;
 
     public WirelessReceiverDelayer(int delay) {

@@ -207,7 +207,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
 
         // Here we load the tags
         /*
-		 * tagsTransmitter.add("[transmitter]"); tagsTransmitter.add("[wrt]");
+         * tagsTransmitter.add("[transmitter]"); tagsTransmitter.add("[wrt]");
 		 * tagsReceiver.add("[receiver]"); tagsReceiver.add("[wrr]");
 		 * tagsScreen.add("[screen]"); tagsScreen.add("[wrs]");
 		 */

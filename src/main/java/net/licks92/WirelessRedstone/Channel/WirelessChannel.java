@@ -68,7 +68,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
             return;
         }
-        int timeInTicks = time / 50; // It's the time in ticks, where the time variable is supposed to be the time in ms.
+        int timeInTicks = time * 20; // It's the time in ticks, where the time variable is supposed to be the time in ticks.
         turnOn();
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable() {
             @Override
