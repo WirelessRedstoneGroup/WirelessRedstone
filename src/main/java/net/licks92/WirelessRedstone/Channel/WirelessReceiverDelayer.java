@@ -41,16 +41,21 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
     @Override
     public void turnOff(final String channelName) {
         int delayInTicks = delay * 20;
-        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WirelessRedstone"), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
                 superTurnOff(channelName);
+                Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Sign sign = (Sign) getLocation().getBlock().getState();
+                        sign.setLine(2, WirelessRedstone.strings.tagsReceiverDelayerType.get(0));
+                        sign.setLine(3, Integer.toString(delay));
+                        sign.update();
+                    }
+                }, 2l);
             }
         }, delayInTicks);
-        Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(2, WirelessRedstone.strings.tagsReceiverDelayerType.get(0));
-        sign.setLine(3, Integer.toString(delay));
-        sign.update();
     }
 
     private void superTurnOff(String channelName) {
