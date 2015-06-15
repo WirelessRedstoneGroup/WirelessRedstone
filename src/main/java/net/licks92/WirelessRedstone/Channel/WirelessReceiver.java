@@ -192,12 +192,35 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                 } else {
                     block.setType(Material.REDSTONE_TORCH_ON);
                     block.getState().setType(Material.REDSTONE_TORCH_ON);
-                    RedstoneTorch torch = new RedstoneTorch();
-                    torch.setFacingDirection(data.getAttachedFace().getOppositeFace());
-                    block.getState().setData(torch);
-                    block.getState().update();
+                    RedstoneTorch torch = new RedstoneTorch(Material.REDSTONE_TORCH_ON);
+                    torch.setFacingDirection(getDirection());
+                    //block.getState().setRawData(torch.getData());
+                    byte directionByte;
+                    switch(getDirection()) {
+                        case EAST:
+                            directionByte = 1;
+                            break;
+
+                        case WEST:
+                            directionByte = 2;
+                            break;
+
+                        case SOUTH:
+                            directionByte = 3;
+                            break;
+
+                        case NORTH:
+                            directionByte = 4;
+                            break;
+
+                        default:
+                            directionByte = 1;
+
+                    }
+                    block.setTypeIdAndData(76,directionByte,true);
+                    //block.getState().update();
                     WirelessRedstone.getWRLogger().debug("Wall_sign facing to " + data.getFacing() + " and attached face " + data.getAttachedFace());
-                    WirelessRedstone.getWRLogger().debug("Torch on the wall facing to " + torch.getFacing() + " and attached face " + torch.getAttachedFace());
+                    //WirelessRedstone.getWRLogger().debug("Torch on the wall facing to " + ((org.bukkit.material.Sign) block.getState().getData()).getFacing() + " and attached face " + ((org.bukkit.material.Sign) block.getState().getData()).getAttachedFace());
                 }
             }
         }
@@ -213,17 +236,40 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
         block.setType(Material.AIR);
 
         org.bukkit.material.Sign sign;
+        int itemID;
 
         if (getisWallSign()) {
             sign = new org.bukkit.material.Sign(Material.WALL_SIGN);
             block.setType(Material.WALL_SIGN);
+            itemID = 68;
         } else {
             block.setType(Material.SIGN_POST);
             sign = new org.bukkit.material.Sign(Material.SIGN_POST);
+            itemID = 63;
         }
-        sign.setFacingDirection(getDirection());
-        block.getState().setData(sign);
-        block.getState().update();
+        byte directionByte;
+        switch(getDirection()) {
+            case NORTH:
+                directionByte = 2;
+                break;
+
+            case SOUTH:
+                directionByte = 3;
+                break;
+
+            case WEST:
+                directionByte = 4;
+                break;
+
+            case EAST:
+                directionByte = 5;
+                break;
+
+            default:
+                directionByte = 2;
+
+        }
+        block.setTypeIdAndData(itemID,directionByte,true);
 
         if (block.getState() instanceof Sign) {
             Sign signtemp = (Sign) block.getState();

@@ -26,25 +26,41 @@ public class WireBox {
     }
 
     public int blockFace2IntDirection(BlockFace face) {
-        if (face == BlockFace.SOUTH)
-            return 5;
-        else if (face == BlockFace.NORTH)
-            return 4;
-        else if (face == BlockFace.EAST)
-            return 2;
-        else
-            return 3;
+        switch(face) {
+            case SOUTH:
+                return 5;
+
+            case NORTH:
+                return 4;
+
+            case WEST:
+                return 3;
+
+            case EAST:
+                return 2;
+
+            default:
+                return 4;
+        }
     }
 
     public BlockFace intDirectionToBlockFace(int dir) {
-        if (dir == 5)
-            return BlockFace.SOUTH;
-        else if (dir == 4)
-            return BlockFace.NORTH;
-        else if (dir == 2)
-            return BlockFace.EAST;
-        else
-            return BlockFace.WEST;
+        switch(dir) {
+            case 2:
+                return BlockFace.EAST;
+
+            case 3:
+                return BlockFace.WEST;
+
+            case 4:
+                return BlockFace.NORTH;
+
+            case 5:
+                return BlockFace.SOUTH;
+
+            default:
+                return BlockFace.NORTH;
+        }
     }
 
     /**
