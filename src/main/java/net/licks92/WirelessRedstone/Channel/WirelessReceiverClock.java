@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone.Channel;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -45,6 +46,15 @@ public class WirelessReceiverClock extends WirelessReceiver {
         task.cancel();
         task = null;
         superTurnOff(channelName);
+        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                Sign sign = (Sign) getLocation().getBlock().getState();
+                sign.setLine(2, WirelessRedstone.strings.tagsReceiverClockType.get(0));
+                sign.setLine(3, Integer.toString(delay));
+                sign.update();
+            }
+        }, 2L);
     }
 
     private void superTurnOff(String channelName) {

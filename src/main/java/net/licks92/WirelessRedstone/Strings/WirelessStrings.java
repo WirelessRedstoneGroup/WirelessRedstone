@@ -106,7 +106,7 @@ public class WirelessStrings {
         tagsReceiverInverterType.add("[inv]");
         tagsReceiverDelayerType.add("[delayer]");
         tagsReceiverDelayerType.add("[delay]");
-        tagsReceiverDelayerType.add("[clock]");
+        tagsReceiverClockType.add("[clock]");
     }
 }
 
