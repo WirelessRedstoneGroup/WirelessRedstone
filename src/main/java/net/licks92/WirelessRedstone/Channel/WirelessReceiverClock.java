@@ -28,7 +28,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
         this.task = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
-                if (!getState()) {
+                if (getState()) {
                     superTurnOff(channelName);
                 } else {
                     superTurnOn(channelName);
