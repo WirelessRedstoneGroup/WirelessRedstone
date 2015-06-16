@@ -24,7 +24,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
 
     @Override
     public void turnOn(final String channelName) {
-        Bukkit.broadcastMessage("Clock runner started:" + channelName);
+        WirelessRedstone.getWRLogger().debug("Clock started named by: " + channelName);
         this.task = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -34,7 +34,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
                     superTurnOn(channelName);
                 }
             }
-        }, 0L, delay * 10).getTaskId();
+        }, 0L, delay * 20).getTaskId();
     }
 
     private void superTurnOn(String channelName) {
@@ -44,8 +44,13 @@ public class WirelessReceiverClock extends WirelessReceiver {
     @Override
     public void turnOff(final String channelName) {
         Bukkit.getScheduler().cancelTask(this.task);
-        Bukkit.broadcastMessage("Clock runner stopped:" + channelName);
-        superTurnOff(channelName);
+        WirelessRedstone.getWRLogger().debug("Clock stopped named by: " + channelName);
+        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                superTurnOff(channelName);
+            }
+        }, 2L);
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -54,7 +59,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
                 sign.setLine(3, Integer.toString(delay));
                 sign.update();
             }
-        }, 2L);
+        }, 4L);
     }
 
     private void superTurnOff(String channelName) {
