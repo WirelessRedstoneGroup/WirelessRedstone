@@ -10,12 +10,12 @@ import java.util.Map;
 
 @SerializableAs("WirelessReceiverClock")
 public class WirelessReceiverClock extends WirelessReceiver {
-    int delay;
-    BukkitTask task;
+    int delay, task;
 
     public WirelessReceiverClock(int delay) {
         super();
         this.delay = delay;
+        this.task = 0;
     }
 
     public WirelessReceiverClock(Map<String, Object> map) {
@@ -25,17 +25,16 @@ public class WirelessReceiverClock extends WirelessReceiver {
     @Override
     public void turnOn(final String channelName) {
         Bukkit.broadcastMessage("Clock runner started:" + channelName);
-        task = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
+        this.task = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Bukkit.broadcastMessage("Clock run: " + channelName);
-                if(getState()){
+                if (!getState()) {
                     superTurnOff(channelName);
                 } else {
                     superTurnOn(channelName);
                 }
             }
-        }, 0L, delay * 10);
+        }, 0L, delay * 10).getTaskId();
     }
 
     private void superTurnOn(String channelName) {
@@ -44,8 +43,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
 
     @Override
     public void turnOff(final String channelName) {
-        task.cancel();
-        task = null;
+        Bukkit.getScheduler().cancelTask(this.task);
         Bukkit.broadcastMessage("Clock runner stopped:" + channelName);
         superTurnOff(channelName);
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
