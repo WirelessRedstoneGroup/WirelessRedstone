@@ -568,8 +568,8 @@ public class SQLStorage implements IWirelessStorageConfiguration {
                 signtype = "receiver_inverter";
             else if (point instanceof WirelessReceiverDelayer)
                 signtype = "receiver_delayer_" + ((WirelessReceiverDelayer) (point)).getDelay();
-            else if (point instanceof WirelessReceiverDelayer)
-                signtype = "receiver_clock_" + ((WirelessReceiverDelayer) (point)).getDelay();
+            else if (point instanceof WirelessReceiverClock)
+                signtype = "receiver_clock_" + ((WirelessReceiverClock) (point)).getDelay();
             else
                 signtype = "receiver";
         } else if (point instanceof WirelessTransmitter) {
@@ -633,7 +633,6 @@ public class SQLStorage implements IWirelessStorageConfiguration {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return;
     }
 
     @Override
