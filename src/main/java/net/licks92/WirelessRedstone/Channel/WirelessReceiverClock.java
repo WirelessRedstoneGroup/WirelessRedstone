@@ -25,7 +25,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
     @Override
     public void turnOn(final String channelName) {
         Bukkit.broadcastMessage("Clock runner started:" + channelName);
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
+        task = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.broadcastMessage("Clock run: " + channelName);
@@ -35,7 +35,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
                     superTurnOn(channelName);
                 }
             }
-        }, 0L, delay * 20);
+        }, 0L, delay * 10);
     }
 
     private void superTurnOn(String channelName) {
