@@ -8,7 +8,7 @@ Language: en
 ColourfulLogging: true
 
 # If you don't want to be spammed with a message telling you that an amazing new release with new great functionnalities has been released, then set it to false.
-CheckForUpdates: true
+CheckForUpdates: false
 
 # If true, then the plugin uses a database to store the channels.
 UseSQL: true

@@ -219,7 +219,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
     }
 
     public boolean doCheckForUpdates() {
-        return getConfig().getBoolean("CheckForUpdates", true);
+        return getConfig().getBoolean("CheckForUpdates", false);
     }
 
     public boolean getVaultUsage() {
