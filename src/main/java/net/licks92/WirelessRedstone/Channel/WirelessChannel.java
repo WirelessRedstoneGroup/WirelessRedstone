@@ -1,26 +1,21 @@
 package net.licks92.WirelessRedstone.Channel;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import com.avaje.ebean.validation.NotNull;
+import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.scheduler.BukkitTask;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import net.licks92.WirelessRedstone.WirelessRedstone;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.SerializableAs;
-
-import com.avaje.ebean.validation.NotNull;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity()
 @Table(name = "wirelesschannels")
@@ -33,6 +28,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
     private String name;
     @NotNull
     private boolean locked;
+    @NotNull
+    private BukkitTask task;
 
     private List<String> owners = new LinkedList<String>();
     private List<WirelessTransmitter> transmitters = new LinkedList<WirelessTransmitter>();
@@ -124,8 +121,20 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             WirelessRedstone.getWRLogger().severe("Error while updating redstone onBlockRedstoneChange for Screens , turn on the Debug Mode to get more informations.");
             if (WirelessRedstone.config.getDebugMode())
                 e.printStackTrace();
-            return;
         }
+    }
+
+    public void startClock(BukkitTask task){
+        WirelessRedstone.getInstance().clockTasks.add(task.getTaskId());
+        WirelessRedstone.getWRLogger().debug("Added clock task " + task.getTaskId() + " to te list");
+    }
+
+    public void stopClock(){
+        for(Integer task : WirelessRedstone.getInstance().clockTasks){
+            Bukkit.getScheduler().cancelTask(task);
+            WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
+        }
+        WirelessRedstone.getInstance().clockTasks.clear();
     }
 
     /**
@@ -139,6 +148,31 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                 if (block.isBlockIndirectlyPowered() || block.isBlockIndirectlyPowered()) {
                     return true;
                 }
+            }
+
+            ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
+            possibleBlockface.add(BlockFace.NORTH);
+            possibleBlockface.add(BlockFace.EAST);
+            possibleBlockface.add(BlockFace.SOUTH);
+            possibleBlockface.add(BlockFace.WEST);
+            possibleBlockface.add(BlockFace.UP);
+            possibleBlockface.add(BlockFace.DOWN);
+            boolean canContinue = false;
+            BlockFace bf = null;
+
+            for (BlockFace blockFace : possibleBlockface) {
+                if (loc.getBlock().getRelative(blockFace).getState() instanceof Sign) {
+                    canContinue = true;
+                    bf = blockFace;
+                }
+            }
+
+            if (!canContinue) {
+                continue;
+            }
+
+            if (block.getRelative(bf).isBlockIndirectlyPowered() || block.getRelative(bf).isBlockIndirectlyPowered()) {
+                return true;
             }
         }
         return false;

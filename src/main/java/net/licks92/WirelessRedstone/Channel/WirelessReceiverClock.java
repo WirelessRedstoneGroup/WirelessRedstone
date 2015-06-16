@@ -10,14 +10,11 @@ import java.util.Map;
 
 @SerializableAs("WirelessReceiverClock")
 public class WirelessReceiverClock extends WirelessReceiver {
-    int delay, taskId;
-    boolean isRunning;
+    int delay;
 
     public WirelessReceiverClock(int delay) {
         super();
         this.delay = delay;
-        this.taskId = 0;
-        this.isRunning = false;
     }
 
     public WirelessReceiverClock(Map<String, Object> map) {
@@ -26,31 +23,27 @@ public class WirelessReceiverClock extends WirelessReceiver {
 
     @Override
     public void turnOn(final String channelName) {
-        if (isRunning) {
-            return;
-        }
-        isRunning = true;
         WirelessRedstone.getWRLogger().debug("Clock started named by: " + channelName);
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
+            boolean b = false;
             @Override
             public void run() {
-                WirelessRedstone.getWRLogger().debug("Clock " + channelName + ", state is " + getState() + ", task Id " + taskId);
-                if (getState()) {
+                WirelessRedstone.getWRLogger().debug("Clock " + channelName + ", state is "
+                        + b);
+                if (b) {
                     superTurnOff(channelName);
                 } else {
                     superTurnOn(channelName);
                 }
+                b = !b;
             }
-        }, 0L, delay * 20);
-        this.taskId = task.getTaskId();
+        }, 0L, this.delay * 20);
+        WirelessRedstone.config.getWirelessChannel(channelName).startClock(task);
     }
 
     @Override
     public void turnOff(final String channelName) {
-        if (!isRunning) {
-            return;
-        }
-        Bukkit.getScheduler().cancelTask(this.taskId);
+        WirelessRedstone.config.getWirelessChannel(channelName).stopClock();
         WirelessRedstone.getWRLogger().debug("Clock stopped named by: " + channelName);
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
             @Override
@@ -67,7 +60,6 @@ public class WirelessReceiverClock extends WirelessReceiver {
                 sign.update();
             }
         }, 4L);
-        isRunning = false;
     }
 
     private void superTurnOn(String channelName) {

@@ -24,7 +24,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
     private int z;
     private String world;
     private int direction = 0;
-    private boolean iswallsign = false, isON = false;
+    private boolean iswallsign = false;
 
     public enum Type {
         Default, Inverter, Delayer, Clock;
@@ -218,7 +218,6 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                     }
                     block.setTypeIdAndData(76, directionByte, true);
                     //block.getState().update();
-                    isON = true;
                     WirelessRedstone.getWRLogger().debug("Wall_sign facing to " + data.getFacing() + " and attached face " + data.getAttachedFace());
                     //WirelessRedstone.getWRLogger().debug("Torch on the wall facing to " + ((org.bukkit.material.Sign) block.getState().getData()).getFacing() + " and attached face " + ((org.bukkit.material.Sign) block.getState().getData()).getAttachedFace());
                 }
@@ -278,10 +277,5 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
             signtemp.setLine(2, WirelessRedstone.strings.tagsReceiverDefaultType.get(0));
             signtemp.update(true);
         }
-        isON = false;
-    }
-
-    public boolean getState() {
-        return isON;
     }
 }

@@ -24,6 +24,9 @@ import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 import org.mcstats.Metrics.Plotter;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * This class is the main class of the plugin. It controls the Configuration,
  * the Listeners, it sends the metrics and controls the actions when enabling /
@@ -46,6 +49,8 @@ public class WirelessRedstone extends JavaPlugin {
 	private BukkitTask updateChecker;
 	public Updater updater;
 	private static WirelessRedstone instance;
+	public List<Integer> clockTasks = new LinkedList<Integer>();
+
 
 	/**
 	 * Wireless Redstone logger
