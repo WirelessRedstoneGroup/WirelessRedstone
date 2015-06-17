@@ -188,7 +188,15 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 							turnOn();
 						} else if (!block.isBlockPowered()
 								|| !block.isBlockIndirectlyPowered()) {
-							turnOff();
+							boolean on = false;
+							for (WirelessTransmitter transmitter : transmitters) {
+								if(transmitter.isActive()){
+									on = true;
+								}
+							}
+							if(!on){
+								turnOff();
+							}
 						}
 					}
 				}, 1L);
