@@ -24,7 +24,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
 
     @Override
     public void turnOn(final String channelName) {
-        WirelessRedstone.getWRLogger().debug("Clock started named by: " + channelName);
+        WirelessRedstone.getWRLogger().debug("Clock started by: " + channelName);
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
             boolean b = false;
             @Override
@@ -45,7 +45,6 @@ public class WirelessReceiverClock extends WirelessReceiver {
     @Override
     public void turnOff(final String channelName) {
         WirelessRedstone.config.getWirelessChannel(channelName).stopClock();
-        WirelessRedstone.getWRLogger().debug("Clock stopped named by: " + channelName);
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {

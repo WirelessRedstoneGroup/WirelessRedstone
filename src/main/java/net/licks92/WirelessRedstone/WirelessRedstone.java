@@ -1,5 +1,8 @@
 package net.licks92.WirelessRedstone;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import net.gravitydevelopment.updater.Updater;
 import net.gravitydevelopment.updater.Updater.UpdateResult;
 import net.gravitydevelopment.updater.Updater.UpdateType;
@@ -13,6 +16,7 @@ import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
 import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
 import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -22,8 +26,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 import org.mcstats.Metrics.Plotter;
-
-import java.util.HashMap;
 
 /**
  * This class is the main class of the plugin. It controls the Configuration,
@@ -47,7 +49,9 @@ public class WirelessRedstone extends JavaPlugin {
     private BukkitTask updateChecker;
     public Updater updater;
     private static WirelessRedstone instance;
+
     public HashMap<Integer, String> clockTasks = new HashMap<Integer, String>();
+    public ArrayList<String> activeChannels = new ArrayList<String>();
 
 
     /**

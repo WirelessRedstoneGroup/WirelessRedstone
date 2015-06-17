@@ -2,24 +2,31 @@ package net.licks92.WirelessRedstone;
 
 import java.util.ArrayList;
 
-import net.licks92.WirelessRedstone.Channel.*;
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverClock;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 public class WireBox {
     private final WirelessRedstone plugin;
 
-    public WireBox(WirelessRedstone wirelessRedstone) {
+    public WireBox(final WirelessRedstone wirelessRedstone) {
         this.plugin = wirelessRedstone;
     }
 
-    public int blockFace2IntDirection(BlockFace face) {
+    public int blockFace2IntDirection(final BlockFace face) {
         switch(face) {
             case SOUTH:
                 return 5;
@@ -38,7 +45,7 @@ public class WireBox {
         }
     }
 
-    public BlockFace intDirectionToBlockFace(int dir) {
+    public BlockFace intDirectionToBlockFace(final int dir) {
         switch(dir) {
             case 2:
                 return BlockFace.EAST;
@@ -61,7 +68,7 @@ public class WireBox {
      * @param data - The line of the sign
      * @return true if string corresponds to the tag of the transmitter.
      */
-    public boolean isTransmitter(String data) {
+    public boolean isTransmitter(final String data) {
         for (String tag : WirelessRedstone.strings.tagsTransmitter) {
             if (data.toLowerCase().equals(tag.toLowerCase())) {
                 return true;
@@ -74,7 +81,7 @@ public class WireBox {
      * @param data - The line of the sign
      * @return true if string corresponds to the tag of the receiver.
      */
-    public boolean isReceiver(String data) {
+    public boolean isReceiver(final String data) {
         for (String tag : WirelessRedstone.strings.tagsReceiver) {
             if (data.toLowerCase().equals(tag.toLowerCase())) {
                 return true;
@@ -87,7 +94,7 @@ public class WireBox {
      * @param data - The line of the sign
      * @return true if string corresponds to the tag of the screen.
      */
-    public boolean isScreen(String data) {
+    public boolean isScreen(final String data) {
         for (String tag : WirelessRedstone.strings.tagsScreen) {
             if (data.toLowerCase().equals(tag.toLowerCase())) {
                 return true;
@@ -100,7 +107,7 @@ public class WireBox {
      * @param data - The line of the sign
      * @return true if the string corresponds to the tag of the inverter receiver type
      */
-    public boolean isReceiverInverter(String data) {
+    public boolean isReceiverInverter(final String data) {
         for (String tag : WirelessRedstone.strings.tagsReceiverInverterType) {
             if (data.toLowerCase().equals(tag.toLowerCase())) {
                 return true;
@@ -113,7 +120,7 @@ public class WireBox {
      * @param data - The line of the sign
      * @return true if the string corresponds to the tag of the delayer receiver type
      */
-    public boolean isReceiverDelayer(String data) {
+    public boolean isReceiverDelayer(final String data) {
         for (String tag : WirelessRedstone.strings.tagsReceiverDelayerType) {
             if (data.toLowerCase().equals(tag.toLowerCase())) {
                 return true;
@@ -126,7 +133,7 @@ public class WireBox {
      * @param data - The line of the sign
      * @return true if the string corresponds to the tag of the delayer receiver type
      */
-    public boolean isReceiverClock(String data) {
+    public boolean isReceiverClock(final String data) {
         for (String tag : WirelessRedstone.strings.tagsReceiverClockType) {
             if (data.toLowerCase().equals(tag.toLowerCase())) {
                 return true;
@@ -139,7 +146,7 @@ public class WireBox {
      * @param data - The line of the sign
      * @return true if the string corresponds to the tag of the default receiver type
      */
-    public boolean isReceiverDefault(String data) {
+    public boolean isReceiverDefault(final String data) {
         for (String tag : WirelessRedstone.strings.tagsReceiverDefaultType) {
             if (data.toLowerCase().equals(tag.toLowerCase())) {
                 return true;
@@ -149,7 +156,7 @@ public class WireBox {
     }
 
 
-    public boolean hasAccessToChannel(Player player, String channelname) {
+    public boolean hasAccessToChannel(final Player player, final String channelname) {
         if (WirelessRedstone.config.getWirelessChannel(channelname) != null) {
             if (this.plugin.permissions.isWirelessAdmin(player)) {
                 return true;
@@ -162,7 +169,7 @@ public class WireBox {
         return true;
     }
 
-    public boolean addWirelessReceiver(String cname, Block cblock, Player player, Type type) {
+    public boolean addWirelessReceiver(final String cname, final Block cblock, final Player player, final Type type) {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
         WirelessRedstone.getWRLogger().debug("Adding a receiver at location "
                 + cblock.getLocation().getBlockX() + ","
@@ -326,7 +333,7 @@ public class WireBox {
         }
     }
 
-    public boolean addWirelessTransmitter(String cname, Block cblock, Player player) {
+    public boolean addWirelessTransmitter(final String cname, final Block cblock, final Player player) {
         Location loc = cblock.getLocation();
         Boolean isWallSign = false;
         if (cblock.getType() == Material.WALL_SIGN) {
@@ -383,7 +390,7 @@ public class WireBox {
         }
     }
 
-    public boolean addWirelessScreen(String cname, Block cblock, Player player) {
+    public boolean addWirelessScreen(final String cname, final Block cblock, final Player player) {
         Location loc = cblock.getLocation();
         Boolean isWallSign = false;
         if (cblock.getType() == Material.WALL_SIGN) {
@@ -452,7 +459,7 @@ public class WireBox {
      * @param block - The sign block
      * @return true if a torch can be put there.
      */
-    public boolean isValidWallLocation(Block block) {
+    public boolean isValidWallLocation(final Block block) {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) block.getState().getData();
         BlockFace face = sign.getAttachedFace();
         Block tempBlock = block.getRelative(face);
@@ -472,7 +479,7 @@ public class WireBox {
         }
     }
 
-    public boolean isValidLocation(Block block) {
+    public boolean isValidLocation(final Block block) {
         if (block == null)
             return false;
 
@@ -492,11 +499,11 @@ public class WireBox {
             return true;
     }
 
-    public boolean isValidName(String channelName) {
+    public boolean isValidName(final String channelName) {
         return true;
     }
 
-    public ArrayList<Location> getReceiverLocations(WirelessChannel channel) {
+    public ArrayList<Location> getReceiverLocations(final WirelessChannel channel) {
         ArrayList<Location> returnlist = new ArrayList<Location>();
         for (WirelessReceiver receiver : channel.getReceivers()) {
             returnlist.add(receiver.getLocation());
@@ -504,7 +511,7 @@ public class WireBox {
         return returnlist;
     }
 
-    public ArrayList<Location> getReceiverLocations(String channelname) {
+    public ArrayList<Location> getReceiverLocations(final String channelname) {
         WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelname);
         if (channel == null)
             return new ArrayList<Location>();
@@ -512,7 +519,7 @@ public class WireBox {
         return getReceiverLocations(channel);
     }
 
-    public ArrayList<Location> getScreenLocations(WirelessChannel channel) {
+    public ArrayList<Location> getScreenLocations(final WirelessChannel channel) {
         ArrayList<Location> returnlist = new ArrayList<Location>();
         for (WirelessScreen screen : channel.getScreens()) {
             returnlist.add(screen.getLocation());
@@ -520,7 +527,7 @@ public class WireBox {
         return returnlist;
     }
 
-    public ArrayList<Location> getScreenLocations(String channelname) {
+    public ArrayList<Location> getScreenLocations(final String channelname) {
         WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(channelname);
         if (channel == null)
             return new ArrayList<Location>();
@@ -530,7 +537,8 @@ public class WireBox {
 
     public void removeReceiverAt(final Location loc, final boolean byplayer) {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
                     for (WirelessReceiver receiver : channel.getReceivers()) {
                         if (receiver.getX() == loc.getBlockX()
@@ -558,7 +566,7 @@ public class WireBox {
         });
     }
 
-    public boolean removeWirelessReceiver(String cname, Location loc) {
+    public boolean removeWirelessReceiver(final String cname, final Location loc) {
         if (WirelessRedstone.config.removeWirelessReceiver(cname, loc)) {
             WirelessRedstone.cache.update();
             return true;
@@ -566,7 +574,7 @@ public class WireBox {
             return false;
     }
 
-    public boolean removeWirelessTransmitter(String cname, Location loc) {
+    public boolean removeWirelessTransmitter(final String cname, final Location loc) {
         if (WirelessRedstone.config.removeWirelessTransmitter(cname, loc)) {
             WirelessRedstone.cache.update();
             return true;
@@ -574,7 +582,7 @@ public class WireBox {
             return false;
     }
 
-    public boolean removeWirelessScreen(String cname, Location loc) {
+    public boolean removeWirelessScreen(final String cname, final Location loc) {
         if (WirelessRedstone.config.removeWirelessScreen(cname, loc)) {
             WirelessRedstone.cache.update();
             return true;
@@ -582,7 +590,7 @@ public class WireBox {
             return false;
     }
 
-    public void removeSigns(WirelessChannel channel) {
+    public void removeSigns(final WirelessChannel channel) {
         try {
             for (IWirelessPoint point : channel.getReceivers()) {
                 point.getLocation().getBlock().setType(Material.AIR);
@@ -608,7 +616,7 @@ public class WireBox {
         }
     }
 
-    public void signWarning(Block block, int code) {
+    public void signWarning(final Block block, final int code) {
         Sign sign = (Sign) block.getState();
         switch (code) {
             case 1:
