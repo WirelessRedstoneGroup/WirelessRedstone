@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone.Channel;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.scheduler.BukkitTask;
@@ -28,8 +29,8 @@ public class WirelessReceiverClock extends WirelessReceiver {
             boolean b = false;
             @Override
             public void run() {
-                WirelessRedstone.getWRLogger().debug("Clock " + channelName + ", state is "
-                        + b);
+//                WirelessRedstone.getWRLogger().debug("Clock " + channelName + ", state is "
+//                        + b);
                 if (b) {
                     superTurnOff(channelName);
                 } else {
@@ -51,15 +52,16 @@ public class WirelessReceiverClock extends WirelessReceiver {
                 superTurnOff(channelName);
             }
         }, 2L);
-        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                Sign sign = (Sign) getLocation().getBlock().getState();
-                sign.setLine(2, WirelessRedstone.strings.tagsReceiverClockType.get(0));
-                sign.setLine(3, Integer.toString(delay));
-                sign.update();
-            }
-        }, 4L);
+    }
+
+    @Override
+    public void changeSignContent(Block block, String channelName){
+        Sign sign = (Sign) getLocation().getBlock().getState();
+        sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
+        sign.setLine(1, channelName);
+        sign.setLine(2, WirelessRedstone.strings.tagsReceiverClockType.get(0));
+        sign.setLine(3, Integer.toString(delay));
+        sign.update();
     }
 
     private void superTurnOn(String channelName) {
