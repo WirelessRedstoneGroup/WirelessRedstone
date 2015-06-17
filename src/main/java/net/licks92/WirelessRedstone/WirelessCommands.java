@@ -1,16 +1,7 @@
 package net.licks92.WirelessRedstone;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,6 +11,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WirelessCommands implements CommandExecutor {
     private final WirelessRedstone plugin;
@@ -35,14 +29,12 @@ public class WirelessCommands implements CommandExecutor {
         String commandName = command.getName().toLowerCase();
         Player player = null;
 
-        if (!(sender instanceof Player) && !commandName.equalsIgnoreCase("wractivate")) {
+        if (!(sender instanceof Player)) {
             WirelessRedstone.getWRLogger().info("Only in-game players can use this command.");
             return true;
         }
 
-        if(!commandName.equalsIgnoreCase("wractivate")) {
-            player = (Player) sender;
-        }
+        player = (Player) sender;
         switch (commandName) {
             case "wirelessredstone":
                 return performWR(sender, args, player);
@@ -75,7 +67,7 @@ public class WirelessCommands implements CommandExecutor {
                 return performLockChannel(sender, args, player);
 
             case "wractivate":
-                return performActivateChannel(sender, args);
+                return performActivateChannel(sender, args, player);
 
             case "wrversion":
                 return performWRVersion(sender, args, player);
@@ -128,6 +120,7 @@ public class WirelessCommands implements CommandExecutor {
 
         return commands;
     }
+
     private boolean performWR(CommandSender sender, String[] r_args, Player player) {
         //If a command is sent after the /wr, perform it. Else, perform help.
         if (r_args.length >= 1) {
@@ -166,7 +159,7 @@ public class WirelessCommands implements CommandExecutor {
                 return performLockChannel(sender, args, player);
             } else if (commandName.equals("activate")
                     || commandName.equals("toggle")) {
-                return performActivateChannel(sender, args);
+                return performActivateChannel(sender, args, player);
             } else if (commandName.equals("version")) {
                 return performWRVersion(sender, args, player);
             } else {
@@ -542,7 +535,7 @@ public class WirelessCommands implements CommandExecutor {
     }
 
     private boolean performShowInfo(CommandSender sender, String[] args, Player player) {
-		/*
+        /*
 		 * This method shows the status of a WirelessChannel.
 		 * At the moment, it shows :
 		 * - if the channel is active or not.
@@ -710,28 +703,26 @@ public class WirelessCommands implements CommandExecutor {
         return true;
     }
 
-    private boolean performActivateChannel(CommandSender sender, String[] args) {
+    private boolean performActivateChannel(CommandSender sender, String[] args, Player player) {
         if (!(args.length > 1)) {
             sender.sendMessage(WirelessRedstone.strings.tooFewArguments);
             return true;
         }
-        if (!(sender instanceof Player)) {
-            if (!plugin.permissions.canActivateChannel((Player) sender)) {
-                sender.sendMessage(WirelessRedstone.strings.playerDoesntHavePermission);
-                return true;
-            }
+        if (!plugin.permissions.canActivateChannel(player)) {
+            sender.sendMessage(WirelessRedstone.strings.playerDoesntHavePermission);
+            return true;
         }
+
         WirelessChannel channel = WirelessRedstone.config.getWirelessChannel(args[0]);
         if (channel == null) {
             sender.sendMessage(WirelessRedstone.strings.channelDoesNotExist);
             return true;
         }
-        if (!(sender instanceof Player)) {
-            if (!WirelessRedstone.WireBox.hasAccessToChannel((Player) sender, channel.getName())) {
-                sender.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
-                return true;
-            }
+        if (!WirelessRedstone.WireBox.hasAccessToChannel(player, channel.getName())) {
+            sender.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+            return true;
         }
+
         int time;
         try {
             time = Integer.parseInt(args[1]);

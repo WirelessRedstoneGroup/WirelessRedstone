@@ -24,6 +24,7 @@ import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 import org.mcstats.Metrics.Plotter;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class WirelessRedstone extends JavaPlugin {
 	private BukkitTask updateChecker;
 	public Updater updater;
 	private static WirelessRedstone instance;
-	public List<Integer> clockTasks = new LinkedList<Integer>();
+	public HashMap<Integer, String> clockTasks = new HashMap<Integer, String>();
 
 
 	/**
