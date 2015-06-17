@@ -215,6 +215,10 @@ public class WireBox {
                         player.sendMessage("[WirelessRedstone] The delay must be a number!");
                         return false;
                     }
+                    if(delay < 50){
+                        player.sendMessage("[WirelessRedstone] The delay must be at least 50ms");
+                        return false;
+                    }
                     receiver = new WirelessReceiverDelayer(delay);
                     break;
 
@@ -225,6 +229,10 @@ public class WireBox {
                         clockDelay = Integer.parseInt(clockDelayStr);
                     } catch (NumberFormatException ex) {
                         player.sendMessage("[WirelessRedstone] The delay must be a number!");
+                        return false;
+                    }
+                    if(clockDelay < 50){
+                        player.sendMessage("[WirelessRedstone] The delay must be at least 50ms");
                         return false;
                     }
                     receiver = new WirelessReceiverClock(clockDelay);
@@ -275,6 +283,10 @@ public class WireBox {
                         player.sendMessage("[WirelessRedstone] The delay must be a number!");
                         return false;
                     }
+                    if(delay < 50){
+                        player.sendMessage("[WirelessRedstone] The delay must be at least 50ms");
+                        return false;
+                    }
                     receiver = new WirelessReceiverDelayer(delay);
                     break;
 
@@ -285,6 +297,10 @@ public class WireBox {
                         clockDelay = Integer.parseInt(clockDelayStr);
                     } catch (NumberFormatException ex) {
                         player.sendMessage("[WirelessRedstone] The delay must be a number!");
+                        return false;
+                    }
+                    if(clockDelay < 50){
+                        player.sendMessage("[WirelessRedstone] The delay must be at least 50ms");
                         return false;
                     }
                     receiver = new WirelessReceiverClock(clockDelay);

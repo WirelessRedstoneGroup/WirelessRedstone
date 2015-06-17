@@ -38,7 +38,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
                 }
                 b = !b;
             }
-        }, 0L, this.delay * 20);
+        }, 0L, this.delay / 50);
         WirelessRedstone.config.getWirelessChannel(channelName).startClock(task);
     }
 
