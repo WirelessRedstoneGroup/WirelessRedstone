@@ -284,7 +284,7 @@ public class WireBox {
 			receiver.setZ(loc.getBlockZ());
 			BlockFace bfaceDirection = sign.getFacing();
 			receiver.setDirection(bfaceDirection);
-			receiver.setisWallSign(isWallSign);
+			receiver.setIsWallSign(isWallSign);
 			channel.addReceiver(receiver);
 			if (!WirelessRedstone.config.createWirelessChannel(channel)) {
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
@@ -358,7 +358,7 @@ public class WireBox {
 			receiver.setZ(loc.getBlockZ());
 			BlockFace bfaceDirection = sign.getFacing();
 			receiver.setDirection(bfaceDirection);
-			receiver.setisWallSign(isWallSign);
+			receiver.setIsWallSign(isWallSign);
 			channel.addReceiver(receiver);
 			WirelessRedstone.config.createWirelessPoint(cname, receiver);
 			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
@@ -397,7 +397,7 @@ public class WireBox {
 			 * transmitter.setDirection(bfaceDirection);
 			 */
 			transmitter.setDirection(BlockFace.NORTH);
-			transmitter.setisWallSign(isWallSign);
+			transmitter.setIsWallSign(isWallSign);
 			channel.addTransmitter(transmitter);
 			if (!WirelessRedstone.config.createWirelessChannel(channel)) {
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
@@ -424,7 +424,7 @@ public class WireBox {
 			 * transmitter.setDirection(bfaceDirection);
 			 */
 			transmitter.setDirection(BlockFace.NORTH);
-			transmitter.setisWallSign(isWallSign);
+			transmitter.setIsWallSign(isWallSign);
 			WirelessRedstone.config.createWirelessPoint(cname, transmitter);
 			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
 			WirelessRedstone.cache.update();
@@ -463,7 +463,7 @@ public class WireBox {
 			 * screen.setDirection(bfaceDirection);
 			 */
 			screen.setDirection(BlockFace.NORTH);
-			screen.setisWallSign(isWallSign);
+			screen.setIsWallSign(isWallSign);
 			channel.addScreen(screen);
 			if (!WirelessRedstone.config.createWirelessChannel(channel)) {
 				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
@@ -491,7 +491,7 @@ public class WireBox {
 				 * screen.setDirection(bfaceDirection);
 				 */
 				screen.setDirection(BlockFace.NORTH);
-				screen.setisWallSign(isWallSign);
+				screen.setIsWallSign(isWallSign);
 				channel.addScreen(screen);
 				WirelessRedstone.config.createWirelessPoint(cname, screen);
 				player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
@@ -616,7 +616,7 @@ public class WireBox {
 															.sendMessage(
 																	"One of your signs on channel: "
 																			+ channel
-																					.getName()
+																			.getName()
 																			+ " is broken by nature.");
 												}
 											} catch (Exception ex) {

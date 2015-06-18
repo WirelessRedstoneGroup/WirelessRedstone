@@ -16,7 +16,7 @@ public interface IWirelessPoint {
 
     BlockFace getDirection();
 
-    boolean getisWallSign();
+    boolean getIsWallSign();
 
     void setOwner(String owner);
 
@@ -32,7 +32,7 @@ public interface IWirelessPoint {
 
     void setDirection(BlockFace face);
 
-    void setisWallSign(boolean iswallsign);
+    void setIsWallSign(boolean iswallsign);
 
     Location getLocation();
 }

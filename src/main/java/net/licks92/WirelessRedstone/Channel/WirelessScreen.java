@@ -41,7 +41,7 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("direction", this.direction);
-        map.put("isWallSign", getisWallSign());
+        map.put("isWallSign", getIsWallSign());
         map.put("owner", getOwner());
         map.put("world", getWorld());
         map.put("x", getX());
@@ -116,12 +116,12 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
     }
 
     @Override
-    public boolean getisWallSign() {
+    public boolean getIsWallSign() {
         return iswallsign;
     }
 
     @Override
-    public void setisWallSign(boolean iswallsign) {
+    public void setIsWallSign(boolean iswallsign) {
         this.iswallsign = iswallsign;
     }
 

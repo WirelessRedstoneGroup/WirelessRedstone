@@ -113,12 +113,12 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     }
 
     @Override
-    public boolean getisWallSign() {
+    public boolean getIsWallSign() {
         return iswallsign;
     }
 
     @Override
-    public void setisWallSign(boolean iswallsign) {
+    public void setIsWallSign(boolean iswallsign) {
         this.iswallsign = iswallsign;
     }
 
@@ -126,7 +126,7 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("direction", this.direction);
-        map.put("isWallSign", getisWallSign());
+        map.put("isWallSign", getIsWallSign());
         map.put("owner", getOwner());
         map.put("world", getWorld());
         map.put("x", getX());
@@ -137,7 +137,7 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
 
     public void deserialize(Map<String, Object> map) {
         this.setDirection((Integer) map.get("direction"));
-        this.setisWallSign((Boolean) map.get("isWallSign"));
+        this.setIsWallSign((Boolean) map.get("isWallSign"));
         this.setOwner((String) map.get("owner"));
         this.setWorld((String) map.get("world"));
         this.setX((Integer) map.get("x"));
