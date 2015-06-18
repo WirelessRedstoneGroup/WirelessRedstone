@@ -71,6 +71,10 @@ commands:
       description: Shows the version of Wireless-Redstone you have.
       usage : |
               Example: /<command>
+   wrtp:
+      description: Teleport you to a channel sign.
+      usage : |
+              Example: /<command>
 permissions:
     wirelessredstone.*:
         description: Gives access to all Wireless Redstone commands
@@ -101,6 +105,7 @@ permissions:
             wirelessredstone.commands.lock: true
             wirelessredstone.commands.activate: true
             wirelessredstone.commands.version: true
+            wirelessredstone.commands.tp: true
     wirelessredstone.admin.*:
         description: Gives you access to all admin commands
         children:
@@ -147,6 +152,9 @@ permissions:
         default: op
     wirelessredstone.commands.version:
         description: Allows you to see which version of WirelessRedstone is installed.
+        default: op
+    wirelessredstone.commands.tp:
+        description: Allows you to teleport to a channel sign.
         default: op
     wirelessredstone.admin.isAdmin:
         description: If you have this node, you're an owner of every channel.
