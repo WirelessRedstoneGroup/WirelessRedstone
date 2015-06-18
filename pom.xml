@@ -26,7 +26,7 @@
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
-					<!-- <finalName>${project.name}-${project.version}-SNAPSHOT</finalName> -->
+					<finalName>${project.name}</finalName>
 					<minimizeJar>true</minimizeJar>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
 					<artifactSet>

@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 
+import org.bukkit.ChatColor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -68,7 +68,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                         WirelessRedstone.getWRLogger().info(
                                 "Loading the tags...");
 
-                        chatTag = tagsElement.getElementsByTagName("chatTag")
+                        chatTag = ChatColor.GREEN + tagsElement.getElementsByTagName("chatTag")
                                 .item(0).getTextContent();
                         break;
 
@@ -77,117 +77,117 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                         WirelessRedstone.getWRLogger().info(
                                 "Loading the player messages ..");
 
-                        backupDone = PMElement
+                        backupDone = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("backupDone").item(0)
                                 .getTextContent();
-                        backupFailed = PMElement
+                        backupFailed = ChatColor.RED + PMElement
                                 .getElementsByTagName("backupFailed").item(0)
                                 .getTextContent();
-                        channelDoesNotExist = PMElement
+                        channelDoesNotExist = ChatColor.RED + PMElement
                                 .getElementsByTagName("channelDoesNotExist")
                                 .item(0).getTextContent();
-                        channelLocked = PMElement
+                        channelLocked = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("channelLocked").item(0)
                                 .getTextContent();
-                        channelNameContainsInvalidCaracters = PMElement
+                        channelNameContainsInvalidCaracters = ChatColor.RED + PMElement
                                 .getElementsByTagName(
                                         "channelNameContainsInvalidCaracters")
                                 .item(0).getTextContent();
-                        channelRemoved = PMElement
+                        channelRemoved = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("channelRemoved").item(0)
                                 .getTextContent();
-                        channelRemovedCauseNoSign = PMElement
+                        channelRemovedCauseNoSign = ChatColor.GRAY + PMElement
                                 .getElementsByTagName(
                                         "channelRemovedCauseNoSign").item(0)
                                 .getTextContent();
-                        channelUnlocked = PMElement
+                        channelUnlocked = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("channelUnlocked")
                                 .item(0).getTextContent();
-                        commandDoesNotExist = PMElement
+                        commandDoesNotExist = ChatColor.RED + PMElement
                                 .getElementsByTagName("commandDoesNotExist")
                                 .item(0).getTextContent();
-                        commandForNextPage = PMElement
+                        commandForNextPage = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("commandForNextPage")
                                 .item(0).getTextContent();
-                        customizedLanguageSuccessfullyLoaded = PMElement
+                        customizedLanguageSuccessfullyLoaded = ChatColor.GREEN + PMElement
                                 .getElementsByTagName(
                                         "customizedLanguageSuccessfullyLoaded")
                                 .item(0).getTextContent();
-                        DBAboutToBeDeleted = PMElement
+                        DBAboutToBeDeleted = ChatColor.RED + PMElement
                                 .getElementsByTagName("DBAboutToBeDeleted")
                                 .item(0).getTextContent();
                         DBDeleted = PMElement.getElementsByTagName("DBDeleted")
                                 .item(0).getTextContent();
-                        DBNotDeleted = PMElement
+                        DBNotDeleted = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("DBNotDeleted").item(0)
                                 .getTextContent();
-                        forMoreInfosPerformWRInfo = PMElement
+                        forMoreInfosPerformWRInfo = ChatColor.GREEN + PMElement
                                 .getElementsByTagName(
                                         "forMoreInfosPerformWRInfo").item(0)
                                 .getTextContent();
-                        listEmpty = PMElement.getElementsByTagName("listEmpty")
+                        listEmpty = ChatColor.GREEN + PMElement.getElementsByTagName("listEmpty")
                                 .item(0).getTextContent();
-                        ownersOfTheChannelAre = PMElement
+                        ownersOfTheChannelAre = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("ownersOfTheChannelAre")
                                 .item(0).getTextContent();
-                        pageEmpty = PMElement.getElementsByTagName("pageEmpty")
+                        pageEmpty = ChatColor.RED + PMElement.getElementsByTagName("pageEmpty")
                                 .item(0).getTextContent();
-                        pageNumberInferiorToZero = PMElement
+                        pageNumberInferiorToZero = ChatColor.RED + PMElement
                                 .getElementsByTagName(
                                         "pageNumberInferiorToZero").item(0)
                                 .getTextContent();
-                        playerCannotCreateChannel = PMElement
+                        playerCannotCreateChannel = ChatColor.RED + PMElement
                                 .getElementsByTagName(
                                         "playerCannotCreateChannel").item(0)
                                 .getTextContent();
-                        playerCannotCreateReceiverOnBlock = PMElement
+                        playerCannotCreateReceiverOnBlock = ChatColor.RED + PMElement
                                 .getElementsByTagName(
                                         "playerCannotCreateReceiverOnBlock")
                                 .item(0).getTextContent();
-                        playerCannotCreateSign = PMElement
+                        playerCannotCreateSign = ChatColor.RED + PMElement
                                 .getElementsByTagName("playerCannotCreateSign")
                                 .item(0).getTextContent();
-                        playerCannotDestroyReceiverTorch = PMElement
+                        playerCannotDestroyReceiverTorch = ChatColor.RED + PMElement
                                 .getElementsByTagName(
                                         "playerCannotDestroyReceiverTorch")
                                 .item(0).getTextContent();
-                        playerCannotDestroySign = PMElement
+                        playerCannotDestroySign = ChatColor.RED + PMElement
                                 .getElementsByTagName("playerCannotDestroySign")
                                 .item(0).getTextContent();
-                        playerCreatedChannel = PMElement
+                        playerCreatedChannel = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("playerCreatedChannel")
                                 .item(0).getTextContent();
-                        playerDoesntHaveAccessToChannel = PMElement
+                        playerDoesntHaveAccessToChannel = ChatColor.RED + PMElement
                                 .getElementsByTagName(
                                         "playerDoesntHaveAccessToChannel")
                                 .item(0).getTextContent();
-                        playerDoesntHavePermission = PMElement
+                        playerDoesntHavePermission = ChatColor.RED + PMElement
                                 .getElementsByTagName(
                                         "playerDoesntHavePermission").item(0)
                                 .getTextContent();
-                        playerExtendedChannel = PMElement
+                        playerExtendedChannel = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("playerExtendedChannel")
                                 .item(0).getTextContent();
-                        signDestroyed = PMElement
+                        signDestroyed = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("signDestroyed").item(0)
                                 .getTextContent();
-                        subCommandDoesNotExist = PMElement
+                        subCommandDoesNotExist = ChatColor.RED + PMElement
                                 .getElementsByTagName("subCommandDoesNotExist")
                                 .item(0).getTextContent();
-                        thisChannelContains = PMElement
+                        thisChannelContains = ChatColor.GREEN + PMElement
                                 .getElementsByTagName("thisChannelContains")
                                 .item(0).getTextContent();
-                        tooFewArguments = PMElement
+                        tooFewArguments = ChatColor.RED + PMElement
                                 .getElementsByTagName("tooFewArguments")
                                 .item(0).getTextContent();
                         break;
 
                     case "logmessages": // Load the LM strings
                         Element LMElement = (Element) rootNodes.item(i);
-                        WirelessRedstone.getWRLogger().info(
+                        WirelessRedstone.getWRLogger().debug(
                                 "Loading the log messages ..");
 
-                        newUpdateAvailable = LMElement
+                        newUpdateAvailable = ChatColor.GREEN + LMElement
                                 .getElementsByTagName("newUpdateAvailable")
                                 .item(0).getTextContent();
                         break;
