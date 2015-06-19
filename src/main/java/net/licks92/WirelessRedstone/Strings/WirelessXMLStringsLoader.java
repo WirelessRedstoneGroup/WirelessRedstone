@@ -127,7 +127,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                                 .getTextContent();
                         listEmpty = ChatColor.GREEN + PMElement.getElementsByTagName("listEmpty")
                                 .item(0).getTextContent();
-                        ownersOfTheChannelAre = ChatColor.GREEN + PMElement
+                        ownersOfTheChannelAre = ChatColor.BLUE + PMElement
                                 .getElementsByTagName("ownersOfTheChannelAre")
                                 .item(0).getTextContent();
                         pageEmpty = ChatColor.RED + PMElement.getElementsByTagName("pageEmpty")
@@ -174,7 +174,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                         subCommandDoesNotExist = ChatColor.RED + PMElement
                                 .getElementsByTagName("subCommandDoesNotExist")
                                 .item(0).getTextContent();
-                        thisChannelContains = ChatColor.GREEN + PMElement
+                        thisChannelContains = ChatColor.BLUE + PMElement
                                 .getElementsByTagName("thisChannelContains")
                                 .item(0).getTextContent();
                         tooFewArguments = ChatColor.RED + PMElement

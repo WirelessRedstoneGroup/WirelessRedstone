@@ -13,7 +13,14 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import net.licks92.WirelessRedstone.Channel.*;
+import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -22,13 +29,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
-import net.licks92.WirelessRedstone.WirelessRedstone;
-
 public class YamlStorage implements IWirelessStorageConfiguration {
-    private File channelFolder;
-    private WirelessRedstone plugin;
+    private final File channelFolder;
+    private final WirelessRedstone plugin;
 
-    public YamlStorage(File channelFolder, WirelessRedstone r_plugin) {
+    public YamlStorage(final File channelFolder, final WirelessRedstone r_plugin) {
         plugin = r_plugin;
         this.channelFolder = channelFolder;
     }
@@ -38,15 +43,15 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         return init(true);
     }
 
-    public boolean init(boolean allowConvert) {
+    public boolean init(final boolean allowConvert) {
         //Initialize the serialization
-        ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
         ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
         ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
         ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
-        ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
-        ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
-        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
+//        ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
+//        ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
+//        ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
+//        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
 
         if (canConvert() && allowConvert) {
             WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in SQL Database.");
@@ -64,7 +69,8 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         return true;
     }
 
-    public boolean canConvert() {
+    @Override
+	public boolean canConvert() {
         for (File file : channelFolder.listFiles()) {
             if (file.getName().contains(".db")) {
                 return true;
@@ -73,7 +79,8 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         return false;
     }
 
-    public boolean convertFromAnotherStorage() {
+    @Override
+	public boolean convertFromAnotherStorage() {
         WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
         if (!backupData()) {
             WirelessRedstone.getWRLogger().severe("Backup failed ! Data transfer abort...");
@@ -97,7 +104,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public WirelessChannel getWirelessChannel(String channelName) {
+    public WirelessChannel getWirelessChannel(final String channelName) {
         FileConfiguration channelConfig = new YamlConfiguration();
         try {
             File channelFile = new File(channelFolder, channelName + ".yml");
@@ -121,7 +128,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             return (WirelessChannel) channel;
     }
 
-    public void setWirelessChannel(String channelName, WirelessChannel channel) {
+    public void setWirelessChannel(final String channelName, final WirelessChannel channel) {
         FileConfiguration channelConfig = new YamlConfiguration();
         try {
             File channelFile = new File(channelFolder, channelName + ".yml");
@@ -146,14 +153,14 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean createWirelessChannel(WirelessChannel channel) {
+    public boolean createWirelessChannel(final WirelessChannel channel) {
         setWirelessChannel(channel.getName(), channel);
 
         return true;
     }
 
     @Override
-    public void removeWirelessChannel(String channelName) {
+    public void removeWirelessChannel(final String channelName) {
         WirelessRedstone.WireBox.removeSigns(getWirelessChannel(channelName));
         setWirelessChannel(channelName, null);
         for (File f : channelFolder.listFiles()) {
@@ -164,7 +171,8 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         WirelessRedstone.getWRLogger().debug("Channel " + channelName + " successfully removed and file deleted.");
     }
 
-    public boolean renameWirelessChannel(String channelName, String newChannelName) {
+    @Override
+	public boolean renameWirelessChannel(final String channelName, final String newChannelName) {
         WirelessChannel channel = getWirelessChannel(channelName);
 
         List<IWirelessPoint> signs = new ArrayList<IWirelessPoint>();
@@ -195,7 +203,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean createWirelessPoint(String channelName, IWirelessPoint point) {
+    public boolean createWirelessPoint(final String channelName, final IWirelessPoint point) {
         WirelessChannel channel = getWirelessChannel(channelName);
         if (point instanceof WirelessReceiver) {
             WirelessRedstone.getWRLogger().debug("Yaml config : Creating a receiver of class "
@@ -217,7 +225,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean removeWirelessReceiver(String channelName, Location loc) {
+    public boolean removeWirelessReceiver(final String channelName, final Location loc) {
         WirelessChannel channel = getWirelessChannel(channelName);
         if (channel != null) {
             channel.removeReceiverAt(loc);
@@ -228,7 +236,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean removeWirelessTransmitter(String channelName, Location loc) {
+    public boolean removeWirelessTransmitter(final String channelName, final Location loc) {
         WirelessChannel channel = getWirelessChannel(channelName);
         if (channel != null) {
             channel.removeTransmitterAt(loc);
@@ -239,7 +247,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean removeWirelessScreen(String channelName, Location loc) {
+    public boolean removeWirelessScreen(final String channelName, final Location loc) {
         WirelessChannel channel = getWirelessChannel(channelName);
         if (channel != null) {
             channel.removeScreenAt(loc);
@@ -344,14 +352,14 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public void updateChannel(String channelName, WirelessChannel channel) {
+    public void updateChannel(final String channelName, final WirelessChannel channel) {
         setWirelessChannel(channelName, channel);
     }
 }
 
 class YamlFilter implements FilenameFilter {
     @Override
-    public boolean accept(File file, String name) {
+    public boolean accept(final File file, final String name) {
         if (name.contains(".yml"))
             return true;
         else

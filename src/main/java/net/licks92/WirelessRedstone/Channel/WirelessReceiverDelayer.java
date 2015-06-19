@@ -1,26 +1,19 @@
 package net.licks92.WirelessRedstone.Channel;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.serialization.SerializableAs;
 
-import java.util.Map;
-
-@SerializableAs("WirelessReceiverDelayer")
 public class WirelessReceiverDelayer extends WirelessReceiver {
-    private static final long serialVersionUID = -2955411933245551990L;
     int delay;
 
-    public WirelessReceiverDelayer(int delay) {
+    public WirelessReceiverDelayer(final int delay) {
         super();
         this.delay = delay;
     }
 
-    public WirelessReceiverDelayer(Map<String, Object> map) {
-        super(map);
-    }
 
     @Override
     public void turnOn(final String channelName) {
@@ -33,7 +26,7 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
         }, delayInTicks);
     }
 
-    private void superTurnOn(String channelName) {
+    private void superTurnOn(final String channelName) {
         super.turnOn(channelName);
     }
 
@@ -49,7 +42,7 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
     }
 
     @Override
-    public void changeSignContent(Block block, String channelName){
+    public void changeSignContent(final Block block, final String channelName){
         Sign sign = (Sign) getLocation().getBlock().getState();
         sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
         sign.setLine(1, channelName);
@@ -58,14 +51,14 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
         sign.update();
     }
 
-    private void superTurnOff(String channelName) {
+    private void superTurnOff(final String channelName) {
         super.turnOff(channelName);
     }
 
     /**
      * @param delay - Sets the delay of the delayer.
      */
-    public void setDelay(int delay) {
+    public void setDelay(final int delay) {
         this.delay = delay;
     }
 

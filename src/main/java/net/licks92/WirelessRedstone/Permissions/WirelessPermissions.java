@@ -24,6 +24,7 @@ public class WirelessPermissions {
     private final String canBackupData = "wirelessredstone.admin.backupdata";
     private final String canActivateChannel = "wirelessredstone.commands.activate";
     private final String canSeeVersion = "wirelessredstone.commands.version";
+    private final String canTeleportToSign = "wirelessredstone.commands.tp";
 
     public WirelessPermissions(final WirelessRedstone plugin) {
         PluginManager pm = plugin.getServer().getPluginManager();
@@ -121,5 +122,9 @@ public class WirelessPermissions {
 
     public boolean canSeeVersion(final Player player) {
         return permissionsHandler.hasPermission(player, canSeeVersion);
+    }
+
+    public boolean canTeleportToSign(final Player player) {
+        return permissionsHandler.hasPermission(player, canTeleportToSign);
     }
 }
