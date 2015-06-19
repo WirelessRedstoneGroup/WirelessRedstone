@@ -12,52 +12,64 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class WirelessPlayerListener implements Listener {
-    private final WirelessRedstone plugin;
+	private final WirelessRedstone plugin;
 
-    public WirelessPlayerListener(final WirelessRedstone r_plugin) {
-        plugin = r_plugin;
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
+	public WirelessPlayerListener(final WirelessRedstone r_plugin) {
+		plugin = r_plugin;
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
 
-    @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent event) {
-        /*
+	@EventHandler
+	public void onPlayerJoin(final PlayerJoinEvent event) {
+		/*
 		 * Check for updates and notify the admins.
 		 */
 
-        if (plugin.permissions.isWirelessAdmin(event.getPlayer())) {
-            if (plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE
-                    && WirelessRedstone.config.doCheckForUpdates()) {
-                event.getPlayer().sendMessage(
-                        WirelessRedstone.strings.newUpdateAvailable);
-            }
-        }
-    }
+		if (plugin.permissions.isWirelessAdmin(event.getPlayer())) {
+			if (plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE
+					&& WirelessRedstone.config.doCheckForUpdates()) {
+				event.getPlayer().sendMessage(
+						WirelessRedstone.strings.newUpdateAvailable);
+			}
+		}
+	}
 
-    /**
-     * Used for handling right click on a transmitter. If a player interacts
-     * with a transmitter, it will turn on the channel for a given time.
-     *
-     * @param event
-     */
-    @EventHandler
-    public void onPlayerRightClick(final PlayerInteractEvent event) {
-        if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
-            return;
-        }
+	/**
+	 * Used for handling right click on a transmitter. If a player interacts
+	 * with a transmitter, it will turn on the channel for a given time.
+	 *
+	 * @param event
+	 */
+	@EventHandler
+	public void onPlayerRightClick(final PlayerInteractEvent event) {
+		if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+			return;
+		}
 
-        if (!(event.getClickedBlock().getState() instanceof Sign))
-            return;
+		if (!(event.getClickedBlock().getState() instanceof Sign))
+			return;
 
-        Sign sign = (Sign) event.getClickedBlock().getState();
+		Sign sign = (Sign) event.getClickedBlock().getState();
 
-        if (!WirelessRedstone.WireBox.isTransmitter(sign.getLine(0))
-                || sign.getLine(1) == null || sign.getLine(1) == "")
-            return;
+		if (sign.getLine(0) == null || sign.getLine(0) == ""
+				|| sign.getLine(1) == null || sign.getLine(1) == "")
+			return;
 
-        WirelessChannel channel = WirelessRedstone.config
-                .getWirelessChannel(sign.getLine(1));
+		String type = "";
+		if (WirelessRedstone.WireBox.isTransmitter(sign.getLine(0)))
+			type = "transmitter";
+		else if (WirelessRedstone.WireBox.isScreen(sign.getLine(0)))
+			type = "screen";
 
-        channel.turnOn(WirelessRedstone.config.getInteractTransmitterTime());
-    }
+		WirelessChannel channel = WirelessRedstone.config
+				.getWirelessChannel(sign.getLine(1));
+
+		if (channel == null)
+			return;
+
+		if (type.equalsIgnoreCase("transmitter"))
+			channel.turnOn(WirelessRedstone.config.getInteractTransmitterTime());
+		else if (type.equalsIgnoreCase("screen"))
+			event.getPlayer().performCommand("wri " + channel.getName());
+	}
 }
