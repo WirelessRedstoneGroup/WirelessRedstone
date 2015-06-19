@@ -13,13 +13,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -48,10 +43,10 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
         ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
         ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
-//        ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
-//        ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
-//        ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
-//        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
+        ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
+        ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
+        ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
+        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
 
         if (canConvert() && allowConvert) {
             WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in SQL Database.");

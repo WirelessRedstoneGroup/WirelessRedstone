@@ -5,7 +5,7 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
-public class WirelessReceiverInverter extends WirelessReceiver implements IWirelessPoint {
+public class WirelessReceiverInverter extends WirelessReceiver {
 
     public WirelessReceiverInverter() {
         super();

@@ -36,7 +36,6 @@ public class WirelessCommands implements CommandExecutor {
 	public boolean onCommand(final CommandSender sender, final Command command,
 			final String commandLabel, final String[] args) {
 		String commandName = command.getName().toLowerCase();
-		Player player = null;
 
 		if (!(sender instanceof Player)) {
 			WirelessRedstone.getWRLogger().info(
@@ -44,7 +43,7 @@ public class WirelessCommands implements CommandExecutor {
 			return true;
 		}
 
-		player = (Player) sender;
+		Player player = (Player) sender;
 		switch (commandName) {
 			case "wirelessredstone" :
 				return performWR(sender, args, player);
@@ -89,7 +88,7 @@ public class WirelessCommands implements CommandExecutor {
 	}
 
 	public ArrayList<String> generateCommandList(final Player player) {
-		ArrayList<String> commands = new ArrayList<String>();
+		ArrayList<String> commands = new ArrayList<>();
 
 		if (plugin.permissions.canCreateTransmitter(player)) {
 			commands.add("/wr transmitter <channelname> - Creates transmitter sign.");
@@ -143,47 +142,45 @@ public class WirelessCommands implements CommandExecutor {
 		// If a command is sent after the /wr, perform it. Else, perform help.
 		if (r_args.length >= 1) {
 			String commandName = r_args[0];
-			List<String> temp = new ArrayList<String>();
-			for (int i = 1; i < r_args.length; i++) {
-				temp.add(r_args[i]);
-			}
-			String[] args = temp.toArray(new String[0]);
-			if (commandName.equals("wirelessredstone")) {
-				return performWR(sender, args, player);
-			}
-			if (commandName.equals("help")) {
-				return performHelp(sender, args, player);
-			} else if (commandName.equals("transmitter")
-					|| commandName.equals("t")) {
-				return performCreateTransmitter(sender, args, player);
-			} else if (commandName.equals("receiver")
-					|| commandName.equals("r")) {
-				return performCreateReceiver(sender, args, player);
-			} else if (commandName.equals("screen") || commandName.equals("s")) {
-				return performCreateScreen(sender, args, player);
-			} else if (commandName.equals("admin") || commandName.equals("a")) {
-				return performChannelAdmin(sender, args, player);
-			} else if (commandName.equals("remove")
-					|| commandName.equals("delete")) {
-				return performRemoveChannel(sender, args, player);
-			} else if (commandName.equals("list")) {
-				return performWRlist(sender, args, player);
-			} else if (commandName.equals("info")) {
-				return performShowInfo(sender, args, player);
-			} else if (commandName.equals("lock")
-					|| commandName.equals("unlock")) {
-				return performLockChannel(sender, args, player);
-			} else if (commandName.equals("activate")
-					|| commandName.equals("toggle")) {
-				return performActivateChannel(sender, args, player);
-			} else if (commandName.equals("version")) {
-				return performWRVersion(sender, args, player);
-			} else if (commandName.equals("tp")) {
-				return performWRTeleport(sender, args, player);
-			} else {
-				player.sendMessage(WirelessRedstone.strings.commandDoesNotExist);
-				return true;
-			}
+			List<String> temp = new ArrayList<>();
+			for (int i = 1; i < r_args.length; i++) temp.add(r_args[i]);
+			String[] args = temp.toArray(new String[temp.size()]);
+			switch (commandName) {
+                case "help":
+                    return performHelp(sender, args, player);
+                case "transmitter":
+                case "t":
+                    return performCreateTransmitter(sender, args, player);
+                case "receiver":
+                case "r":
+                    return performCreateReceiver(sender, args, player);
+                case "screen":
+                case "s":
+                    return performCreateScreen(sender, args, player);
+                case "admin":
+                case "a":
+                    return performChannelAdmin(sender, args, player);
+                case "remove":
+                case "delete":
+                    return performRemoveChannel(sender, args, player);
+                case "list":
+                    return performWRlist(sender, args, player);
+                case "info":
+                    return performShowInfo(sender, args, player);
+                case "lock":
+                case "unlock":
+                    return performLockChannel(sender, args, player);
+                case "activate":
+                case "toggle":
+                    return performActivateChannel(sender, args, player);
+                case "version":
+                    return performWRVersion(sender, args, player);
+                case "tp":
+                    return performWRTeleport(sender, args, player);
+                default:
+                    player.sendMessage(WirelessRedstone.strings.commandDoesNotExist);
+                    return true;
+            }
 		} else {
 			return performHelp(sender, r_args, player);
 		}
@@ -390,12 +387,12 @@ public class WirelessCommands implements CommandExecutor {
 					sign.setLine(1, channelname);
 					org.bukkit.material.Sign dataSign = new org.bukkit.material.Sign();
 					dataSign.setFacingDirection(getPlayerDirection(player)
-							.getOppositeFace());
+                            .getOppositeFace());
 					sign.setData(dataSign);
 					sign.update(true);
 					WirelessRedstone.WireBox.addWirelessTransmitter(
-							channelname, player.getLocation().getBlock(),
-							player);
+                            channelname, player.getLocation().getBlock(),
+                            player);
 				} else {
 					player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
 				}
@@ -541,7 +538,7 @@ public class WirelessCommands implements CommandExecutor {
 					sign.setData(dataSign);
 					sign.update(true);
 					WirelessRedstone.WireBox.addWirelessScreen(channelname,
-							player.getLocation().getBlock(), player);
+                            player.getLocation().getBlock(), player);
 				} else {
 					player.sendMessage(WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
 				}
@@ -1051,8 +1048,8 @@ public class WirelessCommands implements CommandExecutor {
 			for (int i = currentitem; i < (currentitem + maxitems); i++) {
 				if (!(i >= itemsonlist)) {
 					Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-							list.get(i)
-									.replaceAll("%%PLAYER", player.getName()));
+                            list.get(i)
+                                    .replaceAll("%%PLAYER", player.getName()));
 				}
 			}
 		}

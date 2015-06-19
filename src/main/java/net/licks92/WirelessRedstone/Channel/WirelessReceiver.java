@@ -7,8 +7,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 
-public class WirelessReceiver implements IWirelessPoint {
+import java.util.HashMap;
+import java.util.Map;
+
+@SerializableAs("WirelessReceiver")
+public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoint {
+    private static final long serialVersionUID = -7291500732787558150L;
     private String owner;
     private int x;
     private int y;
@@ -21,8 +28,38 @@ public class WirelessReceiver implements IWirelessPoint {
         Default, Inverter, Delayer, Clock;
     }
 
+    /**
+     * IMPORTANT : You shouldn't have to create a WirelessReceiver with this method.
+     * It's used by the bukkit serialization system.
+     */
+    public WirelessReceiver(Map<String, Object> map) {
+        owner = (String) map.get("owner");
+        world = (String) map.get("world");
+        direction = (Integer) map.get("direction");
+        isWallSign = (Boolean) map.get("isWallSign");
+        x = (Integer) map.get("x");
+        y = (Integer) map.get("y");
+        z = (Integer) map.get("z");
+    }
+
     public WirelessReceiver() {
 
+    }
+
+    /**
+     * This method should be called ONLY by the bukkit serialization system!
+     */
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("direction", this.direction);
+        map.put("isWallSign", getIsWallSign());
+        map.put("owner", getOwner());
+        map.put("world", getWorld());
+        map.put("x", getX());
+        map.put("y", getY());
+        map.put("z", getZ());
+        return map;
     }
 
     @Override
