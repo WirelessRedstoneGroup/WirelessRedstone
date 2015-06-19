@@ -4,13 +4,21 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 
+import java.util.Map;
+
+@SerializableAs("WirelessReceiverInverter")
 public class WirelessReceiverInverter extends WirelessReceiver {
+
+    public WirelessReceiverInverter(Map<String,Object> map) {
+        super(map);
+    }
 
     public WirelessReceiverInverter() {
         super();
     }
-
 
     @Override
     public void turnOn(final String channelName) {

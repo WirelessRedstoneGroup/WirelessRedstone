@@ -15,7 +15,6 @@ import java.util.Map;
 
 @SerializableAs("WirelessReceiver")
 public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoint {
-    private static final long serialVersionUID = -7291500732787558150L;
     private String owner;
     private int x;
     private int y;

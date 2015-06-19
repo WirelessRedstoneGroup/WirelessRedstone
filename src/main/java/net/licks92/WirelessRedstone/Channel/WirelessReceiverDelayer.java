@@ -5,15 +5,30 @@ import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.serialization.SerializableAs;
 
+import java.util.Map;
+
+@SerializableAs("WirelessReceiverDelayer")
 public class WirelessReceiverDelayer extends WirelessReceiver {
     int delay;
+
+    public WirelessReceiverDelayer(Map<String,Object> map) {
+        super(map);
+        setDelay((Integer) map.get("delay"));
+    }
 
     public WirelessReceiverDelayer(final int delay) {
         super();
         this.delay = delay;
     }
 
+    @Override
+    public Map<String,Object> serialize(){
+        Map<String,Object> map = super.serialize();
+        map.put("delay", getDelay());
+        return map;
+    }
 
     @Override
     public void turnOn(final String channelName) {
