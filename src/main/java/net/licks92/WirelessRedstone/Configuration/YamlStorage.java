@@ -336,7 +336,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 			String zipName = "WRBackup "
 					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
 					+ Calendar.getInstance().get(Calendar.MONTH) + "-"
-					+ Calendar.getInstance().get(Calendar.YEAR) + " "
+					+ Calendar.getInstance().get(Calendar.YEAR) + "_"
 					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "."
 					+ Calendar.getInstance().get(Calendar.MINUTE) + "."
 					+ Calendar.getInstance().get(Calendar.SECOND);

@@ -253,7 +253,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 			String zipName = "WRBackup "
 					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
 					+ Calendar.getInstance().get(Calendar.MONTH) + "-"
-					+ Calendar.getInstance().get(Calendar.YEAR) + " "
+					+ Calendar.getInstance().get(Calendar.YEAR) + "_"
 					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "."
 					+ Calendar.getInstance().get(Calendar.MINUTE) + "."
 					+ Calendar.getInstance().get(Calendar.SECOND);
@@ -263,7 +263,8 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 			ZipOutputStream zos = new ZipOutputStream(fos);
 
 			for (File file : channelFolder.listFiles()) {
-				if (!file.isDirectory() && file.getName().contains("." + extension)) {
+				if (!file.isDirectory()
+						&& file.getName().contains("." + extension)) {
 					FileInputStream fis = new FileInputStream(file);
 
 					ZipEntry zipEntry = new ZipEntry(file.getName());
@@ -550,7 +551,17 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 				for (IWirelessPoint ipoint : points) {
 					createWirelessPoint(channel.getName(), ipoint);
 				}
-				WirelessRedstone.cache.update();
+
+				if (WirelessRedstone.cache == null)
+					Bukkit.getScheduler().runTaskLater(
+							WirelessRedstone.getInstance(), new Runnable() {
+								@Override
+								public void run() {
+									WirelessRedstone.cache.update();
+								}
+							}, 1L);
+				else
+					WirelessRedstone.cache.update();
 				return true;
 			} catch (SQLException ex) {
 				ex.printStackTrace();
