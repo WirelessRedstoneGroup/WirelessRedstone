@@ -44,6 +44,7 @@ public class WirelessStrings {
     public String thisChannelContains;
     public String tooFewArguments;
     public String allTransmittersGone;
+    public String playerCannotDestroyBlockAttachedToSign;
 
     public String tellRawString;
 

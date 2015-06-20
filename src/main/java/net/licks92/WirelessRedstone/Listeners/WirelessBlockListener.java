@@ -1,7 +1,10 @@
 package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -31,10 +34,7 @@ public class WirelessBlockListener implements Listener {
     WirelessChannel channel;
 
     @EventHandler
-    public void onSignChange(final SignChangeEvent event) // Called when a sign
-    // is created, and
-    // the text edited
-    {
+    public void onSignChange(final SignChangeEvent event) {
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(),
                 new Runnable() {
                     @Override
@@ -289,7 +289,6 @@ public class WirelessBlockListener implements Listener {
                     event.setCancelled(true);
                     signObject.update();
                 }
-                return;
             } else if (WirelessRedstone.WireBox.isTransmitter(signObject
                     .getLine(0))) {
                 if (!WirelessRedstone.config.getSignDrop()) {
@@ -341,7 +340,6 @@ public class WirelessBlockListener implements Listener {
                             WirelessRedstone.strings.playerCannotDestroySign);
                     event.setCancelled(true);
                 }
-                return;
             } else if (WirelessRedstone.WireBox.isScreen(signObject.getLine(0))) {
                 if (!WirelessRedstone.config.getSignDrop()) {
                     cancelEvent(event);
@@ -390,6 +388,92 @@ public class WirelessBlockListener implements Listener {
                                     WirelessRedstone.strings.playerCannotDestroyReceiverTorch);
                     event.setCancelled(true);
                     return;
+                }
+            }
+        } else {
+            if (WirelessRedstone.cache.getAllSignLocations().contains(
+                    event.getBlock().getRelative(BlockFace.UP).getLocation())) {
+                event.getPlayer()
+                        .sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                                WirelessRedstone.strings.playerCannotDestroyBlockAttachedToSign);
+                event.setCancelled(true);
+                return;
+            }
+            ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
+            possibleBlockface.add(BlockFace.NORTH);
+            possibleBlockface.add(BlockFace.EAST);
+            possibleBlockface.add(BlockFace.SOUTH);
+            possibleBlockface.add(BlockFace.WEST);
+
+            for (BlockFace blockFace : possibleBlockface) {
+                if (WirelessRedstone.cache.getAllSignLocations().contains(
+                        event.getBlock().getRelative(blockFace).getLocation())) {
+                    if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
+                        Sign signObject = (Sign) event.getBlock().getRelative(blockFace).getState();
+                        if (WirelessRedstone.WireBox.isReceiver(signObject.getLine(0))
+                                || WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
+                                || WirelessRedstone.WireBox.isScreen(signObject.getLine(0))) {
+                            if (signObject.getLine(1) == null)
+                                continue;
+                            WirelessChannel returnedChannel = WirelessRedstone.config.getWirelessChannel(signObject.getLine(1));
+
+                            for (WirelessReceiver receiver : returnedChannel.getReceivers()) {
+                                if (!receiver.getIsWallSign())
+                                    continue;
+
+                                Location checkLoc = receiver.getLocation().getBlock().getRelative(
+                                        receiver.getDirection().getOppositeFace()).getLocation();
+                                if (event.getBlock().getLocation().equals(checkLoc)) {
+                                    event.getPlayer()
+                                            .sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                                                    WirelessRedstone.strings.playerCannotDestroyBlockAttachedToSign);
+                                    event.setCancelled(true);
+                                }
+                            }
+
+                            for (WirelessTransmitter transmitter : returnedChannel.getTransmitters()) {
+                                if (!transmitter.getIsWallSign())
+                                    continue;
+
+                                Location checkLoc = transmitter.getLocation().getBlock().getRelative(
+                                        transmitter.getDirection().getOppositeFace()).getLocation();
+                                if (event.getBlock().getLocation().equals(checkLoc)) {
+                                    event.getPlayer()
+                                            .sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                                                    WirelessRedstone.strings.playerCannotDestroyBlockAttachedToSign);
+                                    event.setCancelled(true);
+                                }
+                            }
+
+                            for (WirelessScreen screen : returnedChannel.getScreens()) {
+                                if (!screen.getIsWallSign())
+                                    continue;
+
+                                Location checkLoc = screen.getLocation().getBlock().getRelative(
+                                        screen.getDirection().getOppositeFace()).getLocation();
+                                if (event.getBlock().getLocation().equals(checkLoc)) {
+                                    event.getPlayer()
+                                            .sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                                                    WirelessRedstone.strings.playerCannotDestroyBlockAttachedToSign);
+                                    event.setCancelled(true);
+                                }
+                            }
+                        }
+                    } else if (event.getBlock().getRelative(blockFace).getType() == Material.REDSTONE_TORCH_ON
+                            || event.getBlock().getRelative(blockFace).getType() == Material.REDSTONE_TORCH_OFF) {
+                        if(getRedstoneTorchDirection(event.getBlock().getRelative(blockFace)) == null)
+                            continue;
+
+                        Location checkLoc = event.getBlock().getRelative(blockFace)
+                                .getRelative(getRedstoneTorchDirection(event.getBlock().getRelative(blockFace))
+                                        .getOppositeFace()).getLocation();
+                        if (event.getBlock().getLocation().equals(checkLoc)) {
+                            event.getPlayer()
+                                    .sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                                            WirelessRedstone.strings.playerCannotDestroyBlockAttachedToSign);
+                            event.setCancelled(true);
+                        }
+                    }
                 }
             }
         }
@@ -464,6 +548,36 @@ public class WirelessBlockListener implements Listener {
                     b.getLocation());
             if (distance <= radius && !player.equals(author)) {
                 player.playEffect(b.getLocation(), Effect.STEP_SOUND, null);
+            }
+        }
+    }
+
+    private BlockFace getRedstoneTorchDirection(Block b){
+        if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
+            switch (b.getData()) {
+                case (byte) 1:
+                    return BlockFace.EAST;
+                case (byte) 2:
+                    return BlockFace.WEST;
+                case (byte) 3:
+                    return BlockFace.SOUTH;
+                case (byte) 4:
+                    return BlockFace.NORTH;
+                default:
+                    return null;
+            }
+        } else {
+            switch (b.getData()) {
+                case (byte) 0:
+                    return BlockFace.EAST;
+                case (byte) 2:
+                    return BlockFace.WEST;
+                case (byte) 3:
+                    return BlockFace.SOUTH;
+                case (byte) 4:
+                    return BlockFace.NORTH;
+                default:
+                    return null;
             }
         }
     }

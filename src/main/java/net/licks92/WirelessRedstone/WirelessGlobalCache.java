@@ -25,6 +25,7 @@ import java.util.List;
 public class WirelessGlobalCache {
     private ArrayList<IWirelessPoint> allSigns;
     private ArrayList<Location> allReceiverLocations;
+    private ArrayList<Location> allSignLocations;
     private WirelessRedstone plugin;
     @SuppressWarnings("unused") //Eclipse Motherfucker of course it is used
     private BukkitTask refreshingTask;
@@ -46,7 +47,7 @@ public class WirelessGlobalCache {
         refreshingTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
-
+                update();
             }
         }, timeInTicks, timeInTicks);
     }
@@ -95,46 +96,56 @@ public class WirelessGlobalCache {
             plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
                 public void run() {
                     ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
+                    ArrayList<Location> returnlistLocations = new ArrayList<Location>();
                     for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
                         try {
                             for (IWirelessPoint point : channel.getReceivers()) {
                                 returnlist.add(point);
+                                returnlistLocations.add(point.getLocation());
                             }
 
                             for (IWirelessPoint point : channel.getTransmitters()) {
                                 returnlist.add(point);
+                                returnlistLocations.add(point.getLocation());
                             }
 
                             for (IWirelessPoint point : channel.getScreens()) {
                                 returnlist.add(point);
+                                returnlistLocations.add(point.getLocation());
                             }
                         } catch (Exception e) {
 
                         }
                     }
                     allSigns = returnlist;
+                    allSignLocations = returnlistLocations;
                 }
             });
         else {
             ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
+            ArrayList<Location> returnlistLocations = new ArrayList<Location>();
             for (WirelessChannel channel : WirelessRedstone.config.getAllChannels()) {
                 try {
                     for (IWirelessPoint point : channel.getReceivers()) {
                         returnlist.add(point);
+                        returnlistLocations.add(point.getLocation());
                     }
 
                     for (IWirelessPoint point : channel.getTransmitters()) {
                         returnlist.add(point);
+                        returnlistLocations.add(point.getLocation());
                     }
 
                     for (IWirelessPoint point : channel.getScreens()) {
                         returnlist.add(point);
+                        returnlistLocations.add(point.getLocation());
                     }
                 } catch (Exception e) {
 
                 }
             }
             allSigns = returnlist;
+            allSignLocations = returnlistLocations;
         }
     }
 
@@ -167,5 +178,12 @@ public class WirelessGlobalCache {
      */
     public List<IWirelessPoint> getAllSigns() {
         return allSigns;
+    }
+
+    /**
+     * @return All sign locations
+     */
+    public List<Location> getAllSignLocations() {
+        return allSignLocations;
     }
 }
