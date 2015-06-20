@@ -22,6 +22,7 @@ public class WirelessPermissions {
     private final String canLockChannel = "wirelessredstone.commands.lock";
     private final String canWipeData = "wirelessredstone.admin.wipedata";
     private final String canBackupData = "wirelessredstone.admin.backupdata";
+    private final String canPurgeData = "wirelessredstone.admin.purgedata";
     private final String canActivateChannel = "wirelessredstone.commands.activate";
     private final String canSeeVersion = "wirelessredstone.commands.version";
     private final String canTeleportToSign = "wirelessredstone.commands.tp";
@@ -114,6 +115,10 @@ public class WirelessPermissions {
 
     public boolean canBackupData(final Player player) {
         return permissionsHandler.hasPermission(player, canBackupData);
+    }
+
+    public boolean canPurgeData(final Player player) {
+        return permissionsHandler.hasPermission(player, canPurgeData);
     }
 
     public boolean canActivateChannel(final Player player) {

@@ -17,8 +17,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
     private static final String CHANNEL_FOLDER = "/channels";
 
     private File channelFolder;
-    private File configFile;
-    private WirelessRedstone plugin;
+    private final File configFile;
+    private final WirelessRedstone plugin;
     private IWirelessStorageConfiguration storage;
 
     public char[] badCharacters = {'|', '-', '*', '/', '<', '>', ' ', '=', '~', '!', '^', '(', ')', ':'};
@@ -27,7 +27,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return plugin.getConfig();
     }
 
-    public WirelessConfiguration(WirelessRedstone r_plugin) {
+    public WirelessConfiguration(final WirelessRedstone r_plugin) {
         plugin = r_plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
         configFile.getParentFile().mkdirs();
@@ -48,7 +48,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 		reloadConfig();*/
     }
 
-    private void createFromTemplate(InputStream input) {
+    private void createFromTemplate(final InputStream input) {
         InputStream istr = input;
         FileOutputStream ostr = null;
 
@@ -81,7 +81,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         }
     }
 
-    public boolean initStorage() {
+    @Override
+	public boolean initStorage() {
         //Create the channel folder
         channelFolder = new File(plugin.getDataFolder(), CHANNEL_FOLDER);
         channelFolder.mkdir();
@@ -95,24 +96,34 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return storage.initStorage();
     }
 
-    public boolean close() {
+    @Override
+	public boolean close() {
         return storage.close();
     }
 
-    public boolean canConvert() {
+    @Override
+	public boolean canConvert() {
         return storage.canConvert();
     }
 
-    public boolean convertFromAnotherStorage() {
+    @Override
+	public boolean convertFromAnotherStorage() {
         return storage.convertFromAnotherStorage();
     }
 
-    public boolean wipeData() {
+    @Override
+	public boolean wipeData() {
         return storage.wipeData();
     }
 
-    public boolean backupData() {
+    @Override
+	public boolean backupData() {
         return storage.backupData();
+    }
+
+    @Override
+	public boolean purgeData() {
+        return storage.purgeData();
     }
 
     public void reloadConfig() {
@@ -122,7 +133,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
     /**
      * @return The Wireless Channel with the given name, null if doesn't exist or an error happened
      */
-    public WirelessChannel getWirelessChannel(String channelName) {
+    @Override
+	public WirelessChannel getWirelessChannel(final String channelName) {
         return storage.getWirelessChannel(channelName);
     }
 
@@ -131,7 +143,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
      *
      * @return True if everything happened fine, false if something wrong happened.
      */
-    public boolean createWirelessPoint(String channelName, IWirelessPoint point) {
+    @Override
+	public boolean createWirelessPoint(final String channelName, final IWirelessPoint point) {
         return storage.createWirelessPoint(channelName, point);
     }
 
@@ -140,14 +153,16 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
      *
      * @param channel - A wireless channel which has to contain at least one sign.
      */
-    public boolean createWirelessChannel(WirelessChannel channel) {
+    @Override
+	public boolean createWirelessChannel(final WirelessChannel channel) {
         return storage.createWirelessChannel(channel);
     }
 
     /**
      * Simply removes the channel with the given name from the database.
      */
-    public void removeWirelessChannel(String channelName) {
+    @Override
+	public void removeWirelessChannel(final String channelName) {
         storage.removeWirelessChannel(channelName);
     }
 
@@ -158,7 +173,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
      * @param newChannelName - The new channel name.
      * @return true if everything went fine.
      */
-    public boolean renameWirelessChannel(String channelName, String newChannelName) {
+    @Override
+	public boolean renameWirelessChannel(final String channelName, final String newChannelName) {
         return storage.renameWirelessChannel(channelName, newChannelName);
     }
 
@@ -169,7 +185,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
      * @param loc         - The location of the point.
      * @return true if everything went fine.
      */
-    public boolean removeWirelessReceiver(String channelName, Location loc) {
+    @Override
+	public boolean removeWirelessReceiver(final String channelName, final Location loc) {
         return storage.removeWirelessReceiver(channelName, loc);
     }
 
@@ -180,7 +197,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
      * @param loc         - The location of the point.
      * @return true if everything went fine.
      */
-    public boolean removeWirelessTransmitter(String channelName, Location loc) {
+    @Override
+	public boolean removeWirelessTransmitter(final String channelName, final Location loc) {
         return storage.removeWirelessTransmitter(channelName, loc);
     }
 
@@ -191,14 +209,16 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
      * @param loc         - The location of the point.
      * @return true if everything went fine.
      */
-    public boolean removeWirelessScreen(String channelName, Location loc) {
+    @Override
+	public boolean removeWirelessScreen(final String channelName, final Location loc) {
         return storage.removeWirelessScreen(channelName, loc);
     }
 
     /**
      * @return a list which contains all the channels that exist in the database.
      */
-    public Collection<WirelessChannel> getAllChannels() {
+    @Override
+	public Collection<WirelessChannel> getAllChannels() {
         return storage.getAllChannels();
     }
 
@@ -206,7 +226,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
      * This method will update the fields of the specified channel, but it WON'T update the WirelessPoint list.
      * Don't use it in order to update the IWirelessPoint list because it won't save it.
      */
-    public void updateChannel(String channelName, WirelessChannel channel) {
+    @Override
+	public void updateChannel(final String channelName, final WirelessChannel channel) {
         storage.updateChannel(channelName, channel);
     }
 

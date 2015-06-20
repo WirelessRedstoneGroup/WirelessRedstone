@@ -9,12 +9,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverClock;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -350,6 +359,80 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public void updateChannel(final String channelName, final WirelessChannel channel) {
         setWirelessChannel(channelName, channel);
     }
+
+	@Override
+	public boolean purgeData() {
+		try {
+			// Get the names of all the tables
+			Collection<WirelessChannel> channels = new ArrayList<WirelessChannel>();
+			channels = getAllChannels();
+
+			ArrayList<String> remove = new ArrayList<String>();
+
+			// Erase channel if empty or world doesn't exist
+			for (WirelessChannel channel : channels) {
+				if ((channel.getReceivers().size() < 1)
+						&& (channel.getTransmitters().size() < 1)
+						&& (channel.getScreens().size() < 1)) {
+					remove.add(channel.getName());
+					continue;
+				}
+				HashMap<Location, String> receivers = new HashMap<Location, String>();
+				HashMap<Location, String> transmitters = new HashMap<Location, String>();
+				HashMap<Location, String> screens = new HashMap<Location, String>();
+
+				for (WirelessReceiver receiver : channel.getReceivers()) {
+					if (Bukkit.getWorld(receiver.getLocation().getWorld()
+							.getName()) == null) {
+						receivers
+								.put(receiver.getLocation(), channel.getName());
+					}
+				}
+				for (WirelessTransmitter transmitter : channel
+						.getTransmitters()) {
+					if (Bukkit.getWorld(transmitter.getLocation().getWorld()
+							.getName()) == null) {
+						transmitters.put(transmitter.getLocation(),
+								channel.getName());
+					}
+				}
+				for (WirelessScreen screen : channel.getScreens()) {
+					if (Bukkit.getWorld(screen.getLocation().getWorld()
+							.getName()) == null) {
+						screens.put(screen.getLocation(), channel.getName());
+					}
+				}
+
+				for (Entry<Location, String> receiverRemove : receivers
+						.entrySet()) {
+					WirelessRedstone.config.removeWirelessReceiver(
+							receiverRemove.getValue(), receiverRemove.getKey());
+				}
+				for (Entry<Location, String> transmitterRemove : transmitters
+						.entrySet()) {
+					WirelessRedstone.config.removeWirelessTransmitter(
+							transmitterRemove.getValue(),
+							transmitterRemove.getKey());
+				}
+				for (Entry<Location, String> screenRemove : screens.entrySet()) {
+					WirelessRedstone.config.removeWirelessScreen(
+							screenRemove.getValue(), screenRemove.getKey());
+				}
+			}
+
+			for (String channelRemove : remove) {
+				WirelessRedstone.config.removeWirelessChannel(channelRemove);
+			}
+
+			return true;
+		} catch (Exception e) {
+			WirelessRedstone.getWRLogger().severe("An error occured. Enable debug mode to see the stacktraces.");
+			if (WirelessRedstone.config.getDebugMode()) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+	}
 }
 
 class YamlFilter implements FilenameFilter {

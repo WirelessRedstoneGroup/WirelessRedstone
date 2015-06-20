@@ -2,10 +2,10 @@ package net.licks92.WirelessRedstone.Configuration;
 
 import java.util.Collection;
 
-import org.bukkit.Location;
-
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+
+import org.bukkit.Location;
 
 public interface IWirelessStorageConfiguration {
     boolean initStorage();
@@ -46,4 +46,6 @@ public interface IWirelessStorageConfiguration {
     boolean wipeData();
 
     boolean backupData();
+
+    boolean purgeData();
 }

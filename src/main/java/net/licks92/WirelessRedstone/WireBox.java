@@ -616,7 +616,7 @@ public class WireBox {
 															.sendMessage(
 																	"One of your signs on channel: "
 																			+ channel
-																			.getName()
+																					.getName()
 																			+ " is broken by nature.");
 												}
 											} catch (Exception ex) {

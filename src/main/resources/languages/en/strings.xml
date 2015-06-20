@@ -30,6 +30,8 @@
 		<playerCreatedChannel>You just created a new channel!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>You don't have access to this channel.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>You don't have the permissions to do this.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Page number cannot be inferior to 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>You just extended a channel!</playerExtendedChannel>
 		<signDestroyed>Succesfully removed this sign !</signDestroyed>
