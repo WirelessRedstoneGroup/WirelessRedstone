@@ -1,15 +1,14 @@
 package net.licks92.WirelessRedstone;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the place where we'll store the global cache for Wireless Redstone.

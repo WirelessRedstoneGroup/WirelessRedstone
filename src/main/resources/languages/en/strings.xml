@@ -38,6 +38,7 @@
 		<subCommandDoesNotExist>This subcommand doesn't exist!</subCommandDoesNotExist>
 		<thisChannelContains>This channel contains</thisChannelContains>
 		<tooFewArguments>Too few arguments !</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

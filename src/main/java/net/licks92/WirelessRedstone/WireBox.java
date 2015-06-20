@@ -1,17 +1,7 @@
 package net.licks92.WirelessRedstone;
 
-import java.util.ArrayList;
-
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver.Type;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverClock;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +9,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 public class WireBox {
 	private final WirelessRedstone plugin;

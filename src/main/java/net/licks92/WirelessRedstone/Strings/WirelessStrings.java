@@ -1,9 +1,9 @@
 package net.licks92.WirelessRedstone.Strings;
 
+import net.licks92.WirelessRedstone.WirelessRedstone;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.licks92.WirelessRedstone.WirelessRedstone;
 
 public class WirelessStrings {
     // Strings in alphabetical order.
@@ -43,6 +43,7 @@ public class WirelessStrings {
     public String subCommandDoesNotExist;
     public String thisChannelContains;
     public String tooFewArguments;
+    public String allTransmittersGone;
 
     public String tellRawString;
 
