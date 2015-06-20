@@ -168,27 +168,53 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                     WirelessRedstone.WireBox.signWarning(block, 1);
                 } else {
                     byte directionByte;
-                    switch (getDirection()) {
-                        case EAST:
-                            directionByte = 1;
-                            break;
 
-                        case WEST:
-                            directionByte = 2;
-                            break;
+                    if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
+                        switch (getDirection()) {
+                            case EAST:
+                                directionByte = 1;
+                                break;
 
-                        case SOUTH:
-                            directionByte = 3;
-                            break;
+                            case WEST:
+                                directionByte = 2;
+                                break;
 
-                        case NORTH:
-                            directionByte = 4;
-                            break;
+                            case SOUTH:
+                                directionByte = 3;
+                                break;
 
-                        default:
-                            directionByte = 1;
+                            case NORTH:
+                                directionByte = 4;
+                                break;
 
+                            default:
+                                directionByte = 1;
+
+                        }
+                    } else {
+                        switch (getDirection()) {
+                            case EAST:
+                                directionByte = 0;
+                                break;
+
+                            case WEST:
+                                directionByte = 2;
+                                break;
+
+                            case SOUTH:
+                                directionByte = 3;
+                                break;
+
+                            case NORTH:
+                                directionByte = 4;
+                                break;
+
+                            default:
+                                directionByte = 5;
+
+                        }
                     }
+
                     block.setTypeIdAndData(76, directionByte, true);
                 }
             }
@@ -203,7 +229,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
         Block block = getLocation().getBlock();
         int blockID = getIsWallSign() ? 68 : 63;
 
-        if(getIsWallSign()) {
+        if (getIsWallSign()) {
             switch (getDirection()) {
                 case NORTH:
                     directionByte = 2;
@@ -227,14 +253,21 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
         } else {
             directionByte = (byte) WirelessRedstone.WireBox.signFaceToInt(getDirection());
         }
-        block.setTypeIdAndData(blockID, directionByte, true);
+
+        if(WirelessRedstone.getBukkitVersion().contains("v1_8"))
+            block.setTypeIdAndData(blockID, directionByte, true);
+        else {
+            block.setType(Material.AIR);
+            block.setTypeIdAndData(blockID, directionByte, true);
+            block.getState().update();
+        }
 
         if (block.getState() instanceof Sign) {
             changeSignContent(block, channelName);
         }
     }
 
-    public void changeSignContent(Block block, String channelName){
+    public void changeSignContent(Block block, String channelName) {
         Sign signtemp = (Sign) block.getState();
         signtemp.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
         signtemp.setLine(1, channelName);

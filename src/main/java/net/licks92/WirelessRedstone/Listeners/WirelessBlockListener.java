@@ -178,40 +178,42 @@ public class WirelessBlockListener implements Listener {
 
     @EventHandler
     public void onBlockRedstoneChange(final BlockRedstoneEvent event) {
-        if (event.getBlock().getType() == Material.LEVER) {
-            Lever l = (Lever) event.getBlock().getState().getData();
-            Bukkit.getServer()
-                    .getPluginManager()
-                    .callEvent(
-                            new BlockRedstoneEvent(event.getBlock()
-                                    .getRelative(l.getAttachedFace()), event
-                                    .getOldCurrent(), event.getNewCurrent()));
-        }
-        if (event.getBlock().getType() == Material.STONE_BUTTON
-                || event.getBlock().getType() == Material.WOOD_BUTTON) {
-            Button b = (Button) event.getBlock().getState().getData();
-            Bukkit.getServer()
-                    .getPluginManager()
-                    .callEvent(
-                            new BlockRedstoneEvent(event.getBlock()
-                                    .getRelative(b.getAttachedFace()), event
-                                    .getOldCurrent(), event.getNewCurrent()));
-        }
+        if(WirelessRedstone.getBukkitVersion().contains("v1_8")) {
+            if (event.getBlock().getType() == Material.LEVER) {
+                Lever l = (Lever) event.getBlock().getState().getData();
+                Bukkit.getServer()
+                        .getPluginManager()
+                        .callEvent(
+                                new BlockRedstoneEvent(event.getBlock()
+                                        .getRelative(l.getAttachedFace()), event
+                                        .getOldCurrent(), event.getNewCurrent()));
+            }
+            if (event.getBlock().getType() == Material.STONE_BUTTON
+                    || event.getBlock().getType() == Material.WOOD_BUTTON) {
+                Button b = (Button) event.getBlock().getState().getData();
+                Bukkit.getServer()
+                        .getPluginManager()
+                        .callEvent(
+                                new BlockRedstoneEvent(event.getBlock()
+                                        .getRelative(b.getAttachedFace()), event
+                                        .getOldCurrent(), event.getNewCurrent()));
+            }
 
-        ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
-        possibleBlockface.add(BlockFace.NORTH);
-        possibleBlockface.add(BlockFace.EAST);
-        possibleBlockface.add(BlockFace.SOUTH);
-        possibleBlockface.add(BlockFace.WEST);
-        possibleBlockface.add(BlockFace.UP);
-        possibleBlockface.add(BlockFace.DOWN);
+            ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
+            possibleBlockface.add(BlockFace.NORTH);
+            possibleBlockface.add(BlockFace.EAST);
+            possibleBlockface.add(BlockFace.SOUTH);
+            possibleBlockface.add(BlockFace.WEST);
+            possibleBlockface.add(BlockFace.UP);
+            possibleBlockface.add(BlockFace.DOWN);
 
-        for (BlockFace blockFace : possibleBlockface) {
-            if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
-                Bukkit.getPluginManager().callEvent(
-                        new BlockRedstoneEvent(event.getBlock().getRelative(
-                                blockFace), event.getOldCurrent(), event
-                                .getNewCurrent()));
+            for (BlockFace blockFace : possibleBlockface) {
+                if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
+                    Bukkit.getPluginManager().callEvent(
+                            new BlockRedstoneEvent(event.getBlock().getRelative(
+                                    blockFace), event.getOldCurrent(), event
+                                    .getNewCurrent()));
+                }
             }
         }
 

@@ -1,17 +1,16 @@
 package net.licks92.WirelessRedstone.Configuration;
 
+import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-
-import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-
-import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 
 public class WirelessConfiguration implements IWirelessStorageConfiguration {
 	private static final String CHANNEL_FOLDER = "/channels";
@@ -265,7 +264,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 	}
 
 	public String getLanguage() {
-		return getConfig().getString("Language", "default");
+		return getConfig().getString("Language", "en");
 	}
 
 	public boolean getColourfulLogging() {
