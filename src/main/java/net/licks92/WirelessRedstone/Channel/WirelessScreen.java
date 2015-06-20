@@ -1,10 +1,6 @@
 package net.licks92.WirelessRedstone.Channel;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.licks92.WirelessRedstone.WirelessRedstone;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,6 +8,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SerializableAs("WirelessScreen")
 public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable {
@@ -102,7 +101,7 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 
     @Override
     public BlockFace getDirection() {
-        return WirelessRedstone.WireBox.intDirectionToBlockFace(direction);
+        return WirelessRedstone.WireBox.intToBlockFaceSign(direction);
     }
 
     @Override
@@ -112,7 +111,7 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 
     @Override
     public void setDirection(BlockFace face) {
-        setDirection(WirelessRedstone.WireBox.blockFace2IntDirection(face));
+        setDirection(WirelessRedstone.WireBox.signFaceToInt(face));
     }
 
     @Override

@@ -113,7 +113,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 
     @Override
     public BlockFace getDirection() {
-        return WirelessRedstone.WireBox.intDirectionToBlockFace(direction);
+        return WirelessRedstone.WireBox.intToBlockFaceSign(direction);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 
     @Override
     public void setDirection(BlockFace face) {
-        setDirection(WirelessRedstone.WireBox.blockFace2IntDirection(face));
+        setDirection(WirelessRedstone.WireBox.signFaceToInt(face));
     }
 
     @Override
@@ -203,26 +203,29 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
         Block block = getLocation().getBlock();
         int blockID = getIsWallSign() ? 68 : 63;
 
-        switch (getDirection()) {
-            case NORTH:
-                directionByte = 2;
-                break;
+        if(getIsWallSign()) {
+            switch (getDirection()) {
+                case NORTH:
+                    directionByte = 2;
+                    break;
 
-            case SOUTH:
-                directionByte = 3;
-                break;
+                case SOUTH:
+                    directionByte = 3;
+                    break;
 
-            case WEST:
-                directionByte = 4;
-                break;
+                case WEST:
+                    directionByte = 4;
+                    break;
 
-            case EAST:
-                directionByte = 5;
-                break;
+                case EAST:
+                    directionByte = 5;
+                    break;
 
-            default:
-                directionByte = 2;
-
+                default:
+                    directionByte = 2;
+            }
+        } else {
+            directionByte = (byte) WirelessRedstone.WireBox.signFaceToInt(getDirection());
         }
         block.setTypeIdAndData(blockID, directionByte, true);
 

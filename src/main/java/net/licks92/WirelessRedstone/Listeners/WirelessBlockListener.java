@@ -60,7 +60,7 @@ public class WirelessBlockListener implements Listener {
                                                 event.getBlock().getLocation(),
                                                 new ItemStack(Material.SIGN, 1));
                                 event.getPlayer()
-                                        .sendMessage(
+                                        .sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
                                                 WirelessRedstone.strings.playerCannotCreateSign);
                                 return;
                             }
@@ -88,7 +88,7 @@ public class WirelessBlockListener implements Listener {
                                                 event.getBlock().getLocation(),
                                                 new ItemStack(Material.SIGN, 1));
                                 event.getPlayer()
-                                        .sendMessage(
+                                        .sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
                                                 WirelessRedstone.strings.playerCannotCreateSign);
                                 return;
                             }

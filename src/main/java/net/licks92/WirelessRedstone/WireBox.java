@@ -19,40 +19,32 @@ public class WireBox {
 		this.plugin = wirelessRedstone;
 	}
 
-	public int blockFace2IntDirection(final BlockFace face) {
+	public int signFaceToInt(final BlockFace face) {
 		switch (face) {
-			case SOUTH :
-				return 5;
-
-			case NORTH :
+			case NORTH:
+				return 8;
+			case EAST:
+				return 12;
+			case SOUTH:
+				return 0;
+			case WEST:
 				return 4;
-
-			case WEST :
-				return 3;
-
-			case EAST :
-				return 2;
-
-			default :
-				return 4;
+			default:
+				return 0;
 		}
 	}
 
-	public BlockFace intDirectionToBlockFace(final int dir) {
+	public BlockFace intToBlockFaceSign(final int dir) {
 		switch (dir) {
-			case 2 :
-				return BlockFace.EAST;
-
-			case 3 :
-				return BlockFace.WEST;
-
-			case 4 :
+			case 8:
 				return BlockFace.NORTH;
-
-			case 5 :
+			case 12:
+				return BlockFace.EAST;
+			case 0:
 				return BlockFace.SOUTH;
-
-			default :
+			case 4:
+				return BlockFace.WEST;
+			default:
 				return BlockFace.NORTH;
 		}
 	}
@@ -190,20 +182,20 @@ public class WireBox {
 						+ player.getName());
 
 		Location loc = cblock.getLocation();
-		Boolean isWallSign = (cblock.getType() == Material.WALL_SIGN)
-				? true
-				: false;
+		Boolean isWallSign = (cblock.getType() == Material.WALL_SIGN);
 		WirelessChannel channel = WirelessRedstone.config
 				.getWirelessChannel(cname);
 		if (isWallSign) {
 			isWallSign = true;
 			if (!isValidWallLocation(cblock)) {
-				player.sendMessage(WirelessRedstone.strings.playerCannotCreateReceiverOnBlock);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.playerCannotCreateReceiverOnBlock);
 				return false;
 			}
 		} else {
 			if (!isValidLocation(cblock)) {
-				player.sendMessage(WirelessRedstone.strings.playerCannotCreateReceiverOnBlock);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.playerCannotCreateReceiverOnBlock);
 				return false;
 			}
 		}
@@ -213,7 +205,8 @@ public class WireBox {
 					.getWRLogger()
 					.debug("The channel doesn't exist. Creating it and adding the receiver in it.");
 			if (cname.contains(".")) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			channel = new WirelessChannel(cname);
@@ -279,17 +272,20 @@ public class WireBox {
 			receiver.setIsWallSign(isWallSign);
 			channel.addReceiver(receiver);
 			if (!WirelessRedstone.config.createWirelessChannel(channel)) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
+			player.sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag +
+					WirelessRedstone.strings.playerCreatedChannel);
 			WirelessRedstone.cache.update();
 			return true;
 		} else {
 			WirelessRedstone.getWRLogger().debug(
 					"Channel " + cname + " exists. Adding a receiver in it.");
 			if (cname.contains(".")) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			WirelessReceiver receiver;
@@ -353,7 +349,7 @@ public class WireBox {
 			receiver.setIsWallSign(isWallSign);
 			channel.addReceiver(receiver);
 			WirelessRedstone.config.createWirelessPoint(cname, receiver);
-			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
+			player.sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag + WirelessRedstone.strings.playerExtendedChannel);
 			WirelessRedstone.cache.update();
 			return true;
 		}
@@ -367,11 +363,14 @@ public class WireBox {
 			isWallSign = true;
 		}
 
+		org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
+
 		WirelessChannel channel = WirelessRedstone.config
 				.getWirelessChannel(cname);
 		if (channel == null) {
 			if (cname.contains(".")) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			channel = new WirelessChannel(cname);
@@ -382,25 +381,23 @@ public class WireBox {
 			transmitter.setX(loc.getBlockX());
 			transmitter.setY(loc.getBlockY());
 			transmitter.setZ(loc.getBlockZ());
-			/*
-			 * org.bukkit.material.Sign sign = new
-			 * org.bukkit.material.Sign(cblock.getState().getType()); BlockFace
-			 * bfaceDirection = sign.getFacing();
-			 * transmitter.setDirection(bfaceDirection);
-			 */
-			transmitter.setDirection(BlockFace.NORTH);
+			BlockFace bfaceDirection = sign.getFacing();
+			transmitter.setDirection(bfaceDirection);
 			transmitter.setIsWallSign(isWallSign);
 			channel.addTransmitter(transmitter);
 			if (!WirelessRedstone.config.createWirelessChannel(channel)) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
+			player.sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag +
+					WirelessRedstone.strings.playerCreatedChannel);
 			WirelessRedstone.cache.update();
 			return true;
 		} else {
 			if (cname.contains(".")) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			WirelessTransmitter transmitter = new WirelessTransmitter();
@@ -409,16 +406,12 @@ public class WireBox {
 			transmitter.setX(loc.getBlockX());
 			transmitter.setY(loc.getBlockY());
 			transmitter.setZ(loc.getBlockZ());
-			/*
-			 * org.bukkit.material.Sign sign = new
-			 * org.bukkit.material.Sign(cblock.getState().getType()); BlockFace
-			 * bfaceDirection = sign.getFacing();
-			 * transmitter.setDirection(bfaceDirection);
-			 */
-			transmitter.setDirection(BlockFace.NORTH);
+			BlockFace bfaceDirection = sign.getFacing();
+			transmitter.setDirection(bfaceDirection);
 			transmitter.setIsWallSign(isWallSign);
 			WirelessRedstone.config.createWirelessPoint(cname, transmitter);
-			player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
+			player.sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag +
+					WirelessRedstone.strings.playerExtendedChannel);
 			WirelessRedstone.cache.update();
 			return true;
 		}
@@ -432,12 +425,15 @@ public class WireBox {
 			isWallSign = true;
 		}
 
+		org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
+
 		WirelessChannel channel = WirelessRedstone.config
 				.getWirelessChannel(cname);
 
 		if (channel == null) {
 			if (cname.contains(".")) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			channel = new WirelessChannel(cname);
@@ -448,25 +444,23 @@ public class WireBox {
 			screen.setX(loc.getBlockX());
 			screen.setY(loc.getBlockY());
 			screen.setZ(loc.getBlockZ());
-			/*
-			 * org.bukkit.material.Sign sign = new
-			 * org.bukkit.material.Sign(cblock.getState().getType()); BlockFace
-			 * bfaceDirection = sign.getFacing();
-			 * screen.setDirection(bfaceDirection);
-			 */
-			screen.setDirection(BlockFace.NORTH);
+			BlockFace bfaceDirection = sign.getFacing();
+			screen.setDirection(bfaceDirection);
 			screen.setIsWallSign(isWallSign);
 			channel.addScreen(screen);
 			if (!WirelessRedstone.config.createWirelessChannel(channel)) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
-			player.sendMessage(WirelessRedstone.strings.playerCreatedChannel);
+			player.sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag +
+					WirelessRedstone.strings.playerCreatedChannel);
 			WirelessRedstone.cache.update();
 			return true;
 		} else {
 			if (cname.contains(".")) {
-				player.sendMessage(WirelessRedstone.strings.channelNameContainsInvalidCaracters);
+				player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.channelNameContainsInvalidCaracters);
 				return false;
 			}
 			if (channel instanceof WirelessChannel) {
@@ -476,17 +470,13 @@ public class WireBox {
 				screen.setX(loc.getBlockX());
 				screen.setY(loc.getBlockY());
 				screen.setZ(loc.getBlockZ());
-				/*
-				 * org.bukkit.material.Sign sign = new
-				 * org.bukkit.material.Sign(cblock.getState().getType());
-				 * BlockFace bfaceDirection = sign.getFacing();
-				 * screen.setDirection(bfaceDirection);
-				 */
-				screen.setDirection(BlockFace.NORTH);
+				BlockFace bfaceDirection = sign.getFacing();
+				screen.setDirection(bfaceDirection);
 				screen.setIsWallSign(isWallSign);
 				channel.addScreen(screen);
 				WirelessRedstone.config.createWirelessPoint(cname, screen);
-				player.sendMessage(WirelessRedstone.strings.playerExtendedChannel);
+				player.sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag +
+						WirelessRedstone.strings.playerExtendedChannel);
 				WirelessRedstone.cache.update();
 				return true;
 			}
@@ -541,10 +531,6 @@ public class WireBox {
 			return false;
 		} else
 			return true;
-	}
-
-	public boolean isValidName(final String channelName) {
-		return true;
 	}
 
 	public ArrayList<Location> getReceiverLocations(

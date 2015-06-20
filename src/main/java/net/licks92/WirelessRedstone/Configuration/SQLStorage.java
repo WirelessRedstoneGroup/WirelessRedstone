@@ -1,37 +1,17 @@
 package net.licks92.WirelessRedstone.Configuration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverClock;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
+
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class SQLStorage implements IWirelessStorageConfiguration {
 	private final File sqlFile;
@@ -363,7 +343,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 						if (rs3.getString(sql_signtype).equals("receiver")) {
 							WirelessReceiver receiver = new WirelessReceiver();
 							receiver.setDirection(WirelessRedstone.WireBox
-									.intDirectionToBlockFace(rs3
+									.intToBlockFaceSign(rs3
 											.getInt(sql_direction)));
 							receiver.setIsWallSign(rs3
 									.getBoolean(sql_iswallsign));
@@ -378,7 +358,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 							WirelessReceiverInverter receiver_inverter = new WirelessReceiverInverter();
 							receiver_inverter
 									.setDirection(WirelessRedstone.WireBox
-											.intDirectionToBlockFace(rs3
+											.intToBlockFaceSign(rs3
 													.getInt(sql_direction)));
 							receiver_inverter.setIsWallSign(rs3
 									.getBoolean(sql_iswallsign));
@@ -404,7 +384,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 									delay);
 							receiver_delayer
 									.setDirection(WirelessRedstone.WireBox
-											.intDirectionToBlockFace(rs3
+											.intToBlockFaceSign(rs3
 													.getInt(sql_direction)));
 							receiver_delayer.setIsWallSign(rs3
 									.getBoolean(sql_iswallsign));
@@ -430,7 +410,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 									delay);
 							receiver_clock
 									.setDirection(WirelessRedstone.WireBox
-											.intDirectionToBlockFace(rs3
+											.intToBlockFaceSign(rs3
 													.getInt(sql_direction)));
 							receiver_clock.setIsWallSign(rs3
 									.getBoolean(sql_iswallsign));
@@ -446,7 +426,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 								"transmitter")) {
 							WirelessTransmitter transmitter = new WirelessTransmitter();
 							transmitter.setDirection(WirelessRedstone.WireBox
-									.intDirectionToBlockFace(rs3
+									.intToBlockFaceSign(rs3
 											.getInt(sql_direction)));
 							transmitter.setIsWallSign(rs3
 									.getBoolean(sql_iswallsign));
@@ -460,7 +440,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 						if (rs3.getString(sql_signtype).equals("screen")) {
 							WirelessScreen screen = new WirelessScreen();
 							screen.setDirection(WirelessRedstone.WireBox
-									.intDirectionToBlockFace(rs3
+									.intToBlockFaceSign(rs3
 											.getInt(sql_direction)));
 							screen.setIsWallSign(rs3.getBoolean(sql_iswallsign));
 							screen.setOwner(rs3.getString(sql_signowner));
@@ -703,7 +683,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 
 		try {
 			int intDirection = WirelessRedstone.WireBox
-					.blockFace2IntDirection(point.getDirection());
+					.signFaceToInt(point.getDirection());
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("INSERT INTO " + getDBName(channelName)
 					+ " (" + sql_signtype + "," + sql_signx + "," + sql_signy
