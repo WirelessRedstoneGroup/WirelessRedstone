@@ -86,7 +86,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
 	public boolean convertFromAnotherStorage() {
         WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
-        if (!backupData()) {
+        if (!backupData("db")) {
             WirelessRedstone.getWRLogger().severe("Backup failed ! Data transfer abort...");
         } else {
             WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
@@ -321,7 +321,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
     public boolean wipeData() {
         //Backup the channels folder first.
-        backupData();
+        backupData("yml");
 
         //Then remove the channels and the files.
         for (File f : channelFolder.listFiles()) {
@@ -331,20 +331,20 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean backupData() {
+    public boolean backupData(final String extension) {
         try {
-            String zipName = "WRBackup "
-                    + Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-                    + Calendar.getInstance().get(Calendar.MONTH)
-                    + Calendar.getInstance().get(Calendar.YEAR) + "-"
-                    + Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-                    + Calendar.getInstance().get(Calendar.MINUTE)
-                    + Calendar.getInstance().get(Calendar.SECOND);
+			String zipName = "WRBackup "
+					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
+					+ Calendar.getInstance().get(Calendar.MONTH) + "-"
+					+ Calendar.getInstance().get(Calendar.YEAR) + " "
+					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "."
+					+ Calendar.getInstance().get(Calendar.MINUTE) + "."
+					+ Calendar.getInstance().get(Calendar.SECOND);
             FileOutputStream fos = new FileOutputStream((channelFolder.getCanonicalPath().split(channelFolder.getName())[0]) + zipName + ".zip");
             ZipOutputStream zos = new ZipOutputStream(fos);
 
             for (File file : channelFolder.listFiles()) {
-                if (!file.isDirectory() && file.getName().contains(".yml")) {
+                if (!file.isDirectory() && file.getName().contains("." + extension)) {
                     FileInputStream fis = new FileInputStream(file);
 
                     ZipEntry zipEntry = new ZipEntry(file.getName());

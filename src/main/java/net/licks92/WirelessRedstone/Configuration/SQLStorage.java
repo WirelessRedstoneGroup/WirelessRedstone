@@ -174,7 +174,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 	public boolean convertFromAnotherStorage() {
 		WirelessRedstone.getWRLogger().info(
 				"Backuping the channels/ folder before transfer.");
-		if (!backupData()) {
+		if (!backupData("yml")) {
 			WirelessRedstone.getWRLogger().severe(
 					"Backup failed ! Data transfer abort...");
 		} else {
@@ -222,7 +222,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 	@Override
 	public boolean wipeData() {
 		// Backup before wiping
-		backupData();
+		backupData("db");
 		try {
 			// Get the names of all the tables
 			Statement statement = connection.createStatement();
@@ -248,14 +248,14 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 	}
 
 	@Override
-	public boolean backupData() {
+	public boolean backupData(final String extension) {
 		try {
 			String zipName = "WRBackup "
-					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-					+ Calendar.getInstance().get(Calendar.MONTH)
-					+ Calendar.getInstance().get(Calendar.YEAR) + "-"
-					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-					+ Calendar.getInstance().get(Calendar.MINUTE)
+					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
+					+ Calendar.getInstance().get(Calendar.MONTH) + "-"
+					+ Calendar.getInstance().get(Calendar.YEAR) + " "
+					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "."
+					+ Calendar.getInstance().get(Calendar.MINUTE) + "."
 					+ Calendar.getInstance().get(Calendar.SECOND);
 			FileOutputStream fos = new FileOutputStream((channelFolder
 					.getCanonicalPath().split(channelFolder.getName())[0])
@@ -263,7 +263,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 			ZipOutputStream zos = new ZipOutputStream(fos);
 
 			for (File file : channelFolder.listFiles()) {
-				if (!file.isDirectory() && file.getName().contains(".db")) {
+				if (!file.isDirectory() && file.getName().contains("." + extension)) {
 					FileInputStream fis = new FileInputStream(file);
 
 					ZipEntry zipEntry = new ZipEntry(file.getName());

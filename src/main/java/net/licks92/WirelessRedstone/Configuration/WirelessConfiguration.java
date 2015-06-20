@@ -116,9 +116,18 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return storage.wipeData();
     }
 
-    @Override
 	public boolean backupData() {
-        return storage.backupData();
+		String extension = null;
+    	if(getSQLUsage())
+    		extension = "db";
+    	else
+    		extension = "yml";
+        return storage.backupData(extension);
+    }
+
+	@Override
+	public boolean backupData(final String extension) {
+        return storage.backupData(extension);
     }
 
     @Override
