@@ -119,7 +119,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (WirelessRedstone.config.getDebugMode())
 				e.printStackTrace();
 		}
-		if(!WirelessRedstone.getInstance().activeChannels.contains(getName())){
+		if (!WirelessRedstone.getInstance().activeChannels.contains(getName())) {
 			WirelessRedstone.getInstance().activeChannels.add(getName());
 		}
 	}
@@ -145,7 +145,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (WirelessRedstone.config.getDebugMode())
 				e.printStackTrace();
 		}
-		if(WirelessRedstone.getInstance().activeChannels.contains(getName())){
+		if (WirelessRedstone.getInstance().activeChannels.contains(getName())) {
 			WirelessRedstone.getInstance().activeChannels.remove(getName());
 		}
 	}
@@ -182,7 +182,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 					public void run() {
 						if (block.isBlockPowered()
 								|| block.isBlockIndirectlyPowered()) {
-							if(WirelessRedstone.getInstance().activeChannels.contains(getName())){
+							if (WirelessRedstone.getInstance().activeChannels
+									.contains(getName())) {
 								return;
 							}
 							turnOn();
@@ -190,11 +191,11 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 								|| !block.isBlockIndirectlyPowered()) {
 							boolean on = false;
 							for (WirelessTransmitter transmitter : transmitters) {
-								if(transmitter.isActive()){
+								if (transmitter.isActive()) {
 									on = true;
 								}
 							}
-							if(!on){
+							if (!on) {
 								turnOff();
 							}
 						}
@@ -228,7 +229,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 
 			for (BlockFace blockFace : possibleBlockface) {
 				if (block.getRelative(blockFace).isBlockIndirectlyPowered()
-						|| block.getRelative(blockFace).isBlockIndirectlyPowered()) {
+						|| block.getRelative(blockFace)
+								.isBlockIndirectlyPowered()) {
 					return true;
 				}
 			}
@@ -241,7 +243,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (receiver.getX() == loc.getBlockX()
 					&& receiver.getZ() == loc.getBlockZ()
 					&& receiver.getY() == loc.getBlockY()) {
-				if(!receiver.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+				if (!receiver.getWorld().equalsIgnoreCase(
+						loc.getWorld().getName())) {
 					continue;
 				}
 				receivers.remove(receiver);
@@ -255,7 +258,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (transmitter.getX() == loc.getBlockX()
 					&& transmitter.getZ() == loc.getBlockZ()
 					&& transmitter.getY() == loc.getBlockY()) {
-				if(!transmitter.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+				if (!transmitter.getWorld().equalsIgnoreCase(
+						loc.getWorld().getName())) {
 					continue;
 				}
 				transmitters.remove(transmitter);
@@ -269,7 +273,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (screen.getX() == loc.getBlockX()
 					&& screen.getZ() == loc.getBlockZ()
 					&& screen.getY() == loc.getBlockY()) {
-				if(!screen.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+				if (!screen.getWorld().equalsIgnoreCase(
+						loc.getWorld().getName())) {
 					continue;
 				}
 				screens.remove(screen);
@@ -278,15 +283,13 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 		}
 	}
 
-	public void removeReceiverAt(final Location loc, final boolean purge) {
+	public void removeReceiverAt(final Location loc, final String world) {
 		for (WirelessReceiver receiver : receivers) {
 			if (receiver.getX() == loc.getBlockX()
 					&& receiver.getZ() == loc.getBlockZ()
 					&& receiver.getY() == loc.getBlockY()) {
-				if(!purge){
-					if(!receiver.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
-						continue;
-					}
+				if (!receiver.getWorld().equalsIgnoreCase(world)) {
+					continue;
 				}
 				receivers.remove(receiver);
 				return;
@@ -294,15 +297,13 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 		}
 	}
 
-	public void removeTransmitterAt(final Location loc, final boolean purge) {
+	public void removeTransmitterAt(final Location loc, final String world) {
 		for (WirelessTransmitter transmitter : transmitters) {
 			if (transmitter.getX() == loc.getBlockX()
 					&& transmitter.getZ() == loc.getBlockZ()
 					&& transmitter.getY() == loc.getBlockY()) {
-				if(!purge){
-					if(!transmitter.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
-						continue;
-					}
+				if (!transmitter.getWorld().equalsIgnoreCase(world)) {
+					continue;
 				}
 				transmitters.remove(transmitter);
 				return;
@@ -310,15 +311,13 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 		}
 	}
 
-	public void removeScreenAt(final Location loc, final boolean purge) {
+	public void removeScreenAt(final Location loc, final String world) {
 		for (WirelessScreen screen : screens) {
 			if (screen.getX() == loc.getBlockX()
 					&& screen.getZ() == loc.getBlockZ()
 					&& screen.getY() == loc.getBlockY()) {
-				if(!purge){
-					if(!screen.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
-						continue;
-					}
+				if (!screen.getWorld().equalsIgnoreCase(world)) {
+					continue;
 				}
 				screens.remove(screen);
 				return;

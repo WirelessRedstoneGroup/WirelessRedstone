@@ -790,7 +790,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 			final Location loc, final String world) {
 		WirelessChannel channel = getWirelessChannel(channelName);
 		if (channel != null) {
-			channel.removeReceiverAt(loc, true);
+			channel.removeReceiverAt(loc, world);
 			return removeWirelessPoint(channelName, loc, world);
 		} else
 			return false;
@@ -808,7 +808,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 			final Location loc, final String world) {
 		WirelessChannel channel = getWirelessChannel(channelName);
 		if (channel != null) {
-			channel.removeTransmitterAt(loc, true);
+			channel.removeTransmitterAt(loc, world);
 			return removeWirelessPoint(channelName, loc, world);
 		} else
 			return false;
@@ -826,7 +826,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 			final Location loc, final String world) {
 		WirelessChannel channel = getWirelessChannel(channelName);
 		if (channel != null) {
-			channel.removeScreenAt(loc, true);
+			channel.removeScreenAt(loc, world);
 			return removeWirelessPoint(channelName, loc, world);
 		} else
 			return false;
@@ -864,12 +864,6 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 
 			// Erase channel if empty or world doesn't exist
 			for (WirelessChannel channel : channels) {
-				if ((channel.getReceivers().size() < 1)
-						&& (channel.getTransmitters().size() < 1)
-						&& (channel.getScreens().size() < 1)) {
-					remove.add(channel.getName());
-					continue;
-				}
 				HashMap<Location, String> receivers = new HashMap<Location, String>();
 				HashMap<Location, String> transmitters = new HashMap<Location, String>();
 				HashMap<Location, String> screens = new HashMap<Location, String>();
@@ -913,6 +907,13 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 					removeWirelessScreen(screenRemove.getValue().split("~")[0],
 							screenRemove.getKey(), screenRemove.getValue()
 									.split("~")[1]);
+				}
+
+				if ((channel.getReceivers().size() < 1)
+						&& (channel.getTransmitters().size() < 1)
+						&& (channel.getScreens().size() < 1)) {
+					remove.add(channel.getName());
+					continue;
 				}
 			}
 
