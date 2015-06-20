@@ -241,6 +241,9 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (receiver.getX() == loc.getBlockX()
 					&& receiver.getZ() == loc.getBlockZ()
 					&& receiver.getY() == loc.getBlockY()) {
+				if(!receiver.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+					continue;
+				}
 				receivers.remove(receiver);
 				return;
 			}
@@ -252,6 +255,9 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (transmitter.getX() == loc.getBlockX()
 					&& transmitter.getZ() == loc.getBlockZ()
 					&& transmitter.getY() == loc.getBlockY()) {
+				if(!transmitter.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+					continue;
+				}
 				transmitters.remove(transmitter);
 				return;
 			}
@@ -263,6 +269,57 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 			if (screen.getX() == loc.getBlockX()
 					&& screen.getZ() == loc.getBlockZ()
 					&& screen.getY() == loc.getBlockY()) {
+				if(!screen.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+					continue;
+				}
+				screens.remove(screen);
+				return;
+			}
+		}
+	}
+
+	public void removeReceiverAt(final Location loc, final boolean purge) {
+		for (WirelessReceiver receiver : receivers) {
+			if (receiver.getX() == loc.getBlockX()
+					&& receiver.getZ() == loc.getBlockZ()
+					&& receiver.getY() == loc.getBlockY()) {
+				if(!purge){
+					if(!receiver.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+						continue;
+					}
+				}
+				receivers.remove(receiver);
+				return;
+			}
+		}
+	}
+
+	public void removeTransmitterAt(final Location loc, final boolean purge) {
+		for (WirelessTransmitter transmitter : transmitters) {
+			if (transmitter.getX() == loc.getBlockX()
+					&& transmitter.getZ() == loc.getBlockZ()
+					&& transmitter.getY() == loc.getBlockY()) {
+				if(!purge){
+					if(!transmitter.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+						continue;
+					}
+				}
+				transmitters.remove(transmitter);
+				return;
+			}
+		}
+	}
+
+	public void removeScreenAt(final Location loc, final boolean purge) {
+		for (WirelessScreen screen : screens) {
+			if (screen.getX() == loc.getBlockX()
+					&& screen.getZ() == loc.getBlockZ()
+					&& screen.getY() == loc.getBlockY()) {
+				if(!purge){
+					if(!screen.getWorld().equalsIgnoreCase(loc.getWorld().getName())){
+						continue;
+					}
+				}
 				screens.remove(screen);
 				return;
 			}

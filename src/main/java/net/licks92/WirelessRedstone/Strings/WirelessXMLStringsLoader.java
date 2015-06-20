@@ -68,12 +68,11 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
 						WirelessRedstone.getWRLogger().debug(
 								"Loading the tags...");
 
-						String chatTag = tagsElement
-								.getElementsByTagName("chatTag").item(0)
-								.getTextContent();
-
-						if (checkString(chatTag))
-							this.chatTag = chatTag + " ";
+						if (tagsElement.getElementsByTagName("chatTag").item(0) != null)
+							this.chatTag = "[" + tagsElement
+									.getElementsByTagName("chatTag").item(0)
+									.getTextContent()
+									+ "] ";
 						break;
 
 					case "playermessages" : // Load the PM strings
@@ -81,167 +80,175 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
 						WirelessRedstone.getWRLogger().debug(
 								"Loading the player messages ..");
 
-						String backupDone = PMElement
-								.getElementsByTagName("backupDone").item(0)
-								.getTextContent();
-						String backupFailed = PMElement
-								.getElementsByTagName("backupFailed").item(0)
-								.getTextContent();
-						String channelDoesNotExist = PMElement
-								.getElementsByTagName("channelDoesNotExist").item(0)
-								.getTextContent();
-						String channelLocked = PMElement
-								.getElementsByTagName("channelLocked").item(0)
-								.getTextContent();
-						String channelNameContainsInvalidCaracters = PMElement
-								.getElementsByTagName("channelNameContainsInvalidCaracters").item(0)
-								.getTextContent();
-						String channelRemoved = PMElement
-								.getElementsByTagName("channelRemoved").item(0)
-								.getTextContent();
-						String channelRemovedCauseNoSign = PMElement
-								.getElementsByTagName("channelRemovedCauseNoSign").item(0)
-								.getTextContent();
-						String channelUnlocked = PMElement
-								.getElementsByTagName("channelUnlocked").item(0)
-								.getTextContent();
-						String commandDoesNotExist = PMElement
-								.getElementsByTagName("commandDoesNotExist").item(0)
-								.getTextContent();
-						String commandForNextPage = PMElement
-								.getElementsByTagName("commandForNextPage").item(0)
-								.getTextContent();
-						String customizedLanguageSuccessfullyLoaded = PMElement
-								.getElementsByTagName("customizedLanguageSuccessfullyLoaded").item(0)
-								.getTextContent();
-						String DBAboutToBeDeleted = PMElement
-								.getElementsByTagName("DBAboutToBeDeleted").item(0)
-								.getTextContent();
-						String DBDeleted = PMElement
-								.getElementsByTagName("DBDeleted").item(0)
-								.getTextContent();
-						String DBNotDeleted = PMElement
-								.getElementsByTagName("DBNotDeleted").item(0)
-								.getTextContent();
-						String forMoreInfosPerformWRInfo = PMElement
-								.getElementsByTagName("forMoreInfosPerformWRInfo").item(0)
-								.getTextContent();
-						String listEmpty = PMElement
-								.getElementsByTagName("listEmpty").item(0)
-								.getTextContent();
-						String ownersOfTheChannelAre = PMElement
-								.getElementsByTagName("ownersOfTheChannelAre").item(0)
-								.getTextContent();
-						String pageEmpty = PMElement
-								.getElementsByTagName("pageEmpty").item(0)
-								.getTextContent();
-						String pageNumberInferiorToZero = PMElement
-								.getElementsByTagName("pageNumberInferiorToZero").item(0)
-								.getTextContent();
-						String playerCannotCreateChannel = PMElement
-								.getElementsByTagName("playerCannotCreateChannel").item(0)
-								.getTextContent();
-						String playerCannotCreateReceiverOnBlock = PMElement
-								.getElementsByTagName("playerCannotCreateReceiverOnBlock").item(0)
-								.getTextContent();
-						String playerCannotCreateSign = PMElement
-								.getElementsByTagName("playerCannotCreateSign").item(0)
-								.getTextContent();
-						String playerCannotDestroyReceiverTorch = PMElement
-								.getElementsByTagName("playerCannotDestroyReceiverTorch").item(0)
-								.getTextContent();
-						String playerCannotDestroySign = PMElement
-								.getElementsByTagName("playerCannotDestroySign").item(0)
-								.getTextContent();
-						String playerCreatedChannel = PMElement
-								.getElementsByTagName("playerCreatedChannel").item(0)
-								.getTextContent();
-						String playerDoesntHaveAccessToChannel = PMElement
-								.getElementsByTagName("playerDoesntHaveAccessToChannel").item(0)
-								.getTextContent();
-						String playerDoesntHavePermission = PMElement
-								.getElementsByTagName("playerDoesntHavePermission").item(0)
-								.getTextContent();
-						String playerExtendedChannel = PMElement
-								.getElementsByTagName("playerExtendedChannel").item(0)
-								.getTextContent();
-						String signDestroyed = PMElement
-								.getElementsByTagName("signDestroyed").item(0)
-								.getTextContent();
-						String subCommandDoesNotExist = PMElement
-								.getElementsByTagName("subCommandDoesNotExist").item(0)
-								.getTextContent();
-						String thisChannelContains = PMElement
-								.getElementsByTagName("thisChannelContains").item(0)
-								.getTextContent();
-						String tooFewArguments = PMElement
-								.getElementsByTagName("tooFewArguments").item(0)
-								.getTextContent();
-
-						if (checkString(backupDone))
-							this.backupDone = backupDone;
-						if (checkString(backupFailed))
-							this.backupFailed = backupFailed;
-						if (checkString(channelDoesNotExist))
-							this.channelDoesNotExist = channelDoesNotExist;
-						if (checkString(channelLocked))
-							this.channelLocked = channelLocked;
-						if (checkString(channelNameContainsInvalidCaracters))
-							this.channelNameContainsInvalidCaracters = channelNameContainsInvalidCaracters;
-						if (checkString(channelRemoved))
-							this.channelRemoved = channelRemoved;
-						if (checkString(channelRemovedCauseNoSign))
-							this.channelRemovedCauseNoSign = channelRemovedCauseNoSign;
-						if (checkString(channelUnlocked))
-							this.channelUnlocked = channelUnlocked;
-						if (checkString(commandDoesNotExist))
-							this.commandDoesNotExist = commandDoesNotExist;
-						if (checkString(commandForNextPage))
-							this.commandForNextPage = commandForNextPage;
-						if (checkString(customizedLanguageSuccessfullyLoaded))
-							this.customizedLanguageSuccessfullyLoaded = customizedLanguageSuccessfullyLoaded;
-						if (checkString(DBAboutToBeDeleted))
-							this.DBAboutToBeDeleted = DBAboutToBeDeleted;
-						if (checkString(DBDeleted))
-							this.DBDeleted = DBDeleted;
-						if (checkString(DBNotDeleted))
-							this.DBNotDeleted = DBNotDeleted;
-						if (checkString(forMoreInfosPerformWRInfo))
-							this.forMoreInfosPerformWRInfo = forMoreInfosPerformWRInfo;
-						if (checkString(listEmpty))
-							this.listEmpty = listEmpty;
-						if (checkString(ownersOfTheChannelAre))
-							this.ownersOfTheChannelAre = ownersOfTheChannelAre;
-						if (checkString(pageEmpty))
-							this.pageEmpty = pageEmpty;
-						if (checkString(pageNumberInferiorToZero))
-							this.pageNumberInferiorToZero = pageNumberInferiorToZero;
-						if (checkString(playerCannotCreateChannel))
-							this.playerCannotCreateChannel = playerCannotCreateChannel;
-						if (checkString(playerCannotCreateReceiverOnBlock))
-							this.playerCannotCreateReceiverOnBlock = playerCannotCreateReceiverOnBlock;
-						if (checkString(playerCannotCreateSign))
-							this.playerCannotCreateSign = playerCannotCreateSign;
-						if (checkString(playerCannotDestroyReceiverTorch))
-							this.playerCannotDestroyReceiverTorch = playerCannotDestroyReceiverTorch;
-						if (checkString(playerCannotDestroySign))
-							this.playerCannotDestroySign = playerCannotDestroySign;
-						if (checkString(playerCreatedChannel))
-							this.playerCreatedChannel = playerCreatedChannel;
-						if (checkString(playerDoesntHaveAccessToChannel))
-							this.playerDoesntHaveAccessToChannel = playerDoesntHaveAccessToChannel;
-						if (checkString(playerDoesntHavePermission))
-							this.playerDoesntHavePermission = playerDoesntHavePermission;
-						if (checkString(playerExtendedChannel))
-							this.playerExtendedChannel = playerExtendedChannel;
-						if (checkString(signDestroyed))
-							this.signDestroyed = signDestroyed;
-						if (checkString(subCommandDoesNotExist))
-							this.subCommandDoesNotExist = subCommandDoesNotExist;
-						if (checkString(thisChannelContains))
-							this.thisChannelContains = thisChannelContains;
-						if (checkString(tooFewArguments))
-							this.tooFewArguments = tooFewArguments;
+						if (PMElement.getElementsByTagName("backupDone").item(0) != null)
+							this.backupDone = PMElement
+									.getElementsByTagName("backupDone").item(0)
+									.getTextContent();
+						if (PMElement.getElementsByTagName("backupFailed").item(0) != null)
+							this.backupFailed = PMElement
+									.getElementsByTagName("backupFailed")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("channelDoesNotExist").item(0) != null)
+							this.channelDoesNotExist = PMElement
+									.getElementsByTagName("channelDoesNotExist")
+									.item(0).getTextContent();
+						if (PMElement.getElementsByTagName("channelLocked").item(0) != null)
+							this.channelLocked = PMElement
+									.getElementsByTagName("channelLocked")
+									.item(0).getTextContent();
+						if (PMElement.getElementsByTagName("channelUnlocked").item(0) != null)
+							this.channelUnlocked = PMElement
+									.getElementsByTagName("channelUnlocked")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("channelNameContainsInvalidCaracters").item(0) != null)
+							this.channelNameContainsInvalidCaracters = PMElement
+									.getElementsByTagName(
+											"channelNameContainsInvalidCaracters")
+									.item(0).getTextContent();
+						if (PMElement.getElementsByTagName("channelRemoved").item(0) != null)
+							this.channelRemoved = PMElement
+									.getElementsByTagName("channelRemoved")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("channelRemovedCauseNoSign").item(0) != null)
+							this.channelRemovedCauseNoSign = PMElement
+									.getElementsByTagName(
+											"channelRemovedCauseNoSign")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("commandDoesNotExist").item(0) != null)
+							this.commandDoesNotExist = PMElement
+									.getElementsByTagName("commandDoesNotExist")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("commandForNextPage").item(0) != null)
+							this.commandForNextPage = PMElement
+									.getElementsByTagName("commandForNextPage")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("customizedLanguageSuccessfullyLoaded").item(0) != null)
+							this.customizedLanguageSuccessfullyLoaded = PMElement
+									.getElementsByTagName(
+											"customizedLanguageSuccessfullyLoaded")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("DBAboutToBeDeleted").item(0) != null)
+							this.DBAboutToBeDeleted = PMElement
+									.getElementsByTagName("DBAboutToBeDeleted")
+									.item(0).getTextContent();
+						if (PMElement.getElementsByTagName("DBDeleted").item(0) != null)
+							this.DBDeleted = PMElement
+									.getElementsByTagName("DBDeleted").item(0)
+									.getTextContent();
+						if (PMElement.getElementsByTagName("DBNotDeleted").item(0) != null)
+							this.DBNotDeleted = PMElement
+									.getElementsByTagName("DBNotDeleted")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("forMoreInfosPerformWRInfo").item(0) != null)
+							this.forMoreInfosPerformWRInfo = PMElement
+									.getElementsByTagName(
+											"forMoreInfosPerformWRInfo")
+									.item(0).getTextContent();
+						if (PMElement.getElementsByTagName("listEmpty").item(0) != null)
+							this.listEmpty = PMElement
+									.getElementsByTagName("listEmpty").item(0)
+									.getTextContent();
+						if (PMElement
+								.getElementsByTagName("ownersOfTheChannelAre").item(0) != null)
+							this.ownersOfTheChannelAre = PMElement
+									.getElementsByTagName(
+											"ownersOfTheChannelAre").item(0)
+									.getTextContent();
+						if (PMElement.getElementsByTagName("pageEmpty").item(0) != null)
+							this.pageEmpty = PMElement
+									.getElementsByTagName("pageEmpty").item(0)
+									.getTextContent();
+						if (PMElement
+								.getElementsByTagName("pageNumberInferiorToZero").item(0) != null)
+							this.pageNumberInferiorToZero = PMElement
+									.getElementsByTagName(
+											"pageNumberInferiorToZero").item(0)
+									.getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerCannotCreateChannel").item(0) != null)
+							this.playerCannotCreateChannel = PMElement
+									.getElementsByTagName(
+											"playerCannotCreateChannel")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerCannotCreateReceiverOnBlock").item(0) != null)
+							this.playerCannotCreateReceiverOnBlock = PMElement
+									.getElementsByTagName(
+											"playerCannotCreateReceiverOnBlock")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerCannotCreateSign").item(0) != null)
+							this.playerCannotCreateSign = PMElement
+									.getElementsByTagName(
+											"playerCannotCreateSign").item(0)
+									.getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerCannotDestroyReceiverTorch").item(0) != null)
+							this.playerCannotDestroyReceiverTorch = PMElement
+									.getElementsByTagName(
+											"playerCannotDestroyReceiverTorch")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerCannotDestroySign").item(0) != null)
+							this.playerCannotDestroySign = PMElement
+									.getElementsByTagName(
+											"playerCannotDestroySign").item(0)
+									.getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerCreatedChannel").item(0) != null)
+							this.playerCreatedChannel = PMElement
+									.getElementsByTagName(
+											"playerCreatedChannel").item(0)
+									.getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerDoesntHaveAccessToChannel").item(0) != null)
+							this.playerDoesntHaveAccessToChannel = PMElement
+									.getElementsByTagName(
+											"playerDoesntHaveAccessToChannel")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerDoesntHavePermission").item(0) != null)
+							this.playerDoesntHavePermission = PMElement
+									.getElementsByTagName(
+											"playerDoesntHavePermission")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("playerExtendedChannel").item(0) != null)
+							this.playerExtendedChannel = PMElement
+									.getElementsByTagName(
+											"playerExtendedChannel").item(0)
+									.getTextContent();
+						if (PMElement.getElementsByTagName("purgeDataDone").item(0) != null)
+							this.purgeDataDone = PMElement
+									.getElementsByTagName("purgeDataDone")
+									.item(0).getTextContent();
+						if (PMElement.getElementsByTagName("purgeDataFailed").item(0) != null)
+							this.purgeDataFailed = PMElement
+									.getElementsByTagName("purgeDataFailed")
+									.item(0).getTextContent();
+						if (PMElement
+								.getElementsByTagName("subCommandDoesNotExist").item(0) != null)
+							this.subCommandDoesNotExist = PMElement
+									.getElementsByTagName(
+											"subCommandDoesNotExist").item(0)
+									.getTextContent();
+						if (PMElement
+								.getElementsByTagName("thisChannelContains").item(0) != null)
+							this.thisChannelContains = PMElement
+									.getElementsByTagName("thisChannelContains")
+									.item(0).getTextContent();
+						if (PMElement.getElementsByTagName("tooFewArguments").item(0) != null)
+							this.tooFewArguments = PMElement
+									.getElementsByTagName("tooFewArguments")
+									.item(0).getTextContent();
 						break;
 
 					case "logmessages" : // Load the LM strings
@@ -249,12 +256,11 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
 						WirelessRedstone.getWRLogger().debug(
 								"Loading the log messages ..");
 
-						String newUpdateAvailable = LMElement
-								.getElementsByTagName("newUpdateAvailable").item(0)
-								.getTextContent();
-
-						if (checkString(newUpdateAvailable))
-							this.newUpdateAvailable = newUpdateAvailable;
+						if (LMElement
+								.getElementsByTagName("newUpdateAvailable").item(0) != null)
+							this.newUpdateAvailable = LMElement
+									.getElementsByTagName("newUpdateAvailable")
+									.item(0).getTextContent();
 						break;
 				}
 			}
@@ -276,13 +282,5 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
 		 * tagsReceiver.add("[receiver]"); tagsReceiver.add("[wrr]");
 		 * tagsScreen.add("[screen]"); tagsScreen.add("[wrs]");
 		 */
-	}
-
-	private boolean checkString(final String string) {
-		if ((string != null)) {
-			if (!string.equalsIgnoreCase(""))
-				return true;
-		}
-		return false;
 	}
 }
