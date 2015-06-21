@@ -639,7 +639,7 @@ public class WirelessCommands implements CommandExecutor {
                 public void run() {
                     wipeDataConfirm = false;
                 }
-            }, 300L);
+            }, 20 * 15);
             return true;
         }
         wipeDataConfirm = false;

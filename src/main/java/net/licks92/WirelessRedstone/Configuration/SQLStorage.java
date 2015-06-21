@@ -202,7 +202,9 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 	@Override
 	public boolean wipeData() {
 		// Backup before wiping
-		backupData("db");
+		if(channelFolder.listFiles().length > 0)
+			backupData("db");
+
 		try {
 			// Get the names of all the tables
 			Statement statement = connection.createStatement();

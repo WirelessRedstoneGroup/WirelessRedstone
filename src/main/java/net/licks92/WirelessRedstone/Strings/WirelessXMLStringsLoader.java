@@ -252,6 +252,10 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                             this.playerCannotDestroyBlockAttachedToSign = PMElement
                                     .getElementsByTagName("playerCannotDestroyBlockAttachedToSign")
                                     .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("commandDoesNotExist").item(0) != null)
+                            this.commandDoesNotExist = PMElement
+                                    .getElementsByTagName("commandDoesNotExist")
+                                    .item(0).getTextContent();
                         break;
 
                     case "logmessages": // Load the LM strings

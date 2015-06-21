@@ -1,30 +1,7 @@
 package net.licks92.WirelessRedstone.Configuration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverClock;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverDelayer;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiverInverter;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -32,6 +9,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+
+import java.io.*;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class YamlStorage implements IWirelessStorageConfiguration {
     private final File channelFolder;
@@ -116,9 +99,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         } catch (FileNotFoundException e) {
             WirelessRedstone.getWRLogger().debug("File " + channelName + ".yml wasn't found in the channels folder, returning null.");
             return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
+        } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
 
@@ -141,9 +122,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             channelConfig.load(channelFile);
         } catch (FileNotFoundException e) {
             return;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
+        } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
 
@@ -321,11 +300,16 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
     public boolean wipeData() {
         //Backup the channels folder first.
-        backupData("yml");
+        if(channelFolder.listFiles().length > 0)
+            backupData("yml");
 
         //Then remove the channels and the files.
         for (File f : channelFolder.listFiles()) {
-            removeWirelessChannel(f.getName());
+            String name = f.getName();
+            int pos = name.lastIndexOf(".");
+            if (pos > 0) {
+                removeWirelessChannel(name.substring(0, pos));
+            }
         }
         return true;
     }
@@ -366,8 +350,6 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             fos.close();
 
             WirelessRedstone.getWRLogger().info("Channels saved in archive : " + zipName);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -383,11 +365,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             FileConfiguration channelConfig = new YamlConfiguration();
             try {
                 channelConfig.load(f);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InvalidConfigurationException e) {
+            } catch (InvalidConfigurationException | IOException e) {
                 e.printStackTrace();
             }
             String channelName;
@@ -501,10 +479,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 class YamlFilter implements FilenameFilter {
     @Override
     public boolean accept(final File file, final String name) {
-        if (name.contains(".yml"))
-            return true;
-        else
-            return false;
+        return name.contains(".yml");
     }
 
 }
