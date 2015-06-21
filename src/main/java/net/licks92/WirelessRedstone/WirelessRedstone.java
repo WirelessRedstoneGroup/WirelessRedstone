@@ -5,6 +5,7 @@ import net.gravitydevelopment.updater.Updater.UpdateResult;
 import net.gravitydevelopment.updater.Updater.UpdateType;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
@@ -229,6 +230,50 @@ public class WirelessRedstone extends JavaPlugin {
                     } else {
                         return 0;
                     }
+                }
+            });
+
+            final Graph receiverTypesProportion = metrics
+                    .createGraph("Proportion of the different types of receivers");
+
+            receiverTypesProportion.addPlotter(new Plotter("Default") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : config.getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.Default).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Plotter("Inverters") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : config.getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.Inverter).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Plotter("Delayers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : config.getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.Delayer).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Plotter("Clocks") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : config.getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.Clock).size();
+                    }
+                    return total;
                 }
             });
 
