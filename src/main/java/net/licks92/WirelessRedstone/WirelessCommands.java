@@ -213,7 +213,7 @@ public class WirelessCommands implements CommandExecutor {
             }, 20 * 15);
             return true;
         }
-        wipeDataConfirm = false;
+        convertDataConfirm = false;
 
         switch(WirelessRedstone.config.changeStorage(args[1])){
             case 0:
