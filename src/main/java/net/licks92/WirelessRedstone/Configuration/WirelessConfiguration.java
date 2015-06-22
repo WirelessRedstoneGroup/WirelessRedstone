@@ -160,9 +160,10 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 					WirelessRedstone.getInstance().clockTasks.remove(i);
 				}
 				remove.clear();
+				getConfig().set("UseSQL", true);
+				WirelessRedstone.getInstance().saveConfig();
 				backupData();
 				storage.close();
-				setConfigValue("UseSQL", true);
 				break;
 			}
 			case "yml":
@@ -180,9 +181,10 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 					WirelessRedstone.getInstance().clockTasks.remove(i);
 				}
 				remove.clear();
+				getConfig().set("UseSQL", false);
+				WirelessRedstone.getInstance().saveConfig();
 				backupData();
 				storage.close();
-				setConfigValue("UseSQL", false);
 				break;
 			}
 			default:
@@ -320,8 +322,6 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 			final WirelessChannel channel) {
 		storage.updateChannel(channelName, channel);
 	}
-
-	public void setConfigValue(String path, Object value) { getConfig().set(path, value); };
 
 	public String getLanguage() {
 		return getConfig().getString("Language", "en");
