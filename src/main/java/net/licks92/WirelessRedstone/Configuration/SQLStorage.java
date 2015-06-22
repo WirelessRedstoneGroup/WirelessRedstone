@@ -603,7 +603,6 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 		} finally {
 			WirelessRedstone.cache.update();
 		}
-		return;
 	}
 
 	@Override
@@ -903,7 +902,6 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 						&& (channel.getTransmitters().size() < 1)
 						&& (channel.getScreens().size() < 1)) {
 					remove.add(channel.getName());
-					continue;
 				}
 			}
 

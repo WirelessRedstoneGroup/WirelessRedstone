@@ -455,8 +455,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 						&& (channel.getTransmitters().size() < 1)
 						&& (channel.getScreens().size() < 1)) {
 					remove.add(channel.getName());
-					continue;
-				}
+                }
 			}
 
 			for (String channelRemove : remove) {

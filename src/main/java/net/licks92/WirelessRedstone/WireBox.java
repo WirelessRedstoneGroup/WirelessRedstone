@@ -147,10 +147,8 @@ public class WireBox {
     public boolean hasAccessToChannel(final Player player,
                                       final String channelname) {
         if (WirelessRedstone.config.getWirelessChannel(channelname) != null) {
-            if (this.plugin.permissions.isWirelessAdmin(player)) {
-                return true;
-            } else return WirelessRedstone.config.getWirelessChannel(channelname)
-                    .getOwners().contains(player.getName());
+            return this.plugin.permissions.isWirelessAdmin(player)
+                    || WirelessRedstone.config.getWirelessChannel(channelname).getOwners().contains(player.getName());
         }
         return true;
     }

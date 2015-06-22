@@ -256,6 +256,10 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                             this.commandDoesNotExist = PMElement
                                     .getElementsByTagName("commandDoesNotExist")
                                     .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("tooFewArguments").item(0) != null)
+                            this.tooFewArguments = PMElement
+                                    .getElementsByTagName("tooFewArguments")
+                                    .item(0).getTextContent();
                         break;
 
                     case "logmessages": // Load the LM strings
