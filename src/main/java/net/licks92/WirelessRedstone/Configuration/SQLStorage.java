@@ -86,7 +86,6 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 						.info("Done ! All the channels are now stored in the SQL Database.");
 			}
 		}
-
 		return true;
 	}
 

@@ -47,7 +47,6 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                 WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the Yaml Files.");
             }
         }
-
         return true;
     }
 

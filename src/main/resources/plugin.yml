@@ -114,6 +114,7 @@ permissions:
             wirelessredstone.admin.removeOwner: true
             wirelessredstone.admin.wipeData: true
             wirelessredstone.admin.backupdata: true
+            wirelessredstone.admin.convertdata: true
     wirelessredstone.create.transmitter:
         description: Allows you to create a transmitter
         default: op
@@ -170,4 +171,7 @@ permissions:
         default: op
     wirelessredstone.admin.backupdata:
         description: Allows you to backup the database.
+        default: op
+    wirelessredstone.admin.convertdata:
+        description: Allows you to convert the database.
         default: op

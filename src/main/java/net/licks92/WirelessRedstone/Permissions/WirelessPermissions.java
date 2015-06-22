@@ -1,7 +1,6 @@
 package net.licks92.WirelessRedstone.Permissions;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
@@ -23,6 +22,7 @@ public class WirelessPermissions {
     private final String canWipeData = "wirelessredstone.admin.wipedata";
     private final String canBackupData = "wirelessredstone.admin.backupdata";
     private final String canPurgeData = "wirelessredstone.admin.purgedata";
+    private final String canConvertData = "wirelessredstone.admin.convertdata";
     private final String canActivateChannel = "wirelessredstone.commands.activate";
     private final String canSeeVersion = "wirelessredstone.commands.version";
     private final String canTeleportToSign = "wirelessredstone.commands.tp";
@@ -111,6 +111,9 @@ public class WirelessPermissions {
 
     public boolean canWipeData(final Player player) {
         return permissionsHandler.hasPermission(player, canWipeData);
+    }
+    public boolean canConvertData(final Player player) {
+        return permissionsHandler.hasPermission(player, canConvertData);
     }
 
     public boolean canBackupData(final Player player) {

@@ -45,6 +45,10 @@ public class WirelessStrings {
     public String tooFewArguments;
     public String allTransmittersGone;
     public String playerCannotDestroyBlockAttachedToSign;
+    public String convertDone;
+    public String convertFailed;
+    public String convertSameType;
+    public String convertContinue;
 
     public String tellRawString;
 

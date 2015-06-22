@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone.Configuration;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -10,7 +11,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 public class WirelessConfiguration implements IWirelessStorageConfiguration {
 	private static final String CHANNEL_FOLDER = "/channels";
@@ -139,6 +142,61 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 		return storage.purgeData();
 	}
 
+	public Integer changeStorage(String type){
+		switch(type){
+			case "db":
+			case "sql":
+			case "database": {
+				if(getSQLUsage())
+					return 2;
+				ArrayList<Integer> remove = new ArrayList<Integer>();
+				for (Map.Entry<Integer, String> task : WirelessRedstone.getInstance().clockTasks
+						.entrySet()) {
+					Bukkit.getScheduler().cancelTask(task.getKey());
+					remove.add(task.getKey());
+					WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
+				}
+				for (Integer i : remove) {
+					WirelessRedstone.getInstance().clockTasks.remove(i);
+				}
+				remove.clear();
+				backupData();
+				storage.close();
+				setConfigValue("UseSQL", true);
+				break;
+			}
+			case "yml":
+			case "yaml": {
+				if(!getSQLUsage())
+					return 2;
+				ArrayList<Integer> remove = new ArrayList<Integer>();
+				for (Map.Entry<Integer, String> task : WirelessRedstone.getInstance().clockTasks
+						.entrySet()) {
+					Bukkit.getScheduler().cancelTask(task.getKey());
+					remove.add(task.getKey());
+					WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
+				}
+				for (Integer i : remove) {
+					WirelessRedstone.getInstance().clockTasks.remove(i);
+				}
+				remove.clear();
+				backupData();
+				storage.close();
+				setConfigValue("UseSQL", false);
+				break;
+			}
+			default:
+				return 0;
+		}
+		Bukkit.getScheduler().runTaskAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				initStorage();
+			}
+		});
+		return 1;
+	}
+
 	public void reloadConfig() {
 		plugin.reloadConfig();
 	}
@@ -262,6 +320,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 			final WirelessChannel channel) {
 		storage.updateChannel(channelName, channel);
 	}
+
+	public void setConfigValue(String path, Object value) { getConfig().set(path, value); };
 
 	public String getLanguage() {
 		return getConfig().getString("Language", "en");

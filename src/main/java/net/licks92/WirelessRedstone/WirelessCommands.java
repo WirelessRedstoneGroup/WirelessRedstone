@@ -20,7 +20,7 @@ import java.util.List;
 public class WirelessCommands implements CommandExecutor {
     private final WirelessRedstone plugin;
 
-    private boolean wipeDataConfirm = false;
+    private boolean wipeDataConfirm = false, convertDataConfirm = false;
 
     public WirelessCommands(final WirelessRedstone plugin) {
         this.plugin = plugin;
@@ -76,7 +76,7 @@ public class WirelessCommands implements CommandExecutor {
                 return performWRVersion(sender, args, player);
 
             case "wrtp":
-                return performWRTeleport(sender, args, player);
+                return performTeleport(sender, args, player);
         }
         return true;
     }
@@ -177,7 +177,7 @@ public class WirelessCommands implements CommandExecutor {
                 case "version":
                     return performWRVersion(sender, args, player);
                 case "tp":
-                    return performWRTeleport(sender, args, player);
+                    return performTeleport(sender, args, player);
                 default:
                     player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + WirelessRedstone.strings.commandDoesNotExist);
                     return true;
@@ -185,6 +185,51 @@ public class WirelessCommands implements CommandExecutor {
         } else {
             return performHelp(sender, r_args, player);
         }
+    }
+
+    private boolean performConvert(CommandSender sender, String[] args, Player player) {
+        if (!plugin.permissions.canConvertData(player)) {
+            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            return true;
+        }
+
+        if(args.length < 2){
+            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                    + WirelessRedstone.strings.tooFewArguments);
+            return true;
+        }
+
+        if (!convertDataConfirm) {
+            player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD
+                    + WirelessRedstone.strings.chatTag
+                    + WirelessRedstone.strings.convertContinue.replaceAll("%%STORAGETYPE", args[1]));
+            convertDataConfirm = true;
+            Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    convertDataConfirm = false;
+                }
+            }, 20 * 15);
+            return true;
+        }
+        wipeDataConfirm = false;
+
+        switch(WirelessRedstone.config.changeStorage(args[1])){
+            case 0:
+                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                        WirelessRedstone.strings.convertFailed);
+                break;
+            case 1:
+                player.sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag +
+                        WirelessRedstone.strings.convertDone);
+                break;
+            case 2:
+                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                        WirelessRedstone.strings.convertSameType);
+                break;
+        }
+        return true;
     }
 
     private boolean performLockChannel(final CommandSender sender,
@@ -345,6 +390,8 @@ public class WirelessCommands implements CommandExecutor {
                 return performBackupData(sender, args, player);
             } else if (subCommand.equalsIgnoreCase("purge")) {
                 return performPurgeData(sender, args, player);
+            } else if (subCommand.equalsIgnoreCase("convert")) {
+                return performConvert(sender, args, player);
             } else {
                 player.sendMessage(ChatColor.RED
                         + WirelessRedstone.strings.chatTag
@@ -1010,7 +1057,7 @@ public class WirelessCommands implements CommandExecutor {
         return true;
     }
 
-    private boolean performWRTeleport(final CommandSender sender,
+    private boolean performTeleport(final CommandSender sender,
                                       final String[] args, final Player player) {
         if (!(args.length > 2)) {
             sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
@@ -1111,7 +1158,7 @@ public class WirelessCommands implements CommandExecutor {
 		 */
 
         int itemsonlist = list.size();
-        int maxitems = 10;
+        int maxitems = 8;
         int currentpage = cpage;
         int totalpages = 1;
         if (currentpage < 1) {
@@ -1155,7 +1202,7 @@ public class WirelessCommands implements CommandExecutor {
 		 */
 
         int itemsonlist = list.size();
-        int maxitems = 10;
+        int maxitems = 8;
         int currentpage = cpage;
         int totalpages = 1;
         if (currentpage < 1) {

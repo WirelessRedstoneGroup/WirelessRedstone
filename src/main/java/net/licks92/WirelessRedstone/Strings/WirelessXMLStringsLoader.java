@@ -260,6 +260,22 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                             this.tooFewArguments = PMElement
                                     .getElementsByTagName("tooFewArguments")
                                     .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("convertDone").item(0) != null)
+                            this.convertDone = PMElement
+                                    .getElementsByTagName("convertDone")
+                                    .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("convertFailed").item(0) != null)
+                            this.convertFailed = PMElement
+                                    .getElementsByTagName("convertFailed")
+                                    .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("convertSameType").item(0) != null)
+                            this.convertSameType = PMElement
+                                    .getElementsByTagName("convertSameType")
+                                    .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("convertContinue").item(0) != null)
+                            this.convertContinue = PMElement
+                                    .getElementsByTagName("convertContinue")
+                                    .item(0).getTextContent();
                         break;
 
                     case "logmessages": // Load the LM strings
