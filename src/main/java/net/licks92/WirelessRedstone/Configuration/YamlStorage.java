@@ -360,7 +360,6 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public Collection<WirelessChannel> getAllChannels() {
         List<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 
-
         for (File f : channelFolder.listFiles(new YamlFilter())) {
             FileConfiguration channelConfig = new YamlConfiguration();
             try {
