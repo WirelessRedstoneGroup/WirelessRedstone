@@ -809,6 +809,7 @@ public class WirelessCommands implements CommandExecutor {
 
         switch (category) {
             case "receivers":
+            case "receiver":
             case "r": {
                 // Let's show informations about receivers.
                 int receiverCounter = -1;
@@ -849,6 +850,7 @@ public class WirelessCommands implements CommandExecutor {
                 break;
             }
             case "transmitters":
+            case "transmitter":
             case "t": {
                 // Let's show informations about transmitters.
                 int transmitterCounter = -1;
@@ -883,6 +885,7 @@ public class WirelessCommands implements CommandExecutor {
                 break;
             }
             case "screens":
+            case "screen":
             case "s": {
                 // Let's show infos about screens.
                 int screenCounter = -1;

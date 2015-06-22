@@ -6,7 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 import java.util.Map.Entry;
@@ -269,8 +272,6 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 
 			WirelessRedstone.getWRLogger().info(
 					"Channels saved in archive : " + zipName);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
