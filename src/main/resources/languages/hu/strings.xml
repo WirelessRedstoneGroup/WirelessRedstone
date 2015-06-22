@@ -13,12 +13,12 @@
 		<channelRemovedCauseNoSign>Csatorna eltávolítva, nincs több tábla a világokban.</channelRemovedCauseNoSign>
 		<channelUnlocked>Csatorna zárolás feloldva!</channelUnlocked>
 		<commandDoesNotExist>Ilyen parancs nem létezik!</commandDoesNotExist>
-		<commandForNextPage> Ird be: /wr list <oldalszám>  a következő oldalért!</commandForNextPage>
+		<commandForNextPage> Ird be: /wr list [oldalszám]  a következő oldalért!</commandForNextPage>
 		<customizedLanguageSuccessfullyLoaded>Sikeresen betöltötted az általad készített nyelvet!</customizedLanguageSuccessfullyLoaded>
 		<DBAboutToBeDeleted>Törölni készülöd az egész adatbázist.Egy visszaállítási pont készül mielőtt ez megtörténik.Ha biztosan ki akarod törölni írd be újra a parancsot 15 másodpercen belül!</DBAboutToBeDeleted>
 		<DBDeleted>Adatbázis sikeresen törölve!</DBDeleted>
 		<DBNotDeleted>Az adatbázis nincs törölve.</DBNotDeleted>
-		<forMoreInfosPerformWRInfo>ha több információt akarsz látni egy csatornáról írd be: /wr info <csatorna neve></forMoreInfosPerformWRInfo>
+		<forMoreInfosPerformWRInfo>ha több információt akarsz látni egy csatornáról írd be: /wr info [csatorna neve]</forMoreInfosPerformWRInfo>
 		<listEmpty>A lista üres!</listEmpty>
 		<ownersOfTheChannelAre>A csatorna tulajdonosa(i):</ownersOfTheChannelAre>
 		<pageEmpty>Az oldal üres!</pageEmpty>

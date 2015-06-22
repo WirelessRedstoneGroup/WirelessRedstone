@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WirelessCommands implements CommandExecutor {
@@ -136,8 +137,7 @@ public class WirelessCommands implements CommandExecutor {
         if (r_args.length >= 1) {
             String commandName = r_args[0];
             List<String> temp = new ArrayList<>();
-            for (int i = 1; i < r_args.length; i++)
-                temp.add(r_args[i]);
+            temp.addAll(Arrays.asList(r_args).subList(1, r_args.length));
             String[] args = temp.toArray(new String[temp.size()]);
             switch (commandName) {
                 case "help":
@@ -481,58 +481,94 @@ public class WirelessCommands implements CommandExecutor {
                             .getOppositeFace());
                     sign.setData(dataSign);
                     sign.update(true);
-                    if (type.equals("inverter") || type.equals("inv")) {
-                        sign.setLine(
-                                2,
-                                WirelessRedstone.strings.tagsReceiverInverterType
-                                        .get(0));
-                        sign.update();
-                        if (!WirelessRedstone.WireBox.addWirelessReceiver(
-                                channelName, player.getLocation().getBlock(),
-                                player, Type.Inverter)) {
-                            sign.getBlock().breakNaturally();
-                        }
-                    } else if (type.equals("delayer") || type.equals("delay")
-                            || type.equals("del")) {
-                        if (args.length >= 3) {
-                            int delay;
-                            try {
-                                delay = Integer.parseInt(args[2]);
-                            } catch (NumberFormatException ex) {
-                                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + "The delay must be a number!");
-                                delay = 1000;
-                            }
+                    switch (type) {
+                        case "inverter":
+                        case "inv": {
                             sign.setLine(
                                     2,
-                                    WirelessRedstone.strings.tagsReceiverDelayerType
+                                    WirelessRedstone.strings.tagsReceiverInverterType
                                             .get(0));
-                            sign.setLine(3, Integer.toString(delay));
                             sign.update();
                             if (!WirelessRedstone.WireBox.addWirelessReceiver(
-                                    channelName, player.getLocation()
-                                            .getBlock(), player, Type.Delayer))
-                                ;
-                            {
+                                    channelName, player.getLocation().getBlock(),
+                                    player, Type.Inverter)) {
                                 sign.getBlock().breakNaturally();
                             }
+                            break;
                         }
-                        if (args.length < 3) {
-                            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + "Delayer created with the default value of 1000 ms!");
-                            sign.setLine(3, Integer.toString(1000));
+                        case "delayer":
+                        case "delay":
+                        case "del": {
+                            if (args.length >= 3) {
+                                int delay;
+                                try {
+                                    delay = Integer.parseInt(args[2]);
+                                } catch (NumberFormatException ex) {
+                                    player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + "The delay must be a number!");
+                                    delay = 1000;
+                                }
+                                sign.setLine(
+                                        2,
+                                        WirelessRedstone.strings.tagsReceiverDelayerType
+                                                .get(0));
+                                sign.setLine(3, Integer.toString(delay));
+                                sign.update();
+                                if (!WirelessRedstone.WireBox.addWirelessReceiver(
+                                        channelName, player.getLocation()
+                                                .getBlock(), player, Type.Delayer)) {
+                                    sign.getBlock().breakNaturally();
+                                }
+                            }
+                            if (args.length < 3) {
+                                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + "Delayer created with the default value of 1000 ms!");
+                                sign.setLine(3, Integer.toString(1000));
+                                if (!WirelessRedstone.WireBox.addWirelessReceiver(
+                                        channelName, player.getLocation()
+                                                .getBlock(), player, Type.Delayer)) {
+                                    sign.getBlock().breakNaturally();
+                                }
+                            }
+                            break;
+                        }
+                        case "clock":
+                            if (args.length >= 3) {
+                                int delay;
+                                try {
+                                    delay = Integer.parseInt(args[2]);
+                                } catch (NumberFormatException ex) {
+                                    player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + "The delay must be a number!");
+                                    sign.getBlock().breakNaturally();
+                                    break;
+                                }
+                                sign.setLine(
+                                        2,
+                                        WirelessRedstone.strings.tagsReceiverClockType
+                                                .get(0));
+                                sign.setLine(3, Integer.toString(delay));
+                                sign.update();
+                                if (!WirelessRedstone.WireBox.addWirelessReceiver(
+                                        channelName, player.getLocation()
+                                                .getBlock(), player, Type.Delayer)) {
+                                    sign.getBlock().breakNaturally();
+                                }
+                            }
+                            if (args.length < 3) {
+                                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + "Delayer created with the default value of 1000 ms!");
+                                sign.setLine(3, Integer.toString(1000));
+                                if (!WirelessRedstone.WireBox.addWirelessReceiver(
+                                        channelName, player.getLocation()
+                                                .getBlock(), player, Type.Clock)) {
+                                    sign.getBlock().breakNaturally();
+                                }
+                            }
+                            break;
+                        default:
                             if (!WirelessRedstone.WireBox.addWirelessReceiver(
-                                    channelName, player.getLocation()
-                                            .getBlock(), player, Type.Delayer))
-                                ;
-                            {
+                                    channelName, player.getLocation().getBlock(),
+                                    player, Type.Default)) {
                                 sign.getBlock().breakNaturally();
                             }
-                        }
-                    } else {
-                        if (!WirelessRedstone.WireBox.addWirelessReceiver(
-                                channelName, player.getLocation().getBlock(),
-                                player, Type.Default)) {
-                            sign.getBlock().breakNaturally();
-                        }
+                            break;
                     }
                     return true;
                 }

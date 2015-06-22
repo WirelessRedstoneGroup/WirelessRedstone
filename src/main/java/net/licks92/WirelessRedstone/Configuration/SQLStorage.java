@@ -113,12 +113,8 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 		 * caracter at the beginning of the channel name, in order to not cause
 		 * an exception with the database.
 		 */
-		try {
-			Integer.parseInt(normalName);
-			normalName = "num_" + normalName;
-		} catch (NumberFormatException ex) {
+		normalName = "num_" + normalName;
 
-		}
 		for (char character : WirelessRedstone.config.badCharacters) {
 			if (normalName.contains(String.valueOf(character))) {
 				String ascii = "" + (int) character;
@@ -641,7 +637,7 @@ public class SQLStorage implements IWirelessStorageConfiguration {
 			return channels;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (NullPointerException ex) {
+		} catch (NullPointerException ignored) {
 
 		}
 		return null; // Channel not found

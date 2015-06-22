@@ -26,15 +26,15 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 
     }
 
-    public WirelessScreen(Map<String, Object> map) {
-        owner = (String) map.get("owner");
-        world = (String) map.get("world");
-        direction = (Integer) map.get("direction");
-        iswallsign = (Boolean) map.get("isWallSign");
-        x = (Integer) map.get("x");
-        y = (Integer) map.get("y");
-        z = (Integer) map.get("z");
-    }
+//    public WirelessScreen(Map<String, Object> map) {
+//        owner = (String) map.get("owner");
+//        world = (String) map.get("world");
+//        direction = (Integer) map.get("direction");
+//        iswallsign = (Boolean) map.get("isWallSign");
+//        x = (Integer) map.get("x");
+//        y = (Integer) map.get("y");
+//        z = (Integer) map.get("z");
+//    }
 
     @Override
     public Map<String, Object> serialize() {
@@ -126,8 +126,7 @@ public class WirelessScreen implements IWirelessPoint, ConfigurationSerializable
 
     @Override
     public Location getLocation() {
-        Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-        return loc;
+        return new Location(Bukkit.getWorld(world), x, y, z);
     }
 
     public void turnOn() {

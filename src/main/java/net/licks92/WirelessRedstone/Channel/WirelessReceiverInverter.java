@@ -1,10 +1,8 @@
 package net.licks92.WirelessRedstone.Channel;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.Map;

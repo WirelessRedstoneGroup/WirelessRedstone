@@ -227,7 +227,7 @@ public class WirelessBlockListener implements Listener {
         // Lets check if the sign is a Transmitter and if the channel name not
         // is empty
         if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
-                || signObject.getLine(1) == null || signObject.getLine(1) == "") {
+                || signObject.getLine(1) == null || signObject.getLine(1).equals("")) {
             return;
         } else {
             channel = WirelessRedstone.config.getWirelessChannel(signObject

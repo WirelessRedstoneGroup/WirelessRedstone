@@ -149,12 +149,8 @@ public class WireBox {
         if (WirelessRedstone.config.getWirelessChannel(channelname) != null) {
             if (this.plugin.permissions.isWirelessAdmin(player)) {
                 return true;
-            } else if (WirelessRedstone.config.getWirelessChannel(channelname)
-                    .getOwners().contains(player.getName())) {
-                return true;
-            } else {
-                return false;
-            }
+            } else return WirelessRedstone.config.getWirelessChannel(channelname)
+                    .getOwners().contains(player.getName());
         }
         return true;
     }
@@ -490,7 +486,7 @@ public class WireBox {
         BlockFace face = sign.getAttachedFace();
         Block tempBlock = block.getRelative(face);
 
-        if (tempBlock.getType() == Material.AIR
+        return !(tempBlock.getType() == Material.AIR
                 || tempBlock.getType() == Material.PISTON_BASE
                 || tempBlock.getType() == Material.PISTON_EXTENSION
                 || tempBlock.getType() == Material.PISTON_MOVING_PIECE
@@ -498,11 +494,7 @@ public class WireBox {
                 || tempBlock.getType() == Material.GLOWSTONE
                 || tempBlock.getType() == Material.REDSTONE_LAMP_ON
                 || tempBlock.getType() == Material.REDSTONE_LAMP_OFF
-                || tempBlock.getType() == Material.LEAVES) {
-            return false;
-        } else {
-            return true;
-        }
+                || tempBlock.getType() == Material.LEAVES);
     }
 
     public boolean isValidLocation(final Block block) {
@@ -511,7 +503,7 @@ public class WireBox {
 
         Block tempBlock = block.getRelative(BlockFace.DOWN);
 
-        if (tempBlock.getType() == Material.AIR
+        return !(tempBlock.getType() == Material.AIR
                 || tempBlock.getType() == Material.PISTON_BASE
                 || tempBlock.getType() == Material.PISTON_EXTENSION
                 || tempBlock.getType() == Material.PISTON_MOVING_PIECE
@@ -519,10 +511,7 @@ public class WireBox {
                 || tempBlock.getType() == Material.GLOWSTONE
                 || tempBlock.getType() == Material.REDSTONE_LAMP_ON
                 || tempBlock.getType() == Material.REDSTONE_LAMP_OFF
-                || tempBlock.getType() == Material.LEAVES) {
-            return false;
-        } else
-            return true;
+                || tempBlock.getType() == Material.LEAVES);
     }
 
     public ArrayList<Location> getReceiverLocations(

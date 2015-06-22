@@ -1,18 +1,7 @@
 package net.licks92.WirelessRedstone.Channel;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.avaje.ebean.validation.NotNull;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -22,7 +11,11 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.avaje.ebean.validation.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity()
 @Table(name = "wirelesschannels")
@@ -56,7 +49,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         this.setScreens((List<WirelessScreen>) map.get("screens"));
         try {
             this.setLocked((Boolean) map.get("locked"));
-        } catch (NullPointerException ex) {
+        } catch (NullPointerException ignored) {
 
         }
     }

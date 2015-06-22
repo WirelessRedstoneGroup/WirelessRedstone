@@ -57,8 +57,8 @@ public class WirelessPlayerListener implements Listener {
 
         Sign sign = (Sign) event.getClickedBlock().getState();
 
-        if (sign.getLine(0) == null || sign.getLine(0) == ""
-                || sign.getLine(1) == null || sign.getLine(1) == "")
+        if (sign.getLine(0) == null || sign.getLine(0).equals("")
+                || sign.getLine(1) == null || sign.getLine(1).equals(""))
             return;
 
         String type = "";

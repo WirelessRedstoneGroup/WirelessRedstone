@@ -1,13 +1,12 @@
 package net.licks92.WirelessRedstone.Listeners;
 
-import java.util.List;
-
-import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
+
+import java.util.List;
 
 public class WirelessWorldListener implements Listener {
     private final WirelessRedstone plugin;
@@ -43,8 +42,7 @@ public class WirelessWorldListener implements Listener {
                         event.setCancelled(true);
                         return;
                     }
-                } catch (Exception e) {
-                    return;
+                } catch (Exception ignored) {
                 }
             }
         }

@@ -65,7 +65,7 @@ public class WirelessGlobalCache {
                             for (WirelessReceiver point : channel.getReceivers()) {
                                 returnlist.add(point.getLocation());
                             }
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
 
                         }
                     }
@@ -79,7 +79,7 @@ public class WirelessGlobalCache {
                     for (WirelessReceiver point : channel.getReceivers()) {
                         returnlist.add(point.getLocation());
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }
@@ -113,7 +113,7 @@ public class WirelessGlobalCache {
                                 returnlist.add(point);
                                 returnlistLocations.add(point.getLocation());
                             }
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
 
                         }
                     }
@@ -140,7 +140,7 @@ public class WirelessGlobalCache {
                         returnlist.add(point);
                         returnlistLocations.add(point.getLocation());
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }

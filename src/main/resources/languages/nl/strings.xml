@@ -39,7 +39,7 @@
 		<thisChannelContains>Dit kanaal bevat</thisChannelContains>
 		<tooFewArguments>Te weinig argumenten!</tooFewArguments>
 		<allTransmittersGone>Alle zenders zijn verwijderd, alle ontvangers uitschakelen.</allTransmittersGone>
-		<playerCannotDestroyBlockAttachedToSign>Je kan geen blok slopen dat aan een Wireless Redstone boord vast zit!</playerCannotDestroyBlockAttachedToSign>
+		<playerCannotDestroyBlockAttachedToSign>Je kan geen blok slopen dat aan een Wireless Redstone bordje vast zit!</playerCannotDestroyBlockAttachedToSign>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Wireless Redstone is geüpdatet! Ik raad je sterk aan om deze te downloaden op http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

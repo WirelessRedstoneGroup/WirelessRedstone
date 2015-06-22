@@ -40,10 +40,7 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     public boolean isActive() {
         Location loc = new Location(Bukkit.getWorld(getWorld()), getX(), getY(), getZ());
         Block block = loc.getBlock();
-        if (block.isBlockIndirectlyPowered() || block.isBlockPowered())
-            return true;
-        else
-            return false;
+        return block.isBlockIndirectlyPowered() || block.isBlockPowered();
     }
 
     @Override
@@ -146,7 +143,6 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
 
     @Override
     public Location getLocation() {
-        Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-        return loc;
+        return new Location(Bukkit.getWorld(world), x, y, z);
     }
 }

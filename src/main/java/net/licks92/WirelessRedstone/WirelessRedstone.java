@@ -75,7 +75,7 @@ public class WirelessRedstone extends JavaPlugin {
 
             metrics = null;
             instance = null;
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -282,7 +282,7 @@ public class WirelessRedstone extends JavaPlugin {
             permissionsGraph.addPlotter(new Plotter("Vault") {
                 @Override
                 public int getValue() {
-                    if (permissions.permPlugin == "Vault")
+                    if (permissions.permPlugin.equalsIgnoreCase("Vault"))
                         return 1;
                     else
                         return 0;
@@ -292,7 +292,7 @@ public class WirelessRedstone extends JavaPlugin {
             permissionsGraph.addPlotter(new Plotter("PermissionsEx") {
                 @Override
                 public int getValue() {
-                    if (permissions.permPlugin == "PermissionsEx")
+                    if (permissions.permPlugin.equalsIgnoreCase("PermissionsEx"))
                         return 1;
                     else
                         return 0;
@@ -302,7 +302,7 @@ public class WirelessRedstone extends JavaPlugin {
             permissionsGraph.addPlotter(new Plotter("PermissionsBukkit") {
                 @Override
                 public int getValue() {
-                    if (permissions.permPlugin == "PermissionsBukkit")
+                    if (permissions.permPlugin.equalsIgnoreCase("PermissionsBukkit"))
                         return 1;
                     else
                         return 0;
@@ -312,7 +312,7 @@ public class WirelessRedstone extends JavaPlugin {
             permissionsGraph.addPlotter(new Plotter("bPermissions") {
                 @Override
                 public int getValue() {
-                    if (permissions.permPlugin == "bPermissions")
+                    if (permissions.permPlugin.equalsIgnoreCase("bPermissions"))
                         return 1;
                     else
                         return 0;
@@ -322,7 +322,7 @@ public class WirelessRedstone extends JavaPlugin {
             permissionsGraph.addPlotter(new Plotter("GroupManager") {
                 @Override
                 public int getValue() {
-                    if (permissions.permPlugin == "GroupManager")
+                    if (permissions.permPlugin.equalsIgnoreCase("GroupManager"))
                         return 1;
                     else
                         return 0;
@@ -333,7 +333,7 @@ public class WirelessRedstone extends JavaPlugin {
             permissionsGraph.addPlotter(new Plotter("Bukkit OP Permissions") {
                 @Override
                 public int getValue() {
-                    if (permissions.permPlugin == "Bukkit OP Permissions")
+                    if (permissions.permPlugin.equalsIgnoreCase("Bukkit OP Permissions"))
                         return 1;
                     else
                         return 0;

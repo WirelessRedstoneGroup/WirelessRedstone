@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Permissions;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -19,11 +18,7 @@ public class Vault implements IPermissions {
 
     @Override
     public boolean hasPermission(Player base, String node) {
-        if (perms.has(base, node)) {
-            return true;
-        } else {
-            return false;
-        }
+        return perms.has(base, node);
     }
 
     private boolean setupPermissions() {
