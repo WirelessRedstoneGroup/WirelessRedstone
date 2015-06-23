@@ -8,9 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -31,20 +29,57 @@ public class WirelessCommands implements CommandExecutor {
                              final String commandLabel, final String[] args) {
         String commandName = command.getName().toLowerCase();
 
+        //Commands for players, console, commandblocks
+
+        switch (commandName) {
+            case "wirelessredstone":
+                return performWR(sender, args);
+
+            case "wrlock":
+                return performLockChannel(sender, args);
+
+            case "wractivate":
+                return performActivateChannel(sender, args);
+        }
+
+        //Commands allowed for players and console
+
+        if(!(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
+            WirelessRedstone.getWRLogger().info("A command block tried to use a command he is not allowed to. " +
+                    "Commands blocks are only allowed to use /wrlock and /wractivate");
+            return true;
+        }
+
+        switch (commandName) {
+            case "wrhelp":
+                return performHelp(sender, args);
+
+            case "wri":
+                return performShowInfo(sender, args);
+
+            case "wra":
+                return performChannelAdmin(sender, args);
+
+            case "wrremove":
+                return performRemoveChannel(sender, args);
+
+            case "wrlist":
+                return performWRlist(sender, args);
+
+            case "wrversion":
+                return performWRVersion(sender, args);
+        }
+
+        //Commands for players only
+
         if (!(sender instanceof Player)) {
-            WirelessRedstone.getWRLogger().info(
-                    "Only in-game players can use this command.");
+            sender.sendMessage("Only in-game players can use this command.");
             return true;
         }
 
         Player player = (Player) sender;
+
         switch (commandName) {
-            case "wirelessredstone":
-                return performWR(sender, args, player);
-
-            case "wrhelp":
-                return performHelp(sender, args, player);
-
             case "wrt":
                 return performCreateTransmitter(sender, args, player);
 
@@ -53,27 +88,6 @@ public class WirelessCommands implements CommandExecutor {
 
             case "wrs":
                 return performCreateScreen(sender, args, player);
-
-            case "wri":
-                return performShowInfo(sender, args, player);
-
-            case "wra":
-                return performChannelAdmin(sender, args, player);
-
-            case "wrremove":
-                return performRemoveChannel(sender, args, player);
-
-            case "wrlist":
-                return performWRlist(sender, args, player);
-
-            case "wrlock":
-                return performLockChannel(sender, args, player);
-
-            case "wractivate":
-                return performActivateChannel(sender, args, player);
-
-            case "wrversion":
-                return performWRVersion(sender, args, player);
 
             case "wrtp":
                 return performTeleport(sender, args, player);
@@ -132,58 +146,86 @@ public class WirelessCommands implements CommandExecutor {
     }
 
     private boolean performWR(final CommandSender sender,
-                              final String[] r_args, final Player player) {
+                              final String[] r_args) {
         // If a command is sent after the /wr, perform it. Else, perform help.
         if (r_args.length >= 1) {
             String commandName = r_args[0];
             List<String> temp = new ArrayList<>();
             temp.addAll(Arrays.asList(r_args).subList(1, r_args.length));
             String[] args = temp.toArray(new String[temp.size()]);
+
+            //Commands for console, players, commandblocks
+
             switch (commandName) {
-                case "help":
-                    return performHelp(sender, args, player);
-                case "transmitter":
-                case "t": {
-                    return performCreateTransmitter(sender, args, player);
-                }
-                case "receiver":
-                case "r": {
-                    return performCreateReceiver(sender, args, player);
-                }
-                case "screen":
-                case "s": {
-                    return performCreateScreen(sender, args, player);
-                }
-                case "admin":
-                case "a": {
-                    return performChannelAdmin(sender, args, player);
-                }
-                case "remove":
-                case "delete": {
-                    return performRemoveChannel(sender, args, player);
-                }
-                case "list":
-                    return performWRlist(sender, args, player);
-                case "info":
-                    return performShowInfo(sender, args, player);
                 case "lock":
                 case "unlock": {
-                    return performLockChannel(sender, args, player);
+                    return performLockChannel(sender, args);
                 }
                 case "activate":
                 case "toggle": {
-                    return performActivateChannel(sender, args, player);
+                    return performActivateChannel(sender, args);
                 }
+            }
+
+            //Commands for console and players only
+
+            if(!(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
+                WirelessRedstone.getWRLogger().info("A command block tried to use a command he is not allowed to. " +
+                        "Commands blocks are only allowed to use /wrlock and /wractivate");
+                return true;
+            }
+
+            switch (commandName) {
+                case "help":
+                    return performHelp(sender, args);
+                case "admin":
+                case "a": {
+                    return performChannelAdmin(sender, args);
+                }
+                case "remove":
+                case "delete": {
+                    return performRemoveChannel(sender, args);
+                }
+                case "list":
+                    return performWRlist(sender, args);
+                case "info":
+                    return performShowInfo(sender, args);
                 case "version":
-                    return performWRVersion(sender, args, player);
+                    return performWRVersion(sender, args);
+            }
+
+            //Commands for players only
+
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("Only in-game players can use this command.");
+                return true;
+            }
+
+            Player player = (Player) sender;
+
+            switch (commandName) {
+                case "transmitter":
+                case "t": {
+                    return performCreateTransmitter(player, args);
+                }
+                case "receiver":
+                case "r": {
+                    return performCreateReceiver(player, args);
+                }
+                case "screen":
+                case "s": {
+                    return performCreateScreen(player, args);
+                }
                 case "tp":
-                    return performTeleport(sender, args, player);
+                    return performTeleport(player, args);
                 default:
-                    player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + WirelessRedstone.strings.commandDoesNotExist);
+                    sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + WirelessRedstone.strings.commandDoesNotExist);
                     return true;
             }
+        } else if (!(sender instanceof BlockCommandSender)) {
+            return performHelp(sender, r_args);
         } else {
-            return performHelp(sender, r_args, player);
+            return true;
         }
     }
 
@@ -233,13 +275,13 @@ public class WirelessCommands implements CommandExecutor {
     }
 
     private boolean performLockChannel(final CommandSender sender,
-                                       final String[] args, final Player player) {
+                                       final String[] args) {
         if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
                     + WirelessRedstone.strings.tooFewArguments);
         }
-        if (!plugin.permissions.canLockChannel(player)) {
-            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+        if ((sender instanceof Player) ? (!plugin.permissions.canLockChannel((Player)sender)) : false) {
+            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
                     + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
@@ -247,7 +289,7 @@ public class WirelessCommands implements CommandExecutor {
             WirelessChannel channel = WirelessRedstone.config
                     .getWirelessChannel(args[0]);
             if (channel == null) {
-                player.sendMessage(ChatColor.RED
+                sender.sendMessage(ChatColor.RED
                         + WirelessRedstone.strings.chatTag
                         + WirelessRedstone.strings.channelDoesNotExist);
                 return true;
@@ -255,14 +297,14 @@ public class WirelessCommands implements CommandExecutor {
             if (channel.isLocked()) {
                 channel.setLocked(false);
                 WirelessRedstone.config.updateChannel(args[0], channel);
-                player.sendMessage(ChatColor.GREEN
+                sender.sendMessage(ChatColor.GREEN
                         + WirelessRedstone.strings.chatTag
                         + WirelessRedstone.strings.channelUnlocked);
                 return true;
             } else {
                 channel.setLocked(true);
                 WirelessRedstone.config.updateChannel(args[0], channel);
-                player.sendMessage(ChatColor.GREEN
+                sender.sendMessage(ChatColor.GREEN
                         + WirelessRedstone.strings.chatTag
                         + WirelessRedstone.strings.channelLocked);
                 return true;
