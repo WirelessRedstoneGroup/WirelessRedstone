@@ -90,10 +90,11 @@ public class WirelessBlockListener implements Listener {
 
                             if (WirelessRedstone.WireBox.isReceiver(event
                                     .getLine(0))) {
+
                                 if (WirelessRedstone.WireBox
                                         .isReceiverInverter(event.getLine(2))) {
                                     if (!WirelessRedstone.WireBox
-                                            .addWirelessReceiver(cname,
+                                            .addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
                                                     event.getBlock(),
                                                     event.getPlayer(),
                                                     Type.Inverter)) {
@@ -103,7 +104,7 @@ public class WirelessBlockListener implements Listener {
                                 } else if (WirelessRedstone.WireBox
                                         .isReceiverDelayer(event.getLine(2))) {
                                     if (!WirelessRedstone.WireBox
-                                            .addWirelessReceiver(cname,
+                                            .addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
                                                     event.getBlock(),
                                                     event.getPlayer(),
                                                     Type.Delayer)) {
@@ -113,7 +114,7 @@ public class WirelessBlockListener implements Listener {
                                 } else if (WirelessRedstone.WireBox
                                         .isReceiverClock(event.getLine(2))) {
                                     if (!WirelessRedstone.WireBox
-                                            .addWirelessReceiver(cname,
+                                            .addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
                                                     event.getBlock(),
                                                     event.getPlayer(),
                                                     Type.Clock)) {
@@ -123,7 +124,7 @@ public class WirelessBlockListener implements Listener {
                                 } else if (WirelessRedstone.WireBox
                                         .isReceiverDefault(event.getLine(2))) {
                                     if (!WirelessRedstone.WireBox
-                                            .addWirelessReceiver(cname,
+                                            .addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
                                                     event.getBlock(),
                                                     event.getPlayer(),
                                                     Type.Default)) {
@@ -132,7 +133,7 @@ public class WirelessBlockListener implements Listener {
                                     }
                                 } else {
                                     if (!WirelessRedstone.WireBox
-                                            .addWirelessReceiver(cname,
+                                            .addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
                                                     event.getBlock(),
                                                     event.getPlayer(),
                                                     Type.Default)) {
@@ -140,23 +141,26 @@ public class WirelessBlockListener implements Listener {
                                         event.getBlock().breakNaturally();
                                     }
                                 }
+
                             } else if (WirelessRedstone.WireBox
                                     .isTransmitter(event.getLine(0))) {
                                 if (!WirelessRedstone.WireBox
-                                        .addWirelessTransmitter(cname,
+                                        .addWirelessTransmitter(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
                                                 event.getBlock(),
                                                 event.getPlayer())) {
                                     event.setCancelled(true);
                                     event.getBlock().breakNaturally();
                                 }
+
                             } else if (WirelessRedstone.WireBox.isScreen(event
                                     .getLine(0))) {
                                 if (!WirelessRedstone.WireBox
-                                        .addWirelessScreen(cname,
+                                        .addWirelessScreen(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
                                                 event.getBlock(),
                                                 event.getPlayer())) {
                                     event.setCancelled(true);
                                     event.getBlock().breakNaturally();
+
                                 }
                             }
                         }
@@ -173,7 +177,7 @@ public class WirelessBlockListener implements Listener {
 
     @EventHandler
     public void onBlockRedstoneChange(final BlockRedstoneEvent event) {
-        if(WirelessRedstone.getBukkitVersion().contains("v1_8")) {
+        if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
             if (event.getBlock().getType() == Material.LEVER) {
                 Lever l = (Lever) event.getBlock().getState().getData();
                 Bukkit.getServer()
@@ -477,7 +481,7 @@ public class WirelessBlockListener implements Listener {
                         }
                     } else if (event.getBlock().getRelative(blockFace).getType() == Material.REDSTONE_TORCH_ON
                             || event.getBlock().getRelative(blockFace).getType() == Material.REDSTONE_TORCH_OFF) {
-                        if(getRedstoneTorchDirection(event.getBlock().getRelative(blockFace)) == null)
+                        if (getRedstoneTorchDirection(event.getBlock().getRelative(blockFace)) == null)
                             continue;
 
                         Location checkLoc = event.getBlock().getRelative(blockFace)
@@ -527,7 +531,7 @@ public class WirelessBlockListener implements Listener {
 
     private void cancelEvent(final BlockBreakEvent event) {
         /*
-		 * Methods cancelEvent and sendBlockBreakParticles, taken from
+         * Methods cancelEvent and sendBlockBreakParticles, taken from
 		 * http://www
 		 * .bukkit.fr/index.php?threads/enlever-le-drop-dun-block.850/page
 		 * -2#post-11582 All credits to richie3366.
@@ -568,7 +572,7 @@ public class WirelessBlockListener implements Listener {
         }
     }
 
-    private BlockFace getRedstoneTorchDirection(Block b){
+    private BlockFace getRedstoneTorchDirection(Block b) {
         if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
             switch (b.getData()) {
                 case (byte) 1:
@@ -596,5 +600,23 @@ public class WirelessBlockListener implements Listener {
                     return null;
             }
         }
+    }
+
+    private String autoAssign(Player p, Block b, String line) {
+        String name = line;
+        if (line.equalsIgnoreCase("[auto]")) {
+            for (int i = 0; i < Integer.MAX_VALUE; i++) {
+                if (WirelessRedstone.config.getWirelessChannel("ch-" + i) == null) {
+                    Sign sign = (Sign) b.getState();
+                    sign.setLine(1, "ch-" + i);
+                    sign.update(true);
+                    p.sendMessage(ChatColor.GRAY + WirelessRedstone.strings.chatTag
+                            + WirelessRedstone.strings.automaticAssigned.replaceAll("%%NAME", "ch-" + i));
+                    name = "ch-" + i;
+                    break;
+                }
+            }
+        }
+        return name;
     }
 }

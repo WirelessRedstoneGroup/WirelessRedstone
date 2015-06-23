@@ -49,6 +49,7 @@ public class WirelessStrings {
     public String convertFailed;
     public String convertSameType;
     public String convertContinue;
+    public String automaticAssigned;
 
     public String tellRawString;
 
