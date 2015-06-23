@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>KablosuzKızıltaş</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>Yedeğiniz plugin klasöründe oluşturuldu!</backupDone>
 		<backupFailed>Yedekleme başarısız!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>Yeni bir kanal oluşturuldu!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Bu kanala erişiminiz yasaktır.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Bunu yapmak için yetkiniz yok.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Sayfa numarası 0 dan az olamaz!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Kanalı genişlettiniz!</playerExtendedChannel>
-		<signDestroyed>Bu tabela başarıyla silindi!</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>Bu alt komut bulunamadı!</subCommandDoesNotExist>
 		<thisChannelContains>Bu kanaldakiler</thisChannelContains>
-		<tooFewArguments>Çok fazla argüman var!</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Yeni versiyon depoya yüklendi. Bizce kesinlikle  http://dev.bukkit.org/server-mods/wireless-redstone/ adresinden güncelleme yapmalısınız</newUpdateAvailable>

@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>WirelessRedstone</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>Kopia zapasowa zostala stworzona w folderze plugina!</backupDone>
 		<backupFailed>Tworzenie kopii zapasowej nie powiodlo sie!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>Stworzyles nowy kanal!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Nie masz dostepu do tego kanalu.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Nie masz uprawnien by to zrobic.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Numer strony nie moze sie rownac 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Wlasnie rozszerzyles kanal!</playerExtendedChannel>
-		<signDestroyed>Pomyslnie usunieto ten znak!</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>Takie podpolecenie nie istnieje!</subCommandDoesNotExist>
 		<thisChannelContains>Ten kanal zawiera</thisChannelContains>
-		<tooFewArguments>Za malo informacji!</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Nowa wersja zostala wyslana na repozytorium! Wskazane jest, aby pobrac ja jak najszybciej na http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

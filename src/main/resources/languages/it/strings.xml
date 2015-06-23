@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>Wireless Redstone</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>Un backup è stato creato nella cartella del plugin!</backupDone>
 		<backupFailed>Backup fallito!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>Hai appena creato un nuovo canale!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Non hai accesso a questo canale.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Non hai i permessi per farlo.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Il numero della pagina non può essere inferiore a 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Hai appena esteso un canale!</playerExtendedChannel>
-		<signDestroyed>Cartello rimosso con successo!</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>Questo sotto-comando non esiste!</subCommandDoesNotExist>
 		<thisChannelContains>Questo canale contiene</thisChannelContains>
-		<tooFewArguments>Argomenti insufficienti!</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Una nuova versione è stata caricata sul sito! Ti consiglio vivamente di scaricarla ora su

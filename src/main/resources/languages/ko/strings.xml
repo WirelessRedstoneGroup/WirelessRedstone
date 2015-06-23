@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>무선 레드스톤</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>플러그인 폴더에 백업 완료되었습니다!</backupDone>
 		<backupFailed>백업 실패!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>채널을 만들었습니다!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>채널에 접근할 수 없습니다.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>이 작업을 할 권한이 없습니다.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>페이지 수는 0 이하일 수 없습니다!</pageNumberInferiorToZero>
 		<playerExtendedChannel>채널을 확장하였습니다!</playerExtendedChannel>
-		<signDestroyed>표지판을 성공적으로 제거하였습니다 !</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>이 하위 명령어는 존재하지 않습니다!</subCommandDoesNotExist>
 		<thisChannelContains>이 채널에 포함되는 것은</thisChannelContains>
-		<tooFewArguments>너무 적은 인수 !</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>새로운 버전이 저장소에 업로드되었습니다! http://dev.bukkit.org/server-mods/wireless-redstone/ 에서 다운로드하는 것을 적극적으로 추천합니다</newUpdateAvailable>

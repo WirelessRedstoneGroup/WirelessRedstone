@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>无线红石</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>备份已创建到插件文件夹！</backupDone>
 		<backupFailed>备份失败!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>你仅仅创建了一个新的频道！</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>您没有访问该频道。</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>你没有权限去做这个。</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>你不能输入0这个页码</pageNumberInferiorToZero>
 		<playerExtendedChannel>你仅仅延伸了一个频道。</playerExtendedChannel>
-		<signDestroyed>成功以除了这个牌子！</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>这条子命令不存在！</subCommandDoesNotExist>
 		<thisChannelContains>这个频道包含</thisChannelContains>
-		<tooFewArguments>参数太少！</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>新版本已上载于资源库！我强烈建议你下载它的http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

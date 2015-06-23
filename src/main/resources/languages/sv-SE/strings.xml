@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>Trådlös Rödsten</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>En säkerhetskopia har blivit skapad i plugin foldern!</backupDone>
 		<backupFailed>Säkerhetskopieringen misslyckades!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>Du skapade just en ny kanal!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Du har inte behörighet till denna kanal.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Du har inte behörighet att göra detta.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Sidnummer kan inte vara lägre än 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Du utökade en kanal!</playerExtendedChannel>
-		<signDestroyed>Du förstörde denna skylt utan problem!</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>Detta underkommandot finns inte!</subCommandDoesNotExist>
 		<thisChannelContains>Denna kanal innehåller</thisChannelContains>
-		<tooFewArguments>Alltför få argument!</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>En ny version har släppts! Jag rekommenderar dig att ladda ner den nu på:                             http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

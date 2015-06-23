@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>WirelessRedstone</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>Backup был создан в папку плагина!</backupDone>
 		<backupFailed>Backup не удался!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>Вы только что создали новый канал!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Вы не имеете доступ к этому каналу.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Вы не имеете права делать это.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Номер страницы не может быть ниже 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Канал продлен!</playerExtendedChannel>
-		<signDestroyed>Успешно удален знак !</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>Эта команда не существует!</subCommandDoesNotExist>
 		<thisChannelContains>Этот канал содержит</thisChannelContains>
-		<tooFewArguments>Слишком мало аргументов !</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Новая версия была загружена в хранилище! Я настоятельно рекомендую вам скачать его сейчас на http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

@@ -3,39 +3,49 @@
 	<tags>
 		<chatTag>WirelessRedstone</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
-		<backupDone>Une sauvegarde a été crée à l'intérieur du dossier du plugin!</backupDone>
-		<backupFailed>La sauvegarde a échoué!</backupFailed>
-		<channelDoesNotExist>Ce réseau n'existe pas!</channelDoesNotExist>
-		<channelLocked>Le réseau a été bloqué!</channelLocked>
-		<channelNameContainsInvalidCaracters>Ce nom de réseau contient des caractères invalides!</channelNameContainsInvalidCaracters>
-		<channelRemoved>Le réseau a été supprimé!</channelRemoved>
+		<backupDone>Une sauvegarde a été créée à l'intérieur du dossier du plugin!</backupDone>
+		<backupFailed>La sauvegarde a échoué !</backupFailed>
+		<channelDoesNotExist>Ce réseau n'existe pas !</channelDoesNotExist>
+		<channelLocked>Le réseau est verouillé!</channelLocked>
+		<channelNameContainsInvalidCaracters>Ce nom de réseau contient des caractères invalides !</channelNameContainsInvalidCaracters>
+		<channelRemoved>Ce réseau a été supprimé !</channelRemoved>
 		<channelRemovedCauseNoSign>Le réseau a été supprimé car il n'y a plus aucun point d'accès existant.</channelRemovedCauseNoSign>
-		<channelUnlocked>Le réseau a été débloqué!</channelUnlocked>
-		<commandDoesNotExist>Cette commande n'existe pas!</commandDoesNotExist>
-		<commandForNextPage> Entrez la commande /wr list numérodepage pour la page suivante!</commandForNextPage>
+		<channelUnlocked>Le réseau a été débloqué.</channelUnlocked>
+		<commandDoesNotExist>Cette commande n'existe pas.</commandDoesNotExist>
+		<commandForNextPage> Entrez la commande /wr list [numérodepage] pour la page suivante !</commandForNextPage>
 		<customizedLanguageSuccessfullyLoaded>Votre langage personnalisé a bien été installé et chargé pour Wireless Redstone!</customizedLanguageSuccessfullyLoaded>
-		<DBAboutToBeDeleted>Vous êtes sur le point de supprimer votre base de donnée entière. Une sauvegarde va être réalisée avant cette action automatiquement. Si vous êtes sûr de votre choix, vous avez 15 secondes pour entre cette commande à nouveau.</DBAboutToBeDeleted>
-		<DBDeleted>La base de donnée a bien été écrasée!</DBDeleted>
-		<DBNotDeleted>La base de donnée n'a pas été écrasée.</DBNotDeleted>
+		<DBAboutToBeDeleted>Vous êtes sur le point de supprimer votre base de donnée dans son intégrité. Une sauvegarde automatique va être réalisée avant cela. Si vous êtes sûr de votre choix, vous avez 15 secondes pour entrer cette commande à nouveau.</DBAboutToBeDeleted>
+		<DBDeleted>La base de donnée a bien été supprimée !</DBDeleted>
+		<DBNotDeleted>La base de donnée n'a pas été supprimée.</DBNotDeleted>
 		<forMoreInfosPerformWRInfo>Pour plus d'informations sur un réseau, entrez /wr info [réseau]</forMoreInfosPerformWRInfo>
 		<listEmpty>Cette liste est vide!</listEmpty>
 		<ownersOfTheChannelAre>Les propriétaires du réseau sont</ownersOfTheChannelAre>
-		<pageEmpty>Cette page est vide!</pageEmpty>
+		<pageEmpty>Cette page est vide.</pageEmpty>
 		<playerCannotCreateChannel>Vous n'êtes pas autorisé à créer un réseau.</playerCannotCreateChannel>
-		<playerCannotCreateReceiverOnBlock>Vous ne pouvez pas créer de récepteur sur ce bloc!</playerCannotCreateReceiverOnBlock>
-		<playerCannotCreateSign>Vous n'avez pas la permission de créer ce point!</playerCannotCreateSign>
-		<playerCannotDestroyReceiverTorch>Vous ne pouvez pas détruire mes torches magiques, mon ami :D !</playerCannotDestroyReceiverTorch>
-		<playerCannotDestroySign>Vous n'êtes pas autorisé à détruire ce point!</playerCannotDestroySign>
-		<playerCreatedChannel>Vous venez de créer un nouveau réseau!</playerCreatedChannel>
+		<playerCannotCreateReceiverOnBlock>Vous ne pouvez pas créer de récepteur sur ce bloc.</playerCannotCreateReceiverOnBlock>
+		<playerCannotCreateSign>Vous n'avez pas la permission de créer ce panneau.</playerCannotCreateSign>
+		<playerCannotDestroyReceiverTorch>Vous ne pouvez pas détruire mes torches magiques, mon ami :p !</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroySign>Vous n'êtes pas autorisé à détruire ce panneau.</playerCannotDestroySign>
+		<playerCreatedChannel>Vous avez bien créé un nouveau réseau.</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Vous n'avez pas accès à ce réseau.</playerDoesntHaveAccessToChannel>
-		<playerDoesntHavePermission>Vous n'avez pas la permission pour effectuer cette action.</playerDoesntHavePermission>
-		<pageNumberInferiorToZero>Le numéro de la page ne peut être inférieur à 0!</pageNumberInferiorToZero>
-		<playerExtendedChannel>Vous venez d'étendre un réseau!</playerExtendedChannel>
-		<signDestroyed>Vous venez de supprimer ce point!</signDestroyed>
-		<subCommandDoesNotExist>Cette sous-commande n'existe pas!</subCommandDoesNotExist>
+		<playerDoesntHavePermission>Vous n'avez pas la permission pour effectuer cela.</playerDoesntHavePermission>
+		<purgeDataDone>Les données ont été purgées!</purgeDataDone>
+		<purgeDataFailed>Le processus de purgation a échoué!</purgeDataFailed>
+		<pageNumberInferiorToZero>Le numéro de la page ne peut être inférieur à 0...</pageNumberInferiorToZero>
+		<playerExtendedChannel>Vous venez d'étendre un réseau.</playerExtendedChannel>
+		<signDestroyed>Le panneau a bien été détruit!</signDestroyed>
+		<subCommandDoesNotExist>Cette sous-commande n'existe pas...</subCommandDoesNotExist>
 		<thisChannelContains>Ce réseau contient</thisChannelContains>
 		<tooFewArguments>Il manque des arguments!</tooFewArguments>
+		<allTransmittersGone>Aucun autre émetteur trouvé pour ce channel. Les récepteurs ont été éteints.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>Vous ne pouvez pas détruire un bloc qui est attaché à un panneau de Wireless Redstone!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Êtes-vous sûr de vouloir changer de %%STORAGETYPE? Une sauvegarde va être créée si vous décidez de continuer. Vous avez 15 secondes pour confirmer cette décision en retapant cette même commande.</convertContinue>
+		<convertDone>La conversion des fichiers est terminée!</convertDone>
+		<convertSameType>La conversion n'a pas été effectuée. Vous êtes déjà sur le type de storage indiqué.</convertSameType>
+		<convertFailed>La conversion a échoué! Types autorisés: sql et yaml.</convertFailed>
+		<automaticAssigned>Le nom a automatiquement été changé pour %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Une nouvelle a été publiée! Je vous recommande fortement de la télécharger dès maintenant à partir de ce lien : http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

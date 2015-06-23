@@ -3,6 +3,7 @@
 	<tags>
 		<chatTag>WirelessRedstone</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
 		<backupDone>Varmuuskopio luotu 'plugins' kansioon!</backupDone>
 		<backupFailed>Varmuuskopiointi epäonnistui!</backupFailed>
@@ -30,12 +31,21 @@
 		<playerCreatedChannel>Loit juuri uuden kanavan!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Sinulla ei ole oikeuksia tälle kanavalle.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Sinulla ei ole oikeuksia tehdä tuota.</playerDoesntHavePermission>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Sivunnumero ei voi olla alle 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Laajensit juuri kanavaa!</playerExtendedChannel>
-		<signDestroyed>Kyltti poistettu onnistuneesti !</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>Tätä alikomentoa ei ole olemassa!</subCommandDoesNotExist>
 		<thisChannelContains>Tällä kanavalla on</thisChannelContains>
-		<tooFewArguments>Liian vähän argumenttejä !</tooFewArguments>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Uusi versio saatavilla. Suosittelen lataamaan sen heti osoitteesta

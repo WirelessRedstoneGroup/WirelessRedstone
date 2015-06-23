@@ -3,19 +3,20 @@
 	<tags>
 		<chatTag>WirelessRedstone</chatTag>
 	</tags>
+	<!-- ! DON'T REMOVE ANY WORDS THAT STARTS WITH THIS, %% ! -->
 	<playermessages>
-		<backupDone>Er is een back-up van de plugin map gemaakt!</backupDone>
+		<backupDone>Een Backup is gemaakt van de plugin map!</backupDone>
 		<backupFailed>Backup gefaald!</backupFailed>
 		<channelDoesNotExist>Dit kanaal bestaat niet!</channelDoesNotExist>
 		<channelLocked>Kanaal beveiligd!</channelLocked>
-		<channelNameContainsInvalidCaracters>Deze kanaalnaam bevat foute tekens</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCaracters>Dit kanaal naam bevat foute letters</channelNameContainsInvalidCaracters>
 		<channelRemoved>Dit kanaal is verwijderd</channelRemoved>
-		<channelRemovedCauseNoSign>Kanaal verwijderd. Er zijn geen borden van dit kanaal meer in deze wereld.</channelRemovedCauseNoSign>
+		<channelRemovedCauseNoSign>Kanaal verwijderd. Het kanaal bevat geen borden meer in deze wereld.</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanaal gedeblokkeerd!</channelUnlocked>
 		<commandDoesNotExist>Dit commando bestaat niet!</commandDoesNotExist>
 		<commandForNextPage> Type /wr list paginanummer voor de volgende pagina!</commandForNextPage>
-		<customizedLanguageSuccessfullyLoaded>Je hebt jouw taal succesvol geïnstaleerd voor wireless redstone!</customizedLanguageSuccessfullyLoaded>
-		<DBAboutToBeDeleted>Je staat op het punt om je opgeslagen gegevens te verwijderen. Er zal eerst een back-up gemaakt worden. Als je zeker weet dat je de database wilt verwijderen moet je dit commando binnen 15 seconden opnieuw intypen.</DBAboutToBeDeleted>
+		<customizedLanguageSuccessfullyLoaded>Je hebt succesvol jouw taal geïnstaleert voor wireless redstone!</customizedLanguageSuccessfullyLoaded>
+		<DBAboutToBeDeleted>Je staat op het punt om je opgeslagen gegevens te verwijderen. Eerst zal er een backup gemaakt worden. Als je zeker weet dat je de database wilt verwijderen moet je dit command binnen 15 seconden opnieuw intypen.</DBAboutToBeDeleted>
 		<DBDeleted>Database is succesvol verwijderd</DBDeleted>
 		<DBNotDeleted>Database is niet verwijderd</DBNotDeleted>
 		<forMoreInfosPerformWRInfo>Om meer informatie over dit kanaal te krijgen kun je /wr info [kanaalnaam] gebruiken</forMoreInfosPerformWRInfo>
@@ -25,25 +26,26 @@
 		<playerCannotCreateChannel>Je hebt geen permissie om een kanaal te maken.</playerCannotCreateChannel>
 		<playerCannotCreateReceiverOnBlock>Op dit blok kan geen draadloze ontvanger geplaatst worden!</playerCannotCreateReceiverOnBlock>
 		<playerCannotCreateSign>Je hebt geen permissie om dit bord te maken!</playerCannotCreateSign>
-		<playerCannotDestroyReceiverTorch>Je kan mijn magische fakkel niet kapot maken, mijn vriend! Zet het kanaal eerst uit!</playerCannotDestroyReceiverTorch>
+		<playerCannotDestroyReceiverTorch>Je kan mijn magische lampen niet kapot maken, mijn vriend! Zet het kanaal eerst uit!</playerCannotDestroyReceiverTorch>
 		<playerCannotDestroySign>Je hebt geen permissie om dit bordje te slopen!</playerCannotDestroySign>
 		<playerCreatedChannel>Je hebt een nieuw kanaal aangemaakt!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Je hebt geen permissie voor dit kanaal.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Je hebt niet de permissie om dit uit te voeren.</playerDoesntHavePermission>
-		<purgeDataDone>Verzuivering van data is voltooid!</purgeDataDone>
-		<purgeDataFailed>Verzuivering van data is mislukt!</purgeDataFailed>
+		<purgeDataDone>Purging data is done!</purgeDataDone>
+		<purgeDataFailed>Purging data failed!</purgeDataFailed>
 		<pageNumberInferiorToZero>Paginanummer kan niet gelijk zijn aan 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Je hebt het kanaal zojuist uitgebreid!</playerExtendedChannel>
-		<signDestroyed>Dit bordje is succesvol uit de database van Wireless Redstone verwijderd!</signDestroyed>
+		<signDestroyed>Succesfully removed this sign!</signDestroyed>
 		<subCommandDoesNotExist>Deze sub-opracht bestaat niet!</subCommandDoesNotExist>
 		<thisChannelContains>Dit kanaal bevat</thisChannelContains>
-		<tooFewArguments>Te weinig argumenten!</tooFewArguments>
-		<allTransmittersGone>Alle zenders zijn verwijderd, alle ontvangers uitschakelen.</allTransmittersGone>
-		<playerCannotDestroyBlockAttachedToSign>Je kan geen blok slopen dat aan een Wireless Redstone bordje vast zit!</playerCannotDestroyBlockAttachedToSign>
-		<convertContinue>Weet je zeker dat je de opslag type wil veranderen naar %%STORAGETYPE? Een back-up word gemaakt als je doorgaat. De opslag type zal worden veranderd als je deze commando nog een keer intypt binnen 15 seconden.</convertContinue>
-		<convertDone>Overzetten van bestanden voltooid!</convertDone>
-		<convertSameType>Overzetten van bestanden gefaald! Je bent al op je aangegeven opslag type.</convertSameType>
-		<convertFailed>Overzetten van bestanden gefaald! Deze typen zijn toegestaan: sql of yaml.</convertFailed>
+		<tooFewArguments>Too few arguments!</tooFewArguments>
+		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
+		<convertDone>Converting files finished!</convertDone>
+		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
+		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
+		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Wireless Redstone is geüpdatet! Ik raad je sterk aan om deze te downloaden op http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
