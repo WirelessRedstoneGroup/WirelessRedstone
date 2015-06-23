@@ -65,12 +65,7 @@ public class WirelessBlockListener implements Listener {
                                 return;
                             }
                             if (event.getLine(1) == null) {
-                                event.getBlock().setType(Material.AIR);
-                                event.getPlayer()
-                                        .getWorld()
-                                        .dropItemNaturally(
-                                                event.getBlock().getLocation(),
-                                                new ItemStack(Material.SIGN, 1));
+                                event.getBlock().breakNaturally();
                                 event.getPlayer()
                                         .sendMessage(
                                                 "[WirelessRedstone] No Channelname given!");
