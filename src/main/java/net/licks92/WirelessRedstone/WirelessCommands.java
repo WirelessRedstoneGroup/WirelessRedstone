@@ -441,11 +441,12 @@ public class WirelessCommands implements CommandExecutor {
             }
         } else {
             sender.sendMessage("Channel Admin Commands:");
-            sender.sendMessage("/wr admin addowner channelname playername - Add a player to channel.");
-            sender.sendMessage("/wr admin removeowner channelname playername - Add a player to channel.");
+            sender.sendMessage("/wr admin addowner <channelname> <playername> - Add a player to channel.");
+            sender.sendMessage("/wr admin removeowner <channelname> <playername> - Add a player to channel.");
             sender.sendMessage("/wr admin purge - Removes channels with nothing inside it and removes signs when the world doesn't exist");
             sender.sendMessage("/wr admin wipedata - Erase the database! Don't do it if you don't know what you're doing!");
             sender.sendMessage("/wr admin backup - Backup the database. You should use it before to update in order to recover it if an error occurs.");
+            sender.sendMessage("/wr admin convert <storage> - Converts the database to another type of storage. Can be 'sql' or 'yaml'");
         }
         return true;
     }
