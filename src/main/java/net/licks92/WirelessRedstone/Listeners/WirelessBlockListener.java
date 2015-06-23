@@ -198,6 +198,23 @@ public class WirelessBlockListener implements Listener {
                                         .getRelative(b.getAttachedFace()), event
                                         .getOldCurrent(), event.getNewCurrent()));
             }
+            if (event.getBlock().getType() == Material.DETECTOR_RAIL) {
+                Bukkit.getServer()
+                        .getPluginManager()
+                        .callEvent(
+                                new BlockRedstoneEvent(event.getBlock()
+                                        .getRelative(BlockFace.DOWN), event
+                                        .getOldCurrent(), event.getNewCurrent()));
+            }
+//            if (event.getBlock().getType() == Material.DAYLIGHT_DETECTOR
+//                    || event.getBlock().getType() == Material.DAYLIGHT_DETECTOR_INVERTED) {
+//                Bukkit.getServer()
+//                        .getPluginManager()
+//                        .callEvent(
+//                                new BlockRedstoneEvent(event.getBlock()
+//                                        .getRelative(BlockFace.DOWN), event
+//                                        .getOldCurrent(), event.getNewCurrent()));
+//            }
 
             ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
             possibleBlockface.add(BlockFace.NORTH);
@@ -301,7 +318,8 @@ public class WirelessBlockListener implements Listener {
                     if (WirelessRedstone.WireBox.removeWirelessTransmitter(
                             signObject.getLine(1), event.getBlock()
                                     .getLocation())) {
-                        event.getPlayer().sendMessage(
+                        event.getPlayer().sendMessage(ChatColor.GREEN
+                                + WirelessRedstone.strings.chatTag +
                                 WirelessRedstone.strings.signDestroyed);
                         if (WirelessRedstone.config
                                 .getWirelessChannel(signObject.getLine(1))
@@ -336,7 +354,8 @@ public class WirelessBlockListener implements Listener {
                                 .debug("Transmitter wasn't found in the config, but the sign has been successfuly removed !");
                     }
                 } else {
-                    event.getPlayer().sendMessage(
+                    event.getPlayer().sendMessage(ChatColor.RED
+                            + WirelessRedstone.strings.chatTag +
                             WirelessRedstone.strings.playerCannotDestroySign);
                     event.setCancelled(true);
                 }
@@ -351,7 +370,8 @@ public class WirelessBlockListener implements Listener {
                     if (WirelessRedstone.WireBox.removeWirelessScreen(
                             signObject.getLine(1), event.getBlock()
                                     .getLocation())) {
-                        event.getPlayer().sendMessage(
+                        event.getPlayer().sendMessage(ChatColor.GREEN
+                                + WirelessRedstone.strings.chatTag +
                                 WirelessRedstone.strings.signDestroyed);
                         if (WirelessRedstone.config
                                 .getWirelessChannel(signObject.getLine(1))
@@ -373,7 +393,8 @@ public class WirelessBlockListener implements Listener {
                                 .debug("Screen wasn't found in the config, but the sign has been successfuly removed !");
                     }
                 } else {
-                    event.getPlayer().sendMessage(
+                    event.getPlayer().sendMessage(ChatColor.RED
+                            + WirelessRedstone.strings.chatTag +
                             WirelessRedstone.strings.playerCannotDestroySign);
                     event.setCancelled(true);
                 }
