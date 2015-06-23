@@ -716,7 +716,7 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performRemoveChannel(final CommandSender sender,
                                          final String[] args) {
-        if ((sender instanceof Player) ? (!plugin.permissions.canRemoveChannel((Player)sender)) : false) {
+        if ((sender instanceof Player) ? (plugin.permissions.canRemoveChannel((Player)sender)) : true) {
             if (args.length >= 1) {
                 if (hasAccessToChannel(sender, args[0])) {
                     WirelessRedstone.config.removeWirelessChannel(args[0]);
