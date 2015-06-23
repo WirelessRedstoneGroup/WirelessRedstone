@@ -40,10 +40,11 @@
 		<tooFewArguments>Te weinig argumenten!</tooFewArguments>
 		<allTransmittersGone>Alle zenders zijn verwijderd, alle ontvangers uitschakelen.</allTransmittersGone>
 		<playerCannotDestroyBlockAttachedToSign>Je kan geen blok slopen dat aan een Wireless Redstone bordje vast zit!</playerCannotDestroyBlockAttachedToSign>
-		<convertContinue>Weet je zeker dat je de opslag type wil veranderen naar %%STORAGETYPE? Een back-up word gemaakt als je doorgaat. De opslag type zal worden veranderd als je deze commando nog een keer intypt binnen 15 seconden.</convertContinue>
+		<convertContinue>Weet je zeker dat je de opslag type wil veranderen naar %%STORAGETYPE? Er zal een back-up worden gemaakt. De opslag type zal worden veranderd als je deze commando nog een keer intypt binnen 15 seconden.</convertContinue>
 		<convertDone>Overzetten van bestanden voltooid!</convertDone>
 		<convertSameType>Overzetten van bestanden gefaald! Je bent al op je aangegeven opslag type.</convertSameType>
-		<convertFailed>Overzetten van bestanden gefaald! Deze typen zijn toegestaan: sql of yaml.</convertFailed>
+		<convertFailed>Overzetten van bestanden gefaald! Alleen deze typen: sql of yaml.</convertFailed>
+		<automaticAssigned>Automatisch de naam veranderd naar: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Wireless Redstone is geüpdatet! Ik raad je sterk aan om deze te downloaden op http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
