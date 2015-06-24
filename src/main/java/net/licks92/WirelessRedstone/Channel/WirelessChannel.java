@@ -167,20 +167,18 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         remove.clear();
     }
 
-    public void toggle(final Block block) {
+    public void toggle(final Integer redstoneValue, final Block block) {
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(),
                 new Runnable() {
                     @Override
                     public void run() {
-                        if (block.isBlockPowered()
-                                || block.isBlockIndirectlyPowered()) {
+                        if (redstoneValue > 0) {
                             if (WirelessRedstone.getInstance().activeChannels
                                     .contains(getName())) {
                                 return;
                             }
                             turnOn();
-                        } else if (!block.isBlockPowered()
-                                || !block.isBlockIndirectlyPowered()) {
+                        } else if (redstoneValue == 0) {
                             boolean on = false;
                             for (WirelessTransmitter transmitter : transmitters) {
                                 if (transmitter.isActive()) {

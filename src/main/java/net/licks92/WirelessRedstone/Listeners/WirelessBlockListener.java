@@ -223,41 +223,40 @@ public class WirelessBlockListener implements Listener {
             possibleBlockface.add(BlockFace.UP);
             possibleBlockface.add(BlockFace.DOWN);
 
+            BlockFace bf = null;
+
             for (BlockFace blockFace : possibleBlockface) {
                 if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
-                    Bukkit.getPluginManager().callEvent(
-                            new BlockRedstoneEvent(event.getBlock().getRelative(
-                                    blockFace), event.getOldCurrent(), event
-                                    .getNewCurrent()));
+                    bf = blockFace;
+                    break;
                 }
             }
-        }
 
-        if (!(event.getBlock().getState() instanceof Sign)) {
-            return;
-        }
+            if(bf == null)
+                return;
 
-        Sign signObject = (Sign) event.getBlock().getState();
-        // final WirelessChannel channel;
+            Sign signObject = (Sign) event.getBlock().getRelative(bf).getState();
+            // final WirelessChannel channel;
 
-        // Lets check if the sign is a Transmitter and if the channel name not
-        // is empty
-        if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
-                || signObject.getLine(1) == null || signObject.getLine(1).equals("")) {
-            return;
-        } else {
-            channel = WirelessRedstone.config.getWirelessChannel(signObject
-                    .getLine(1));
+            // Lets check if the sign is a Transmitter and if the channel name not
+            // is empty
+            if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
+                    || signObject.getLine(1) == null || signObject.getLine(1).equals("")) {
+                return;
+            } else {
+                channel = WirelessRedstone.config.getWirelessChannel(signObject
+                        .getLine(1));
+            }
+            if (channel == null) {
+                WirelessRedstone.getWRLogger().debug(
+                        "The transmitter at location " + signObject.getX() + ","
+                                + signObject.getY() + "," + signObject.getZ() + " "
+                                + "in the world " + signObject.getWorld().getName()
+                                + " is actually linked with a null channel.");
+                return;
+            }
+            channel.toggle(event.getNewCurrent(), event.getBlock().getRelative(bf));
         }
-        if (channel == null) {
-            WirelessRedstone.getWRLogger().debug(
-                    "The transmitter at location " + signObject.getX() + ","
-                            + signObject.getY() + "," + signObject.getZ() + " "
-                            + "in the world " + signObject.getWorld().getName()
-                            + " is actually linked with a null channel.");
-            return;
-        }
-        channel.toggle(event.getBlock());
     }
 
     @EventHandler
