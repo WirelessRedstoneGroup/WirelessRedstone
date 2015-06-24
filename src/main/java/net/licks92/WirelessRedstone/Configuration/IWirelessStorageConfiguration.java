@@ -1,11 +1,10 @@
 package net.licks92.WirelessRedstone.Configuration;
 
-import java.util.Collection;
-
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-
 import org.bukkit.Location;
+
+import java.util.Collection;
 
 public interface IWirelessStorageConfiguration {
     boolean initStorage();
@@ -16,11 +15,19 @@ public interface IWirelessStorageConfiguration {
 
     boolean convertFromAnotherStorage();
 
+    boolean isChannelEmpty(WirelessChannel channel);
+
     WirelessChannel getWirelessChannel(String channelName);
+
+    String getWirelessChannelName(Location loc);
+
+    IWirelessPoint getWirelessRedstoneSign(Location loc);
 
     Collection<WirelessChannel> getAllChannels();
 
     boolean createWirelessChannel(WirelessChannel channel);
+
+    void checkChannel(String channelName);
 
     void removeWirelessChannel(String channelName);
 
@@ -32,6 +39,8 @@ public interface IWirelessStorageConfiguration {
      * @return true if everything went well.
      */
     boolean createWirelessPoint(String channelName, IWirelessPoint point);
+
+    boolean removeIWirelessPoint(String channelName, Location loc);
 
     boolean removeWirelessReceiver(String channelName, Location loc);
 

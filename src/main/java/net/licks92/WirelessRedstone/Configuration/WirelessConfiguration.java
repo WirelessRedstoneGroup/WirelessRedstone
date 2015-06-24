@@ -212,6 +212,25 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 		return storage.getWirelessChannel(channelName);
 	}
 
+	@Override
+	public IWirelessPoint getWirelessRedstoneSign(final Location loc){
+		return storage.getWirelessRedstoneSign(loc);
+	}
+
+	@Override
+	public String getWirelessChannelName(final Location loc){
+		return storage.getWirelessChannelName(loc);
+	}
+
+	@Override
+	public boolean removeIWirelessPoint(final String channelName, final Location loc){ return storage.removeIWirelessPoint(channelName, loc); }
+
+	@Override
+	public boolean isChannelEmpty(WirelessChannel channel){ return storage.isChannelEmpty(channel);	}
+
+	@Override
+	public void checkChannel(String channelName) { storage.checkChannel(channelName); };
+
 	/**
 	 * Creates a WPoint in the channel with the given name.
 	 *

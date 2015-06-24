@@ -471,6 +471,80 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 			return false;
 		}
 	}
+
+    @Override
+    public IWirelessPoint getWirelessRedstoneSign(final Location loc){
+        for(WirelessChannel channel : getAllChannels()){
+            for(WirelessReceiver receiver : channel.getReceivers()){
+                if(WirelessRedstone.sameLocation(receiver.getLocation(), loc))
+                    return receiver;
+            }
+            for(WirelessTransmitter transmitter : channel.getTransmitters()){
+                if(WirelessRedstone.sameLocation(transmitter.getLocation(), loc))
+                    return transmitter;
+            }
+            for(WirelessScreen screen : channel.getScreens()){
+                if(WirelessRedstone.sameLocation(screen.getLocation(), loc))
+                    return screen;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getWirelessChannelName(final Location loc){
+        for(WirelessChannel channel : getAllChannels()){
+            for(WirelessReceiver receiver : channel.getReceivers()){
+                if(WirelessRedstone.sameLocation(receiver.getLocation(), loc))
+                    return channel.getName();
+            }
+            for(WirelessTransmitter transmitter : channel.getTransmitters()){
+                if(WirelessRedstone.sameLocation(transmitter.getLocation(), loc))
+                    return channel.getName();
+            }
+            for(WirelessScreen screen : channel.getScreens()){
+                if(WirelessRedstone.sameLocation(screen.getLocation(), loc))
+                    return channel.getName();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean removeIWirelessPoint(final String channelName, final Location loc){
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if(channel == null)
+            return false;
+        for(WirelessReceiver receiver : channel.getReceivers()){
+            if(WirelessRedstone.sameLocation(receiver.getLocation(), loc))
+                return removeWirelessReceiver(channelName, loc);
+        }
+        for(WirelessTransmitter transmitter : channel.getTransmitters()){
+            if(WirelessRedstone.sameLocation(transmitter.getLocation(), loc))
+                return removeWirelessTransmitter(channelName, loc);
+        }
+        for(WirelessScreen screen : channel.getScreens()){
+            if(WirelessRedstone.sameLocation(screen.getLocation(), loc))
+                return removeWirelessScreen(channelName, loc);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isChannelEmpty(WirelessChannel channel){
+        return (channel.getReceivers().size() < 1)
+                && (channel.getTransmitters().size() < 1)
+                && (channel.getScreens().size() < 1);
+    }
+
+    @Override
+    public void checkChannel(String channelName){
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if(channel != null) {
+            if (isChannelEmpty(channel))
+                removeWirelessChannel(channelName);
+        }
+    }
 }
 
 class YamlFilter implements FilenameFilter {

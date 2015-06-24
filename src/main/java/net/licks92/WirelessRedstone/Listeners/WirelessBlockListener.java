@@ -275,13 +275,8 @@ public class WirelessBlockListener implements Listener {
                     if (WirelessRedstone.WireBox.removeWirelessReceiver(
                             signObject.getLine(1), event.getBlock()
                                     .getLocation())) {
-                        if (WirelessRedstone.config
-                                .getWirelessChannel(signObject.getLine(1))
-                                .getTransmitters().size() == 0
-                                && WirelessRedstone.config
-                                .getWirelessChannel(
-                                        signObject.getLine(1))
-                                .getReceivers().size() == 0) {
+                        if (WirelessRedstone.config.isChannelEmpty(WirelessRedstone.config
+                                .getWirelessChannel(signObject.getLine(1)))) {
                             WirelessRedstone.config
                                     .removeWirelessChannel(signObject
                                             .getLine(1));
@@ -320,17 +315,8 @@ public class WirelessBlockListener implements Listener {
                         event.getPlayer().sendMessage(ChatColor.GREEN
                                 + WirelessRedstone.strings.chatTag +
                                 WirelessRedstone.strings.signDestroyed);
-                        if (WirelessRedstone.config
-                                .getWirelessChannel(signObject.getLine(1))
-                                .getTransmitters().size() == 0
-                                && WirelessRedstone.config
-                                .getWirelessChannel(
-                                        signObject.getLine(1))
-                                .getReceivers().size() == 0
-                                && WirelessRedstone.config
-                                .getWirelessChannel(
-                                        signObject.getLine(1))
-                                .getScreens().size() == 0) {
+                        if (WirelessRedstone.config.isChannelEmpty(WirelessRedstone.config
+                                .getWirelessChannel(signObject.getLine(1)))) {
                             WirelessRedstone.config
                                     .removeWirelessChannel(signObject
                                             .getLine(1));
@@ -372,13 +358,8 @@ public class WirelessBlockListener implements Listener {
                         event.getPlayer().sendMessage(ChatColor.GREEN
                                 + WirelessRedstone.strings.chatTag +
                                 WirelessRedstone.strings.signDestroyed);
-                        if (WirelessRedstone.config
-                                .getWirelessChannel(signObject.getLine(1))
-                                .getTransmitters().size() == 0
-                                && WirelessRedstone.config
-                                .getWirelessChannel(
-                                        signObject.getLine(1))
-                                .getReceivers().size() == 0) {
+                        if (WirelessRedstone.config.isChannelEmpty(WirelessRedstone.config
+                                .getWirelessChannel(signObject.getLine(1)))) {
                             WirelessRedstone.config
                                     .removeWirelessChannel(signObject
                                             .getLine(1));

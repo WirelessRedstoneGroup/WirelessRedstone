@@ -13,6 +13,7 @@ import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
 import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
 import net.licks92.WirelessRedstone.Strings.WirelessStrings;
 import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
+import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -134,6 +135,11 @@ public class WirelessRedstone extends JavaPlugin {
         worldlistener = new WirelessWorldListener(this);
         blocklistener = new WirelessBlockListener(this);
         playerlistener = new WirelessPlayerListener(this);
+
+        if(Bukkit.getPluginManager().isPluginEnabled("WorldEdit")) {
+            WirelessRedstone.getWRLogger().debug("Hooking into WorldEdit ...");
+            new WorldEditLoader();
+        }
 
         WirelessRedstone.logger.info("Loading Permissions...");
 
@@ -375,6 +381,11 @@ public class WirelessRedstone extends JavaPlugin {
     public static String getBukkitVersion() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();
         return packageName.substring(packageName.lastIndexOf('.') + 1);
+    }
+
+    public static boolean sameLocation(Location loc1, Location loc2){
+        return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY()
+                && loc1.getBlockZ() == loc2.getBlockZ() && loc1.getWorld() == loc2.getWorld();
     }
 
     /**

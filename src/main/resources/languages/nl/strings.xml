@@ -31,21 +31,13 @@
 		<playerCreatedChannel>Je hebt een nieuw kanaal aangemaakt!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Je hebt geen permissie voor dit kanaal.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Je hebt niet de permissie om dit uit te voeren.</playerDoesntHavePermission>
-		<purgeDataDone>Purging data is done!</purgeDataDone>
-		<purgeDataFailed>Purging data failed!</purgeDataFailed>
+		<purgeDataDone>Verzuiveren van data is voltooid!</purgeDataDone>
+		<purgeDataFailed>Verzuiveren van data mislukt!</purgeDataFailed>
 		<pageNumberInferiorToZero>Paginanummer kan niet gelijk zijn aan 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Je hebt het kanaal zojuist uitgebreid!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign!</signDestroyed>
+		<signDestroyed>Dit bordje is succesvol verwijderd!</signDestroyed>
 		<subCommandDoesNotExist>Deze sub-opracht bestaat niet!</subCommandDoesNotExist>
 		<thisChannelContains>Dit kanaal bevat</thisChannelContains>
-		<tooFewArguments>Too few arguments!</tooFewArguments>
-		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
-		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
-		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
-		<convertDone>Converting files finished!</convertDone>
-		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
-		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
-		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
 		<tooFewArguments>Te weinig argumenten!</tooFewArguments>
 		<allTransmittersGone>Alle zenders zijn verwijderd, alle ontvangers uitschakelen.</allTransmittersGone>
 		<playerCannotDestroyBlockAttachedToSign>Je kan geen blok slopen dat aan een Wireless Redstone bordje vast zit!</playerCannotDestroyBlockAttachedToSign>
