@@ -255,7 +255,16 @@ public class WirelessBlockListener implements Listener {
                                 + " is actually linked with a null channel.");
                 return;
             }
-            channel.toggle(event.getNewCurrent(), event.getBlock().getRelative(bf));
+            if(event.getBlock().getType() == Material.REDSTONE_WIRE && event.getNewCurrent() == 0){
+                final BlockFace finalBf = bf;
+                Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        channel.toggle(event.getNewCurrent(), event.getBlock().getRelative(finalBf));
+                    }
+                }, 1L);
+            } else
+                channel.toggle(event.getNewCurrent(), event.getBlock().getRelative(bf));
         }
     }
 
