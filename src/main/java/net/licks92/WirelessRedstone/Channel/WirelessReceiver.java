@@ -145,8 +145,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
      * @return A Location object made with the receiver data.
      */
     public Location getLocation() {
-        Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-        return loc;
+        return new Location(Bukkit.getWorld(world), x, y, z);
     }
 
     public void turnOn(String channelName) {
@@ -155,12 +154,16 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 
         Block block = getLocation().getBlock();
 
-        if (block.getType() == Material.SIGN_POST) {
+        if (!getIsWallSign()) {
             if (!WirelessRedstone.WireBox.isValidLocation(block)) {
                 WirelessRedstone.WireBox.signWarning(block, 1);
             } else {
-                block.setType(Material.REDSTONE_TORCH_ON);
-                block.getState().update();
+//                block.setType(Material.REDSTONE_TORCH_ON);
+//                block.getState().update(); // This doesn't work for 1.7 when facing west, please don't ask me why :P
+                if(WirelessRedstone.getBukkitVersion().contains("v1_8"))
+                    block.setTypeIdAndData(76, (byte) 0, true);
+                else
+                    block.setTypeIdAndData(76, (byte) 5, true);
             }
         } else {
             if (block.getType() == Material.WALL_SIGN) {
@@ -188,7 +191,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
                                 break;
 
                             default:
-                                directionByte = 1;
+                                directionByte = 0;
 
                         }
                     } else {
@@ -254,7 +257,7 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
             directionByte = (byte) WirelessRedstone.WireBox.signFaceToInt(getDirection());
         }
 
-        if(WirelessRedstone.getBukkitVersion().contains("v1_8"))
+        if (WirelessRedstone.getBukkitVersion().contains("v1_8"))
             block.setTypeIdAndData(blockID, directionByte, true);
         else {
             block.setType(Material.AIR);
