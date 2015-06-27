@@ -1,10 +1,7 @@
 package net.licks92.WirelessRedstone.Listeners;
 
 import net.gravitydevelopment.updater.Updater.UpdateResult;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.Channel.WirelessScreen;
-import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
+import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -202,10 +199,14 @@ public class WirelessPlayerListener implements Listener {
             return;
         }
 
-        if (type.equalsIgnoreCase("transmitter"))
-            channel.turnOn(WirelessRedstone.config.getInteractTransmitterTime());
-        else if (type.equalsIgnoreCase("screen"))
-            event.getPlayer().performCommand("wri " + channel.getName());
+        if (WirelessRedstone.getInstance().permissions.canActivateChannel(event.getPlayer())) {
+            if (type.equalsIgnoreCase("transmitter"))
+                channel.turnOn(WirelessRedstone.config.getInteractTransmitterTime());
+            else if (type.equalsIgnoreCase("screen"))
+                event.getPlayer().performCommand("wri " + channel.getName());
+        } else
+            event.getPlayer().sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                    + WirelessRedstone.strings.playerDoesntHavePermission);
     }
 
     private boolean signAlreadyExist(Location loc, String schannel) {
