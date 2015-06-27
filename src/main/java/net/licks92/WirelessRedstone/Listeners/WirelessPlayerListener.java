@@ -204,9 +204,11 @@ public class WirelessPlayerListener implements Listener {
                 channel.turnOn(WirelessRedstone.config.getInteractTransmitterTime());
             else if (type.equalsIgnoreCase("screen"))
                 event.getPlayer().performCommand("wri " + channel.getName());
-        } else
-            event.getPlayer().sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+        } else {
+            if (!WirelessRedstone.config.getSilentMode())
+                event.getPlayer().sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
+        }
     }
 
     private boolean signAlreadyExist(Location loc, String schannel) {

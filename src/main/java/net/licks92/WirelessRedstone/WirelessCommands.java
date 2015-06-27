@@ -44,7 +44,7 @@ public class WirelessCommands implements CommandExecutor {
 
         //Commands allowed for players and console
 
-        if(!(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
+        if (!(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
             WirelessRedstone.getWRLogger().info("A command block tried to use a command he is not allowed to. " +
                     "Commands blocks are only allowed to use /wrlock and /wractivate");
             return true;
@@ -98,47 +98,47 @@ public class WirelessCommands implements CommandExecutor {
     public ArrayList<String> generateCommandList(final CommandSender sender) {
         ArrayList<String> commands = new ArrayList<>();
 
-        if ((sender instanceof Player) ? plugin.permissions.canCreateTransmitter((Player)sender) : false) {
+        if ((sender instanceof Player) ? plugin.permissions.canCreateTransmitter((Player) sender) : false) {
             commands.add("/wr transmitter <channelname> - Creates transmitter sign.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canCreateReceiver((Player)sender) : false) {
+        if ((sender instanceof Player) ? plugin.permissions.canCreateReceiver((Player) sender) : false) {
             commands.add("/wr receiver <channelname> - Creates receiver sign.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canCreateScreen((Player)sender) : false) {
+        if ((sender instanceof Player) ? plugin.permissions.canCreateScreen((Player) sender) : false) {
             commands.add("/wr screen <channelname> - Creates screen sign.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canRemoveChannel((Player)sender) : true) {
+        if ((sender instanceof Player) ? plugin.permissions.canRemoveChannel((Player) sender) : true) {
             commands.add("/wr remove <channel> - Removes a channel.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.isWirelessAdmin((Player)sender) : true) {
+        if ((sender instanceof Player) ? plugin.permissions.isWirelessAdmin((Player) sender) : true) {
             commands.add("/wr admin - Channel admin commands. Execute for more info.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canUseListCommand((Player)sender) : true) {
+        if ((sender instanceof Player) ? plugin.permissions.canUseListCommand((Player) sender) : true) {
             commands.add("/wr list [page] - Lists all the channels with the owners.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canSeeChannelInfo((Player)sender) : true) {
+        if ((sender instanceof Player) ? plugin.permissions.canSeeChannelInfo((Player) sender) : true) {
             commands.add("/wr info <channel> <signCategory> - Get some informations about a channel. TIP: if you specify a signcategory you can click on the text to teleport to te sign");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canLockChannel((Player)sender) : true) {
+        if ((sender instanceof Player) ? plugin.permissions.canLockChannel((Player) sender) : true) {
             commands.add("/wr lock/unlock <channel> - Locks/Unlocks a channel.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canActivateChannel((Player)sender) : true) {
+        if ((sender instanceof Player) ? plugin.permissions.canActivateChannel((Player) sender) : true) {
             commands.add("/wr activate <channel> <time> - Turns on a channel for a given time in ms.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canSeeHelp((Player)sender) : true) {
+        if ((sender instanceof Player) ? plugin.permissions.canSeeHelp((Player) sender) : true) {
             commands.add("/wr help [page] - Shows a list of commands you can use.");
         }
 
-        if ((sender instanceof Player) ? plugin.permissions.canTeleportToSign((Player)sender) : false) {
+        if ((sender instanceof Player) ? plugin.permissions.canTeleportToSign((Player) sender) : false) {
             commands.add("/wr tp <channel> <signCategory> <index> - Teleport to a sign.");
         }
 
@@ -169,7 +169,7 @@ public class WirelessCommands implements CommandExecutor {
 
             //Commands for console and players only
 
-            if(!(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
+            if (!(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
                 WirelessRedstone.getWRLogger().info("A command block tried to use a command he is not allowed to. " +
                         "Commands blocks are only allowed to use /wrlock and /wractivate");
                 return true;
@@ -219,7 +219,8 @@ public class WirelessCommands implements CommandExecutor {
                 case "tp":
                     return performTeleport(player, args);
                 default:
-                    sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + WirelessRedstone.strings.commandDoesNotExist);
+                    if (!WirelessRedstone.config.getSilentMode())
+                        sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag + WirelessRedstone.strings.commandDoesNotExist);
                     return true;
             }
         } else if (!(sender instanceof BlockCommandSender)) {
@@ -231,12 +232,13 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performConvert(CommandSender sender, String[] args) {
         if ((sender instanceof Player) ? (!plugin.permissions.canConvertData((Player) sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
 
-        if(args.length < 2){
+        if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
                     + WirelessRedstone.strings.tooFewArguments);
             return true;
@@ -257,7 +259,7 @@ public class WirelessCommands implements CommandExecutor {
         }
         convertDataConfirm = false;
 
-        switch(WirelessRedstone.config.changeStorage(args[1])){
+        switch (WirelessRedstone.config.changeStorage(args[1])) {
             case 0:
                 sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
                         WirelessRedstone.strings.convertFailed);
@@ -276,15 +278,18 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performLockChannel(final CommandSender sender,
                                        final String[] args) {
+        if ((sender instanceof Player) ? (!plugin.permissions.canLockChannel((Player) sender)) : false) {
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
+            return true;
+        }
         if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
                     + WirelessRedstone.strings.tooFewArguments);
-        }
-        if ((sender instanceof Player) ? (!plugin.permissions.canLockChannel((Player)sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
+
         if (args.length >= 1) {
             WirelessChannel channel = WirelessRedstone.config
                     .getWirelessChannel(args[0]);
@@ -315,9 +320,10 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performWRlist(final CommandSender sender,
                                   final String[] args) {
-        if ((sender instanceof Player) ? (!plugin.permissions.canUseListCommand((Player)sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+        if ((sender instanceof Player) ? (!plugin.permissions.canUseListCommand((Player) sender)) : false) {
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         ArrayList<String> list = new ArrayList<String>();
@@ -371,9 +377,10 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performChannelAdmin(final CommandSender sender,
                                         final String[] args) {
-        if ((sender instanceof Player) ? (!plugin.permissions.isWirelessAdmin((Player)sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+        if ((sender instanceof Player) ? (!plugin.permissions.isWirelessAdmin((Player) sender)) : false) {
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         if (args.length > 0) {
@@ -453,9 +460,10 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performHelp(final CommandSender sender,
                                 final String[] args) {
-        if ((sender instanceof Player) ? (!plugin.permissions.canSeeHelp((Player)sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+        if ((sender instanceof Player) ? (!plugin.permissions.canSeeHelp((Player) sender)) : false) {
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
             return true;
         }
 
@@ -516,8 +524,9 @@ public class WirelessCommands implements CommandExecutor {
                 return true;
             }
         } else {
-            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         return true;
@@ -669,8 +678,9 @@ public class WirelessCommands implements CommandExecutor {
                 return true;
             }
         } else {
-            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         return true;
@@ -708,8 +718,9 @@ public class WirelessCommands implements CommandExecutor {
                 return true;
             }
         } else {
-            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         return true;
@@ -717,7 +728,7 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performRemoveChannel(final CommandSender sender,
                                          final String[] args) {
-        if ((sender instanceof Player) ? (plugin.permissions.canRemoveChannel((Player)sender)) : true) {
+        if ((sender instanceof Player) ? (plugin.permissions.canRemoveChannel((Player) sender)) : true) {
             if (args.length >= 1) {
                 if (hasAccessToChannel(sender, args[0])) {
                     WirelessRedstone.config.removeWirelessChannel(args[0]);
@@ -736,8 +747,9 @@ public class WirelessCommands implements CommandExecutor {
                 return true;
             }
         } else {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         return true;
@@ -750,8 +762,9 @@ public class WirelessCommands implements CommandExecutor {
 		 * channel.
 		 */
         if ((sender instanceof Player) ? (!plugin.permissions.canWipeData((Player) sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         if (!wipeDataConfirm) {
@@ -783,8 +796,9 @@ public class WirelessCommands implements CommandExecutor {
     private boolean performBackupData(final CommandSender sender,
                                       final String[] args) {
         if ((sender instanceof Player) ? (!plugin.permissions.canBackupData((Player) sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         if (WirelessRedstone.config.backupData()) {
@@ -801,14 +815,15 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performShowInfo(final CommandSender sender,
                                     final String[] args) {
-		/*
+        /*
 		 * This method shows the status of a WirelessChannel. At the moment, it
 		 * shows : - if the channel is active or not. - how many signs of each
 		 * kind is in each channel.
 		 */
         if ((sender instanceof Player) ? (!plugin.permissions.canSeeChannelInfo((Player) sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         if (args.length == 0) {
@@ -891,7 +906,7 @@ public class WirelessCommands implements CommandExecutor {
 		 */
 
         if (args.length == 2 && (sender instanceof Player)) {
-            return performAdvancedShowInfo(args, (Player)sender, 1);
+            return performAdvancedShowInfo(args, (Player) sender, 1);
         }
         if (args.length == 3 && (sender instanceof Player)) {
             int page;
@@ -905,7 +920,7 @@ public class WirelessCommands implements CommandExecutor {
                 return false;
             }
             if (page > 0)
-                return performAdvancedShowInfo(args, (Player)sender, page);
+                return performAdvancedShowInfo(args, (Player) sender, page);
             else {
                 sender.sendMessage(ChatColor.RED
                         + WirelessRedstone.strings.chatTag
@@ -926,8 +941,9 @@ public class WirelessCommands implements CommandExecutor {
             return true;
         }
         if (!WirelessRedstone.WireBox.hasAccessToChannel(player, args[0])) {
-            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
+            if (!WirelessRedstone.config.getSilentMode())
+                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHaveAccessToChannel);
             return true;
         }
 
@@ -1053,14 +1069,15 @@ public class WirelessCommands implements CommandExecutor {
 
     private boolean performActivateChannel(final CommandSender sender,
                                            final String[] args) {
+        if ((sender instanceof Player) ? (!plugin.permissions.canActivateChannel((Player) sender)) : false) {
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
+            return true;
+        }
         if (!(args.length > 1)) {
             sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
                     + WirelessRedstone.strings.tooFewArguments);
-            return true;
-        }
-        if ((sender instanceof Player) ? (!plugin.permissions.canActivateChannel((Player) sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
 
@@ -1091,8 +1108,9 @@ public class WirelessCommands implements CommandExecutor {
     private boolean performWRVersion(final CommandSender sender,
                                      final String[] args) {
         if ((sender instanceof Player) ? (!plugin.permissions.canSeeVersion((Player) sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
         sender.sendMessage("You are currently running WirelessRedstone "
@@ -1103,15 +1121,16 @@ public class WirelessCommands implements CommandExecutor {
     }
 
     private boolean performTeleport(final Player player,
-                                      final String[] args) {
+                                    final String[] args) {
+        if (!plugin.permissions.canTeleportToSign(player)) {
+            if (!WirelessRedstone.config.getSilentMode())
+                player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
+            return true;
+        }
         if (!(args.length > 2)) {
             player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
                     + WirelessRedstone.strings.tooFewArguments);
-            return true;
-        }
-        if (!plugin.permissions.canTeleportToSign(player)) {
-            player.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
 
@@ -1169,8 +1188,9 @@ public class WirelessCommands implements CommandExecutor {
     public boolean performPurgeData(final CommandSender sender,
                                     final String[] args) {
         if ((sender instanceof Player) ? (!plugin.permissions.canPurgeData((Player) sender)) : false) {
-            sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
-                    + WirelessRedstone.strings.playerDoesntHavePermission);
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
             return true;
         }
 
@@ -1341,7 +1361,7 @@ public class WirelessCommands implements CommandExecutor {
     }
 
     public boolean hasAccessToChannel(CommandSender sender, String channelName) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             return WirelessRedstone.WireBox.hasAccessToChannel((Player) sender, channelName);
         } else {
             return true; //If it's console or commandBlock, it has access to channel.

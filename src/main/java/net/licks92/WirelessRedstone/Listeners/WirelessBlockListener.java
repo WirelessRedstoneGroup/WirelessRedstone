@@ -232,7 +232,7 @@ public class WirelessBlockListener implements Listener {
                 }
             }
 
-            if(bf == null)
+            if (bf == null)
                 return;
 
             Sign signObject = (Sign) event.getBlock().getRelative(bf).getState();
@@ -255,7 +255,7 @@ public class WirelessBlockListener implements Listener {
                                 + " is actually linked with a null channel.");
                 return;
             }
-            if(event.getBlock().getType() == Material.REDSTONE_WIRE && event.getNewCurrent() == 0){
+            if (event.getBlock().getType() == Material.REDSTONE_WIRE && event.getNewCurrent() == 0) {
                 final BlockFace finalBf = bf;
                 Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                     @Override

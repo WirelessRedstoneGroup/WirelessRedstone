@@ -22,6 +22,9 @@ cancelChunkUnloadRange: 4
 # You have Vault but for any reason you don't want to use it? Set this value to false
 UseVault: true
 
+# Silent mode, don't send when you don't have permission (only on commands). Great for themparks
+SilentMode: false
+
 # Debug Mode, don't activate it if you're not a tester or a developper
 DebugMode: false
 
