@@ -393,84 +393,101 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         setWirelessChannel(channelName, channel);
     }
 
-	@Override
-	public boolean purgeData() {
-		try {
-			// Get the names of all the tables
-			Collection<WirelessChannel> channels = new ArrayList<WirelessChannel>();
-			channels = getAllChannels();
+    @Override
+    public boolean purgeData() {
+        try {
+            // Get the names of all the tables
+            Collection<WirelessChannel> channels = new ArrayList<WirelessChannel>();
+            channels = getAllChannels();
 
-			ArrayList<String> remove = new ArrayList<String>();
+            ArrayList<String> remove = new ArrayList<String>();
+            ArrayList<IWirelessPoint> removeSigns = new ArrayList<IWirelessPoint>();
 
-			// Erase channel if empty or world doesn't exist
-			for (WirelessChannel channel : channels) {
-				HashMap<Location, String> receivers = new HashMap<Location, String>();
-				HashMap<Location, String> transmitters = new HashMap<Location, String>();
-				HashMap<Location, String> screens = new HashMap<Location, String>();
+            // Erase channel if empty or world doesn't exist
+            for (WirelessChannel channel : channels) {
+                HashMap<Location, String> receivers = new HashMap<Location, String>();
+                HashMap<Location, String> transmitters = new HashMap<Location, String>();
+                HashMap<Location, String> screens = new HashMap<Location, String>();
+                ArrayList<Location> locationCheck = new ArrayList<Location>();
 
-				for (WirelessReceiver receiver : channel.getReceivers()) {
-					if (Bukkit.getWorld(receiver.getWorld()) == null) {
-						receivers.put(receiver.getLocation(), channel.getName()
-								+ "~" + receiver.getWorld());
-					}
-				}
-				for (WirelessTransmitter transmitter : channel
-						.getTransmitters()) {
-					if (Bukkit.getWorld(transmitter.getWorld()) == null) {
-						transmitters.put(
-								transmitter.getLocation(),
-								channel.getName() + "~"
-										+ transmitter.getWorld());
-					}
-				}
-				for (WirelessScreen screen : channel.getScreens()) {
-					if (Bukkit.getWorld(screen.getWorld()) == null) {
-						screens.put(screen.getLocation(), channel.getName()
-								+ "~" + screen.getWorld());
-					}
-				}
-
-				for (Entry<Location, String> receiverRemove : receivers
-						.entrySet()) {
-					removeWirelessReceiver(
-							receiverRemove.getValue().split("~")[0],
-							receiverRemove.getKey(), receiverRemove.getValue()
-									.split("~")[1]);
-				}
-				for (Entry<Location, String> transmitterRemove : transmitters
-						.entrySet()) {
-					removeWirelessTransmitter(transmitterRemove.getValue()
-							.split("~")[0], transmitterRemove.getKey(),
-							transmitterRemove.getValue().split("~")[1]);
-				}
-				for (Entry<Location, String> screenRemove : screens.entrySet()) {
-					removeWirelessScreen(screenRemove.getValue().split("~")[0],
-							screenRemove.getKey(), screenRemove.getValue()
-									.split("~")[1]);
-				}
-
-				if ((channel.getReceivers().size() < 1)
-						&& (channel.getTransmitters().size() < 1)
-						&& (channel.getScreens().size() < 1)) {
-					remove.add(channel.getName());
+                for (WirelessReceiver receiver : channel.getReceivers()) {
+                    if(locationCheck.contains(receiver.getLocation()))
+                        receivers.put(receiver.getLocation(), channel.getName()
+                                + "~" + receiver.getWorld());
+                    else
+                        locationCheck.add(receiver.getLocation());
+                    if (Bukkit.getWorld(receiver.getWorld()) == null) {
+                        receivers.put(receiver.getLocation(), channel.getName()
+                                + "~" + receiver.getWorld());
+                    }
                 }
-			}
+                for (WirelessTransmitter transmitter : channel
+                        .getTransmitters()) {
+                    if(locationCheck.contains(transmitter.getLocation()))
+                        receivers.put(transmitter.getLocation(), channel.getName()
+                                + "~" + transmitter.getWorld());
+                    else
+                        locationCheck.add(transmitter.getLocation());
+                    if (Bukkit.getWorld(transmitter.getWorld()) == null) {
+                        transmitters.put(
+                                transmitter.getLocation(),
+                                channel.getName() + "~"
+                                        + transmitter.getWorld());
+                    }
+                }
+                for (WirelessScreen screen : channel.getScreens()) {
+                    if(locationCheck.contains(screen.getLocation()))
+                        receivers.put(screen.getLocation(), channel.getName()
+                                + "~" + screen.getWorld());
+                    else
+                        locationCheck.add(screen.getLocation());
+                    if (Bukkit.getWorld(screen.getWorld()) == null) {
+                        screens.put(screen.getLocation(), channel.getName()
+                                + "~" + screen.getWorld());
+                    }
+                }
 
-			for (String channelRemove : remove) {
-				WirelessRedstone.config.removeWirelessChannel(channelRemove);
-			}
+                for (Entry<Location, String> receiverRemove : receivers
+                        .entrySet()) {
+                    removeWirelessReceiver(
+                            receiverRemove.getValue().split("~")[0],
+                            receiverRemove.getKey(), receiverRemove.getValue()
+                                    .split("~")[1]);
+                }
+                for (Entry<Location, String> transmitterRemove : transmitters
+                        .entrySet()) {
+                    removeWirelessTransmitter(transmitterRemove.getValue()
+                                    .split("~")[0], transmitterRemove.getKey(),
+                            transmitterRemove.getValue().split("~")[1]);
+                }
+                for (Entry<Location, String> screenRemove : screens.entrySet()) {
+                    removeWirelessScreen(screenRemove.getValue().split("~")[0],
+                            screenRemove.getKey(), screenRemove.getValue()
+                                    .split("~")[1]);
+                }
 
-			return true;
-		} catch (Exception e) {
-			WirelessRedstone
-					.getWRLogger()
-					.severe("An error occured. Enable debug mode to see the stacktraces.");
-			if (WirelessRedstone.config.getDebugMode()) {
-				e.printStackTrace();
-			}
-			return false;
-		}
-	}
+                if ((channel.getReceivers().size() < 1)
+                        && (channel.getTransmitters().size() < 1)
+                        && (channel.getScreens().size() < 1)) {
+                    remove.add(channel.getName());
+                }
+            }
+
+            for (String channelRemove : remove) {
+                WirelessRedstone.config.removeWirelessChannel(channelRemove);
+            }
+
+            return true;
+        } catch (Exception e) {
+            WirelessRedstone
+                    .getWRLogger()
+                    .severe("An error occured. Enable debug mode to see the stacktraces.");
+            if (WirelessRedstone.config.getDebugMode()) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+    }
 
     @Override
     public IWirelessPoint getWirelessRedstoneSign(final Location loc){

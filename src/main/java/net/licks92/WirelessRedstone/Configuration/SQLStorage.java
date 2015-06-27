@@ -853,21 +853,22 @@ public class SQLStorage implements IWirelessStorageConfiguration {
             channels = getAllChannels();
 
             ArrayList<String> remove = new ArrayList<String>();
+            ArrayList<IWirelessPoint> removeSigns = new ArrayList<IWirelessPoint>();
 
             // Erase channel if empty or world doesn't exist
             for (WirelessChannel channel : channels) {
                 HashMap<Location, String> receivers = new HashMap<Location, String>();
                 HashMap<Location, String> transmitters = new HashMap<Location, String>();
                 HashMap<Location, String> screens = new HashMap<Location, String>();
+                ArrayList<Location> locationCheck = new ArrayList<Location>();
 
-                for (WirelessReceiver receiver : channel.getReceivers()) {
-                    if (Bukkit.getWorld(receiver.getWorld()) == null) {
-                        receivers.put(receiver.getLocation(), channel.getName()
-                                + "~" + receiver.getWorld());
-                    }
-                }
                 for (WirelessTransmitter transmitter : channel
                         .getTransmitters()) {
+                    if(locationCheck.contains(transmitter.getLocation()))
+                        receivers.put(transmitter.getLocation(), channel.getName()
+                                + "~" + transmitter.getWorld());
+                    else
+                        locationCheck.add(transmitter.getLocation());
                     if (Bukkit.getWorld(transmitter.getWorld()) == null) {
                         transmitters.put(
                                 transmitter.getLocation(),
@@ -875,7 +876,25 @@ public class SQLStorage implements IWirelessStorageConfiguration {
                                         + transmitter.getWorld());
                     }
                 }
+
+                for (WirelessReceiver receiver : channel.getReceivers()) {
+                    if(locationCheck.contains(receiver.getLocation()))
+                        receivers.put(receiver.getLocation(), channel.getName()
+                                + "~" + receiver.getWorld());
+                    else
+                        locationCheck.add(receiver.getLocation());
+                    if (Bukkit.getWorld(receiver.getWorld()) == null) {
+                        receivers.put(receiver.getLocation(), channel.getName()
+                                + "~" + receiver.getWorld());
+                    }
+                }
+
                 for (WirelessScreen screen : channel.getScreens()) {
+                    if(locationCheck.contains(screen.getLocation()))
+                        receivers.put(screen.getLocation(), channel.getName()
+                                + "~" + screen.getWorld());
+                    else
+                        locationCheck.add(screen.getLocation());
                     if (Bukkit.getWorld(screen.getWorld()) == null) {
                         screens.put(screen.getLocation(), channel.getName()
                                 + "~" + screen.getWorld());
