@@ -31,8 +31,6 @@ public class WirelessBlockListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    WirelessChannel channel;
-
     @EventHandler
     public void onSignChange(final SignChangeEvent event) {
         Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(),
@@ -240,6 +238,8 @@ public class WirelessBlockListener implements Listener {
         }
 
         Sign signObject = (Sign) event.getBlock().getRelative(bf).getState();
+
+        final WirelessChannel channel;
         // final WirelessChannel channel;
 
         // Lets check if the sign is a Transmitter and if the channel name not
@@ -251,6 +251,7 @@ public class WirelessBlockListener implements Listener {
             channel = WirelessRedstone.config.getWirelessChannel(signObject
                     .getLine(1));
         }
+
         if (channel == null) {
             WirelessRedstone.getWRLogger().debug(
                     "The transmitter at location " + signObject.getX() + ","
@@ -259,6 +260,7 @@ public class WirelessBlockListener implements Listener {
                             + " is actually linked with a null channel.");
             return;
         }
+
         if (event.getBlock().getType() == Material.REDSTONE_WIRE && event.getNewCurrent() == 0) {
             final BlockFace finalBf = bf;
             Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
@@ -269,7 +271,6 @@ public class WirelessBlockListener implements Listener {
             }, 1L);
         } else
             channel.toggle(event.getNewCurrent(), event.getBlock().getRelative(bf));
-
     }
 
     @EventHandler
