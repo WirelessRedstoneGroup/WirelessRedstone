@@ -46,6 +46,8 @@
 		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
 		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
 		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
+		<restoreDataDone>The backup is successfuly restored!</restoreDataDone>
+		<restoreDataFailed>Can't restore the backup! Is there any backup?</restoreDataFailed>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>A new version has been uploaded on the repository! I highly recommend you to download it now on http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>

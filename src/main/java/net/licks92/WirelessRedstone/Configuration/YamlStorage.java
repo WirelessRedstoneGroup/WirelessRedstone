@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class YamlStorage implements IWirelessStorageConfiguration {
@@ -561,6 +562,114 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             if (isChannelEmpty(channel))
                 removeWirelessChannel(channelName);
         }
+    }
+
+    @Override
+    public int restoreData(){
+        try {
+            if(getLastBackup() == null) {
+                if(WirelessRedstone.config.getDebugMode())
+                    WirelessRedstone.getWRLogger().debug("Couldn't get last backup, aborting restore");
+                return 0;
+            }
+
+            File mainFolder = new File(channelFolder
+                    .getCanonicalPath().split(channelFolder.getName())[0]);
+
+
+            return unZip(mainFolder + File.separator + getLastBackup(), channelFolder.getAbsolutePath());
+        } catch (Exception e){
+            if(WirelessRedstone.config.getDebugMode())
+                e.printStackTrace();
+            return 0;
+        }
+    }
+
+    private String getLastBackup() {
+        ArrayList<String> files = new ArrayList<String>();
+        try {
+            File folder = new File(channelFolder
+                    .getCanonicalPath().split(channelFolder.getName())[0]);
+            for (final File fileEntry : folder.listFiles()) {
+                if (fileEntry.isDirectory()) {
+                    continue;
+                } else if (!fileEntry.getName().startsWith("WRBackup")) {
+                    continue;
+                } else {
+                    files.add(fileEntry.getName());
+                }
+            }
+        } catch (Exception e) {
+            if(WirelessRedstone.config.getDebugMode())
+                e.printStackTrace();
+            return null;
+        }
+        if(!files.isEmpty())
+            return files.get(files.size() - 1);
+
+        if(WirelessRedstone.config.getDebugMode())
+            WirelessRedstone.getWRLogger().debug("There are no backups, aborting restore");
+        return null;
+    }
+
+    private int unZip(String zipFile, String outputFolder){
+        byte[] buffer = new byte[1024];
+        try{
+            //create output directory is not exists
+            File folder = new File(outputFolder);
+            if(!folder.exists()){
+                folder.mkdir();
+            }
+
+            //get the zip file content
+            ZipInputStream zis =
+                    new ZipInputStream(new FileInputStream(zipFile));
+            //get the zipped file list entry
+            ZipEntry ze = zis.getNextEntry();
+
+            int returnValue = 1;
+            while(ze != null){
+                String fileName = ze.getName();
+                File newFile = new File(outputFolder + File.separator + fileName);
+
+                if(WirelessRedstone.config.getDebugMode())
+                    WirelessRedstone.getWRLogger().debug("File unziped: " + newFile.getAbsoluteFile());
+
+                if (fileName.endsWith(".db")) {
+                    returnValue = 2;
+                    if (WirelessRedstone.config.getDebugMode())
+                        WirelessRedstone.getWRLogger().debug("Found DB file! Changing storage type to DB after restore.");
+                } else if (fileName.endsWith(".yml")) {
+                    returnValue = 3;
+                    if (WirelessRedstone.config.getDebugMode())
+                        WirelessRedstone.getWRLogger().debug("Found yml file! Changing storage type to yml after restore.");
+                }
+
+                //create all non exists folders
+                //else you will hit FileNotFoundException for compressed folder
+                new File(newFile.getParent()).mkdirs();
+
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+            zis.closeEntry();
+            zis.close();
+
+            if(WirelessRedstone.config.getDebugMode())
+                WirelessRedstone.getWRLogger().debug("Unpacking zip done!");
+
+            return returnValue;
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+        return 0;
     }
 }
 

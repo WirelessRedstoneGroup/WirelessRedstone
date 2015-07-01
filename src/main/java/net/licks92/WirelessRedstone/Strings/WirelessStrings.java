@@ -50,6 +50,8 @@ public class WirelessStrings {
     public String convertSameType;
     public String convertContinue;
     public String automaticAssigned;
+    public String restoreDataDone;
+    public String restoreDataFailed;
 
     public String tellRawString;
 

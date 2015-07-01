@@ -123,6 +123,11 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return storage.wipeData();
     }
 
+    @Override
+    public int restoreData() {
+        return storage.restoreData();
+    }
+
     public boolean backupData() {
         String extension = null;
         if (getSQLUsage())
@@ -197,6 +202,21 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
             }
         });
         return 1;
+    }
+
+    public boolean reloadChannels() {
+        try {
+            storage.close();
+            Bukkit.getScheduler().runTaskLaterAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    initStorage();
+                }
+            }, 1L);
+        } catch (Exception ignored){
+            return false;
+        }
+        return true;
     }
 
     public void reloadConfig() {

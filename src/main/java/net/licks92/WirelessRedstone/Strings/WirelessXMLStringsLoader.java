@@ -280,6 +280,14 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                             this.automaticAssigned = PMElement
                                     .getElementsByTagName("automaticAssigned")
                                     .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("restoreDataDone").item(0) != null)
+                            this.restoreDataDone = PMElement
+                                    .getElementsByTagName("restoreDataDone")
+                                    .item(0).getTextContent();
+                        if (PMElement.getElementsByTagName("restoreDataFailed").item(0) != null)
+                            this.restoreDataFailed = PMElement
+                                    .getElementsByTagName("restoreDataFailed")
+                                    .item(0).getTextContent();
                         break;
 
                     case "logmessages": // Load the LM strings

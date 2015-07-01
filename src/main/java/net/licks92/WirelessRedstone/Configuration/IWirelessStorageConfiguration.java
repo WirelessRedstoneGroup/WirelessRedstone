@@ -57,4 +57,6 @@ public interface IWirelessStorageConfiguration {
     boolean backupData(String extension);
 
     boolean purgeData();
+
+    int restoreData();
 }

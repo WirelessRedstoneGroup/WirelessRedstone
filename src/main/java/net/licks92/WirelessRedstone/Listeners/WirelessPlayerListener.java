@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone.Listeners;
 import net.gravitydevelopment.updater.Updater.UpdateResult;
 import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,8 +32,13 @@ public class WirelessPlayerListener implements Listener {
         if (plugin.permissions.isWirelessAdmin(event.getPlayer())) {
             if (plugin.updater.getResult() == UpdateResult.UPDATE_AVAILABLE
                     && WirelessRedstone.config.doCheckForUpdates()) {
-                event.getPlayer().sendMessage(
-                        WirelessRedstone.strings.newUpdateAvailable);
+                Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        event.getPlayer().sendMessage(ChatColor.GREEN + WirelessRedstone.strings.chatTag +
+                                WirelessRedstone.strings.newUpdateAvailable);
+                    }
+                }, 2L); //This runnable makes sure this is the last message if the player joins
             }
         }
     }

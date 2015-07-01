@@ -439,6 +439,8 @@ public class WirelessCommands implements CommandExecutor {
                 return performBackupData(sender, args);
             } else if (subCommand.equalsIgnoreCase("purge")) {
                 return performPurgeData(sender, args);
+            } else if (subCommand.equalsIgnoreCase("restore")) {
+                return performRestoreData(sender, args);
             } else if (subCommand.equalsIgnoreCase("convert")) {
                 return performConvert(sender, args);
             } else {
@@ -454,6 +456,7 @@ public class WirelessCommands implements CommandExecutor {
             sender.sendMessage("/wr admin wipedata - Erase the database! Don't do it if you don't know what you're doing!");
             sender.sendMessage("/wr admin backup - Backup the database. You should use it before to update in order to recover it if an error occurs.");
             sender.sendMessage("/wr admin convert <storage> - Converts the database to another type of storage. Can be 'sql' or 'yaml'");
+            sender.sendMessage("/wr admin restore - Restore the last backup.");
         }
         return true;
     }
@@ -1201,6 +1204,71 @@ public class WirelessCommands implements CommandExecutor {
         } else {
             sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
                     + WirelessRedstone.strings.purgeDataFailed);
+        }
+        return true;
+    }
+
+    public boolean performRestoreData(final CommandSender sender,
+                                      final String[] args) {
+        if ((sender instanceof Player) ? (!plugin.permissions.canRestoreData((Player) sender)) : false) {
+            if (!WirelessRedstone.config.getSilentMode())
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.playerDoesntHavePermission);
+            return true;
+        }
+
+        switch (WirelessRedstone.config.restoreData()) {
+            case 0:
+                sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                        + WirelessRedstone.strings.restoreDataFailed);
+                break;
+            case 1: {
+                if (WirelessRedstone.config.reloadChannels()) {
+                    sender.sendMessage(ChatColor.GREEN
+                            + WirelessRedstone.strings.chatTag
+                            + WirelessRedstone.strings.restoreDataDone);
+                } else {
+                    sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                            + WirelessRedstone.strings.restoreDataFailed);
+                }
+                break;
+            }
+            case 2: {
+                switch (WirelessRedstone.config.changeStorage("db")) {
+                    case 0:
+                        sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                                + WirelessRedstone.strings.restoreDataFailed);
+                        break;
+                    case 1:
+                        sender.sendMessage(ChatColor.GREEN
+                                + WirelessRedstone.strings.chatTag
+                                + WirelessRedstone.strings.restoreDataDone);
+                        break;
+                    case 2:
+                        sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag +
+                                WirelessRedstone.strings.convertSameType);
+                        break;
+                }
+                break;
+            }
+            case 3: {
+                switch (WirelessRedstone.config.changeStorage("yml")) {
+                    case 0:
+                        sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                                + WirelessRedstone.strings.restoreDataFailed);
+                        break;
+                    case 1:
+                        sender.sendMessage(ChatColor.GREEN
+                                + WirelessRedstone.strings.chatTag
+                                + WirelessRedstone.strings.restoreDataDone);
+                        break;
+                    case 2:
+                        sender.sendMessage(ChatColor.RED + WirelessRedstone.strings.chatTag
+                                + WirelessRedstone.strings.restoreDataFailed);
+                        break;
+                }
+                break;
+            }
         }
         return true;
     }
