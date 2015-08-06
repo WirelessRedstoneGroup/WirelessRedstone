@@ -204,6 +204,15 @@ public class WirelessBlockListener implements Listener {
                                         .getRelative(BlockFace.DOWN), event
                                         .getOldCurrent(), event.getNewCurrent()));
             }
+            if (event.getBlock().getType() == Material.WOOD_PLATE || event.getBlock().getType() == Material.STONE_PLATE
+                    || event.getBlock().getType() == Material.IRON_PLATE || event.getBlock().getType() == Material.GOLD_PLATE) {
+                Bukkit.getServer()
+                        .getPluginManager()
+                        .callEvent(
+                                new BlockRedstoneEvent(event.getBlock()
+                                        .getRelative(BlockFace.DOWN), event
+                                        .getOldCurrent(), event.getNewCurrent()));
+            }
 //            if (event.getBlock().getType() == Material.DAYLIGHT_DETECTOR
 //                    || event.getBlock().getType() == Material.DAYLIGHT_DETECTOR_INVERTED) {
 //                Bukkit.getServer()
