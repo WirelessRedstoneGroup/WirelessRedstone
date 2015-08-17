@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings version="0.1">
 	<tags>
 		<chatTag>WirelessRedstone</chatTag>
@@ -14,7 +14,7 @@
 		<channelRemovedCauseNoSign>Канал удален, не более знаков в миров</channelRemovedCauseNoSign>
 		<channelUnlocked>Канал открыт !</channelUnlocked>
 		<commandDoesNotExist>Эта команда не существует!</commandDoesNotExist>
-		<commandForNextPage> Введите /wr list для перехода на слд. страницу!</commandForNextPage>
+		<commandForNextPage>Введите /wr list для перехода на слд. страницу!</commandForNextPage>
 		<customizedLanguageSuccessfullyLoaded>Вы успешно загрузили настроенный язык для WirelessRedstone!</customizedLanguageSuccessfullyLoaded>
 		<DBAboutToBeDeleted>Вы собираетесь удалить всю базу данных. Резерв будет сделан прежде чем начнется удаление. Если вы уверены, чтобы сделать это, тогда у вас есть 15 секунд, чтобы ввести эту команду еще раз.</DBAboutToBeDeleted>
 		<DBDeleted>База данных была успешно уничтожена!</DBDeleted>
@@ -31,25 +31,23 @@
 		<playerCreatedChannel>Вы только что создали новый канал!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Вы не имеете доступ к этому каналу.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Вы не имеете права делать это.</playerDoesntHavePermission>
-		<purgeDataDone>Purging data is done!</purgeDataDone>
-		<purgeDataFailed>Purging data failed!</purgeDataFailed>
+		<purgeDataDone>Очистка данных завершена!</purgeDataDone>
+		<purgeDataFailed>Ошибка очистки данных!</purgeDataFailed>
 		<pageNumberInferiorToZero>Номер страницы не может быть ниже 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Канал продлен!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign!</signDestroyed>
+		<signDestroyed>Табличка успешно удалена!</signDestroyed>
 		<subCommandDoesNotExist>Эта команда не существует!</subCommandDoesNotExist>
 		<thisChannelContains>Этот канал содержит</thisChannelContains>
-		<tooFewArguments>Too few arguments!</tooFewArguments>
-		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
-		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
-		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
-		<convertDone>Converting files finished!</convertDone>
-		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
-		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
-		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
+		<tooFewArguments>Слишком мало аргументов!</tooFewArguments>
+		<allTransmittersGone>Не было обнаружено ни одного передатчика, выключение всех приемников.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>Вы не можете уничтожить прикрепленный к табличке Wireless Redstone блок!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Вы уверены, что хотите сменить на %%STORAGETYPE? Если вы продолжите, будет создана резервная копия. У вас есть 15 секунд, чтобы подтвердить свой выбор, набрав команду повторно.</convertContinue>
+		<convertDone>Конвертация файлов завершена!</convertDone>
+		<convertSameType>Ошибка конвертации файлов! Вы уже находитесь на указанном типе хранилища.</convertSameType>
+		<convertFailed>Конвертация файлов не возможна! Разрешенные типы: sql или yaml.</convertFailed>
+		<automaticAssigned>Название автоматически изменено на: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Новая версия была загружена в хранилище! Я настоятельно рекомендую вам скачать его сейчас на http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
-  
-  

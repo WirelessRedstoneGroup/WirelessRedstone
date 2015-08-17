@@ -400,6 +400,32 @@ public class SQLStorage implements IWirelessStorageConfiguration {
                             receiver_delayer.setZ(rs3.getInt(sql_signz));
                             receivers.add(receiver_delayer);
                         } else if (rs3.getString(sql_signtype).contains(
+                                "receiver_switch_")) {
+                            String signtype = rs3.getString(sql_signtype);
+                            signtype = signtype.split("receiver_switch_")[1];
+                            boolean state;
+                            try {
+                                state = Boolean.parseBoolean(signtype);
+                            } catch (NumberFormatException ex) {
+                                state = false;
+                            }
+                            WirelessReceiverSwitch receiver_switch = new WirelessReceiverSwitch(
+                                    state);
+                            receiver_switch
+                                    .setDirection(WirelessRedstone.WireBox
+                                            .intToBlockFaceSign(rs3
+                                                    .getInt(sql_direction)));
+                            receiver_switch.setIsWallSign(rs3
+                                    .getBoolean(sql_iswallsign));
+                            receiver_switch.setOwner(rs3
+                                    .getString(sql_signowner));
+                            receiver_switch.setWorld(rs3
+                                    .getString(sql_signworld));
+                            receiver_switch.setX(rs3.getInt(sql_signx));
+                            receiver_switch.setY(rs3.getInt(sql_signy));
+                            receiver_switch.setZ(rs3.getInt(sql_signz));
+                            receivers.add(receiver_switch);
+                        } else if (rs3.getString(sql_signtype).contains(
                                 "receiver_clock_")) {
                             String signtype = rs3.getString(sql_signtype);
                             signtype = signtype.split("receiver_clock_")[1];
@@ -664,7 +690,15 @@ public class SQLStorage implements IWirelessStorageConfiguration {
             else if (point instanceof WirelessReceiverDelayer)
                 signtype = "receiver_delayer_"
                         + ((WirelessReceiverDelayer) (point)).getDelay();
-            else if (point instanceof WirelessReceiverClock)
+            else if (point instanceof WirelessReceiverSwitch) {
+                boolean state;
+                if (WirelessRedstone.WireBox.switchState.get(((WirelessReceiverSwitch) (point)).getLocation()) != null)
+                    state = WirelessRedstone.WireBox.switchState.get(((WirelessReceiverSwitch) (point)).getLocation());
+                else
+                    state = false;
+                signtype = "receiver_switch_"
+                        + state;
+            } else if (point instanceof WirelessReceiverClock)
                 signtype = "receiver_clock_"
                         + ((WirelessReceiverClock) (point)).getDelay();
             else
@@ -1037,6 +1071,38 @@ public class SQLStorage implements IWirelessStorageConfiguration {
             if(WirelessRedstone.config.getDebugMode())
                 e.printStackTrace();
             return 0;
+        }
+    }
+
+    @Override
+    public void updateReceivers() {
+        for(WirelessChannel channel : getAllChannels()){
+            for(WirelessReceiver receiver : channel.getReceivers()){
+                if(receiver instanceof WirelessReceiverSwitch){
+                    if(WirelessRedstone.config.getDebugMode())
+                        WirelessRedstone.getWRLogger().debug("Updating Switcher from channel " + channel.getName());
+                    updateSwitch(channel, receiver);
+                }
+            }
+        }
+    }
+
+    private void updateSwitch(WirelessChannel channel, WirelessReceiver receiver){
+        try {
+            Statement statement = connection.createStatement();
+
+            // Update name and lock status
+            statement.executeUpdate("UPDATE " + getDBName(channel.getName())
+                    + " SET " + sql_signtype + "='receiver_switch_" + ((WirelessReceiverSwitch) receiver).getState()
+                    + "' WHERE "
+                    + sql_signworld + "='" + receiver.getWorld() + "' AND "
+                    + sql_signx + "='" + receiver.getX() + "' AND "
+                    + sql_signy + "='" + receiver.getY() + "' AND "
+                    + sql_signz + "='" + receiver.getZ() + "'");
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

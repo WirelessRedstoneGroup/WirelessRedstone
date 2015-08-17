@@ -59,4 +59,6 @@ public interface IWirelessStorageConfiguration {
     boolean purgeData();
 
     int restoreData();
+
+    void updateReceivers();
 }

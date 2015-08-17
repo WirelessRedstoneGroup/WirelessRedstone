@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings version="0.1">
 	<tags>
 		<chatTag>RubroLapis Magica</chatTag>
@@ -10,11 +10,11 @@
 		<channelDoesNotExist>Hunc canalem non existit!</channelDoesNotExist>
 		<channelLocked>Canalem clausit!</channelLocked>
 		<channelNameContainsInvalidCaracters>Hoc nomen canalem characteres invalidos continet!</channelNameContainsInvalidCaracters>
-		<channelRemoved>Hun canelem removatum est!</channelRemoved>
+		<channelRemoved>Hunc canelem removatum est!</channelRemoved>
 		<channelRemovedCauseNoSign>Canelem removit, signi absunt</channelRemovedCauseNoSign>
 		<channelUnlocked>Canalem aperuit!</channelUnlocked>
 		<commandDoesNotExist>Hoc iussum non existit!</commandDoesNotExist>
-		<commandForNextPage> Digita /wr listam numerum paginam pro post paginam!</commandForNextPage>
+		<commandForNextPage>Digita /wr listam numerum paginam pro post paginam!</commandForNextPage>
 		<customizedLanguageSuccessfullyLoaded>Linguam tuam fructite pro Rubrolapis Magica activavis!</customizedLanguageSuccessfullyLoaded>
 		<DBAboutToBeDeleted>Datorum repositorium deleturus es. Duplicationem fiet ante id facis. Si certe id facis, XV secundi habes ut hoc iussum digitare iterium.</DBAboutToBeDeleted>
 		<DBDeleted>Datorum repositorium fructite deletem est!</DBDeleted>
@@ -31,25 +31,23 @@
 		<playerCreatedChannel>canelem novum creavisti!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Accessum huic canali non habes.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Permitionem hoc facere non habes.</playerDoesntHavePermission>
-		<purgeDataDone>Purging data is done!</purgeDataDone>
-		<purgeDataFailed>Purging data failed!</purgeDataFailed>
+		<purgeDataDone>Purgatio datorum perfecta est!</purgeDataDone>
+		<purgeDataFailed>Purgatio datorum infausta erat!</purgeDataFailed>
 		<pageNumberInferiorToZero>Numeram paginam minus zeri non potest!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Canelem extendit!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign!</signDestroyed>
+		<signDestroyed>Hoc signum feliciter remotum est!</signDestroyed>
 		<subCommandDoesNotExist>Hoc subiussum non existit!</subCommandDoesNotExist>
 		<thisChannelContains>Hoc canalem contenit</thisChannelContains>
-		<tooFewArguments>Too few arguments!</tooFewArguments>
-		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
-		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
-		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
-		<convertDone>Converting files finished!</convertDone>
-		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
-		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
-		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
+		<tooFewArguments>Nimis pauca argumenta!</tooFewArguments>
+		<allTransmittersGone>Nulli Transmittores inventi sunt, receptores actuantur.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>Cubum signo Rubrolapidis Magici adiunctum delere non potes!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Certene pro %%STORAGETYPE commutare vis? Duplicatione creabitur si procedis. XV secunda in quo eodem iussu confirmare habes.</convertContinue>
+		<convertDone>Conversio sarcinarum datorum facta est!</convertDone>
+		<convertSameType>Conversio sarcinarum datorum infausta erat! Iam in modo condendi electo es.</convertSameType>
+		<convertFailed>Conversatio sarcinarum datorum infausta erat! Typi liciti: sql vel yaml.</convertFailed>
+		<automaticAssigned>Automatice est nomen mutatum ad: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Versionem novum promptus est! Id obtine ex http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
-  
-  

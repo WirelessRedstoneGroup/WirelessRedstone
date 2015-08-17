@@ -25,9 +25,11 @@ import org.bukkit.scheduler.BukkitTask;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 import org.mcstats.Metrics.Plotter;
+import sun.util.logging.PlatformLogger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 /**
  * This class is the main class of the plugin. It controls the Configuration,
@@ -52,10 +54,6 @@ public class WirelessRedstone extends JavaPlugin {
     public Updater updater;
     private static WirelessRedstone instance;
 
-    public HashMap<Integer, String> clockTasks = new HashMap<Integer, String>();
-    public ArrayList<String> activeChannels = new ArrayList<String>();
-
-
     /**
      * Wireless Redstone logger
      *
@@ -71,13 +69,13 @@ public class WirelessRedstone extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
+            config.updateReceivers();
             config.close();
             updateChecker.cancel();
 
             metrics = null;
             instance = null;
         } catch (Exception ignored) {
-
         }
     }
 

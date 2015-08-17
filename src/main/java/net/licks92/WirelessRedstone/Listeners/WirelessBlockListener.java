@@ -88,7 +88,6 @@ public class WirelessBlockListener implements Listener {
 
                             if (WirelessRedstone.WireBox.isReceiver(event
                                     .getLine(0))) {
-
                                 if (WirelessRedstone.WireBox
                                         .isReceiverInverter(event.getLine(2))) {
                                     if (!WirelessRedstone.WireBox
@@ -106,6 +105,16 @@ public class WirelessBlockListener implements Listener {
                                                     event.getBlock(),
                                                     event.getPlayer(),
                                                     Type.Delayer)) {
+                                        event.setCancelled(true);
+                                        event.getBlock().breakNaturally();
+                                    }
+                                } else if (WirelessRedstone.WireBox
+                                        .isReceiverSwitch(event.getLine(2))) {
+                                    if (!WirelessRedstone.WireBox
+                                            .addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
+                                                    event.getBlock(),
+                                                    event.getPlayer(),
+                                                    Type.Switch)) {
                                         event.setCancelled(true);
                                         event.getBlock().breakNaturally();
                                     }

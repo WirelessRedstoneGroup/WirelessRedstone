@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings version="0.1">
 	<tags>
 		<chatTag>Vezeték Nélküli Redstone</chatTag>
@@ -14,12 +14,12 @@
 		<channelRemovedCauseNoSign>Csatorna eltávolítva, nincs több tábla a világokban.</channelRemovedCauseNoSign>
 		<channelUnlocked>Csatorna zárolás feloldva!</channelUnlocked>
 		<commandDoesNotExist>Ilyen parancs nem létezik!</commandDoesNotExist>
-		<commandForNextPage> Ird be: /wr list <oldalszám>  a következő oldalért!</commandForNextPage>
+		<commandForNextPage>Ird be: /wr list [oldalszám]  a következő oldalért!</commandForNextPage>
 		<customizedLanguageSuccessfullyLoaded>Sikeresen betöltötted az általad készített nyelvet!</customizedLanguageSuccessfullyLoaded>
 		<DBAboutToBeDeleted>Törölni készülöd az egész adatbázist.Egy visszaállítási pont készül mielőtt ez megtörténik.Ha biztosan ki akarod törölni írd be újra a parancsot 15 másodpercen belül!</DBAboutToBeDeleted>
 		<DBDeleted>Adatbázis sikeresen törölve!</DBDeleted>
 		<DBNotDeleted>Az adatbázis nincs törölve.</DBNotDeleted>
-		<forMoreInfosPerformWRInfo>ha több információt akarsz látni egy csatornáról írd be: /wr info <csatorna neve></forMoreInfosPerformWRInfo>
+		<forMoreInfosPerformWRInfo>ha több információt akarsz látni egy csatornáról írd be: /wr info [csatorna neve]</forMoreInfosPerformWRInfo>
 		<listEmpty>A lista üres!</listEmpty>
 		<ownersOfTheChannelAre>A csatorna tulajdonosa(i):</ownersOfTheChannelAre>
 		<pageEmpty>Az oldal üres!</pageEmpty>
@@ -31,25 +31,24 @@
 		<playerCreatedChannel>Készítettél egy új csatornát!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>Nincs jogod ehez a csatornához!</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>Nincs jogod ahoz, hogy ezt csináld!</playerDoesntHavePermission>
-		<purgeDataDone>Purging data is done!</purgeDataDone>
-		<purgeDataFailed>Purging data failed!</purgeDataFailed>
+		<purgeDataDone>Adatok törlése megtörtént!</purgeDataDone>
+		<purgeDataFailed>Adatok törlése nem sikerült!</purgeDataFailed>
 		<pageNumberInferiorToZero>Az oldalszám nem lehet kisseb, mint 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Kiterjesztetted a csatornát!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign!</signDestroyed>
+		<signDestroyed>A tábla sikeresen eltávolítva!</signDestroyed>
 		<subCommandDoesNotExist>Ez a parancs nem létezik!</subCommandDoesNotExist>
 		<thisChannelContains>Ez a csatorna tartalmazza a(z):</thisChannelContains>
-		<tooFewArguments>Too few arguments!</tooFewArguments>
-		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
-		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
-		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
-		<convertDone>Converting files finished!</convertDone>
-		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
-		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
-		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
+		<tooFewArguments>Túl kevés változó!</tooFewArguments>
+		<allTransmittersGone>Nem találtunk egyetlen adót (Transmitter) sem, ezért kikapcsoljuk a vevőt.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>Nem tudod elpusztítani ezt a blokkot mert csatlakozik a Vezeték Nélküli Redstone táblához!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>Biztosan váltani szeretne a következő tároló típusra?: %%STORAGETYPE
+			Ha biztosan ki váltani szeretnél akkor írd be újra a parancsot 15 másodpercen belül.</convertContinue>
+		<convertDone>Fájlok konvertálása befejeződött!</convertDone>
+		<convertSameType>Fájlok konvertálása nem sikerült! Te már a kiválasztott tároló típust használod.</convertSameType>
+		<convertFailed>Fájlok konvertálása nem sikerült! Engedélyezett típusok: sql vagy yaml.</convertFailed>
+		<automaticAssigned>Automatikusan megváltozott a név a következőre: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Egy új verzió van feltöltve! Javasolt hogy tölsd le az alábbi linkről: http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
-  
-  

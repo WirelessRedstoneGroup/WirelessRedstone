@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings version="0.1">
 	<tags>
 		<chatTag>Redstone Inalámbrico</chatTag>
@@ -14,7 +14,7 @@
 		<channelRemovedCauseNoSign>Canal eliminado, no hay más señales en el mundo</channelRemovedCauseNoSign>
 		<channelUnlocked>Canal desbloqueado!</channelUnlocked>
 		<commandDoesNotExist>Este comando no existe!</commandDoesNotExist>
-		<commandForNextPage> Escribe /wr [número de página] para pasar a la siguiente página!</commandForNextPage>
+		<commandForNextPage>Escribe /wr [número de página] para pasar a la siguiente página!</commandForNextPage>
 		<customizedLanguageSuccessfullyLoaded>Has cargado con éxito tu idioma personalizado para Redstone Inalámbrico!</customizedLanguageSuccessfullyLoaded>
 		<DBAboutToBeDeleted>Estás a punto de borrar toda la base de datos. Se creará una copia de seguridad antes de que lo  hagas. Si estás seguro de hacerlo, tienes 15 segundos para escribir de nuevo este comando.</DBAboutToBeDeleted>
 		<DBDeleted>La base de datos se ha limpiado con éxito!</DBDeleted>
@@ -31,25 +31,23 @@
 		<playerCreatedChannel>Has creado un nuevo canal!</playerCreatedChannel>
 		<playerDoesntHaveAccessToChannel>No tienes acceso a este canal.</playerDoesntHaveAccessToChannel>
 		<playerDoesntHavePermission>No tienes permiso para hacer esto.</playerDoesntHavePermission>
-		<purgeDataDone>Purging data is done!</purgeDataDone>
-		<purgeDataFailed>Purging data failed!</purgeDataFailed>
+		<purgeDataDone>Se realiza la purga de datos!</purgeDataDone>
+		<purgeDataFailed>Purga de datos fallida!</purgeDataFailed>
 		<pageNumberInferiorToZero>El número de página no puede ser inferior a 0!</pageNumberInferiorToZero>
 		<playerExtendedChannel>Has extendido un canal!</playerExtendedChannel>
-		<signDestroyed>Succesfully removed this sign!</signDestroyed>
+		<signDestroyed>¡Señal eliminada con éxito!</signDestroyed>
 		<subCommandDoesNotExist>Este subcomando no existe!</subCommandDoesNotExist>
 		<thisChannelContains>Este canal contiene</thisChannelContains>
-		<tooFewArguments>Too few arguments!</tooFewArguments>
-		<allTransmittersGone>No other Transmitters found, switching receivers off.</allTransmittersGone>
-		<playerCannotDestroyBlockAttachedToSign>You cannot destroy a block that is attached to a Wireless Redstone sign!</playerCannotDestroyBlockAttachedToSign>
-		<convertContinue>Are you really sure you want to change to %%STORAGETYPE? A backup will be created if you continue. You have 15 seconds to confirm with the same command.</convertContinue>
-		<convertDone>Converting files finished!</convertDone>
-		<convertSameType>Converting files failed! You're already on your indicated storage type.</convertSameType>
-		<convertFailed>Converting files failed! Allowed types: sql or yaml.</convertFailed>
-		<automaticAssigned>Automatically changed the name to: %%NAME</automaticAssigned>
+		<tooFewArguments>Muy pocos argumentos!</tooFewArguments>
+		<allTransmittersGone>No se encontaron otros transmisores, desconectando los receptores.</allTransmittersGone>
+		<playerCannotDestroyBlockAttachedToSign>No se puede destruir un bloque que se une a una señal de Redstone inalàmbrica!</playerCannotDestroyBlockAttachedToSign>
+		<convertContinue>¿Es realmente seguro de que desea cambiar a %%STORAGETYPE? Si continúa, se creará una copia de seguridad. Tienes 15 segundos para confirmar con el mismo comando.</convertContinue>
+		<convertDone>¡Conversión de archivos terminada!</convertDone>
+		<convertSameType>¡Conversión de archivos fallida! Ya se encuentra en el tipo de almacenamiento indicado.</convertSameType>
+		<convertFailed>¡Conversión de archivos fallida! Tipos permitidos: sql o yaml.</convertFailed>
+		<automaticAssigned>Se ha cambiado el nombre autoamáticamente a: %%NAME</automaticAssigned>
 	</playermessages>
 	<logmessages>
 		<newUpdateAvailable>Una nueva versión ha salido! Recomiendo descargarlo ahora en http://dev.bukkit.org/server-mods/wireless-redstone/</newUpdateAvailable>
 	</logmessages>
 </strings>
-  
-  

@@ -11,6 +11,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WireBox {
     private final WirelessRedstone plugin;
@@ -18,6 +19,10 @@ public class WireBox {
     public WireBox(final WirelessRedstone wirelessRedstone) {
         this.plugin = wirelessRedstone;
     }
+
+    public HashMap<Integer, String> clockTasks = new HashMap<Integer, String>();
+    public HashMap<Location, Boolean> switchState = new HashMap<Location, Boolean>();
+    public ArrayList<String> activeChannels = new ArrayList<String>();
 
     public int signFaceToInt(final BlockFace face) {
         switch (face) {
@@ -132,6 +137,20 @@ public class WireBox {
 
     /**
      * @param data - The line of the sign
+     * @return true if the string corresponds to the tag of the delayer receiver
+     * type
+     */
+    public boolean isReceiverSwitch(final String data) {
+        for (String tag : WirelessRedstone.strings.tagsReceiverSwitchType) {
+            if (data.toLowerCase().equals(tag.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param data - The line of the sign
      * @return true if the string corresponds to the tag of the default receiver
      * type
      */
@@ -207,6 +226,20 @@ public class WireBox {
                 case Inverter:
                     receiver = new WirelessReceiverInverter();
                     break;
+
+                case Switch:
+                    String stateStr = ((Sign) (cblock.getState())).getLine(3);
+                    boolean state;
+                    try {
+                        state = Boolean.parseBoolean(stateStr);
+                    } catch (NumberFormatException ex) {
+                        receiver = new WirelessReceiverSwitch();
+                        break;
+                    }
+                    receiver = new WirelessReceiverSwitch(state);
+                    break;
+//                    receiver = new WirelessReceiverSwitch();
+//                    break;
 
                 case Delayer:
                     String delayStr = ((Sign) (cblock.getState())).getLine(3);
@@ -284,6 +317,20 @@ public class WireBox {
                 case Inverter:
                     receiver = new WirelessReceiverInverter();
                     break;
+
+                case Switch:
+                    String stateStr = ((Sign) (cblock.getState())).getLine(3);
+                    boolean state;
+                    try {
+                        state = Boolean.parseBoolean(stateStr);
+                    } catch (NumberFormatException ex) {
+                        receiver = new WirelessReceiverSwitch();
+                        break;
+                    }
+                    receiver = new WirelessReceiverSwitch(state);
+                    break;
+//                    receiver = new WirelessReceiverSwitch();
+//                    break;
 
                 case Delayer:
                     String delayStr = ((Sign) (cblock.getState())).getLine(3);

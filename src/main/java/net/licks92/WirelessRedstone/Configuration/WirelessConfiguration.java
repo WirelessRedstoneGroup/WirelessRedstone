@@ -128,6 +128,9 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return storage.restoreData();
     }
 
+    @Override
+    public void updateReceivers() { storage.updateReceivers(); }
+
     public boolean backupData() {
         String extension = null;
         if (getSQLUsage())
@@ -155,14 +158,14 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
                 if (getSQLUsage())
                     return 2;
                 ArrayList<Integer> remove = new ArrayList<Integer>();
-                for (Map.Entry<Integer, String> task : WirelessRedstone.getInstance().clockTasks
+                for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
                         .entrySet()) {
                     Bukkit.getScheduler().cancelTask(task.getKey());
                     remove.add(task.getKey());
                     WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
                 }
                 for (Integer i : remove) {
-                    WirelessRedstone.getInstance().clockTasks.remove(i);
+                    WirelessRedstone.WireBox.clockTasks.remove(i);
                 }
                 remove.clear();
                 getConfig().set("UseSQL", true);
@@ -176,14 +179,14 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
                 if (!getSQLUsage())
                     return 2;
                 ArrayList<Integer> remove = new ArrayList<Integer>();
-                for (Map.Entry<Integer, String> task : WirelessRedstone.getInstance().clockTasks
+                for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
                         .entrySet()) {
                     Bukkit.getScheduler().cancelTask(task.getKey());
                     remove.add(task.getKey());
                     WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
                 }
                 for (Integer i : remove) {
-                    WirelessRedstone.getInstance().clockTasks.remove(i);
+                    WirelessRedstone.WireBox.clockTasks.remove(i);
                 }
                 remove.clear();
                 getConfig().set("UseSQL", false);

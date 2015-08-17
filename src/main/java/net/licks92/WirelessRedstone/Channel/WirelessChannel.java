@@ -111,8 +111,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             if (WirelessRedstone.config.getDebugMode())
                 e.printStackTrace();
         }
-        if (!WirelessRedstone.getInstance().activeChannels.contains(getName())) {
-            WirelessRedstone.getInstance().activeChannels.add(getName());
+        if (!WirelessRedstone.WireBox.activeChannels.contains(getName())) {
+            WirelessRedstone.WireBox.activeChannels.add(getName());
         }
     }
 
@@ -137,13 +137,13 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             if (WirelessRedstone.config.getDebugMode())
                 e.printStackTrace();
         }
-        if (WirelessRedstone.getInstance().activeChannels.contains(getName())) {
-            WirelessRedstone.getInstance().activeChannels.remove(getName());
+        if (WirelessRedstone.WireBox.activeChannels.contains(getName())) {
+            WirelessRedstone.WireBox.activeChannels.remove(getName());
         }
     }
 
     public void startClock(final BukkitTask task) {
-        WirelessRedstone.getInstance().clockTasks.put(task.getTaskId(),
+        WirelessRedstone.WireBox.clockTasks.put(task.getTaskId(),
                 getName());
         WirelessRedstone.getWRLogger().debug(
                 "Added clock task " + task.getTaskId()
@@ -152,7 +152,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
 
     public void stopClock() {
         ArrayList<Integer> remove = new ArrayList<Integer>();
-        for (Map.Entry<Integer, String> task : WirelessRedstone.getInstance().clockTasks
+        for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
                 .entrySet()) {
             if (!task.getValue().equalsIgnoreCase(getName())) {
                 continue;
@@ -162,7 +162,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
         }
         for (Integer i : remove) {
-            WirelessRedstone.getInstance().clockTasks.remove(i);
+            WirelessRedstone.WireBox.clockTasks.remove(i);
         }
         remove.clear();
     }
@@ -173,7 +173,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                     @Override
                     public void run() {
                         if (redstoneValue > 0) {
-                            if (WirelessRedstone.getInstance().activeChannels
+                            if (WirelessRedstone.WireBox.activeChannels
                                     .contains(getName())) {
                                 return;
                             }
@@ -316,9 +316,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
     }
 
     public boolean removeOwner(final String username) {
-        boolean ret = this.owners.remove(username);
-
-        return ret;
+        return this.owners.remove(username);
     }
 
     public void addTransmitter(final WirelessTransmitter transmitter) {
@@ -416,6 +414,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             } else if (receiver instanceof WirelessReceiverInverter && type == WirelessReceiver.Type.Inverter) {
                 returnList.add(receiver);
             } else if (receiver instanceof WirelessReceiverDelayer && type == WirelessReceiver.Type.Delayer) {
+                returnList.add(receiver);
+            } else if (receiver instanceof WirelessReceiverSwitch && type == WirelessReceiver.Type.Switch) {
                 returnList.add(receiver);
             } else if (type == WirelessReceiver.Type.Default) {
                 returnList.add(receiver);
