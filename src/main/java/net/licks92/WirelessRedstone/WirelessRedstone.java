@@ -25,11 +25,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.mcstats.Metrics;
 import org.mcstats.Metrics.Graph;
 import org.mcstats.Metrics.Plotter;
-import sun.util.logging.PlatformLogger;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
 
 /**
  * This class is the main class of the plugin. It controls the Configuration,

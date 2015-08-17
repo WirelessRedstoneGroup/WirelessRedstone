@@ -1,7 +1,10 @@
 package net.licks92.WirelessRedstone.Listeners;
 
 import net.gravitydevelopment.updater.Updater.UpdateResult;
-import net.licks92.WirelessRedstone.Channel.*;
+import net.licks92.WirelessRedstone.Channel.WirelessChannel;
+import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Channel.WirelessScreen;
+import net.licks92.WirelessRedstone.Channel.WirelessTransmitter;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

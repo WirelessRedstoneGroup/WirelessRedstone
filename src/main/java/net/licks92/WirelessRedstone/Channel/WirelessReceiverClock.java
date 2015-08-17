@@ -1,7 +1,6 @@
 package net.licks92.WirelessRedstone.Channel;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
-
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
