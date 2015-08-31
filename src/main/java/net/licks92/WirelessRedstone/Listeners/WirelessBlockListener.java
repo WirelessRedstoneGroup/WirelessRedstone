@@ -279,7 +279,7 @@ public class WirelessBlockListener implements Listener {
             return;
         }
 
-        if (event.getBlock().getType() == Material.REDSTONE_WIRE && event.getNewCurrent() == 0) {
+        if (event.getNewCurrent() == 0) {
             final BlockFace finalBf = bf;
             Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                 @Override
