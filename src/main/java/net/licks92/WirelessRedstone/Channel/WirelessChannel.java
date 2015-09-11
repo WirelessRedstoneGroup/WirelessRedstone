@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.persistence.Entity;
@@ -124,6 +125,22 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             // Change receivers
             for (WirelessReceiver receiver : getReceivers()) {
                 receiver.turnOff(getName());
+
+                if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
+                    ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
+                    possibleBlockface.add(BlockFace.NORTH);
+                    possibleBlockface.add(BlockFace.EAST);
+                    possibleBlockface.add(BlockFace.SOUTH);
+                    possibleBlockface.add(BlockFace.WEST);
+                    possibleBlockface.add(BlockFace.UP);
+                    possibleBlockface.add(BlockFace.DOWN);
+
+                    for (BlockFace blockFace : possibleBlockface) {
+                        Bukkit.getServer().getPluginManager().callEvent(
+                                new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
+                                        receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
+                    }
+                }
             }
 
             // Change screens
@@ -168,6 +185,8 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
     }
 
     public void toggle(final Integer redstoneValue, final Block block) {
+        Bukkit.broadcastMessage(redstoneValue + " - " + block.getLocation().getX()
+                + " " + block.getLocation().getY() + " " + block.getLocation().getZ());
         if (redstoneValue > 0) {
             if (WirelessRedstone.WireBox.activeChannels
                     .contains(getName())) {
@@ -175,13 +194,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
             }
             turnOn();
         } else if (redstoneValue == 0) {
-            boolean on = false;
-            for (WirelessTransmitter transmitter : transmitters) {
-                if (transmitter.isActive()) {
-                    on = true;
-                }
-            }
-            if (!on) {
+            if (!isOn()) {
                 turnOff();
             }
         }
@@ -417,6 +430,16 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
 
         return returnList;
+    }
+
+    public boolean isOn(){
+        boolean on = false;
+        for (WirelessTransmitter transmitter : transmitters) {
+            if (transmitter.isActive()) {
+                on = true;
+            }
+        }
+        return on;
     }
 
     public List<WirelessScreen> getScreens() {

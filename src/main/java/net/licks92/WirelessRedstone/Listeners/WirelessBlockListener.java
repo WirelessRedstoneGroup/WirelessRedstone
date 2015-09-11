@@ -184,6 +184,9 @@ public class WirelessBlockListener implements Listener {
 
     @EventHandler
     public void onBlockRedstoneChange(final BlockRedstoneEvent event) {
+        if(event.getOldCurrent() == event.getNewCurrent())
+            return;
+
         BlockFace bf = BlockFace.SELF;
         if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
             if (event.getBlock().getType() == Material.LEVER) {
@@ -242,6 +245,13 @@ public class WirelessBlockListener implements Listener {
 
             for (BlockFace blockFace : possibleBlockface) {
                 if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
+                    Sign signObject = (Sign) event.getBlock().getRelative(blockFace).getState();
+
+                    if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
+                            || signObject.getLine(1) == null || signObject.getLine(1).equals("")) {
+                        continue;
+                    }
+
                     bf = blockFace;
                     break;
                 }
@@ -251,9 +261,8 @@ public class WirelessBlockListener implements Listener {
                 return;
         }
 
-        if (!(event.getBlock().getRelative(bf).getState() instanceof Sign)) {
+        if (!(event.getBlock().getRelative(bf).getState() instanceof Sign))
             return;
-        }
 
         Sign signObject = (Sign) event.getBlock().getRelative(bf).getState();
 
