@@ -185,8 +185,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
     }
 
     public void toggle(final Integer redstoneValue, final Block block) {
-        Bukkit.broadcastMessage(redstoneValue + " - " + block.getLocation().getX()
-                + " " + block.getLocation().getY() + " " + block.getLocation().getZ());
         if (redstoneValue > 0) {
             if (WirelessRedstone.WireBox.activeChannels
                     .contains(getName())) {

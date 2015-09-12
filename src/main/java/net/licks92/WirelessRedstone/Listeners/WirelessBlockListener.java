@@ -225,15 +225,15 @@ public class WirelessBlockListener implements Listener {
                                         .getRelative(BlockFace.DOWN), event
                                         .getOldCurrent(), event.getNewCurrent()));
             }
-//            if (event.getBlock().getType() == Material.DAYLIGHT_DETECTOR
-//                    || event.getBlock().getType() == Material.DAYLIGHT_DETECTOR_INVERTED) {
-//                Bukkit.getServer()
-//                        .getPluginManager()
-//                        .callEvent(
-//                                new BlockRedstoneEvent(event.getBlock()
-//                                        .getRelative(BlockFace.DOWN), event
-//                                        .getOldCurrent(), event.getNewCurrent()));
-//            }
+            if (event.getBlock().getType() == Material.DAYLIGHT_DETECTOR
+                    || event.getBlock().getType() == Material.DAYLIGHT_DETECTOR_INVERTED) {
+                Bukkit.getServer()
+                        .getPluginManager()
+                        .callEvent(
+                                new BlockRedstoneEvent(event.getBlock()
+                                        .getRelative(BlockFace.DOWN), event
+                                        .getOldCurrent(), event.getNewCurrent()));
+            }
 
             ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
             possibleBlockface.add(BlockFace.NORTH);
