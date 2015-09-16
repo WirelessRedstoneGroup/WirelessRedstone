@@ -539,7 +539,30 @@ public class WireBox {
                 || tempBlock.getType() == Material.GLOWSTONE
                 || tempBlock.getType() == Material.REDSTONE_LAMP_ON
                 || tempBlock.getType() == Material.REDSTONE_LAMP_OFF
-                || tempBlock.getType() == Material.LEAVES);
+                || tempBlock.getType() == Material.LEAVES
+                || tempBlock.getType() == Material.WOOD_STAIRS
+                || tempBlock.getType() == Material.COBBLESTONE_STAIRS
+                || tempBlock.getType() == Material.RED_SANDSTONE_STAIRS
+                || tempBlock.getType() == Material.SANDSTONE_STAIRS
+                || tempBlock.getType() == Material.FENCE
+                || tempBlock.getType() == Material.ACACIA_FENCE
+                || tempBlock.getType() == Material.DARK_OAK_FENCE
+                || tempBlock.getType() == Material.JUNGLE_FENCE
+                || tempBlock.getType() == Material.BIRCH_FENCE
+                || tempBlock.getType() == Material.WOOD_DOOR
+                || tempBlock.getType() == Material.WOODEN_DOOR
+                || tempBlock.getType() == Material.IRON_DOOR_BLOCK
+                || tempBlock.getType() == Material.IRON_DOOR
+                || tempBlock.getType() == Material.GLASS
+                || tempBlock.getType() == Material.THIN_GLASS
+                || tempBlock.getType() == Material.STAINED_GLASS
+                || tempBlock.getType() == Material.STAINED_GLASS_PANE
+                || tempBlock.getType() == Material.COBBLE_WALL
+                || tempBlock.getType() == Material.ICE
+                || tempBlock.getType() == Material.WOOD_STEP
+                || tempBlock.getType() == Material.STEP
+                || tempBlock.getType() == Material.SEA_LANTERN
+                || tempBlock.getType() == Material.TNT);
     }
 
     public boolean isValidLocation(final Block block) {
@@ -556,7 +579,9 @@ public class WireBox {
                 || tempBlock.getType() == Material.GLOWSTONE
                 || tempBlock.getType() == Material.REDSTONE_LAMP_ON
                 || tempBlock.getType() == Material.REDSTONE_LAMP_OFF
-                || tempBlock.getType() == Material.LEAVES);
+                || tempBlock.getType() == Material.LEAVES
+                || tempBlock.getType() == Material.SEA_LANTERN
+                || tempBlock.getType() == Material.TNT);
     }
 
     public ArrayList<Location> getReceiverLocations(
