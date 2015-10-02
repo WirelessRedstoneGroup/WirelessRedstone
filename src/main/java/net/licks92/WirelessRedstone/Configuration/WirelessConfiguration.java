@@ -30,8 +30,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return plugin.getConfig();
     }
 
-    public WirelessConfiguration(final WirelessRedstone r_plugin) {
-        plugin = r_plugin;
+    public WirelessConfiguration(final WirelessRedstone plugin) {
+        this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
         configFile.getParentFile().mkdirs();
         if (!configFile.exists()) {
@@ -96,9 +96,9 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 
         // Create the storage config
         if (getSQLUsage()) {
-            storage = new SQLStorage(channelFolder, plugin);
+            storage = new SQLiteStorage(CHANNEL_FOLDER, plugin);
         } else
-            storage = new YamlStorage(channelFolder, plugin);
+            storage = new YamlStorage(CHANNEL_FOLDER, plugin);
 
         return storage.initStorage();
     }

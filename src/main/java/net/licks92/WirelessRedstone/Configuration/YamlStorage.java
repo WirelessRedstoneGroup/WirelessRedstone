@@ -20,10 +20,12 @@ import java.util.zip.ZipOutputStream;
 public class YamlStorage implements IWirelessStorageConfiguration {
     private final File channelFolder;
     private final WirelessRedstone plugin;
+    private final String channelFolderStr;
 
-    public YamlStorage(final File channelFolder, final WirelessRedstone r_plugin) {
-        plugin = r_plugin;
-        this.channelFolder = channelFolder;
+    public YamlStorage(final String channelFolder, final WirelessRedstone plugin) {
+        this.plugin = plugin;
+        this.channelFolder = new File(plugin.getDataFolder(), channelFolder);
+        this.channelFolderStr = channelFolder;
     }
 
     @Override
@@ -58,7 +60,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-	public boolean canConvert() {
+    public boolean canConvert() {
         for (File file : channelFolder.listFiles()) {
             if (file.getName().contains(".db")) {
                 return true;
@@ -68,14 +70,14 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-	public boolean convertFromAnotherStorage() {
+    public boolean convertFromAnotherStorage() {
         WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
         if (!backupData("db")) {
             WirelessRedstone.getWRLogger().severe("Backup failed ! Data transfer abort...");
         } else {
             WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
 
-            SQLStorage sql = new SQLStorage(channelFolder, plugin);
+            SQLiteStorage sql = new SQLiteStorage(channelFolderStr, plugin);
             sql.init(false);
             for (WirelessChannel channel : sql.getAllChannels()) {
                 //Something fails here! Channels do not transfer the transmitter that's strange!
@@ -156,7 +158,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-	public boolean renameWirelessChannel(final String channelName, final String newChannelName) {
+    public boolean renameWirelessChannel(final String channelName, final String newChannelName) {
         WirelessChannel channel = getWirelessChannel(channelName);
 
         List<IWirelessPoint> signs = new ArrayList<IWirelessPoint>();
@@ -250,62 +252,62 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             return false;
     }
 
-	/**
-	 * Private method to purge data. Don't use it anywhere else
-	 *
-	 * @param channelName
-	 * @param loc
-	 * @param world
-	 * @return succeeded
-	 */
-	private boolean removeWirelessReceiver(final String channelName,
-			final Location loc, final String world) {
-		WirelessChannel channel = getWirelessChannel(channelName);
-		if (channel != null) {
-			channel.removeReceiverAt(loc, world);
-			updateChannel(channelName, channel);
-			return true;
-		} else
-			return false;
-	}
+    /**
+     * Private method to purge data. Don't use it anywhere else
+     *
+     * @param channelName
+     * @param loc
+     * @param world
+     * @return succeeded
+     */
+    private boolean removeWirelessReceiver(final String channelName,
+                                           final Location loc, final String world) {
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeReceiverAt(loc, world);
+            updateChannel(channelName, channel);
+            return true;
+        } else
+            return false;
+    }
 
-	/**
-	 * Private method to purge data. Don't use it anywhere else
-	 *
-	 * @param channelName
-	 * @param loc
-	 * @param world
-	 * @return succeeded
-	 */
-	private boolean removeWirelessTransmitter(final String channelName,
-			final Location loc, final String world) {
-		WirelessChannel channel = getWirelessChannel(channelName);
-		if (channel != null) {
-			channel.removeTransmitterAt(loc, world);
-			updateChannel(channelName, channel);
-			return true;
-		} else
-			return false;
-	}
+    /**
+     * Private method to purge data. Don't use it anywhere else
+     *
+     * @param channelName
+     * @param loc
+     * @param world
+     * @return succeeded
+     */
+    private boolean removeWirelessTransmitter(final String channelName,
+                                              final Location loc, final String world) {
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeTransmitterAt(loc, world);
+            updateChannel(channelName, channel);
+            return true;
+        } else
+            return false;
+    }
 
-	/**
-	 * Private method to purge data. Don't use it anywhere else
-	 *
-	 * @param channelName
-	 * @param loc
-	 * @param world
-	 * @return succeeded
-	 */
-	private boolean removeWirelessScreen(final String channelName,
-			final Location loc, final String world) {
-		WirelessChannel channel = getWirelessChannel(channelName);
-		if (channel != null) {
-			channel.removeScreenAt(loc, world);
-			updateChannel(channelName, channel);
-			return true;
-		} else
-			return false;
-	}
+    /**
+     * Private method to purge data. Don't use it anywhere else
+     *
+     * @param channelName
+     * @param loc
+     * @param world
+     * @return succeeded
+     */
+    private boolean removeWirelessScreen(final String channelName,
+                                         final Location loc, final String world) {
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeScreenAt(loc, world);
+            updateChannel(channelName, channel);
+            return true;
+        } else
+            return false;
+    }
 
     @Override
     public boolean wipeData() {
@@ -327,13 +329,13 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
     public boolean backupData(final String extension) {
         try {
-			String zipName = "WRBackup "
-					+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
-					+ Calendar.getInstance().get(Calendar.MONTH) + "-"
-					+ Calendar.getInstance().get(Calendar.YEAR) + "_"
-					+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "."
-					+ Calendar.getInstance().get(Calendar.MINUTE) + "."
-					+ Calendar.getInstance().get(Calendar.SECOND);
+            String zipName = "WRBackup "
+                    + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
+                    + Calendar.getInstance().get(Calendar.MONTH) + "-"
+                    + Calendar.getInstance().get(Calendar.YEAR) + "_"
+                    + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "."
+                    + Calendar.getInstance().get(Calendar.MINUTE) + "."
+                    + Calendar.getInstance().get(Calendar.SECOND);
             FileOutputStream fos = new FileOutputStream((channelFolder.getCanonicalPath().split(channelFolder.getName())[0]) + zipName + ".zip");
             ZipOutputStream zos = new ZipOutputStream(fos);
 
