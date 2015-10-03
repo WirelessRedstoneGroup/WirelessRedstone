@@ -44,10 +44,10 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
         ConfigurationSerialization.registerClass(WirelessReceiverSwitch.class, "WirelessReceiverSwitch");
 
-        if (canConvert() && allowConvert) {
+        if (canConvert() != 0 && allowConvert) {
             WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in SQL Database.");
-            WirelessRedstone.getWRLogger().info("Beginning data transfer... (from SQL Database to Yaml Files)");
-            if (convertFromAnotherStorage()) {
+            WirelessRedstone.getWRLogger().info("Beginning data transfer to yaml...");
+            if (convertFromAnotherStorage(canConvert())) {
                 WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the Yaml Files.");
             }
         }
@@ -60,34 +60,51 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean canConvert() {
+    public Integer canConvert() {
+        if(plugin.getConfig().getString("saveOption", "YML").equalsIgnoreCase("MYSQL")) {
+            return 3;
+        }
         for (File file : channelFolder.listFiles()) {
             if (file.getName().contains(".db")) {
-                return true;
+                return 2;
             }
         }
-        return false;
+        return 0;
     }
 
     @Override
-    public boolean convertFromAnotherStorage() {
+    public boolean convertFromAnotherStorage(Integer type) {
         WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
-        if (!backupData("db")) {
-            WirelessRedstone.getWRLogger().severe("Backup failed ! Data transfer abort...");
+        boolean canConinue = true;
+        if(type == 2){
+            canConinue = backupData("db");
+        }
+        if (!canConinue) {
+            WirelessRedstone.getWRLogger().severe("Backup failed! Data transfer abort...");
+            return false;
         } else {
             WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
 
-            SQLiteStorage sql = new SQLiteStorage(channelFolderStr, plugin);
-            sql.init(false);
-            for (WirelessChannel channel : sql.getAllChannels()) {
-                //Something fails here! Channels do not transfer the transmitter that's strange!
-                createWirelessChannel(channel);
-            }
-            sql.close();
-            for (File f : channelFolder.listFiles()) {
-                if (f.getName().contains(".db")) {
-                    f.delete();
+            if(type == 2) {
+                SQLiteStorage sql = new SQLiteStorage(channelFolderStr, plugin);
+                sql.init(false);
+                for (WirelessChannel channel : sql.getAllChannels()) {
+                    createWirelessChannel(channel);
                 }
+                sql.close();
+                for (File f : channelFolder.listFiles()) {
+                    if (f.getName().contains(".db")) {
+                        f.delete();
+                    }
+                }
+            } else if(type == 3) {
+                MySQLStorage sql = new MySQLStorage(channelFolderStr, plugin);
+                sql.init(false);
+                for (WirelessChannel channel : sql.getAllChannels()) {
+                    //Something fails here! Channels do not transfer the transmitter that's strange!
+                    createWirelessChannel(channel);
+                }
+                sql.close();
             }
         }
         return true;

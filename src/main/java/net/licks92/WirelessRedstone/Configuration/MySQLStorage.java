@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone.Configuration;
 
+import com.husky.mysql.MySQL;
 import com.husky.sqlite.SQLite;
 import net.licks92.WirelessRedstone.Channel.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
@@ -11,18 +12,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-public class SQLiteStorage implements IWirelessStorageConfiguration {
-    private final SQLite sqLite;
+public class MySQLStorage implements IWirelessStorageConfiguration {
+    private final MySQL mySQL;
     private final File channelFolder;
     private final String channelFolderStr;
-    private Connection connection;
 
     private final String sqlIsWallSign = "iswallsign";
     private final String sqlDirection = "direction";
@@ -39,11 +41,24 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private final WirelessRedstone plugin;
 
-    public SQLiteStorage(String channelFolder, final WirelessRedstone plugin) {
+    public MySQLStorage(String channelFolder, WirelessRedstone plugin, String host, String port,
+                        String database, String username, String password) {
         this.plugin = plugin;
         this.channelFolder = new File(plugin.getDataFolder(), channelFolder);
-        this.channelFolderStr= channelFolder;
-        sqLite = new SQLite(plugin, channelFolder + File.separator + "channels.db");
+        this.channelFolderStr = channelFolder;
+        mySQL = new MySQL(plugin, host, port, database, username, password);
+    }
+
+    public MySQLStorage(String channelFolder, WirelessRedstone plugin) {
+        String host = plugin.getConfig().getString("MySQL.host", "localhost");
+        String port = plugin.getConfig().getString("MySQL.port", "3306");
+        String database = plugin.getConfig().getString("MySQL.database", "WirelessRedstone");
+        String username = plugin.getConfig().getString("MySQL.username", "root");
+        String password = plugin.getConfig().getString("MySQL.password", "root");
+        this.plugin = plugin;
+        this.channelFolder = new File(plugin.getDataFolder(), channelFolder);
+        this.channelFolderStr = channelFolder;
+        mySQL = new MySQL(plugin, host, port, database, username, password);
     }
 
     @Override
@@ -52,21 +67,12 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     }
 
     public boolean init(final boolean allowConvert) {
-        WirelessRedstone.getWRLogger().debug("Establishing connection to database...");
-
-        try {
-            connection = sqLite.openConnection();
-        } catch (SQLException | ClassNotFoundException e) {
-            WirelessRedstone.getWRLogger().severe("Couldn't open an connection from the database!");
-            e.printStackTrace();
-        }
-
-        WirelessRedstone.getWRLogger().debug("Connection to SQLite Database has been established!");
-
         if (canConvert() != 0 && allowConvert) {
-            WirelessRedstone.getWRLogger().info("Beginning data transfer to SQLite...");
+            WirelessRedstone.getWRLogger().info("Beginning data transfer to MySQL storage...");
             if (convertFromAnotherStorage(canConvert())) {
-                WirelessRedstone.getWRLogger().info("Done! All the channels are now stored in the SQLite Database.");
+                WirelessRedstone.getWRLogger().info("Done! All the channels are now stored in the MySQL Database.");
+            } else {
+                WirelessRedstone.getWRLogger().severe("Data transfer failed!");
             }
         }
         return true;
@@ -113,23 +119,16 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        WirelessRedstone.getWRLogger().debug("Connection to SQL Database has been successfully closed!");
         return true;
     }
 
     @Override
     public Integer canConvert() {
-        if(channelFolder.listFiles().length == 0) {
-            return 3;
-        }
         for (File file : channelFolder.listFiles()) {
             if (file.getName().contains(".yml")) {
                 return 1;
+            } else if(file.getName().contains(".db")) {
+                return 2;
             }
         }
         return 0;
@@ -141,6 +140,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         boolean canConinue = true;
         if(type == 1){
             canConinue = backupData("yml");
+        } else if(type == 2){
+            canConinue = backupData("db");
         }
         if (!canConinue) {
             WirelessRedstone.getWRLogger().severe("Backup failed! Data transfer abort...");
@@ -180,6 +181,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private boolean sqlTableExists(final String name) {
         try {
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return false;
+            }
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
 
@@ -193,6 +199,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
             rs.close();
             statement.close();
+            closeConnection(connection);
             return false;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -207,6 +214,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
         try {
             // Get the names of all the tables
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return false;
+            }
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
             ArrayList<String> tables = new ArrayList<String>();
@@ -215,6 +227,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             }
             rs.close();
             statement.close();
+            closeConnection(connection);
 
             // Erase all the tables
             for (String channelName : tables) {
@@ -270,6 +283,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     @Override
     public WirelessChannel getWirelessChannel(final String r_channelName) {
         try {
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return null;
+            }
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
             ArrayList<String> channels = new ArrayList<String>();
@@ -423,6 +441,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     // Done. Return channel
                     rsSigns.close();
                     statement.close();
+                    closeConnection(connection);
                     return channel;
                 }
             }
@@ -445,6 +464,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
             try {
                 // Create the table
+                Connection connection = getConnection();
+                if(connection == null) {
+                    WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                    return false;
+                }
                 Statement statement = connection.createStatement();
                 statement.executeUpdate("CREATE TABLE " + getDBName(channel.getName()) + " ( "
 
@@ -463,6 +487,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 // owner
                 // Finished this part
                 statement.close();
+                closeConnection(connection);
 
                 // Create the wireless points
                 ArrayList<IWirelessPoint> points = new ArrayList<IWirelessPoint>();
@@ -512,12 +537,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         }
 
         try {
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return false;
+            }
             Statement statement = connection.createStatement();
 
             // Remove the old channel in the config
             statement.executeUpdate("DROP TABLE " + getDBName(channelName));
 
             statement.close();
+            closeConnection(connection);
 
             // Set a new channel - HAVE TO FIND A BETTER WAY THAN JUST REMOVING
             // THE TABLE AND CREATE AN OTHER
@@ -534,9 +565,15 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         try {
             WirelessRedstone.WireBox.removeSigns(getWirelessChannel(channelName));
             if (!sqlTableExists(channelName)) return;
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return;
+            }
             Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE " + getDBName(channelName));
             statement.close();
+            closeConnection(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -548,6 +585,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public Collection<WirelessChannel> getAllChannels() {
         Statement statement;
         try {
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return null;
+            }
             statement = connection.createStatement();
             ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 
@@ -565,6 +607,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             }
             rs.close();
             statement.close();
+            closeConnection(connection);
 
             for (String channelName : channelNames) {
                 channels.add(getWirelessChannel(channelName));
@@ -615,6 +658,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
         try {
             int intDirection = WirelessRedstone.WireBox.signFaceToInt(point.getDirection());
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return false;
+            }
             Statement statement = connection.createStatement();
             statement.executeUpdate("INSERT INTO " + getDBName(channelName) + " (" + sqlSignType + "," + sqlSignX
                     + "," + sqlSignY + "," + sqlSignZ + "," + sqlDirection + "," + sqlSignOwner + ","
@@ -622,6 +670,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     + point.getX() + "," + point.getY() + "," + point.getZ() + "," + intDirection + "," + "'"
                     + point.getOwner() + "'," + "'" + point.getWorld() + "'," + iswallsign + " ) ");
             statement.close();
+            closeConnection(connection);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -632,6 +681,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public void updateChannel(final String channelName, final WirelessChannel channel) {
         try {
             int locked = (channel.isLocked()) ? 1 : 0;
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return;
+            }
             Statement statement = connection.createStatement();
 
             // Update name and lock status
@@ -651,6 +705,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 			 * owner); }
 			 */
             statement.close();
+            closeConnection(connection);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -686,11 +741,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     /**
      * Private method to purge data. Don't use it anywhere else
-     *
-     * @param channelName
-     * @param loc
-     * @param world
-     * @return succeeded
      */
     private boolean removeWirelessReceiver(final String channelName, final Location loc, final String world) {
         WirelessChannel channel = getWirelessChannel(channelName);
@@ -702,11 +752,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     /**
      * Private method to purge data. Don't use it anywhere else
-     *
-     * @param channelName
-     * @param loc
-     * @param world
-     * @return succeeded
      */
     private boolean removeWirelessTransmitter(final String channelName, final Location loc, final String world) {
         WirelessChannel channel = getWirelessChannel(channelName);
@@ -718,11 +763,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     /**
      * Private method to purge data. Don't use it anywhere else
-     *
-     * @param channelName
-     * @param loc
-     * @param world
-     * @return succeeded
      */
     private boolean removeWirelessScreen(final String channelName, final Location loc, final String world) {
         WirelessChannel channel = getWirelessChannel(channelName);
@@ -734,6 +774,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private boolean removeWirelessPoint(final String channelName, final Location loc, final String world) {
         try {
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return false;
+            }
             Statement statement = connection.createStatement();
             String sql = "DELETE FROM " + getDBName(channelName) + " WHERE " + sqlSignX + "="
                     + loc.getBlockX() + " AND " + sqlSignY + "=" + loc.getBlockY() + " AND " + sqlSignZ + "="
@@ -741,6 +786,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             statement.executeUpdate(sql);
             WirelessRedstone.getWRLogger().debug("Statement to delete wireless sign : " + sql);
             statement.close();
+            closeConnection(connection);
             WirelessRedstone.cache.update();
         } catch (SQLException ex) {
             WirelessRedstone.getWRLogger().debug(ex.getMessage());
@@ -793,13 +839,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     }
                 }
 
-                for (Entry<Location, String> receiverRemove : receivers.entrySet()) {
+                for (Map.Entry<Location, String> receiverRemove : receivers.entrySet()) {
                     removeWirelessReceiver(receiverRemove.getValue().split("~")[0], receiverRemove.getKey(), receiverRemove.getValue().split("~")[1]);
                 }
-                for (Entry<Location, String> transmitterRemove : transmitters.entrySet()) {
+                for (Map.Entry<Location, String> transmitterRemove : transmitters.entrySet()) {
                     removeWirelessTransmitter(transmitterRemove.getValue().split("~")[0], transmitterRemove.getKey(), transmitterRemove.getValue().split("~")[1]);
                 }
-                for (Entry<Location, String> screenRemove : screens.entrySet()) {
+                for (Map.Entry<Location, String> screenRemove : screens.entrySet()) {
                     removeWirelessScreen(screenRemove.getValue().split("~")[0], screenRemove.getKey(), screenRemove.getValue().split("~")[1]);
                 }
 
@@ -918,6 +964,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private void updateSwitch(WirelessChannel channel, WirelessReceiver receiver) {
         try {
+            Connection connection = getConnection();
+            if(connection == null) {
+                WirelessRedstone.getWRLogger().severe("Can't connect to MySQL database!");
+                return;
+            }
             Statement statement = connection.createStatement();
 
             // Update name and lock status
@@ -926,7 +977,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     + sqlSignWorld + "='" + receiver.getWorld() + "' AND " + sqlSignX + "=" + receiver.getX() + " AND "
                     + sqlSignY + "=" + receiver.getY() + " AND " + sqlSignZ + "=" + receiver.getZ());
             statement.close();
-
+            closeConnection(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -1011,5 +1062,21 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             ex.printStackTrace();
         }
         return 0;
+    }
+
+    private Connection getConnection(){
+        try{
+            return mySQL.openConnection();
+        } catch (SQLException | ClassNotFoundException ex) {
+            return null;
+        }
+    }
+    private boolean closeConnection(Connection connection){
+        try{
+            connection.close();
+            return true;
+        } catch (SQLException ex){
+            return false;
+        }
     }
 }

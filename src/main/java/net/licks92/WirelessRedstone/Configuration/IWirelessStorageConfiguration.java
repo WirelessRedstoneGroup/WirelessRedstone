@@ -11,9 +11,9 @@ public interface IWirelessStorageConfiguration {
 
     boolean close();
 
-    boolean canConvert();
+    Integer canConvert();
 
-    boolean convertFromAnotherStorage();
+    boolean convertFromAnotherStorage(Integer type);
 
     boolean isChannelEmpty(WirelessChannel channel);
 
