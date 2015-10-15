@@ -31,7 +31,7 @@ InteractTransmitterTime: 1000
 CacheRefreshFrequency: 150
 gateLogic: OR
 saveOption: SQLITE
-MYSQL:
+MySQL:
   host: localhost
   port: '3306'
   database: WirelessRedstone
