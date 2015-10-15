@@ -1,38 +1,39 @@
 # This is the Wireless Redstone main configuration file.
-# If you want to modify some of these lines, I highly recommend you to read this page : http://dev.bukkit.org/server-mods/wireless-redstone/pages/setup/configuration/
 
-# Corresponds to the language used by the plugin.
+#        !Configuration explained!
+# Config version           Do NOT change this value
+# Language                 Corresponds to the language used by the plugin.
+# ColourfulLogging         Set this value to true if you want the log in the console to be written with colors (it's easier to see what's wrong)
+# CheckForUpdates          If you don't want to be spammed with a message telling you that an amazing new release with new great functionalities has been released, then set it to false.
+# cancelChunkUnloads       Recommended to keep this value on true
+# cancelChunkUnloadRange   Correspond to the radius where the chunk won't be unloaded around the wireless sign
+# UseVault                 You have Vault but for any reason you don't want to use it? Set this value to false
+# SilentMode               The plugin doesn't send any feedback if you don't have permissions to a certain command
+# DebugMode                Don't activate it if you're not a tester or a developer
+# DropSignWhenBroken       This value can be set to false because some people can create signs with a command and destroy them to get free signs.
+# InteractTransmitterTime  The time in milliseconds you activate a transmitter if you interact with it
+# CacheRefreshFrequency    Cache refresh time in seconds, it's recommended to leave this value as it is
+# gateLogic                The logic of the transmitters (more info can be found on the Minecraft redstone circuit wiki), available options: OR, IGNORE (no logic/old logic from version <2.0)
+# saveOption               Save the channels in YML, SQLITE or MYSQL format
+# MYSQL..                  Options for MySQL, you can ignore it if you don't use it
+
+ConfigVersion: 1
 Language: en
-
-# Set this value to true if you want the log in the console to be written with colors (it's easier to see what's wrong)
 ColourfulLogging: true
-
-# If you don't want to be spammed with a message telling you that an amazing new release with new great functionnalities has been released, then set it to false.
 CheckForUpdates: false
-
-# If true, then the plugin uses a database to store the channels.
-UseSQL: true
-
-# If you want to this plugin work, you should not set this value to false
 cancelChunkUnloads: true
-
-# Correspond to the radius where the chunk won't be unloaded around the wireless sign
 cancelChunkUnloadRange: 4
-
-# You have Vault but for any reason you don't want to use it? Set this value to false
 UseVault: true
-
-# Silent mode, don't send when you don't have permission (only on commands). Great for themeparks
 SilentMode: false
-
-# Debug Mode, don't activate it if you're not a tester or a developper
 DebugMode: false
-
-# This value can be set to false, because some people can create signs with a command and destroy them to get free signs.
 DropSignWhenBroken: true
-
-# Time in ms.
 InteractTransmitterTime: 1000
-
-# Time in seconds.
 CacheRefreshFrequency: 150
+gateLogic: OR
+saveOption: SQLITE
+MYSQL:
+  host: localhost
+  port: '3306'
+  database: WirelessRedstone
+  username: root
+  password: root

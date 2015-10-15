@@ -100,7 +100,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         } else if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML")) {
             storage = new YamlStorage(CHANNEL_FOLDER, plugin);
         } else if (getSaveOption().equalsIgnoreCase("MYSQL")) {
-
+            storage = new MySQLStorage(CHANNEL_FOLDER, plugin);
         } else {
             storage = new YamlStorage(CHANNEL_FOLDER, plugin);
         }
@@ -141,6 +141,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
             extension = "db";
         else if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML"))
             extension = "yml";
+        if(extension == null)
+            return true;
         return storage.backupData(extension);
     }
 
@@ -403,7 +405,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
     }
 
     public String getSaveOption() {
-        return getConfig().getString("saveOption", "YML");
+        return getConfig().getString("saveOption", "SQLITE");
     }
 
     public int getInteractTransmitterTime() {

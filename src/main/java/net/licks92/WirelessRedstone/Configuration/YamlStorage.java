@@ -48,7 +48,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             WirelessRedstone.getWRLogger().info("WirelessRedstone found one or many channels in SQL Database.");
             WirelessRedstone.getWRLogger().info("Beginning data transfer to yaml...");
             if (convertFromAnotherStorage(canConvert())) {
-                WirelessRedstone.getWRLogger().info("Done ! All the channels are now stored in the Yaml Files.");
+                WirelessRedstone.getWRLogger().info("Done! All the channels are now stored in the Yaml Files.");
             }
         }
         return true;
@@ -61,8 +61,10 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Integer canConvert() {
-        if(plugin.getConfig().getString("saveOption", "YML").equalsIgnoreCase("MYSQL")) {
-            return 3;
+        for (File file : channelFolder.listFiles()) {
+            if (file.getName().contains("MYSQL")) {
+                return 3;
+            }
         }
         for (File file : channelFolder.listFiles()) {
             if (file.getName().contains(".db")) {
@@ -76,9 +78,9 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public boolean convertFromAnotherStorage(Integer type) {
         WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
         boolean canConinue = true;
-        if(type == 2){
+        if(type == 2)
             canConinue = backupData("db");
-        }
+
         if (!canConinue) {
             WirelessRedstone.getWRLogger().severe("Backup failed! Data transfer abort...");
             return false;
@@ -209,23 +211,23 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public boolean createWirelessPoint(final String channelName, final IWirelessPoint point) { // Idk what this does, we added Delayers and clocks and it worked with yml without adding it to the cache
         WirelessChannel channel = getWirelessChannel(channelName);
         if (point instanceof WirelessReceiver) {
-            WirelessRedstone.getWRLogger().debug("Yaml config : Creating a receiver of class "
+            WirelessRedstone.getWRLogger().debug("Yaml config: Creating a receiver of class "
                     + point.getClass());
             if (point instanceof WirelessReceiverInverter) {
                 channel.addReceiver((WirelessReceiverInverter) point);
-                WirelessRedstone.getWRLogger().debug("Yaml Config : Adding an inverter");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an inverter");
             } else if (point instanceof WirelessReceiverSwitch) {
                 channel.addReceiver((WirelessReceiverSwitch) point);
-                WirelessRedstone.getWRLogger().debug("Yaml Config : Adding an Switch");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an Switch");
             } else if (point instanceof WirelessReceiverDelayer) {
                 channel.addReceiver((WirelessReceiverDelayer) point);
-                WirelessRedstone.getWRLogger().debug("Yaml Config : Adding an Delayer");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an Delayer");
             } else if (point instanceof WirelessReceiverClock) {
                 channel.addReceiver((WirelessReceiverClock) point);
-                WirelessRedstone.getWRLogger().debug("Yaml Config : Adding an Clock");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an Clock");
             } else {
                 channel.addReceiver((WirelessReceiver) point);
-                WirelessRedstone.getWRLogger().debug("Yaml Config : Adding a default receiver");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding a default receiver");
             }
         } else if (point instanceof WirelessTransmitter)
             channel.addTransmitter((WirelessTransmitter) point);

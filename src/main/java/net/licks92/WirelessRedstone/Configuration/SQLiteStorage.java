@@ -124,8 +124,10 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Integer canConvert() {
-        if(channelFolder.listFiles().length == 0) {
-            return 3;
+        for (File file : channelFolder.listFiles()) {
+            if (file.getName().contains("MYSQL")) {
+                return 3;
+            }
         }
         for (File file : channelFolder.listFiles()) {
             if (file.getName().contains(".yml")) {

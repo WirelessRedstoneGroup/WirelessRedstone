@@ -6,6 +6,7 @@ import net.gravitydevelopment.updater.Updater.UpdateType;
 import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
 import net.licks92.WirelessRedstone.Channel.WirelessChannel;
 import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
+import net.licks92.WirelessRedstone.Configuration.ConfigurationConverter;
 import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
 import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
 import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
@@ -82,6 +83,8 @@ public class WirelessRedstone extends JavaPlugin {
     public void onEnable() {
         instance = this;
         PluginDescriptionFile pdFile = getDescription();
+
+        new ConfigurationConverter(this);
 
         WireBox = new WireBox(this);
         config = new WirelessConfiguration(this);
@@ -210,10 +213,10 @@ public class WirelessRedstone extends JavaPlugin {
             });
 
             final Graph storageGraph = metrics.createGraph("Storage used");
-            storageGraph.addPlotter(new Plotter("SQL") {
+            storageGraph.addPlotter(new Plotter("SQLite") {
                 @Override
                 public int getValue() {
-                    if (config.getSQLUsage()) {
+                    if (config.getSaveOption().equalsIgnoreCase("SQLITE")) {
                         return 1;
                     } else {
                         return 0;
@@ -221,10 +224,21 @@ public class WirelessRedstone extends JavaPlugin {
                 }
             });
 
-            storageGraph.addPlotter(new Plotter("Yaml files") {
+            storageGraph.addPlotter(new Plotter("MySQL") {
                 @Override
                 public int getValue() {
-                    if (!config.getSQLUsage()) {
+                    if (config.getSaveOption().equalsIgnoreCase("MYSQL")) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            storageGraph.addPlotter(new Plotter("Yaml") {
+                @Override
+                public int getValue() {
+                    if (config.getSaveOption().equalsIgnoreCase("YAML") || config.getSaveOption().equalsIgnoreCase("YML")) {
                         return 1;
                     } else {
                         return 0;
@@ -233,7 +247,7 @@ public class WirelessRedstone extends JavaPlugin {
             });
 
             final Graph receiverTypesProportion = metrics
-                    .createGraph("Proportion of the different types of receivers");
+                    .createGraph("Different types of receivers");
 
             receiverTypesProportion.addPlotter(new Plotter("Default") {
                 @Override
@@ -271,6 +285,16 @@ public class WirelessRedstone extends JavaPlugin {
                     int total = 0;
                     for(WirelessChannel channel : config.getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.Clock).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Plotter("Switchers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : config.getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.Switch).size();
                     }
                     return total;
                 }

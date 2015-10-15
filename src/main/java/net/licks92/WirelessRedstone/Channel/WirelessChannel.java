@@ -437,7 +437,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                 on = true;
             }
         }
-        return on;
+        return WirelessRedstone.getInstance().getConfig().getString("gateLogic", "OR").equalsIgnoreCase("IGNORE") ? false : on;
     }
 
     public List<WirelessScreen> getScreens() {
