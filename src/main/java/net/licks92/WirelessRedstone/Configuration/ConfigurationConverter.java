@@ -22,11 +22,11 @@ public class ConfigurationConverter {
                     conf.set("saveOption", "YML");
                 }
 
-                conf.set("MYSQL.host", "localhost");
-                conf.set("MYSQL.port", "3306");
-                conf.set("MYSQL.database", "WirelessRedstone");
-                conf.set("MYSQL.username", "root");
-                conf.set("MYSQL.password", "root");
+                conf.set("MySQL.host", "localhost");
+                conf.set("MySQL.port", "3306");
+                conf.set("MySQL.database", "WirelessRedstone");
+                conf.set("MySQL.username", "root");
+                conf.set("MySQL.password", "root");
                 conf.set("gateLogic", "OR");
 
                 conf.set("UseSQL", null);
