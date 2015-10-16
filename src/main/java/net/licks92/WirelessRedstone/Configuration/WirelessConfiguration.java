@@ -30,8 +30,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return plugin.getConfig();
     }
 
-    public WirelessConfiguration(final WirelessRedstone r_plugin) {
-        plugin = r_plugin;
+    public WirelessConfiguration(final WirelessRedstone plugin) {
+        this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
         configFile.getParentFile().mkdirs();
         if (!configFile.exists()) {
@@ -95,11 +95,15 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         channelFolder.mkdir();
 
         // Create the storage config
-        if (getSQLUsage()) {
-            storage = new SQLStorage(channelFolder, plugin);
-        } else
-            storage = new YamlStorage(channelFolder, plugin);
-
+        if (getSaveOption().equalsIgnoreCase("SQLITE")) {
+            storage = new SQLiteStorage(CHANNEL_FOLDER, plugin);
+        } else if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML")) {
+            storage = new YamlStorage(CHANNEL_FOLDER, plugin);
+        } else if (getSaveOption().equalsIgnoreCase("MYSQL")) {
+            storage = new MySQLStorage(CHANNEL_FOLDER, plugin);
+        } else {
+            storage = new YamlStorage(CHANNEL_FOLDER, plugin);
+        }
         return storage.initStorage();
     }
 
@@ -109,13 +113,13 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public boolean canConvert() {
+    public Integer canConvert() {
         return storage.canConvert();
     }
 
     @Override
-    public boolean convertFromAnotherStorage() {
-        return storage.convertFromAnotherStorage();
+    public boolean convertFromAnotherStorage(Integer type) {
+        return storage.convertFromAnotherStorage(type);
     }
 
     @Override
@@ -133,10 +137,12 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 
     public boolean backupData() {
         String extension = null;
-        if (getSQLUsage())
+        if (getSaveOption().equalsIgnoreCase("SQLITE"))
             extension = "db";
-        else
+        else if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML"))
             extension = "yml";
+        if(extension == null)
+            return true;
         return storage.backupData(extension);
     }
 
@@ -152,10 +158,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 
     public Integer changeStorage(String type) {
         switch (type) {
-            case "db":
-            case "sql":
-            case "database": {
-                if (getSQLUsage())
+            case "sqlite": {
+                if (getSaveOption().equalsIgnoreCase("SQLITE"))
                     return 2;
                 ArrayList<Integer> remove = new ArrayList<Integer>();
                 for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
@@ -168,7 +172,27 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
                     WirelessRedstone.WireBox.clockTasks.remove(i);
                 }
                 remove.clear();
-                getConfig().set("UseSQL", true);
+                getConfig().set("saveOption", "SQLITE");
+                WirelessRedstone.getInstance().saveConfig();
+                backupData();
+                storage.close();
+                break;
+            }
+            case "mysql": {
+                if (getSaveOption().equalsIgnoreCase("MYSQL"))
+                    return 2;
+                ArrayList<Integer> remove = new ArrayList<Integer>();
+                for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
+                        .entrySet()) {
+                    Bukkit.getScheduler().cancelTask(task.getKey());
+                    remove.add(task.getKey());
+                    WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
+                }
+                for (Integer i : remove) {
+                    WirelessRedstone.WireBox.clockTasks.remove(i);
+                }
+                remove.clear();
+                getConfig().set("saveOption", "MYSQL");
                 WirelessRedstone.getInstance().saveConfig();
                 backupData();
                 storage.close();
@@ -176,7 +200,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
             }
             case "yml":
             case "yaml": {
-                if (!getSQLUsage())
+                if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML"))
                     return 2;
                 ArrayList<Integer> remove = new ArrayList<Integer>();
                 for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
@@ -189,7 +213,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
                     WirelessRedstone.WireBox.clockTasks.remove(i);
                 }
                 remove.clear();
-                getConfig().set("UseSQL", false);
+                getConfig().set("saveOption", "YML");
                 WirelessRedstone.getInstance().saveConfig();
                 backupData();
                 storage.close();
@@ -380,8 +404,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
         return getConfig().getBoolean("UseVault", false);
     }
 
-    public boolean getSQLUsage() {
-        return getConfig().getBoolean("UseSQL", true);
+    public String getSaveOption() {
+        return getConfig().getString("saveOption", "SQLITE");
     }
 
     public int getInteractTransmitterTime() {

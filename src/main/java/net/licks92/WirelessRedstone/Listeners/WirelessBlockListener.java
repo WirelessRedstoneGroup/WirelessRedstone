@@ -267,10 +267,6 @@ public class WirelessBlockListener implements Listener {
         Sign signObject = (Sign) event.getBlock().getRelative(bf).getState();
 
         final WirelessChannel channel;
-        // final WirelessChannel channel;
-
-        // Lets check if the sign is a Transmitter and if the channel name not
-        // is empty
         if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
                 || signObject.getLine(1) == null || signObject.getLine(1).equals("")) {
             return;
@@ -553,9 +549,8 @@ public class WirelessBlockListener implements Listener {
     private void cancelEvent(final BlockBreakEvent event) {
         /*
          * Methods cancelEvent and sendBlockBreakParticles, taken from
-		 * http://www
-		 * .bukkit.fr/index.php?threads/enlever-le-drop-dun-block.850/page
-		 * -2#post-11582 All credits to richie3366.
+		 * http://www.bukkit.fr/index.php?threads/enlever-le-drop-dun-block.850/page-2#post-11582
+		 * All credits to richie3366.
 		 */
 
         event.setCancelled(true);
