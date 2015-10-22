@@ -99,10 +99,10 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
             storage = new SQLiteStorage(CHANNEL_FOLDER, plugin);
         } else if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML")) {
             storage = new YamlStorage(CHANNEL_FOLDER, plugin);
-        } else if (getSaveOption().equalsIgnoreCase("MYSQL")) {
-            storage = new MySQLStorage(CHANNEL_FOLDER, plugin);
+//        } else if (getSaveOption().equalsIgnoreCase("MYSQL")) {
+//            storage = new MySQLStorage(CHANNEL_FOLDER, plugin);
         } else {
-            storage = new YamlStorage(CHANNEL_FOLDER, plugin);
+            storage = new SQLiteStorage(CHANNEL_FOLDER, plugin);
         }
         return storage.initStorage();
     }
@@ -158,6 +158,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
 
     public Integer changeStorage(String type) {
         switch (type) {
+            case "db":
             case "sqlite": {
                 if (getSaveOption().equalsIgnoreCase("SQLITE"))
                     return 2;
@@ -178,26 +179,26 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
                 storage.close();
                 break;
             }
-            case "mysql": {
-                if (getSaveOption().equalsIgnoreCase("MYSQL"))
-                    return 2;
-                ArrayList<Integer> remove = new ArrayList<Integer>();
-                for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
-                        .entrySet()) {
-                    Bukkit.getScheduler().cancelTask(task.getKey());
-                    remove.add(task.getKey());
-                    WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
-                }
-                for (Integer i : remove) {
-                    WirelessRedstone.WireBox.clockTasks.remove(i);
-                }
-                remove.clear();
-                getConfig().set("saveOption", "MYSQL");
-                WirelessRedstone.getInstance().saveConfig();
-                backupData();
-                storage.close();
-                break;
-            }
+//            case "mysql": {
+//                if (getSaveOption().equalsIgnoreCase("MYSQL"))
+//                    return 2;
+//                ArrayList<Integer> remove = new ArrayList<Integer>();
+//                for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
+//                        .entrySet()) {
+//                    Bukkit.getScheduler().cancelTask(task.getKey());
+//                    remove.add(task.getKey());
+//                    WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
+//                }
+//                for (Integer i : remove) {
+//                    WirelessRedstone.WireBox.clockTasks.remove(i);
+//                }
+//                remove.clear();
+//                getConfig().set("saveOption", "MYSQL");
+//                WirelessRedstone.getInstance().saveConfig();
+//                backupData();
+//                storage.close();
+//                break;
+//            }
             case "yml":
             case "yaml": {
                 if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML"))
