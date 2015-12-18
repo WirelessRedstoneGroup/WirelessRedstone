@@ -531,7 +531,7 @@ public class WireBox {
         BlockFace face = sign.getAttachedFace();
         Block tempBlock = block.getRelative(face);
 
-        return !(tempBlock.getType() == Material.AIR
+        Boolean check = !(tempBlock.getType() == Material.AIR
                 || tempBlock.getType() == Material.PISTON_BASE
                 || tempBlock.getType() == Material.PISTON_EXTENSION
                 || tempBlock.getType() == Material.PISTON_MOVING_PIECE
@@ -561,8 +561,11 @@ public class WireBox {
                 || tempBlock.getType() == Material.ICE
                 || tempBlock.getType() == Material.WOOD_STEP
                 || tempBlock.getType() == Material.STEP
-                || tempBlock.getType() == Material.SEA_LANTERN
                 || tempBlock.getType() == Material.TNT);
+        if(WirelessRedstone.getBukkitVersion().contains("v1_8")){
+            if(check) check = !(tempBlock.getType() == Material.SEA_LANTERN);
+        }
+        return check;
     }
 
     public boolean isValidLocation(final Block block) {
@@ -571,7 +574,7 @@ public class WireBox {
 
         Block tempBlock = block.getRelative(BlockFace.DOWN);
 
-        return !(tempBlock.getType() == Material.AIR
+        Boolean check = !(tempBlock.getType() == Material.AIR
                 || tempBlock.getType() == Material.PISTON_BASE
                 || tempBlock.getType() == Material.PISTON_EXTENSION
                 || tempBlock.getType() == Material.PISTON_MOVING_PIECE
@@ -580,8 +583,11 @@ public class WireBox {
                 || tempBlock.getType() == Material.REDSTONE_LAMP_ON
                 || tempBlock.getType() == Material.REDSTONE_LAMP_OFF
                 || tempBlock.getType() == Material.LEAVES
-                || tempBlock.getType() == Material.SEA_LANTERN
                 || tempBlock.getType() == Material.TNT);
+        if(WirelessRedstone.getBukkitVersion().contains("v1_8")){
+            if(check) check = !(tempBlock.getType() == Material.SEA_LANTERN);
+        }
+        return check;
     }
 
     public ArrayList<Location> getReceiverLocations(

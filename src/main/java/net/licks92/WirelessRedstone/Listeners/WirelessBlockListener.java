@@ -252,6 +252,16 @@ public class WirelessBlockListener implements Listener {
                         continue;
                     }
 
+                    if(event.getBlock().getType() == Material.DIODE
+                            || event.getBlock().getType() == Material.DIODE_BLOCK_OFF
+                            || event.getBlock().getType() == Material.DIODE_BLOCK_ON) {
+                        Bukkit.broadcastMessage(blockFace + "");
+                        Bukkit.broadcastMessage(getDiodeFace(event.getBlock()) + "");
+                        if (blockFace != getDiodeFace(event.getBlock())) {
+                            continue;
+                        }
+                    }
+
                     bf = blockFace;
                     break;
                 }
@@ -619,6 +629,21 @@ public class WirelessBlockListener implements Listener {
                 default:
                     return null;
             }
+        }
+    }
+
+    private BlockFace getDiodeFace(Block b){
+        switch (b.getData()) {
+            case (byte) 0:
+                return BlockFace.NORTH;
+            case (byte) 1:
+                return BlockFace.EAST;
+            case (byte) 2:
+                return BlockFace.SOUTH;
+            case (byte) 3:
+                return BlockFace.WEST;
+            default:
+                return null;
         }
     }
 
