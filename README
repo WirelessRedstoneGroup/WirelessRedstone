@@ -1,10 +1,7 @@
 WirelessRedstone for Bukkit
 
-|build-status| |coverage| |docs| |container|
-
-.. |build-status| image:: https://travis-ci.org/Bart-0110/WirelessRedstone.svg?branch=master
-   :target: https://travis-ci.org/Bart-0110/WirelessRedstone
-   :alt: Travis CI status
+### Status
+[![Build Status](https://travis-ci.org/Bart-0110/WirelessRedstone.svg?branch=master)](https://travis-ci.org/Bart-0110/WirelessRedstone)
 
 Welcome on the official page of the Wireless Redstone plugin
 
