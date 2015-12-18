@@ -1,6 +1,4 @@
-WirelessRedstone for Bukkit
+WirelessRedstone for Bukkit [![Build Status](https://travis-ci.org/Bart-0110/WirelessRedstone.svg?branch=master)](https://travis-ci.org/Bart-0110/WirelessRedstone)
 
 Welcome on the official page of the Wireless Redstone plugin
 
-This repository contains everything you need to modify, compile, and run the plugin: 
-  Just download it (I recommend using the Github app on windows), and add it as a maven project into eclipse.
