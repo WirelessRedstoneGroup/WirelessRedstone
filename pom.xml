@@ -6,7 +6,7 @@
 	<name>WirelessRedstone</name>
 	<groupId>net.licks92</groupId>
 	<artifactId>WirelessRedstone</artifactId>
-	<version>2.6</version>
+	<version>2.6.1</version>
 	<url>http://dev.bukkit.org/server-mods/wireless-redstone/</url>
 	<description>Wireless Redstone plugin for bukkit.</description>
 
@@ -32,14 +32,14 @@
 					<artifactSet>
 						<includes>
 							<!--<include>net.gravitydevelopment.updater:updater</include>-->
-							<include>org.mcstats.bukkit:metrics</include>
+							<!--<include>org.mcstats.bukkit:metrics</include>-->
 						</includes>
 					</artifactSet>
 					<relocations>
-						<relocation>
-							<pattern>org.mcstats</pattern>
-							<shadedPattern>net.licks92.WirelessRedstone</shadedPattern>
-						</relocation>
+						<!--<relocation>-->
+							<!--<pattern>org.mcstats</pattern>-->
+							<!--<shadedPattern>net.licks92.WirelessRedstone</shadedPattern>-->
+						<!--</relocation>-->
 						<!--<relocation>-->
 							<!--<pattern>net.gravitydevelopment.updater</pattern>-->
 							<!--<shadedPattern>net.licks92.WirelessRedstone</shadedPattern>-->
@@ -81,12 +81,12 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.mcstats.bukkit</groupId>
-			<artifactId>metrics</artifactId>
-			<version>R8-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.mcstats.bukkit</groupId>-->
+			<!--<artifactId>metrics</artifactId>-->
+			<!--<version>R8-SNAPSHOT</version>-->
+			<!--<scope>compile</scope>-->
+		<!--</dependency>-->
 		<!--<dependency>-->
 			<!--<groupId>net.gravitydevelopment.updater</groupId>-->
 			<!--<artifactId>updater</artifactId>-->
@@ -100,10 +100,10 @@
 			<id>Bukkit</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
-		<repository>
-			<id>Plugin Metrics</id>
-			<url>http://repo.mcstats.org/content/repositories/public</url>
-		</repository>
+		<!--<repository>-->
+			<!--<id>Plugin Metrics</id>-->
+			<!--<url>http://repo.mcstats.org/content/repositories/public</url>-->
+		<!--</repository>-->
 		<!--<repository>-->
 			<!--<id>gravity-repo</id>-->
 			<!--<url>http://repo.gravitydevelopment.net</url>-->
