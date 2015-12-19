@@ -183,128 +183,124 @@ public class WirelessBlockListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockRedstoneChange(final BlockRedstoneEvent event) {
-        if(event.getOldCurrent() == event.getNewCurrent())
-            return;
+	public void onBlockRedstoneChange(final BlockRedstoneEvent event) {
+		if (event.getOldCurrent() == event.getNewCurrent())
+			return;
 
-        BlockFace bf = BlockFace.SELF;
-        if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
-            if (event.getBlock().getType() == Material.LEVER) {
-                Lever l = (Lever) event.getBlock().getState().getData();
-                Bukkit.getServer()
-                        .getPluginManager()
-                        .callEvent(
-                                new BlockRedstoneEvent(event.getBlock()
-                                        .getRelative(l.getAttachedFace()), event
-                                        .getOldCurrent(), event.getNewCurrent()));
-            }
-            if (event.getBlock().getType() == Material.STONE_BUTTON
-                    || event.getBlock().getType() == Material.WOOD_BUTTON) {
-                Button b = (Button) event.getBlock().getState().getData();
-                Bukkit.getServer()
-                        .getPluginManager()
-                        .callEvent(
-                                new BlockRedstoneEvent(event.getBlock()
-                                        .getRelative(b.getAttachedFace()), event
-                                        .getOldCurrent(), event.getNewCurrent()));
-            }
-            if (event.getBlock().getType() == Material.DETECTOR_RAIL) {
-                Bukkit.getServer()
-                        .getPluginManager()
-                        .callEvent(
-                                new BlockRedstoneEvent(event.getBlock()
-                                        .getRelative(BlockFace.DOWN), event
-                                        .getOldCurrent(), event.getNewCurrent()));
-            }
-            if (event.getBlock().getType() == Material.WOOD_PLATE || event.getBlock().getType() == Material.STONE_PLATE
-                    || event.getBlock().getType() == Material.IRON_PLATE || event.getBlock().getType() == Material.GOLD_PLATE) {
-                Bukkit.getServer()
-                        .getPluginManager()
-                        .callEvent(
-                                new BlockRedstoneEvent(event.getBlock()
-                                        .getRelative(BlockFace.DOWN), event
-                                        .getOldCurrent(), event.getNewCurrent()));
-            }
-            if (event.getBlock().getType() == Material.DAYLIGHT_DETECTOR
-                    || event.getBlock().getType() == Material.DAYLIGHT_DETECTOR_INVERTED) {
-                Bukkit.getServer()
-                        .getPluginManager()
-                        .callEvent(
-                                new BlockRedstoneEvent(event.getBlock()
-                                        .getRelative(BlockFace.DOWN), event
-                                        .getOldCurrent(), event.getNewCurrent()));
-            }
+		if (event.getBlock().getType() == Material.SIGN_POST) {
 
-            ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
-            possibleBlockface.add(BlockFace.NORTH);
-            possibleBlockface.add(BlockFace.EAST);
-            possibleBlockface.add(BlockFace.SOUTH);
-            possibleBlockface.add(BlockFace.WEST);
-            possibleBlockface.add(BlockFace.UP);
-            possibleBlockface.add(BlockFace.DOWN);
+			Sign signObject = (Sign) event.getBlock().getState();
 
-            for (BlockFace blockFace : possibleBlockface) {
-                if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
-                    Sign signObject = (Sign) event.getBlock().getRelative(blockFace).getState();
+			WirelessChannel channel;
+			if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
+					|| signObject.getLine(1) == null
+					|| signObject.getLine(1).equals("")) {
+				return;
+			} else {
+				channel = WirelessRedstone.config.getWirelessChannel(signObject
+						.getLine(1));
+			}
 
-                    if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
-                            || signObject.getLine(1) == null || signObject.getLine(1).equals("")) {
-                        continue;
-                    }
+			if (channel == null) {
+				WirelessRedstone.getWRLogger().debug(
+						"The transmitter at location " + signObject.getX()
+								+ "," + signObject.getY() + ","
+								+ signObject.getZ() + " " + "in the world "
+								+ signObject.getWorld().getName()
+								+ " is actually linked with a null channel.");
+				return;
+			}
 
-                    if(event.getBlock().getType() == Material.DIODE
-                            || event.getBlock().getType() == Material.DIODE_BLOCK_OFF
-                            || event.getBlock().getType() == Material.DIODE_BLOCK_ON) {
-                        Bukkit.broadcastMessage(blockFace + "");
-                        Bukkit.broadcastMessage(getDiodeFace(event.getBlock()) + "");
-                        if (blockFace != getDiodeFace(event.getBlock())) {
-                            continue;
-                        }
-                    }
+			if (event.getBlock().isBlockIndirectlyPowered()
+					|| event.getBlock().isBlockPowered()) {
+				channel.toggle(1, event.getBlock());
+			} else {
+				channel.toggle(0, event.getBlock());
+			}
+			return;
+		}
 
-                    bf = blockFace;
-                    break;
-                }
-            }
+		BlockFace bf = BlockFace.SELF;
+		if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
+			if (event.getBlock().getType() == Material.LEVER) {
+				Lever l = (Lever) event.getBlock().getState().getData();
+				BlockRedstoneEvent e = new BlockRedstoneEvent(event.getBlock()
+						.getRelative(l.getAttachedFace()),
+						event.getOldCurrent(), event.getNewCurrent());
+				callLater(e);
+			}
+			if (event.getBlock().getType() == Material.STONE_BUTTON
+					|| event.getBlock().getType() == Material.WOOD_BUTTON) {
+				Button b = (Button) event.getBlock().getState().getData();
+				BlockRedstoneEvent e = new BlockRedstoneEvent(event.getBlock()
+						.getRelative(b.getAttachedFace()),
+						event.getOldCurrent(), event.getNewCurrent());
+				callLater(e);
+			}
+			if (event.getBlock().getType() == Material.DETECTOR_RAIL) {
+				BlockRedstoneEvent e = new BlockRedstoneEvent(event.getBlock()
+						.getRelative(BlockFace.DOWN), event.getOldCurrent(),
+						event.getNewCurrent());
+				callLater(e);
+			}
+			if (event.getBlock().getType() == Material.WOOD_PLATE
+					|| event.getBlock().getType() == Material.STONE_PLATE
+					|| event.getBlock().getType() == Material.IRON_PLATE
+					|| event.getBlock().getType() == Material.GOLD_PLATE) {
+				BlockRedstoneEvent e = new BlockRedstoneEvent(event.getBlock()
+						.getRelative(BlockFace.DOWN), event.getOldCurrent(),
+						event.getNewCurrent());
+				callLater(e);
+			}
+			if (event.getBlock().getType() == Material.DAYLIGHT_DETECTOR
+					|| event.getBlock().getType() == Material.DAYLIGHT_DETECTOR_INVERTED) {
+				BlockRedstoneEvent e = new BlockRedstoneEvent(event.getBlock()
+						.getRelative(BlockFace.DOWN), event.getOldCurrent(),
+						event.getNewCurrent());
+				callLater(e);
+			}
 
-            if (bf == null)
-                return;
-        }
+			ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
+			possibleBlockface.add(BlockFace.NORTH);
+			possibleBlockface.add(BlockFace.EAST);
+			possibleBlockface.add(BlockFace.SOUTH);
+			possibleBlockface.add(BlockFace.WEST);
+			possibleBlockface.add(BlockFace.UP);
+			possibleBlockface.add(BlockFace.DOWN);
 
-        if (!(event.getBlock().getRelative(bf).getState() instanceof Sign))
-            return;
+			for (BlockFace blockFace : possibleBlockface) {
+				if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
+					final Sign signObject = (Sign) event.getBlock()
+							.getRelative(blockFace).getState();
 
-        Sign signObject = (Sign) event.getBlock().getRelative(bf).getState();
+					if (!WirelessRedstone.WireBox.isTransmitter(signObject
+							.getLine(0))
+							|| signObject.getLine(1) == null
+							|| signObject.getLine(1).equals("")) {
+						continue;
+					}
 
-        final WirelessChannel channel;
-        if (!WirelessRedstone.WireBox.isTransmitter(signObject.getLine(0))
-                || signObject.getLine(1) == null || signObject.getLine(1).equals("")) {
-            return;
-        } else {
-            channel = WirelessRedstone.config.getWirelessChannel(signObject
-                    .getLine(1));
-        }
+					BlockRedstoneEvent e = new BlockRedstoneEvent(
+							signObject.getBlock(), event.getOldCurrent(),
+							event.getNewCurrent());
+					callLater(e);
+					return;
+				}
+			}
+			return;
+		}
 
-        if (channel == null) {
-            WirelessRedstone.getWRLogger().debug(
-                    "The transmitter at location " + signObject.getX() + ","
-                            + signObject.getY() + "," + signObject.getZ() + " "
-                            + "in the world " + signObject.getWorld().getName()
-                            + " is actually linked with a null channel.");
-            return;
-        }
+	}
 
-        if (event.getNewCurrent() == 0) {
-            final BlockFace finalBf = bf;
-            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    channel.toggle(event.getNewCurrent(), event.getBlock().getRelative(finalBf));
-                }
-            }, 1L);
-        } else
-            channel.toggle(event.getNewCurrent(), event.getBlock().getRelative(bf));
-    }
+	public void callLater(final BlockRedstoneEvent event) {
+		Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(),
+				new Runnable() {
+					@Override
+					public void run() {
+						Bukkit.getServer().getPluginManager().callEvent(event);
+					}
+				}, 1L);
+	}
 
     @EventHandler
     public void onBlockBreak(final BlockBreakEvent event) {
@@ -629,21 +625,6 @@ public class WirelessBlockListener implements Listener {
                 default:
                     return null;
             }
-        }
-    }
-
-    private BlockFace getDiodeFace(Block b){
-        switch (b.getData()) {
-            case (byte) 0:
-                return BlockFace.NORTH;
-            case (byte) 1:
-                return BlockFace.EAST;
-            case (byte) 2:
-                return BlockFace.SOUTH;
-            case (byte) 3:
-                return BlockFace.WEST;
-            default:
-                return null;
         }
     }
 
