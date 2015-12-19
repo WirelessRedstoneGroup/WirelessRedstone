@@ -287,7 +287,6 @@ public class WirelessBlockListener implements Listener {
 					return;
 				}
 			}
-			return;
 		}
 
 	}
