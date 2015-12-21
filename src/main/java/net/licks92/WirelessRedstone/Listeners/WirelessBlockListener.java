@@ -187,7 +187,7 @@ public class WirelessBlockListener implements Listener {
 		if (event.getOldCurrent() == event.getNewCurrent())
 			return;
 
-		if (event.getBlock().getType() == Material.SIGN_POST) {
+		if(event.getBlock().getState() instanceof Sign){
 
 			Sign signObject = (Sign) event.getBlock().getState();
 
