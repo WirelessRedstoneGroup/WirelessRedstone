@@ -221,7 +221,7 @@ public class WirelessBlockListener implements Listener {
 		}
 
 		BlockFace bf = BlockFace.SELF;
-		if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
+		//if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
 			if (event.getBlock().getType() == Material.LEVER) {
 				Lever l = (Lever) event.getBlock().getState().getData();
 				BlockRedstoneEvent e = new BlockRedstoneEvent(event.getBlock()
@@ -287,7 +287,7 @@ public class WirelessBlockListener implements Listener {
 					return;
 				}
 			}
-		}
+		//}
 
 	}
 
