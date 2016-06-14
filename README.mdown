@@ -3,5 +3,3 @@
 
 ## WirelessRedstone
 Welcome on the official page of the Wireless Redstone plugin
-
-Test
