@@ -137,6 +137,11 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
+    public String getWirelessChannelName(Location loc) {
+        return null;
+    }
+
+    @Override
     public void updateChannel(String channelName, WirelessChannel channel) {
 
     }

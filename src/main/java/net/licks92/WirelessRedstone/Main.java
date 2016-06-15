@@ -4,6 +4,7 @@ import net.licks92.WirelessRedstone.Storage.IWirelessStorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.String.StringLoader;
 import net.licks92.WirelessRedstone.String.StringManager;
+import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -71,13 +72,21 @@ public class Main extends JavaPlugin{
 
         if(!Utils.isCompatible()){
             WRLogger.severe("**********");
-            WRLogger.severe("This plugin isn't compatible with this Minecraft version! Download a different version.");
+            WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
             WRLogger.severe("**********");
             return;
         }
 
         WRLogger.info("Loading Chunks...");
         Utils.loadChunks();
+
+        if(pm.isPluginEnabled("WorldEdit")) {
+            WRLogger.info("Loading WorldEdit support...");
+            new WorldEditLoader();
+        } else
+            WRLogger.info("WorldEdit not enabled. Skipping WorldEdit support.");
+
+        WRLogger.info("Plugin is now loaded");
     }
 
 }

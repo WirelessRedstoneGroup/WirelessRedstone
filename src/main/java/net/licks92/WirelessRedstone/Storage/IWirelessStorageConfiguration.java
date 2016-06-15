@@ -32,6 +32,8 @@ public interface IWirelessStorageConfiguration {
 
     StorageType canConvert();
 
+    String getWirelessChannelName(Location loc);
+
     void updateChannel(String channelName, WirelessChannel channel);
     void updateReceivers();
     void checkChannel(String channelName);
