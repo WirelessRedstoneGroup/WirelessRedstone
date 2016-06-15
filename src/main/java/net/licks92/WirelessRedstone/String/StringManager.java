@@ -1,12 +1,12 @@
-package net.licks92.WirelessRedstone.Strings;
+package net.licks92.WirelessRedstone.String;
 
-import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.Main;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WirelessStrings {
-    // Strings in alphabetical order.
+public class StringManager {
+
     public String chatTag;
     public String backupDone;
     public String backupFailed;
@@ -64,7 +64,7 @@ public class WirelessStrings {
     public List<String> tagsReceiverClockType;
     public List<String> tagsReceiverSwitchType;
 
-    public WirelessStrings() {
+    public StringManager() {
         tagsTransmitter = new ArrayList<String>();
         tagsReceiver = new ArrayList<String>();
         tagsScreen = new ArrayList<String>();
@@ -74,36 +74,32 @@ public class WirelessStrings {
         tagsReceiverClockType = new ArrayList<String>();
         tagsReceiverSwitchType = new ArrayList<String>();
 
-        WirelessRedstone.getWRLogger().debug("Loading the tags...");
+        Main.getWRLogger().debug("Loading the tags...");
 
         tellRawString = "tellraw %%PLAYER [\"\",{\"text\":\"[\",\"color\":\"dark_blue\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"\\u27A4\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"] \",\"color\":\"dark_blue\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}}]";
 
-        tagsTransmitter.add("[transmitter]");
         tagsTransmitter.add("[wrt]");
-        tagsReceiver.add("[receiver]");
+        tagsTransmitter.add("[transmitter]");
+
         tagsReceiver.add("[wrr]");
-        tagsScreen.add("[screen]");
+        tagsReceiver.add("[receiver]");
+
         tagsScreen.add("[wrs]");
+        tagsScreen.add("[screen]");
+
         tagsReceiverDefaultType.add("[default]");
         tagsReceiverDefaultType.add("[normal]");
+
         tagsReceiverInverterType.add("[inverter]");
         tagsReceiverInverterType.add("[inv]");
+
         tagsReceiverDelayerType.add("[delayer]");
         tagsReceiverDelayerType.add("[delay]");
+
         tagsReceiverClockType.add("[clock]");
+
         tagsReceiverSwitchType.add("[switch]");
         tagsReceiverSwitchType.add("[switcher]");
     }
-}
 
-/*
- * //The signtags must be always the same tagsTransmitter.add("[transmitter]");
- * tagsTransmitter.add("[wrt]"); tagsReceiver.add("[receiver]");
- * tagsReceiver.add("[wrr]"); tagsScreen.add("[screen]");
- * tagsScreen.add("[wrs]"); tagsReceiverDefaultType.add("[default]");
- * tagsReceiverDefaultType.add("[normal]");
- * tagsReceiverInverterType.add("[inverter]");
- * tagsReceiverInverterType.add("[inv]");
- * tagsReceiverDelayerType.add("[delayer]");
- * tagsReceiverDelayerType.add("[delay]");
- */
+}

@@ -1,6 +1,6 @@
-package net.licks92.WirelessRedstone.Channel;
+package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -10,14 +10,15 @@ import java.util.Map;
 
 @SerializableAs("WirelessReceiverDelayer")
 public class WirelessReceiverDelayer extends WirelessReceiver {
-    int delay;
+
+    private Integer delay;
 
     public WirelessReceiverDelayer(Map<String,Object> map) {
         super(map);
         setDelay((Integer) map.get("delay"));
     }
 
-    public WirelessReceiverDelayer(final int delay) {
+    public WirelessReceiverDelayer(Integer delay) {
         super();
         this.delay = delay;
     }
@@ -40,14 +41,14 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
         }, delayInTicks);
     }
 
-    private void superTurnOn(final String channelName) {
+    private void superTurnOn(String channelName) {
         super.turnOn(channelName);
     }
 
     @Override
     public void turnOff(final String channelName) {
         int delayInTicks = delay / 50;
-        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
             @Override
             public void run() {
                 superTurnOff(channelName);
@@ -56,29 +57,23 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
     }
 
     @Override
-    public void changeSignContent(final Block block, final String channelName){
+    public void changeSignContent(Block block, String channelName){
         Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
+        sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, WirelessRedstone.strings.tagsReceiverDelayerType.get(0));
+        sign.setLine(2, Main.getStrings().tagsReceiverDelayerType.get(0));
         sign.setLine(3, Integer.toString(delay));
         sign.update();
     }
 
-    private void superTurnOff(final String channelName) {
+    private void superTurnOff(String channelName) {
         super.turnOff(channelName);
     }
 
-    /**
-     * @param delay - Sets the delay of the delayer.
-     */
-    public void setDelay(final int delay) {
+    public void setDelay(Integer delay) {
         this.delay = delay;
     }
 
-    /**
-     * @return The delay of the delayer.
-     */
     public int getDelay() {
         return this.delay;
     }

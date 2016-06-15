@@ -1,6 +1,6 @@
-package net.licks92.WirelessRedstone.Channel;
+package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -19,14 +19,13 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     public WirelessReceiverSwitch(final boolean state) {
         super();
         try {
-            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     setFirstState(state); //The plugin must be fully loaded to call this method, otherwise you get a nullpointers
                 }
             }, 1L);
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     public WirelessReceiverSwitch() {
@@ -38,8 +37,8 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     public Map<String, Object> serialize() {
         Map<String, Object> map = super.serialize();
         boolean state;
-        if (WirelessRedstone.WireBox.switchState.get(getLocation()) != null)
-            state = WirelessRedstone.WireBox.switchState.get(getLocation());
+        if (Main.getSignManager().switchState.get(getLocation()) != null)
+            state = Main.getSignManager().switchState.get(getLocation());
         else
             state = false;
         map.put("state", state);
@@ -47,10 +46,10 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     }
 
     @Override
-    public void turnOn(final String channelName) {
+    public void turnOn(String channelName) {
         boolean state;
-        if (WirelessRedstone.WireBox.switchState.get(getLocation()) != null)
-            state = WirelessRedstone.WireBox.switchState.get(getLocation());
+        if (Main.getSignManager().switchState.get(getLocation()) != null)
+            state = Main.getSignManager().switchState.get(getLocation());
         else
             state = false;
 
@@ -62,45 +61,39 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
         setState(!state);
     }
 
-    private void superTurnOn(final String channelName) {
+    private void superTurnOn(String channelName) {
         super.turnOn(channelName);
     }
 
     @Override
-    public void turnOff(final String channelName) {
+    public void turnOff(String channelName) {
         //Nothing, the turnOn function enables and disables the receiver
     }
 
     @Override
-    public void changeSignContent(final Block block, final String channelName) {
+    public void changeSignContent(Block block, String channelName) {
         Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, WirelessRedstone.strings.tagsReceiver.get(0));
+        sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, WirelessRedstone.strings.tagsReceiverSwitchType.get(0));
+        sign.setLine(2, Main.getStrings().tagsReceiverSwitchType.get(0));
         sign.update();
     }
 
-    private void superTurnOff(final String channelName) {
+    private void superTurnOff(String channelName) {
         super.turnOff(channelName);
     }
 
-    /**
-     * @param state - Sets the state of the switch.
-     */
-    public void setState(final boolean state) {
-        WirelessRedstone.WireBox.switchState.put(getLocation(), state);
+    public void setState(boolean state) {
+        Main.getSignManager().switchState.put(getLocation(), state);
     }
 
 
     public boolean getState() {
-        return WirelessRedstone.WireBox.switchState.get(getLocation());
+        return Main.getSignManager().switchState.get(getLocation());
     }
 
-    /**
-     * @param state - Sets the state of the switch.
-     */
-    public void setFirstState(final boolean state) {
-        if (WirelessRedstone.WireBox.switchState.get(getLocation()) == null)
-            WirelessRedstone.WireBox.switchState.put(getLocation(), state);
+    public void setFirstState(boolean state) {
+        if (Main.getSignManager().switchState.get(getLocation()) == null)
+            Main.getSignManager().switchState.put(getLocation(), state);
     }
 }

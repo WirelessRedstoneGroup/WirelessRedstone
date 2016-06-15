@@ -20,7 +20,7 @@
 ConfigVersion: 1
 Language: en
 ColourfulLogging: true
-CheckForUpdates: false
+CheckForUpdates: true
 cancelChunkUnloads: true
 cancelChunkUnloadRange: 4
 UseVault: true
@@ -33,7 +33,7 @@ gateLogic: OR
 saveOption: SQLITE
 MySQL:
   host: localhost
-  port: '3306'
+  port: 3306
   database: WirelessRedstone
   username: root
-  password: root
+  password: password

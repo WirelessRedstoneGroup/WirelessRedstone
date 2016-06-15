@@ -1,6 +1,6 @@
-package net.licks92.WirelessRedstone.Channel;
+package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -8,44 +8,31 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @SerializableAs("WirelessTransmitter")
-public class WirelessTransmitter implements ConfigurationSerializable, IWirelessPoint, Serializable {
-    private static final long serialVersionUID = 7054486521728647260L;
+public class WirelessTransmitter implements ConfigurationSerializable, IWirelessPoint {
+
     private String owner;
     private int x;
     private int y;
     private int z;
     private String world;
-    private int direction = 0;
-    private boolean iswallsign = false;
+    private BlockFace direction = BlockFace.SELF;
+    private boolean isWallSign = false;
 
     public WirelessTransmitter() {
-
     }
 
     public WirelessTransmitter(Map<String, Object> map) {
         owner = (String) map.get("owner");
         world = (String) map.get("world");
-        direction = (Integer) map.get("direction");
-        iswallsign = (Boolean) map.get("isWallSign");
+        direction = (BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase());
+        isWallSign = (Boolean) map.get("isWallSign");
         x = (Integer) map.get("x");
         y = (Integer) map.get("y");
         z = (Integer) map.get("z");
-    }
-
-    public boolean isActive() {
-        Location loc = new Location(Bukkit.getWorld(getWorld()), getX(), getY(), getZ());
-        Block block = loc.getBlock();
-        return block.isBlockIndirectlyPowered() || block.isBlockPowered();
-    }
-
-    @Override
-    public String getOwner() {
-        return this.owner;
     }
 
     @Override
@@ -64,8 +51,8 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     }
 
     @Override
-    public String getWorld() {
-        return this.world;
+    public boolean getIsWallSign() {
+        return this.isWallSign;
     }
 
     @Override
@@ -94,34 +81,47 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     }
 
     @Override
-    public BlockFace getDirection() {
-        return WirelessRedstone.WireBox.intToBlockFaceSign(direction);
-    }
-
-    @Override
     public void setDirection(int direction) {
-        this.direction = direction;
+        if (isWallSign)
+            this.direction = Utils.intToBlockFaceWallSign(direction);
+        else
+            this.direction = Utils.intToBlockFaceSign(direction);
     }
 
     @Override
     public void setDirection(BlockFace face) {
-        setDirection(WirelessRedstone.WireBox.signFaceToInt(face));
+        this.direction = face;
     }
 
     @Override
-    public boolean getIsWallSign() {
-        return iswallsign;
+    public void setIsWallSign(boolean isWallSign) {
+        this.isWallSign = isWallSign;
     }
 
     @Override
-    public void setIsWallSign(boolean iswallsign) {
-        this.iswallsign = iswallsign;
+    public String getOwner() {
+        return this.owner;
+    }
+
+    @Override
+    public String getWorld() {
+        return this.world;
+    }
+
+    @Override
+    public BlockFace getDirection() {
+        return this.direction;
+    }
+
+    @Override
+    public Location getLocation() {
+        return new Location(Bukkit.getWorld(world), x, y, z);
     }
 
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("direction", this.direction);
+        map.put("direction", this.direction.name().toUpperCase());
         map.put("isWallSign", getIsWallSign());
         map.put("owner", getOwner());
         map.put("world", getWorld());
@@ -132,7 +132,7 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     }
 
     public void deserialize(Map<String, Object> map) {
-        this.setDirection((Integer) map.get("direction"));
+        this.setDirection((BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase()));
         this.setIsWallSign((Boolean) map.get("isWallSign"));
         this.setOwner((String) map.get("owner"));
         this.setWorld((String) map.get("world"));
@@ -141,8 +141,9 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
         this.setZ((Integer) map.get("z"));
     }
 
-    @Override
-    public Location getLocation() {
-        return new Location(Bukkit.getWorld(world), x, y, z);
+    public boolean isActive() {
+        Location loc = new Location(Bukkit.getWorld(getWorld()), getX(), getY(), getZ());
+        Block block = loc.getBlock();
+        return block.isBlockIndirectlyPowered() || block.isBlockPowered();
     }
 }

@@ -1,28 +1,23 @@
-package net.licks92.WirelessRedstone.Channel;
+package net.licks92.WirelessRedstone.Signs;
 
 import com.avaje.ebean.validation.NotNull;
-import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.ConfigManager;
+import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.*;
 
-@Entity()
-@Table(name = "wirelesschannels")
-@SerializableAs("WirelessChannel")
-public class WirelessChannel implements ConfigurationSerializable, Serializable {
-    private static final long serialVersionUID = -3322590857684087871L;
+public class WirelessChannel implements ConfigurationSerializable {
+
     @Id
     private int id;
     @NotNull
@@ -39,14 +34,12 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         this.setName(name);
     }
 
-    @SuppressWarnings("unchecked")
     public WirelessChannel(final Map<String, Object> map) {
         this.setId((Integer) map.get("id"));
         this.setName((String) map.get("name"));
         this.setOwners((List<String>) map.get("owners"));
         this.setReceivers((List<WirelessReceiver>) map.get("receivers"));
-        this.setTransmitters((List<WirelessTransmitter>) map
-                .get("transmitters"));
+        this.setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
         this.setScreens((List<WirelessScreen>) map.get("screens"));
         try {
             this.setLocked((Boolean) map.get("locked"));
@@ -55,24 +48,16 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    /**
-     * This method is almost the same as turnOn(), except that the channel will
-     * be on for a temporary time only!
-     *
-     * @param time - Time spent until the channel turns off in ms.
-     */
-    public void turnOn(final int time) {
+    public void turnOn(Integer time) {
         if (isLocked()) {
-            WirelessRedstone.getWRLogger().debug(
-                    "Channel " + name + " didn't turn on because locked.");
+            Main.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
             return;
         }
-        int timeInTicks = time / 50; // It's the time in ticks, where the time
-        // variable is supposed to be the time
-        // in ms.
+
+        int timeInTicks = time / 50; // It's the time in ticks, where the timevariable is supposed to be the time in ms.
         turnOn();
-        Bukkit.getScheduler().runTaskLater(
-                Bukkit.getPluginManager().getPlugin("WirelessRedstone"),
+
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WirelessRedstone"),
                 new Runnable() {
                     @Override
                     public void run() {
@@ -82,14 +67,9 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                 }, timeInTicks);
     }
 
-    /**
-     * Simply turns on the wireless channel, means that all the receivers and
-     * screens will turn on.
-     */
     public void turnOn() {
         if (isLocked()) {
-            WirelessRedstone.getWRLogger().debug(
-                    "Channel " + name + " didn't turn on because locked.");
+            Main.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
             return;
         }
         // Turning on the receivers ONLY if the channel isn't active.
@@ -104,42 +84,27 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                 screen.turnOn();
             }
         } catch (RuntimeException e) {
-            WirelessRedstone
-                    .getWRLogger()
-                    .severe("Error while turning on the receivers of channel "
-                            + name
-                            + ". Please turn the debug mode on to get more informations.");
-            if (WirelessRedstone.config.getDebugMode())
+            Main.getWRLogger().severe("Error while turning on the receivers of channel "
+                    + name
+                    + ". Please turn the debug mode on to get more informations.");
+            if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
-        if (!WirelessRedstone.WireBox.activeChannels.contains(getName())) {
-            WirelessRedstone.WireBox.activeChannels.add(getName());
+        if (!Main.getSignManager().activeChannels.contains(getName())) {
+            Main.getSignManager().activeChannels.add(getName());
         }
     }
 
-    /**
-     * Simply turns off the channel : all the receivers and screens turn off.
-     */
     public void turnOff() {
         try {
             // Change receivers
             for (WirelessReceiver receiver : getReceivers()) {
                 receiver.turnOff(getName());
 
-                if (WirelessRedstone.getBukkitVersion().contains("v1_8")) {
-                    ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
-                    possibleBlockface.add(BlockFace.NORTH);
-                    possibleBlockface.add(BlockFace.EAST);
-                    possibleBlockface.add(BlockFace.SOUTH);
-                    possibleBlockface.add(BlockFace.WEST);
-                    possibleBlockface.add(BlockFace.UP);
-                    possibleBlockface.add(BlockFace.DOWN);
-
-                    for (BlockFace blockFace : possibleBlockface) {
-                        Bukkit.getServer().getPluginManager().callEvent(
-                                new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
-                                        receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
-                    }
+                for (BlockFace blockFace : Utils.getEveryBlockFace(true)) {
+                    Bukkit.getServer().getPluginManager().callEvent(
+                            new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
+                                    receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
                 }
             }
 
@@ -148,45 +113,44 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                 screen.turnOff();
             }
         } catch (RuntimeException e) {
-            WirelessRedstone
-                    .getWRLogger()
-                    .severe("Error while updating redstone onBlockRedstoneChange for Screens , turn on the Debug Mode to get more informations.");
-            if (WirelessRedstone.config.getDebugMode())
+            Main.getWRLogger()
+                    .severe("Error while updating redstone onBlockRedstoneChange for Screens, turn on the Debug Mode to get more informations.");
+            if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
-        if (WirelessRedstone.WireBox.activeChannels.contains(getName())) {
-            WirelessRedstone.WireBox.activeChannels.remove(getName());
+        if (Main.getSignManager().activeChannels.contains(getName())) {
+            Main.getSignManager().activeChannels.remove(getName());
         }
     }
 
-    public void startClock(final BukkitTask task) {
-        WirelessRedstone.WireBox.clockTasks.put(task.getTaskId(),
+    public void startClock(BukkitTask task) {
+        Main.getSignManager().clockTasks.put(task.getTaskId(),
                 getName());
-        WirelessRedstone.getWRLogger().debug(
+        Main.getWRLogger().debug(
                 "Added clock task " + task.getTaskId()
                         + " to te list for circuit " + getName());
     }
 
     public void stopClock() {
         ArrayList<Integer> remove = new ArrayList<Integer>();
-        for (Map.Entry<Integer, String> task : WirelessRedstone.WireBox.clockTasks
+        for (Map.Entry<Integer, String> task : Main.getSignManager().clockTasks
                 .entrySet()) {
             if (!task.getValue().equalsIgnoreCase(getName())) {
                 continue;
             }
             Bukkit.getScheduler().cancelTask(task.getKey());
             remove.add(task.getKey());
-            WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
+            Main.getWRLogger().debug("Stopped clock task " + task);
         }
         for (Integer i : remove) {
-            WirelessRedstone.WireBox.clockTasks.remove(i);
+            Main.getSignManager().clockTasks.remove(i);
         }
         remove.clear();
     }
 
-    public void toggle(final Integer redstoneValue, final Block block) {
+    public void toggle(Integer redstoneValue, Block block) {
         if (redstoneValue > 0) {
-            if (WirelessRedstone.WireBox.activeChannels
+            if (Main.getSignManager().activeChannels
                     .contains(getName())) {
                 return;
             }
@@ -198,10 +162,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    /**
-     * @return true if one of the transmitters is active, false if they are all
-     * off.
-     */
     public boolean isActive() {
         for (WirelessTransmitter t : getTransmitters()) {
             Location loc = new Location(Bukkit.getWorld(t.getWorld()),
@@ -214,15 +174,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
                 }
             }
 
-            ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
-            possibleBlockface.add(BlockFace.NORTH);
-            possibleBlockface.add(BlockFace.EAST);
-            possibleBlockface.add(BlockFace.SOUTH);
-            possibleBlockface.add(BlockFace.WEST);
-            possibleBlockface.add(BlockFace.UP);
-            possibleBlockface.add(BlockFace.DOWN);
-
-            for (BlockFace blockFace : possibleBlockface) {
+            for (BlockFace blockFace : Utils.getEveryBlockFace(true)) {
                 if (block.getRelative(blockFace).isBlockIndirectlyPowered()
                         || block.getRelative(blockFace)
                         .isBlockIndirectlyPowered()) {
@@ -233,7 +185,38 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         return false;
     }
 
-    public void removeReceiverAt(final Location loc) {
+    public boolean isOn() {
+        boolean on = false;
+        for (WirelessTransmitter transmitter : transmitters) {
+            if (transmitter.isActive()) {
+                on = true;
+            }
+        }
+        return ConfigManager.getConfig().useORLogic() ? on : false;
+    }
+
+    public void addTransmitter(final WirelessTransmitter transmitter) {
+        if (transmitters == null)
+            transmitters = new ArrayList<WirelessTransmitter>();
+
+        transmitters.add(transmitter);
+    }
+
+    public void addReceiver(final WirelessReceiver receiver) {
+        if (receivers == null)
+            receivers = new ArrayList<WirelessReceiver>();
+
+        receivers.add(receiver);
+    }
+
+    public void addScreen(final WirelessScreen screen) {
+        if (screens == null)
+            screens = new LinkedList<WirelessScreen>();
+
+        screens.add(screen);
+    }
+
+    public void removeReceiverAt(Location loc) {
         for (WirelessReceiver receiver : receivers) {
             if (receiver.getX() == loc.getBlockX()
                     && receiver.getZ() == loc.getBlockZ()
@@ -263,7 +246,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    public void removeScreenAt(final Location loc) {
+    public void removeScreenAt(Location loc) {
         for (WirelessScreen screen : screens) {
             if (screen.getX() == loc.getBlockX()
                     && screen.getZ() == loc.getBlockZ()
@@ -278,7 +261,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    public void removeReceiverAt(final Location loc, final String world) {
+    public void removeReceiverAt(Location loc, String world) { //TODO: Finish rebuild and check if this is called
         for (WirelessReceiver receiver : receivers) {
             if (receiver.getX() == loc.getBlockX()
                     && receiver.getZ() == loc.getBlockZ()
@@ -292,7 +275,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    public void removeTransmitterAt(final Location loc, final String world) {
+    public void removeTransmitterAt(Location loc, String world) { //TODO: Finish rebuild and check if this is called
         for (WirelessTransmitter transmitter : transmitters) {
             if (transmitter.getX() == loc.getBlockX()
                     && transmitter.getZ() == loc.getBlockZ()
@@ -306,7 +289,7 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    public void removeScreenAt(final Location loc, final String world) {
+    public void removeScreenAt(Location loc, String world) { //TODO: Finish rebuild and check if this is called
         for (WirelessScreen screen : screens) {
             if (screen.getX() == loc.getBlockX()
                     && screen.getZ() == loc.getBlockZ()
@@ -324,74 +307,57 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         return this.owners.remove(username);
     }
 
-    public void addTransmitter(final WirelessTransmitter transmitter) {
-        if (transmitters == null)
-            transmitters = new ArrayList<WirelessTransmitter>();
-
-        transmitters.add(transmitter);
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void addReceiver(final WirelessReceiver receiver) {
-        if (receivers == null)
-            receivers = new ArrayList<WirelessReceiver>();
-
-        receivers.add(receiver);
-    }
-
-    public void addScreen(final WirelessScreen screen) {
-        if (screens == null)
-            screens = new LinkedList<WirelessScreen>();
-
-        screens.add(screen);
-    }
-
-    public void addOwner(final String username) {
-        if (this.owners == null)
-            this.owners = new LinkedList<String>();
-
-        if (!this.owners.contains(username))
-            this.owners.add(username);
-    }
-
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setLocked(final boolean value) {
-        this.locked = value;
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
-    public void setOwners(final List<String> owners) {
+    public void setOwners(List<String> owners) {
         this.owners = owners;
     }
 
-    public void setTransmitters(final List<WirelessTransmitter> transmitters) {
+    public void setTransmitters(List<WirelessTransmitter> transmitters) {
         if (transmitters != null)
             this.transmitters = transmitters;
         else
             this.transmitters = new LinkedList<WirelessTransmitter>();
     }
 
-    public void setReceivers(final List<WirelessReceiver> receivers) {
+    public void setReceivers(List<WirelessReceiver> receivers) {
         if (receivers != null)
             this.receivers = receivers;
         else
             this.receivers = new LinkedList<WirelessReceiver>();
     }
 
-    public void setScreens(final List<WirelessScreen> screens) {
+    public void setScreens(List<WirelessScreen> screens) {
         if (screens != null)
             this.screens = screens;
         else
             this.screens = new LinkedList<WirelessScreen>();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public boolean isLocked() {
-        return this.locked;
+        return locked;
+    }
+
+    public List<String> getOwners() {
+        return owners;
     }
 
     public List<WirelessTransmitter> getTransmitters() {
@@ -410,36 +376,6 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    public List<WirelessReceiver> getReceiversOfType(WirelessReceiver.Type type) {
-        List<WirelessReceiver> returnList = new LinkedList<>();
-
-        for (WirelessReceiver receiver : getReceivers()) {
-            if (receiver instanceof WirelessReceiverClock && type == WirelessReceiver.Type.Clock) {
-                returnList.add(receiver);
-            } else if (receiver instanceof WirelessReceiverInverter && type == WirelessReceiver.Type.Inverter) {
-                returnList.add(receiver);
-            } else if (receiver instanceof WirelessReceiverDelayer && type == WirelessReceiver.Type.Delayer) {
-                returnList.add(receiver);
-            } else if (receiver instanceof WirelessReceiverSwitch && type == WirelessReceiver.Type.Switch) {
-                returnList.add(receiver);
-            } else if (type == WirelessReceiver.Type.Default) {
-                returnList.add(receiver);
-            }
-        }
-
-        return returnList;
-    }
-
-    public boolean isOn(){
-        boolean on = false;
-        for (WirelessTransmitter transmitter : transmitters) {
-            if (transmitter.isActive()) {
-                on = true;
-            }
-        }
-        return WirelessRedstone.getInstance().getConfig().getString("gateLogic", "OR").equalsIgnoreCase("IGNORE") ? false : on;
-    }
-
     public List<WirelessScreen> getScreens() {
         try {
             return this.screens;
@@ -448,20 +384,24 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         }
     }
 
-    public List<String> getOwners() {
-        try {
-            return this.owners;
-        } catch (NullPointerException ex) {
-            return new LinkedList<String>();
+    public List<WirelessReceiver> getReceiversOfType(WirelessReceiver.Type type) {
+        List<WirelessReceiver> returnList = new LinkedList<>();
+
+        for (WirelessReceiver receiver : getReceivers()) {
+            if (receiver instanceof WirelessReceiverClock && type == WirelessReceiver.Type.CLOCK) {
+                returnList.add(receiver);
+            } else if (receiver instanceof WirelessReceiverInverter && type == WirelessReceiver.Type.INVERTER) {
+                returnList.add(receiver);
+            } else if (receiver instanceof WirelessReceiverDelayer && type == WirelessReceiver.Type.DELAYER) {
+                returnList.add(receiver);
+            } else if (receiver instanceof WirelessReceiverSwitch && type == WirelessReceiver.Type.SWITCH) {
+                returnList.add(receiver);
+            } else if (type == WirelessReceiver.Type.DEFAULT) {
+                returnList.add(receiver);
+            }
         }
-    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(final int id) {
-        this.id = id;
+        return returnList;
     }
 
     @Override
@@ -476,4 +416,5 @@ public class WirelessChannel implements ConfigurationSerializable, Serializable 
         map.put("locked", isLocked());
         return map;
     }
+
 }

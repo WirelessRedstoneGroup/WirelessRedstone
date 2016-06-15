@@ -1,6 +1,6 @@
-package net.licks92.WirelessRedstone.Strings;
+package net.licks92.WirelessRedstone.String;
 
-import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.Main;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -12,41 +12,24 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Loads the strings from a specific file. If some strings are missing, it will
- * replace them by the one in the default english file.
- */
-public class WirelessXMLStringsLoader extends WirelessStrings {
-    private final String STRINGS_FOLDER = "languages/";
-    private final String defaultLanguage = "en";
+public class StringLoader extends StringManager {
 
-    public WirelessXMLStringsLoader(final WirelessRedstone plugin,
-                                    final String language) {
+    private final String stringFolder = "languages/";
+    private final String fallbackLanguage= "en";
 
-        String defaultLocation = STRINGS_FOLDER + defaultLanguage
-                + "/strings.xml";
-        InputStream stream = plugin.getResource(STRINGS_FOLDER + language
-                + "/strings.xml");
+    public StringLoader(String language){
+        Main plugin = Main.getInstance();
+
+        InputStream stream = plugin.getResource(stringFolder + language + "/strings.xml");
+
         if (stream != null) {
-            loadFromStream(plugin.getResource(defaultLocation));
+            loadFromStream(plugin.getResource(stringFolder + fallbackLanguage + "/strings.xml")); //Load english strings in case the translated string isn't available
             loadFromStream(stream);
         } else {
-            WirelessRedstone
-                    .getWRLogger()
-                    .warning(
-                            "You've set the language to "
-                                    + language
-                                    + " in your configuration. This language is not available. The plugin will now load the default english strings.");
-            stream = plugin.getResource(defaultLocation);
-            if (stream != null) {
-                loadFromStream(plugin.getResource(defaultLocation));
-                loadFromStream(stream);
-            } else
-                WirelessRedstone
-                        .getWRLogger()
-                        .severe("Could not load the strings in "
-                                + defaultLocation
-                                + ". Your jar file is probably corrupted. Please download it again from dev.bukkit.org/bukkit-plugins/wireless-redstone/");
+            Main.getWRLogger().warning("You've set the language to " + language + " in your configuration. " +
+                    "This language isn't available. The plugin will use English as language.");
+
+            loadFromStream(plugin.getResource(stringFolder + fallbackLanguage + "/strings.xml"));
         }
     }
 
@@ -63,7 +46,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                 switch (rootNodes.item(i).getNodeName()) {
                     case "tags": // Load the tags
                         final Element tagsElement = (Element) rootNodes.item(i);
-                        WirelessRedstone.getWRLogger().debug(
+                        Main.getWRLogger().debug(
                                 "Loading the tags...");
 
                         if (tagsElement.getElementsByTagName("chatTag").item(0) != null)
@@ -75,7 +58,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
 
                     case "playermessages": // Load the PM strings
                         Element PMElement = (Element) rootNodes.item(i);
-                        WirelessRedstone.getWRLogger().debug(
+                        Main.getWRLogger().debug(
                                 "Loading the player messages ..");
 
                         if (PMElement.getElementsByTagName("backupDone").item(0) != null)
@@ -292,7 +275,7 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
 
                     case "logmessages": // Load the LM strings
                         Element LMElement = (Element) rootNodes.item(i);
-                        WirelessRedstone.getWRLogger().debug(
+                        Main.getWRLogger().debug(
                                 "Loading the log messages ..");
 
                         if (LMElement
@@ -304,22 +287,15 @@ public class WirelessXMLStringsLoader extends WirelessStrings {
                 }
             }
         } catch (ParserConfigurationException e) {
-            WirelessRedstone.getWRLogger().severe(
+            Main.getWRLogger().severe(
                     "Error while loading the xml parser.");
         } catch (SAXException | IOException e) {
-            WirelessRedstone.getWRLogger().severe(
+            Main.getWRLogger().severe(
                     "Error while parsing the xml file.");
         } catch (NullPointerException e) {
-            WirelessRedstone.getWRLogger().severe(
+            Main.getWRLogger().severe(
                     "Your strings file is not correctly written.");
             e.printStackTrace();
         }
-
-        // Here we load the tags
-        /*
-		 * tagsTransmitter.add("[transmitter]"); tagsTransmitter.add("[wrt]");
-		 * tagsReceiver.add("[receiver]"); tagsReceiver.add("[wrr]");
-		 * tagsScreen.add("[screen]"); tagsScreen.add("[wrs]");
-		 */
     }
 }
