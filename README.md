@@ -15,7 +15,7 @@ Welcome on the official page of the Wireless Redstone plugin
 - [ ] Command
 - [ ] Metrics
 
-- Storage
+#### Storage
 - [ ] Yaml
 - [ ] SQLite
 - [ ] MySQL
