@@ -299,7 +299,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             }
 
             for (String channelRemove : remove) {
-                Main.getSignManager().removeWirelessChannel(channelRemove);
+                Main.getStorage().removeWirelessChannel(channelRemove);
             }
 
             return true;
