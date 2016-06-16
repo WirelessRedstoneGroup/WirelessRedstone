@@ -25,6 +25,16 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public YamlStorage(String channelFolder) {
         this.channelFolder = new File(Main.getInstance().getDataFolder(), channelFolder);
         this.channelFolderStr = channelFolder;
+
+        //Initialize the serialization
+        ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
+        ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
+        ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
+        ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
+        ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
+        ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
+        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
+        ConfigurationSerialization.registerClass(WirelessReceiverSwitch.class, "WirelessReceiverSwitch");
     }
 
     @Override
@@ -505,16 +515,6 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     }
 
     private boolean initiate(boolean allowConvert){
-        //Initialize the serialization
-        ConfigurationSerialization.registerClass(WirelessTransmitter.class, "WirelessTransmitter");
-        ConfigurationSerialization.registerClass(WirelessChannel.class, "WirelessChannel");
-        ConfigurationSerialization.registerClass(WirelessScreen.class, "WirelessScreen");
-        ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
-        ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
-        ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
-        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
-        ConfigurationSerialization.registerClass(WirelessReceiverSwitch.class, "WirelessReceiverSwitch");
-
         if (canConvert() != null && allowConvert) {
             Main.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");
             Main.getWRLogger().info("Beginning data transfer to Yaml...");

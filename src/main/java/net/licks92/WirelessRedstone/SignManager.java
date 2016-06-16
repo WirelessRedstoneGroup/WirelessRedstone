@@ -341,6 +341,27 @@ public class SignManager {
         return getScreenLocations(channel);
     }
 
+    public SignType getSignType(String data){
+        return getSignType(data, null);
+    }
+
+    public SignType getSignType(String data, String extraData){
+        if(isTransmitter(data))
+            return SignType.TRANSMITTER;
+
+        if(isScreen(data))
+            return SignType.SCREEN;
+
+        if(isReceiver(data)){
+            if(extraData == null)
+                return SignType.RECEIVER;
+            else
+                return getReceiverType(extraData);
+        }
+
+        return null;
+    }
+
     public SignType getReceiverType(String data){
         if(isReceiverInverter(data))
             return SignType.RECEIVER_INVERTER;

@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.gravitydevelopment.updater.Updater;
+import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
 import net.licks92.WirelessRedstone.Storage.IWirelessStorageConfiguration;
@@ -82,6 +83,7 @@ public class Main extends JavaPlugin{
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
         globalCache = new GlobalCache(config.getCacheRefreshRate());
         signManager = new SignManager();
+        permissionsManager = new PermissionsManager();
 
         PluginManager pm = getServer().getPluginManager();
 
@@ -103,9 +105,9 @@ public class Main extends JavaPlugin{
 
         WRLogger.info("Loading listeners...");
         //Don't need to store the instance because we won't touch it.
-        new WorldListener();
-//        blockListener = new BlockListener(this);
-        new PlayerListener();
+        pm.registerEvents(new WorldListener(), this);
+        pm.registerEvents(new BlockListener(), this);
+        pm.registerEvents(new PlayerListener(), this);
 
         WRLogger.info("Loading updater...");
         updater = new Updater(this, 37345, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);

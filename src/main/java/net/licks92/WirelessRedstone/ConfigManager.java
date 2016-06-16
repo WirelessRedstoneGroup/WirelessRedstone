@@ -82,6 +82,10 @@ public class ConfigManager {
         return config.getBoolean(ConfigPaths.SILENTMODE.getValue(), false);
     }
 
+    public boolean getDropSignBroken(){
+        return config.getBoolean(ConfigPaths.DROPSIGNBROKEN.getValue(), true);
+    }
+
     public boolean useORLogic(){
         return !config.getString(ConfigPaths.GATELOGIC.getValue(), "OR").equalsIgnoreCase("IGNORE");
     }
@@ -119,7 +123,7 @@ public class ConfigManager {
 enum ConfigPaths {
     DEBUGMODE("DebugMode"), LANGUAGE("Language"), COLORLOGGING("ColourfulLogging"), UPDATECHECK("CheckForUpdates"), CANCELCHUNKUNLOAD("cancelChunkUnloads"),
         CANCELCHUNKUNLOADRANGE("cancelChunkUnloadRange"), USEVAULT("UseVault"), SILENTMODE("SilentMode"), INTERACTTRANSMITTERTIME("InteractTransmitterTime"),
-        CACHEREFRESHRATE("CacheRefreshFrequency"), GATELOGIC("gateLogic"), SAVEMODE("saveOption");
+        CACHEREFRESHRATE("CacheRefreshFrequency"), GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken");
 
     private String name;
 

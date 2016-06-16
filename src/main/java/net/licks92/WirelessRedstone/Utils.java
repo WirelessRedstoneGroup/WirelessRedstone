@@ -23,31 +23,33 @@ public class Utils {
         return packageName.substring(packageName.lastIndexOf('.') + 1);
     }
 
-    public static boolean sameLocation(Location loc1, Location loc2){
+    public static boolean sameLocation(Location loc1, Location loc2) {
         return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY()
                 && loc1.getBlockZ() == loc2.getBlockZ() && loc1.getWorld() == loc2.getWorld();
     }
 
-    public static boolean isCompatible(){
+    public static boolean isCompatible() {
         try {
             String[] pieces = getBukkitVersion().substring(1).split("_");
 
             return Integer.parseInt(pieces[0]) >= 1 && Integer.parseInt(pieces[1]) >= 8;
-        } catch (NumberFormatException | NullPointerException e){
+        } catch (NumberFormatException | NullPointerException e) {
             return false;
         }
     }
 
-    public static void sendFeedback(String message, CommandSender sender, boolean error){
+    public static void sendFeedback(String message, CommandSender sender, boolean error) {
         sendFeedback(message, sender, error, false);
     }
 
-    public static void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent){
-        if(!ConfigManager.getConfig().getSilentMode() && checkSilent)
-            sender.sendMessage((error ? ChatColor.RED : ChatColor.GREEN) + Main.getStrings().chatTag + message);
+    public static void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
+        if (ConfigManager.getConfig().getSilentMode() && checkSilent)
+            return;
+        sender.sendMessage(ChatColor.GRAY + "[" + ChatColor.RED + "WirelessRedstone" + ChatColor.GRAY + "] "
+                + (error ? ChatColor.RED : ChatColor.GREEN) + message);
     }
 
-    public static boolean containsBadChar(String string){
+    public static boolean containsBadChar(String string) {
         //Check if string contains something different then a-z 0-9. It also checks if it contains a tab char
         Pattern p = Pattern.compile("([^a-z0-9-_]|[\\t])", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(string);
@@ -104,7 +106,7 @@ public class Utils {
     * 5 - East
     * */
 
-    public static int wallSignFaceToInt(BlockFace face){
+    public static int wallSignFaceToInt(BlockFace face) {
         switch (face) {
             case NORTH:
                 return 0;
@@ -143,7 +145,7 @@ public class Utils {
     * 12 - East
     * */
 
-    public static int signFaceToInt(BlockFace face){
+    public static int signFaceToInt(BlockFace face) {
         switch (face) {
             case NORTH:
                 return 8;
@@ -246,14 +248,14 @@ public class Utils {
         }
     }
 
-    public static List<BlockFace> getEveryBlockFace(boolean addUpAndDown){
+    public static List<BlockFace> getEveryBlockFace(boolean addUpAndDown) {
         ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
         possibleBlockface.add(BlockFace.NORTH);
         possibleBlockface.add(BlockFace.EAST);
         possibleBlockface.add(BlockFace.SOUTH);
         possibleBlockface.add(BlockFace.WEST);
 
-        if(addUpAndDown) {
+        if (addUpAndDown) {
             possibleBlockface.add(BlockFace.UP);
             possibleBlockface.add(BlockFace.DOWN);
         }

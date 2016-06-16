@@ -10,12 +10,14 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.persistence.Id;
 import java.util.*;
 
+@SerializableAs("WirelessChannel")
 public class WirelessChannel implements ConfigurationSerializable {
 
     @Id

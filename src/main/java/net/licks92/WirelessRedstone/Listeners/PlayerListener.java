@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerListener implements Listener{
+public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
@@ -56,79 +56,81 @@ public class PlayerListener implements Listener{
         else if (Main.getSignManager().isReceiver(sign.getLine(0)))
             type = Main.getSignManager().getReceiverType(sign.getLine(2));
 
+        if (type == null) {
+            return;
+        }
+
         WirelessChannel channel = Main.getStorage().getWirelessChannel(sign.getLine(1));
 
         if (!signAlreadyExist(event.getClickedBlock().getLocation(), sign.getLine(1))) {
-            if(type != null){
-                if (sign.getLine(1) == null) {
-                    event.getClickedBlock().setType(Material.AIR);
-                    event.getPlayer().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(),
-                            new ItemStack(Material.SIGN, 1));
-                    Utils.sendFeedback("No channel name found", event.getPlayer(), true); //TODO: Add this string to the stringloader
-                    return;
-                }
+            if (sign.getLine(1) == null) {
+                event.getClickedBlock().setType(Material.AIR);
+                event.getPlayer().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(),
+                        new ItemStack(Material.SIGN, 1));
+                Utils.sendFeedback("No channel name found", event.getPlayer(), true); //TODO: Add this string to the stringloader
+                return;
+            }
 
-                String cname = sign.getLine(1);
+            String cname = sign.getLine(1);
 
-                if (!Main.getSignManager().hasAccessToChannel(event.getPlayer(), cname)) {
-                    event.getClickedBlock().setType(Material.AIR);
-                    event.getPlayer().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(),
-                            new ItemStack(Material.SIGN, 1));
-                    Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), false);
-                    return;
-                }
+            if (!Main.getSignManager().hasAccessToChannel(event.getPlayer(), cname)) {
+                event.getClickedBlock().setType(Material.AIR);
+                event.getPlayer().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(),
+                        new ItemStack(Material.SIGN, 1));
+                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), false);
+                return;
+            }
 
-                switch (type) {
-                    case TRANSMITTER:
-                        if (!Main.getSignManager().addWirelessTransmitter(cname, event.getClickedBlock(), event.getPlayer())) {
-                            event.setCancelled(true);
-                            event.getClickedBlock().breakNaturally();
-                        }
-                        break;
-                    case SCREEN:
-                        if (!Main.getSignManager().addWirelessScreen(cname, event.getClickedBlock(), event.getPlayer())) {
-                            event.setCancelled(true);
-                            event.getClickedBlock().breakNaturally();
-                        }
-                        break;
-                    case RECEIVER_NORMAL:
-                        if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
-                                event.getPlayer(), WirelessReceiver.Type.DEFAULT)) {
-                            event.setCancelled(true);
-                            event.getClickedBlock().breakNaturally();
-                        }
-                        break;
-                    case RECEIVER_INVERTER:
-                        if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
-                                event.getPlayer(), WirelessReceiver.Type.INVERTER)) {
-                            event.setCancelled(true);
-                            event.getClickedBlock().breakNaturally();
-                        }
-                        break;
-                    case RECEIVER_DELAYER:
-                        if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
-                                event.getPlayer(), WirelessReceiver.Type.DELAYER)) {
-                            event.setCancelled(true);
-                            event.getClickedBlock().breakNaturally();
-                        }
-                        break;
-                    case RECEIVER_CLOCK:
-                        if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
-                                event.getPlayer(), WirelessReceiver.Type.CLOCK)) {
-                            event.setCancelled(true);
-                            event.getClickedBlock().breakNaturally();
-                        }
-                        break;
-                    case RECEIVER_SWITCH:
-                        if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
-                                event.getPlayer(), WirelessReceiver.Type.SWITCH)) {
-                            event.setCancelled(true);
-                            event.getClickedBlock().breakNaturally();
-                        }
-                        break;
-                    default:
-                        break;
-                }
+            switch (type) {
+                case TRANSMITTER:
+                    if (!Main.getSignManager().addWirelessTransmitter(cname, event.getClickedBlock(), event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getClickedBlock().breakNaturally();
+                    }
+                    break;
+                case SCREEN:
+                    if (!Main.getSignManager().addWirelessScreen(cname, event.getClickedBlock(), event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getClickedBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_NORMAL:
+                    if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
+                            event.getPlayer(), WirelessReceiver.Type.DEFAULT)) {
+                        event.setCancelled(true);
+                        event.getClickedBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_INVERTER:
+                    if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
+                            event.getPlayer(), WirelessReceiver.Type.INVERTER)) {
+                        event.setCancelled(true);
+                        event.getClickedBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_DELAYER:
+                    if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
+                            event.getPlayer(), WirelessReceiver.Type.DELAYER)) {
+                        event.setCancelled(true);
+                        event.getClickedBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_CLOCK:
+                    if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
+                            event.getPlayer(), WirelessReceiver.Type.CLOCK)) {
+                        event.setCancelled(true);
+                        event.getClickedBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_SWITCH:
+                    if (!Main.getSignManager().addWirelessReceiver(cname, event.getClickedBlock(),
+                            event.getPlayer(), WirelessReceiver.Type.SWITCH)) {
+                        event.setCancelled(true);
+                        event.getClickedBlock().breakNaturally();
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -159,7 +161,7 @@ public class PlayerListener implements Listener{
             }
         }
 
-        if(!exist) {
+        if (!exist) {
             for (WirelessTransmitter transmitter : channel.getTransmitters()) {
                 if (Utils.sameLocation(loc, transmitter.getLocation())) {
                     exist = true;
@@ -168,7 +170,7 @@ public class PlayerListener implements Listener{
             }
         }
 
-        if(!exist) {
+        if (!exist) {
             for (WirelessScreen screen : channel.getScreens()) {
                 if (Utils.sameLocation(loc, screen.getLocation())) {
                     exist = true;

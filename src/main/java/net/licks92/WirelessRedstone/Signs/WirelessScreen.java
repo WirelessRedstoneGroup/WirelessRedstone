@@ -7,10 +7,12 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@SerializableAs("WirelessScreen")
 public class WirelessScreen implements ConfigurationSerializable, IWirelessPoint{
 
     private String owner;
