@@ -39,7 +39,12 @@ public class Utils {
     }
 
     public static void sendFeedback(String message, CommandSender sender, boolean error){
-        sender.sendMessage((error ? ChatColor.RED : ChatColor.GREEN) + Main.getStrings().chatTag + message);
+        sendFeedback(message, sender, error, false);
+    }
+
+    public static void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent){
+        if(!ConfigManager.getConfig().getSilentMode() && checkSilent)
+            sender.sendMessage((error ? ChatColor.RED : ChatColor.GREEN) + Main.getStrings().chatTag + message);
     }
 
     public static boolean containsBadChar(String string){

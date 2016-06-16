@@ -1,5 +1,8 @@
 package net.licks92.WirelessRedstone;
 
+import net.gravitydevelopment.updater.Updater;
+import net.licks92.WirelessRedstone.Listeners.PlayerListener;
+import net.licks92.WirelessRedstone.Listeners.WorldListener;
 import net.licks92.WirelessRedstone.Storage.IWirelessStorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.String.StringLoader;
@@ -16,6 +19,9 @@ public class Main extends JavaPlugin{
     private static WRLogger WRLogger;
     private static StringManager stringManager;
     private static StorageManager storageManager;
+    private static PermissionsManager permissionsManager;
+    private static Updater updater;
+
     private ConfigManager config;
 
     public static Main getInstance() {
@@ -36,6 +42,12 @@ public class Main extends JavaPlugin{
     public static IWirelessStorageConfiguration getStorage() {
         return storageManager.getStorage();
     };
+    public static PermissionsManager getPermissionsManager() {
+        return permissionsManager;
+    }
+    public static Updater getUpdater() {
+        return updater;
+    }
 
     private static final String CHANNEL_FOLDER = "/channels";
 
@@ -48,9 +60,11 @@ public class Main extends JavaPlugin{
             ex.printStackTrace();
         }
 
+        updater = null;
         stringManager = null;
         WRLogger = null;
         globalCache = null;
+        signManager = null;
         storageManager = null;
         instance = null;
     }
@@ -60,13 +74,14 @@ public class Main extends JavaPlugin{
         instance = this;
         config = ConfigManager.getConfig();
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
-        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
-        globalCache = new GlobalCache(config.getCacheRefreshRate());
 
         if(config.getDebugMode())
             WRLogger.info("Debug mode enabled!");
 
         stringManager = new StringLoader(config.getLanguage());
+        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
+        globalCache = new GlobalCache(config.getCacheRefreshRate());
+        signManager = new SignManager();
 
         PluginManager pm = getServer().getPluginManager();
 
@@ -85,6 +100,15 @@ public class Main extends JavaPlugin{
             new WorldEditLoader();
         } else
             WRLogger.info("WorldEdit not enabled. Skipping WorldEdit support.");
+
+        WRLogger.info("Loading listeners...");
+        //Don't need to store the instance because we won't touch it.
+        new WorldListener();
+//        blockListener = new BlockListener(this);
+        new PlayerListener();
+
+        WRLogger.info("Loading updater...");
+        updater = new Updater(this, 37345, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
 
         WRLogger.info("Plugin is now loaded");
     }

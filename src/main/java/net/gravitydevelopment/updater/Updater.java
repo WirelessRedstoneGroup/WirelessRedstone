@@ -1,5 +1,12 @@
 package net.gravitydevelopment.updater;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,13 +15,6 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  * Check for updates on BukkitDev for a given plugin, and download the updates if needed.
@@ -62,7 +62,7 @@ public class Updater {
     // Config key for disabling Updater
     private static final String DISABLE_CONFIG_KEY = "disable";
     // Default api key value in config
-    private static final String API_KEY_DEFAULT = "ee268bcd6b47fcf81760095e7f3d6bd3d3474c52";
+    private static final String API_KEY_DEFAULT = "e342efe8538926528ea7094ecdd9607fe0941642";
     // Default disable value in config
     private static final boolean DISABLE_DEFAULT = false;
 

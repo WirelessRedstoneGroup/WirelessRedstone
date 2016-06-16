@@ -16,10 +16,12 @@ None at the moment
 - [x] String loader
 - [x] Sign logic
 - [x] WorldEdit
-- [ ] Listeners
+- [ ] Listeners (Halfway done)
 - [ ] Command
 - [ ] Metrics
-- [ ] Permissions
+- [x] Permissions
+- [ ] Updater
+- [ ] Add remaining strings to stringloader
 - [ ] Documentation
 
 #### Storage

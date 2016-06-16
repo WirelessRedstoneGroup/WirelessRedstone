@@ -341,6 +341,22 @@ public class SignManager {
         return getScreenLocations(channel);
     }
 
+    public SignType getReceiverType(String data){
+        if(isReceiverInverter(data))
+            return SignType.RECEIVER_INVERTER;
+
+        if(isReceiverDelayer(data))
+            return SignType.RECEIVER_DELAYER;
+
+        if(isReceiverClock(data))
+            return SignType.RECEIVER_CLOCK;
+
+        if(isReceiverSwitch(data))
+            return SignType.RECEIVER_SWITCH;
+
+        return SignType.RECEIVER_NORMAL;
+    }
+
     //Checkers
 
     public boolean isTransmitter(String data) {
@@ -413,5 +429,13 @@ public class SignManager {
             }
         }
         return false;
+    }
+
+    public boolean hasAccessToChannel(Player player, String channelname) {
+        if (Main.getStorage().getWirelessChannel(channelname) != null) {
+            return Main.getPermissionsManager().isWirelessAdmin(player)
+                    || Main.getStorage().getWirelessChannel(channelname).getOwners().contains(player.getName());
+        }
+        return true;
     }
 }
