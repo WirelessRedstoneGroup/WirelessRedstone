@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin{
 
     private static Main instance;
-    private static ChannelManager channelManager; //ChannelManager -> Manage global cache, SignManager -> Manage WireBox functions
+    private static GlobalCache globalCache; //GlobalCache -> Manage global cache, SignManager -> Manage WireBox functions
     private static SignManager signManager;
     private static WRLogger WRLogger;
     private static StringManager stringManager;
@@ -21,8 +21,8 @@ public class Main extends JavaPlugin{
     public static Main getInstance() {
         return instance;
     }
-    public static ChannelManager getChannelManager() {
-        return channelManager;
+    public static GlobalCache getGlobalCache() {
+        return globalCache;
     }
     public static SignManager getSignManager() {
         return signManager;
@@ -50,7 +50,7 @@ public class Main extends JavaPlugin{
 
         stringManager = null;
         WRLogger = null;
-        channelManager = null;
+        globalCache = null;
         storageManager = null;
         instance = null;
     }
@@ -61,7 +61,7 @@ public class Main extends JavaPlugin{
         config = ConfigManager.getConfig();
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
-        channelManager = new ChannelManager(config.getCacheRefreshRate());
+        globalCache = new GlobalCache(config.getCacheRefreshRate());
 
         if(config.getDebugMode())
             WRLogger.info("Debug mode enabled!");

@@ -29,7 +29,7 @@ public class WorldEditLogger extends AbstractLoggingExtent {
 
         org.bukkit.World world = ((BukkitWorld)this.eventWorld).getWorld();
         Block block = world.getBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ());
-        for(Location loc : Main.getChannelManager().getAllSignLocations()){
+        for(Location loc : Main.getGlobalCache().getAllSignLocations()){
             if(Utils.sameLocation(loc, block.getLocation())){
                 String channelName = Main.getStorage().getWirelessChannelName(loc);
                 if(Main.getStorage().removeIWirelessPoint(channelName, loc)){

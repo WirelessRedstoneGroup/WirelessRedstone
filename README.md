@@ -14,6 +14,7 @@ Welcome on the official page of the Wireless Redstone plugin
 - [ ] Listeners
 - [ ] Command
 - [ ] Metrics
+- [ ] Documentation
 
 #### Storage
 - [ ] Yaml

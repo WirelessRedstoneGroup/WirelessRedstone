@@ -1,16 +1,22 @@
 package net.licks92.WirelessRedstone;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import net.licks92.WirelessRedstone.Signs.IWirelessPoint;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
+
+//    Using regex atm, checking if that works fine
+//    public static char[] badCharacters = {'|', '-', '*', '/', '<', '>', ' ', '=', '~',
+//            '!', '^', '(', ')', ':', '`', '.'};
 
     public static String getBukkitVersion() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();
@@ -30,6 +36,18 @@ public class Utils {
         } catch (NumberFormatException | NullPointerException e){
             return false;
         }
+    }
+
+    public static void sendFeedback(String message, CommandSender sender, boolean error){
+        sender.sendMessage((error ? ChatColor.RED : ChatColor.GREEN) + Main.getStrings().chatTag + message);
+    }
+
+    public static boolean containsBadChar(String string){
+        //Check if string contains something different then a-z 0-9. It also checks if it contains a tab char
+        Pattern p = Pattern.compile("([^a-z0-9-_]|[\\t])", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(string);
+
+        return m.find();
     }
 
     /*
@@ -146,7 +164,7 @@ public class Utils {
             case 4:
                 return BlockFace.WEST;
             default:
-                return BlockFace.NORTH;
+                return BlockFace.SOUTH;
         }
     }
 
@@ -209,7 +227,7 @@ public class Utils {
                 || tempBlock.getType() == Material.SEA_LANTERN);
     }
 
-    public static void signWarning(Block block, int code) {
+    public static void signWarning(Block block, Integer code) {
         Sign sign = (Sign) block.getState();
         switch (code) {
             case 1:
@@ -239,23 +257,23 @@ public class Utils {
     }
 
     public static void loadChunks() {
-        if (ConfigManager.getConfig().getCancelChunkUnload()) { //TODO: Fix this
-//            for (IWirelessPoint point : cache.getAllSigns()) {
-//                Location location = point.getLocation();
-//                if (location.getWorld() == null)
-//                    continue; // world currently not loaded.
-//
-//                Chunk center = location.getBlock().getChunk();
-//                World world = center.getWorld();
-//                int range = WirelessRedstone.config.getChunkUnloadRange();
-//                for (int dx = -(range); dx <= range; dx++) {
-//                    for (int dz = -(range); dz <= range; dz++) {
-//                        Chunk chunk = world.getChunkAt(center.getX() + dx,
-//                                center.getZ() + dz);
-//                        world.loadChunk(chunk);
-//                    }
-//                }
-//            }
+        if (ConfigManager.getConfig().getCancelChunkUnload()) {
+            for (IWirelessPoint point : Main.getGlobalCache().getAllSigns()) {
+                Location location = point.getLocation();
+                if (location.getWorld() == null)
+                    continue; // world currently not loaded.
+
+                Chunk center = location.getBlock().getChunk();
+                World world = center.getWorld();
+                int range = ConfigManager.getConfig().getCancelChunkUnloadRange();
+                for (int dx = -(range); dx <= range; dx++) {
+                    for (int dz = -(range); dz <= range; dz++) {
+                        Chunk chunk = world.getChunkAt(center.getX() + dx,
+                                center.getZ() + dz);
+                        world.loadChunk(chunk);
+                    }
+                }
+            }
         }
     }
 }

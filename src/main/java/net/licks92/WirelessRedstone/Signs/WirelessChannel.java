@@ -195,21 +195,21 @@ public class WirelessChannel implements ConfigurationSerializable {
         return ConfigManager.getConfig().useORLogic() ? on : false;
     }
 
-    public void addTransmitter(final WirelessTransmitter transmitter) {
+    public void addTransmitter(WirelessTransmitter transmitter) {
         if (transmitters == null)
             transmitters = new ArrayList<WirelessTransmitter>();
 
         transmitters.add(transmitter);
     }
 
-    public void addReceiver(final WirelessReceiver receiver) {
+    public void addReceiver(WirelessReceiver receiver) {
         if (receivers == null)
             receivers = new ArrayList<WirelessReceiver>();
 
         receivers.add(receiver);
     }
 
-    public void addScreen(final WirelessScreen screen) {
+    public void addScreen(WirelessScreen screen) {
         if (screens == null)
             screens = new LinkedList<WirelessScreen>();
 
@@ -231,7 +231,7 @@ public class WirelessChannel implements ConfigurationSerializable {
         }
     }
 
-    public void removeTransmitterAt(final Location loc) {
+    public void removeTransmitterAt(Location loc) {
         for (WirelessTransmitter transmitter : transmitters) {
             if (transmitter.getX() == loc.getBlockX()
                     && transmitter.getZ() == loc.getBlockZ()
@@ -303,7 +303,7 @@ public class WirelessChannel implements ConfigurationSerializable {
         }
     }
 
-    public boolean removeOwner(final String username) {
+    public boolean removeOwner(String username) {
         return this.owners.remove(username);
     }
 
@@ -321,6 +321,14 @@ public class WirelessChannel implements ConfigurationSerializable {
 
     public void setOwners(List<String> owners) {
         this.owners = owners;
+    }
+
+    public void addOwner(String username) {
+        if (this.owners == null)
+            this.owners = new LinkedList<String>();
+
+        if (!this.owners.contains(username))
+            this.owners.add(username);
     }
 
     public void setTransmitters(List<WirelessTransmitter> transmitters) {

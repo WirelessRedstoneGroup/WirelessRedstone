@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ChannelManager {
+public class GlobalCache {
 
     private Collection<WirelessChannel> allChannels;
     private ArrayList<IWirelessPoint> allSigns;
@@ -18,7 +18,7 @@ public class ChannelManager {
     private ArrayList<Location> allSignLocations;
     private BukkitTask refreshingTask;
 
-    public ChannelManager(Integer refreshTime){
+    public GlobalCache(Integer refreshTime){
         //At plugin startup we have to directly update the cache.
         update(false);
 
