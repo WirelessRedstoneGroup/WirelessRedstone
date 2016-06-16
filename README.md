@@ -19,6 +19,7 @@ None at the moment
 - [ ] Listeners
 - [ ] Command
 - [ ] Metrics
+- [ ] Permissions
 - [ ] Documentation
 
 #### Storage
