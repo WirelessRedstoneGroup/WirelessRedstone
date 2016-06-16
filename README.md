@@ -4,12 +4,17 @@
 ## WirelessRedstone
 Welcome on the official page of the Wireless Redstone plugin
 
-## Development
+## Upcomming features
 
+None at the moment
+
+## Rebuild development
+
+- [ ] Debug everything
 - [x] Configuration
 - [x] Logger
 - [x] String loader
-- [ ] Sign logic
+- [x] Sign logic
 - [x] WorldEdit
 - [ ] Listeners
 - [ ] Command
@@ -17,6 +22,6 @@ Welcome on the official page of the Wireless Redstone plugin
 - [ ] Documentation
 
 #### Storage
-- [ ] Yaml
+- [x] Yaml (Only the convert feature isn't ready)
 - [ ] SQLite
 - [ ] MySQL
