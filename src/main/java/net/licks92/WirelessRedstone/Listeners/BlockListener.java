@@ -23,9 +23,7 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
         if (event.getBlock().getState() instanceof Sign) {
-            Sign signObject = (Sign) event.getBlock().getState();
-
-            if (Main.getSignManager().getSignType(signObject.getLine(0)) == null)
+            if (Main.getSignManager().getSignType(event.getLine(0)) == null)
                 return;
 
             if (event.getLine(1) == null) {
@@ -42,13 +40,13 @@ public class BlockListener implements Listener {
 
             String cname = event.getLine(1);
 
-            if (!Main.getSignManager().hasAccessToChannel(event.getPlayer(), signObject.getLine(1))) {
+            if (!Main.getSignManager().hasAccessToChannel(event.getPlayer(), event.getLine(1))) {
                 event.setCancelled(true);
                 Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
                 return;
             }
 
-            switch (Main.getSignManager().getSignType(signObject.getLine(0), signObject.getLine(2))) {
+            switch (Main.getSignManager().getSignType(event.getLine(0), event.getLine(2))) {
                 case TRANSMITTER:
                     if (!Main.getPermissionsManager().canCreateTransmitter(event.getPlayer())) {
                         event.setCancelled(true);

@@ -356,7 +356,10 @@ public class SignManager {
             return SignType.SCREEN;
 
         if (isReceiver(data))
-            return getReceiverType(extraData);
+            if (extraData == null)
+                return SignType.RECEIVER;
+            else
+                return getReceiverType(extraData);
 
         return null;
     }
