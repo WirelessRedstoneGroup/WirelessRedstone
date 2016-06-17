@@ -4,13 +4,20 @@ import net.gravitydevelopment.updater.Updater;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
+import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
 import net.licks92.WirelessRedstone.Storage.IWirelessStorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
+import net.licks92.WirelessRedstone.Storage.StorageType;
 import net.licks92.WirelessRedstone.String.StringLoader;
 import net.licks92.WirelessRedstone.String.StringManager;
+import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
+import org.mcstats.Metrics;
 
 public class Main extends JavaPlugin{
 
@@ -22,8 +29,11 @@ public class Main extends JavaPlugin{
     private static StorageManager storageManager;
     private static PermissionsManager permissionsManager;
     private static Updater updater;
+    private static Metrics metrics;
+    private static WorldEditHooker worldEditHooker;
 
     private ConfigManager config;
+    private BukkitTask updateTask;
 
     public static Main getInstance() {
         return instance;
@@ -49,18 +59,33 @@ public class Main extends JavaPlugin{
     public static Updater getUpdater() {
         return updater;
     }
+    public static Metrics getMetrics() {
+        return metrics;
+    }
+    public static WorldEditHooker getWorldEditHooker() {
+        return worldEditHooker;
+    }
+
+    public static void setWorldEditHooker(WorldEditHooker worldEditHooker) {
+        Main.worldEditHooker = worldEditHooker;
+    }
 
     private static final String CHANNEL_FOLDER = "/channels";
 
     @Override
     public void onDisable() {
         try{
+//            WorldEditHooker.unRegister();
+            Main.getStorage().updateReceivers();
             storageManager.getStorage().close();
         } catch (Exception ex){
             WRLogger.severe("An error occured when disabling the plugin!");
             ex.printStackTrace();
         }
 
+        updateTask = null;
+        worldEditHooker = null;
+        metrics = null;
         updater = null;
         stringManager = null;
         WRLogger = null;
@@ -80,9 +105,9 @@ public class Main extends JavaPlugin{
             WRLogger.info("Debug mode enabled!");
 
         stringManager = new StringLoader(config.getLanguage());
+        signManager = new SignManager();
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
         globalCache = new GlobalCache(config.getCacheRefreshRate());
-        signManager = new SignManager();
         permissionsManager = new PermissionsManager();
 
         PluginManager pm = getServer().getPluginManager();
@@ -112,7 +137,183 @@ public class Main extends JavaPlugin{
         WRLogger.info("Loading updater...");
         updater = new Updater(this, 37345, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
 
+        if (ConfigManager.getConfig().getUpdateCheck()) {
+            updateTask = Bukkit.getServer().getScheduler()
+                    .runTaskTimerAsynchronously(this, new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+                                    getWRLogger()
+                                            .info(Main.getStrings().newUpdateAvailable);
+                                }
+                            } catch (Exception ex) {
+                                WRLogger.warning("Failed to check for updates. Turn on debug mode to see the stack trace.");
+                                if(ConfigManager.getConfig().getDebugMode())
+                                    ex.printStackTrace();
+                            }
+                        }
+                    }, 0, 20 * 60 * 30);
+        }
+
+        WRLogger.info("Loading metrics...");
+        loadMetrics();
+
         WRLogger.info("Plugin is now loaded");
     }
 
+    private void loadMetrics() {
+        try {
+            metrics = new Metrics(this);
+            
+            // Channel metrics
+            Metrics.Graph channelGraph = metrics.createGraph("Channel metrics");
+            channelGraph.addPlotter(new Metrics.Plotter("Total channels") {
+                @Override
+                public int getValue() {
+                    return Main.getStorage().getAllChannels().size();
+                }
+            });
+            channelGraph.addPlotter(new Metrics.Plotter("Total signs") {
+                @Override
+                public int getValue() {
+                    return Main.getGlobalCache().getAllSigns().size();
+                }
+            });
+
+            // Sign Metrics
+            Metrics.Graph signGraph = metrics.createGraph("Sign metrics");
+            signGraph.addPlotter(new Metrics.Plotter("Transmitters") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getTransmitters().size();
+                    }
+                    return total;
+                }
+            });
+            signGraph.addPlotter(new Metrics.Plotter("Receivers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getReceivers().size();
+                    }
+                    return total;
+                }
+            });
+            signGraph.addPlotter(new Metrics.Plotter("Screens") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getScreens().size();
+                    }
+                    return total;
+                }
+            });
+
+            Metrics.Graph receiverTypesProportion = metrics.createGraph("Different types of receivers");
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Default") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.DEFAULT).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Inverters") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.INVERTER).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Delayers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.DELAYER).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Clocks") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.CLOCK).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Switchers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.SWITCH).size();
+                    }
+                    return total;
+                }
+            });
+
+            //Storage metrics
+            Metrics.Graph storageGraph = metrics.createGraph("Storage used");
+            storageGraph.addPlotter(new Metrics.Plotter("SQLite") {
+                @Override
+                public int getValue() {
+                    if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            storageGraph.addPlotter(new Metrics.Plotter("MySQL") {
+                @Override
+                public int getValue() {
+                    if (ConfigManager.getConfig().getStorageType() == StorageType.MYSQL) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            storageGraph.addPlotter(new Metrics.Plotter("Yaml") {
+                @Override
+                public int getValue() {
+                    if (ConfigManager.getConfig().getStorageType() == StorageType.YAML) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            Metrics.Graph permissionsGraph = metrics.createGraph("Plugin used for Permissions");
+            permissionsGraph.addPlotter(new Metrics.Plotter("Bukkit permissions") {
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+
+            metrics.start();
+        } catch (Exception e) {
+            WRLogger.warning("Failed to load metrics. Turn on debug mode to see the stack trace.");
+            if(ConfigManager.getConfig().getDebugMode())
+                e.printStackTrace();
+        }
+    }
 }

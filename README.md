@@ -18,9 +18,9 @@ None at the moment
 - [x] WorldEdit
 - [x] Listeners
 - [ ] Command
-- [ ] Metrics
+- [x] Metrics
 - [x] Permissions
-- [ ] Updater
+- [x] Updater
 - [ ] Add remaining strings to stringloader
 - [ ] Documentation
 

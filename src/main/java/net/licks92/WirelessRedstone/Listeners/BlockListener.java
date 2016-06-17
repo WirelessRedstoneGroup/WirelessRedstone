@@ -16,24 +16,27 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
 public class BlockListener implements Listener {
 
     @EventHandler
-    public void onSignChange(SignChangeEvent event) {
+    public void onSignChange(final SignChangeEvent event) {
         if (event.getBlock().getState() instanceof Sign) {
             if (Main.getSignManager().getSignType(event.getLine(0)) == null)
                 return;
 
             if (event.getLine(1) == null) {
-                event.getBlock().breakNaturally();
+                event.getBlock().setType(Material.AIR);
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                 Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
                 return;
             }
 
             if (event.getLine(1).equalsIgnoreCase("")){
-                event.getBlock().breakNaturally();
+                event.getBlock().setType(Material.AIR);
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                 Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
                 return;
             }
@@ -46,108 +49,128 @@ public class BlockListener implements Listener {
                 return;
             }
 
-            switch (Main.getSignManager().getSignType(event.getLine(0), event.getLine(2))) {
-                case TRANSMITTER:
-                    if (!Main.getPermissionsManager().canCreateTransmitter(event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
-                        return;
-                    }
+            //Bukkit/Spigot first call the SignChangeEvent then register the block. If you don't add the runnable you can't access the block via getBlock()
+            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    switch (Main.getSignManager().getSignType(event.getLine(0), event.getLine(2))) {
+                        case TRANSMITTER:
+                            if (!Main.getPermissionsManager().canCreateTransmitter(event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                                return;
+                            }
 
-                    if (!Main.getSignManager().addWirelessTransmitter(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
-                            event.getBlock(), event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                    break;
-                case SCREEN:
-                    if (!Main.getPermissionsManager().canCreateScreen(event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
-                        return;
-                    }
+                            if (!Main.getSignManager().addWirelessTransmitter(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
+                                    event.getBlock(), event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                            }
+                            break;
+                        case SCREEN:
+                            if (!Main.getPermissionsManager().canCreateScreen(event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                                return;
+                            }
 
-                    if (!Main.getSignManager().addWirelessScreen(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
-                            event.getBlock(), event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                    break;
-                case RECEIVER_NORMAL:
-                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
-                        return;
-                    }
+                            if (!Main.getSignManager().addWirelessScreen(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
+                                    event.getBlock(), event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                            }
+                            break;
+                        case RECEIVER_NORMAL:
+                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                                return;
+                            }
 
-                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
-                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.DEFAULT)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                    break;
-                case RECEIVER_INVERTER:
-                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
-                        return;
-                    }
+                            if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                                    event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.DEFAULT)) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                            }
+                            break;
+                        case RECEIVER_INVERTER:
+                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                                return;
+                            }
 
-                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
-                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.INVERTER)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                    break;
-                case RECEIVER_DELAYER:
-                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
-                        return;
-                    }
+                            if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                                    event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.INVERTER)) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                            }
+                            break;
+                        case RECEIVER_DELAYER:
+                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                                return;
+                            }
 
-                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
-                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.DELAYER)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                    break;
-                case RECEIVER_CLOCK:
-                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
-                        return;
-                    }
+                            if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                                    event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.DELAYER)) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                            }
+                            break;
+                        case RECEIVER_CLOCK:
+                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                                return;
+                            }
 
-                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
-                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.CLOCK)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                    }
-                    break;
-                case RECEIVER_SWITCH:
-                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
-                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
-                        return;
-                    }
+                            if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                                    event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.CLOCK)) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                            }
+                            break;
+                        case RECEIVER_SWITCH:
+                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                                return;
+                            }
 
-                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
-                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.SWITCH)) {
-                        event.setCancelled(true);
-                        event.getBlock().breakNaturally();
+                            if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                                    event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.SWITCH)) {
+                                event.setCancelled(true);
+                                event.getBlock().setType(Material.AIR);
+                                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                    break;
-                default:
-                    break;
-            }
+                }
+            }, 1L);
         }
     }
 

@@ -26,15 +26,31 @@ public class WorldEditHooker {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
                 public void run() {
                     try {
-                        WorldEdit.getInstance().getEventBus().register(new WorldEditHooker());
-                    }
-                    catch (Exception e) {
+                        WorldEditHooker worldEditHooker = new WorldEditHooker();
+                        Main.setWorldEditHooker(worldEditHooker);
+                        WorldEdit.getInstance().getEventBus().register(worldEditHooker);
+                    } catch (Exception e) {
                         Main.getWRLogger().severe("Error while hooking worldedit");
                     }
                 }
             }, 0L);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e) {
+    }
+
+    public static void unRegister(){
+        try {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
+                public void run() {
+                    try {
+                        WorldEdit.getInstance().getEventBus().unregister(Main.getWorldEditHooker());
+                    } catch (Exception e) {
+                        Main.getWRLogger().severe("Error while unhooking worldedit");
+                    }
+                }
+            }, 0L);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

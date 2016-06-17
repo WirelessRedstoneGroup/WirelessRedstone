@@ -20,8 +20,7 @@ public class SignManager {
     //Create
 
     public boolean addWirelessReceiver(String cname, Block cblock, Player player, WirelessReceiver.Type type) {
-        org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock
-                .getState().getData();
+        org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
         Main.getWRLogger().debug("Adding a receiver at location "
                 + cblock.getLocation().getBlockX() + ","
                 + cblock.getLocation().getBlockY() + ","
@@ -103,8 +102,7 @@ public class SignManager {
                 break;
 
             case CLOCK:
-                String clockDelayStr = ((Sign) (cblock.getState()))
-                        .getLine(3);
+                String clockDelayStr = ((Sign) (cblock.getState())).getLine(3);
                 int clockDelay;
                 try {
                     clockDelay = Integer.parseInt(clockDelayStr);
