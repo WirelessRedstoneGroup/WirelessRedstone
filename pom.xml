@@ -27,26 +27,17 @@
 				<version>2.4</version>
 				<configuration>
 					<finalName>${project.name}</finalName>
-					<minimizeJar>true</minimizeJar>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
+
 					<artifactSet>
 						<includes>
-							<!--<include>net.gravitydevelopment.updater:updater</include>-->
-							<!--<include>org.mcstats.bukkit:metrics</include>-->
+							<include>org.mcstats.*:*</include>
 						</includes>
 					</artifactSet>
 					<relocations>
-						<!--<relocation>-->
-							<!--<pattern>org.mcstats</pattern>-->
-							<!--<shadedPattern>net.licks92.WirelessRedstone</shadedPattern>-->
-						<!--</relocation>-->
-						<!--<relocation>-->
-							<!--<pattern>net.gravitydevelopment.updater</pattern>-->
-							<!--<shadedPattern>net.licks92.WirelessRedstone</shadedPattern>-->
-							<!--<includes>-->
-								<!--<include>net.gravitydevelopment.updater.*</include>-->
-							<!--</includes>-->
-						<!--</relocation>-->
+						<relocation>
+							<pattern>org.mcstats</pattern>
+							<shadedPattern>net.licks92.WirelessRedstone</shadedPattern>
+						</relocation>
 					</relocations>
 				</configuration>
 				<executions>
@@ -55,6 +46,24 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.coderplus.maven.plugins</groupId>
+				<artifactId>copy-rename-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>copy-file</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<sourceFile>${basedir}/target/WirelessRedstone.jar</sourceFile>
+							<destinationFile>${basedir}/target/WirelessRedstone v${version}.jar</destinationFile>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -81,12 +90,12 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.mcstats.bukkit</groupId>-->
-			<!--<artifactId>metrics</artifactId>-->
-			<!--<version>R8-SNAPSHOT</version>-->
-			<!--<scope>compile</scope>-->
-		<!--</dependency>-->
+		<dependency>
+			<groupId>org.mcstats.bukkit</groupId>
+			<artifactId>metrics</artifactId>
+			<version>R7</version>
+			<scope>compile</scope>
+		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>net.gravitydevelopment.updater</groupId>-->
 			<!--<artifactId>updater</artifactId>-->
@@ -100,17 +109,17 @@
 			<id>Bukkit</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
-		<!--<repository>-->
-			<!--<id>Plugin Metrics</id>-->
-			<!--<url>http://repo.mcstats.org/content/repositories/public</url>-->
-		<!--</repository>-->
-		<!--<repository>-->
-			<!--<id>gravity-repo</id>-->
-			<!--<url>http://repo.gravitydevelopment.net</url>-->
-		<!--</repository>-->
+		<repository>
+			<id>Plugin Metrics</id>
+			<url>http://repo.mcstats.org/content/repositories/releases/</url>
+		</repository>
 		<repository>
 			<id>sk89q-repo</id>
 			<url>http://maven.sk89q.com/repo/</url>
 		</repository>
+		<!--<repository>-->
+		<!--<id>gravity-repo</id>-->
+		<!--<url>http://repo.gravitydevelopment.net</url>-->
+		<!--</repository>-->
 	</repositories>
 </project>
