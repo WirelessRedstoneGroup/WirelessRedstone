@@ -1,7 +1,11 @@
 package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.Signs.SignType;
+import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
 import net.licks92.WirelessRedstone.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -10,19 +14,152 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.material.Attachable;
 
 public class BlockListener implements Listener {
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
+        if (event.getBlock().getState() instanceof Sign) {
+            Sign signObject = (Sign) event.getBlock().getState();
 
+            if (Main.getSignManager().getSignType(signObject.getLine(0)) == null)
+                return;
+
+            if (event.getLine(1) == null) {
+                event.getBlock().breakNaturally();
+                Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
+                return;
+            }
+
+            if (event.getLine(1).equalsIgnoreCase("")){
+                event.getBlock().breakNaturally();
+                Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
+                return;
+            }
+
+            String cname = event.getLine(1);
+
+            if (!Main.getSignManager().hasAccessToChannel(event.getPlayer(), signObject.getLine(1))) {
+                event.setCancelled(true);
+                Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                return;
+            }
+
+            switch (Main.getSignManager().getSignType(signObject.getLine(0), signObject.getLine(2))) {
+                case TRANSMITTER:
+                    if (!Main.getPermissionsManager().canCreateTransmitter(event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                        return;
+                    }
+
+                    if (!Main.getSignManager().addWirelessTransmitter(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
+                            event.getBlock(), event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                    }
+                    break;
+                case SCREEN:
+                    if (!Main.getPermissionsManager().canCreateScreen(event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                        return;
+                    }
+
+                    if (!Main.getSignManager().addWirelessScreen(autoAssign(event.getPlayer(), event.getBlock(), event.getLine(1)),
+                            event.getBlock(), event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_NORMAL:
+                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                        return;
+                    }
+
+                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.DEFAULT)) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_INVERTER:
+                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                        return;
+                    }
+
+                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.INVERTER)) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_DELAYER:
+                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                        return;
+                    }
+
+                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.DELAYER)) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_CLOCK:
+                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                        return;
+                    }
+
+                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.CLOCK)) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                    }
+                    break;
+                case RECEIVER_SWITCH:
+                    if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                        Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                        return;
+                    }
+
+                    if (!Main.getSignManager().addWirelessReceiver(autoAssign(event.getPlayer(), event.getBlock(),
+                            event.getLine(1)), event.getBlock(), event.getPlayer(), WirelessReceiver.Type.SWITCH)) {
+                        event.setCancelled(true);
+                        event.getBlock().breakNaturally();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getBlock().getState() instanceof Sign) {
             Sign signObject = (Sign) event.getBlock().getState();
+
+            if (Main.getSignManager().getSignType(signObject.getLine(0)) == null)
+                return;
 
             if (!Main.getSignManager().hasAccessToChannel(event.getPlayer(), signObject.getLine(1))) {
                 event.setCancelled(true);
@@ -115,6 +252,87 @@ public class BlockListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onBlockRedstoneChange(BlockRedstoneEvent event) {
+        if (event.getOldCurrent() == event.getNewCurrent())
+            return;
+
+        if(event.getBlock().getState() instanceof Sign){
+            Sign signObject = (Sign) event.getBlock().getState();
+
+            if (Main.getSignManager().getSignType(signObject.getLine(0)) != SignType.TRANSMITTER)
+                return;
+
+            if (signObject.getLine(1) == null)
+                return;
+
+            if (signObject.getLine(1).equalsIgnoreCase(""))
+                return;
+
+            WirelessChannel channel = Main.getStorage().getWirelessChannel(signObject.getLine(1));
+
+            if (channel == null) {
+                Main.getWRLogger().debug("The transmitter at location " + signObject.getX() + "," + signObject.getY()
+                        + "," + signObject.getZ() + " in the world " + signObject.getWorld().getName()
+                        + " is actually linked with a null channel.");
+                return;
+            }
+
+            if (event.getBlock().isBlockIndirectlyPowered() || event.getBlock().isBlockPowered()) {
+                channel.toggle(1, event.getBlock());
+            } else {
+                channel.toggle(0, event.getBlock());
+            }
+            return;
+        }
+
+        BlockRedstoneEvent e = null;
+        switch (event.getBlock().getType()){
+            case LEVER:
+            case STONE_BUTTON:
+            case WOOD_BUTTON:
+                Attachable attachable = (Attachable) event.getBlock().getState().getData();
+                e = new BlockRedstoneEvent(event.getBlock().getRelative(attachable.getAttachedFace()),
+                        event.getOldCurrent(), event.getNewCurrent());
+                callLater(e);
+                break;
+            case DETECTOR_RAIL:
+            case WOOD_PLATE:
+            case STONE_PLATE:
+            case GOLD_PLATE:
+            case IRON_PLATE:
+            case DAYLIGHT_DETECTOR:
+            case DAYLIGHT_DETECTOR_INVERTED:
+                e = new BlockRedstoneEvent(event.getBlock().getRelative(BlockFace.DOWN),
+                        event.getOldCurrent(), event.getNewCurrent());
+                callLater(e);
+                break;
+            default:
+                break;
+        }
+
+        for (BlockFace blockFace : Utils.getEveryBlockFace(true)){
+            if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
+                Sign signObject = (Sign) event.getBlock().getRelative(blockFace).getState();
+
+                if (Main.getSignManager().getSignType(signObject.getLine(0)) == SignType.TRANSMITTER) {
+                    e = new BlockRedstoneEvent(signObject.getBlock(), event.getOldCurrent(), event.getNewCurrent());
+                    callLater(e);
+                }
+            }
+        }
+    }
+
+    private void callLater(final BlockRedstoneEvent event) {
+        Bukkit.getScheduler().runTaskLater(Main.getInstance(),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getServer().getPluginManager().callEvent(event);
+                    }
+                }, 1L);
     }
 
     private String autoAssign(Player p, Block b, String line) {

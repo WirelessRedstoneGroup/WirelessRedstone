@@ -7,14 +7,12 @@ import net.licks92.WirelessRedstone.Signs.*;
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class PlayerListener implements Listener {
 
@@ -64,9 +62,7 @@ public class PlayerListener implements Listener {
 
         if (!signAlreadyExist(event.getClickedBlock().getLocation(), sign.getLine(1))) {
             if (sign.getLine(1) == null) {
-                event.getClickedBlock().setType(Material.AIR);
-                event.getPlayer().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(),
-                        new ItemStack(Material.SIGN, 1));
+                event.getClickedBlock().breakNaturally();
                 Utils.sendFeedback("No channel name found", event.getPlayer(), true); //TODO: Add this string to the stringloader
                 return;
             }
@@ -74,9 +70,7 @@ public class PlayerListener implements Listener {
             String cname = sign.getLine(1);
 
             if (!Main.getSignManager().hasAccessToChannel(event.getPlayer(), cname)) {
-                event.getClickedBlock().setType(Material.AIR);
-                event.getPlayer().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(),
-                        new ItemStack(Material.SIGN, 1));
+                event.getClickedBlock().breakNaturally();
                 Utils.sendFeedback(Main.getStrings().playerCannotCreateSign, event.getPlayer(), false);
                 return;
             }

@@ -16,7 +16,7 @@ None at the moment
 - [x] String loader
 - [x] Sign logic
 - [x] WorldEdit
-- [ ] Listeners (Halfway done)
+- [x] Listeners
 - [ ] Command
 - [ ] Metrics
 - [x] Permissions

@@ -292,19 +292,22 @@ public class SignManager {
             for (IWirelessPoint point : channel.getReceivers()) {
                 point.getLocation().getBlock().setType(Material.AIR);
             }
-        } catch (NullPointerException ignored) {} //When there isn't any receiver, it'll throw this exception.
+        } catch (NullPointerException ignored) {
+        } //When there isn't any receiver, it'll throw this exception.
 
         try {
             for (IWirelessPoint point : channel.getTransmitters()) {
                 point.getLocation().getBlock().setType(Material.AIR);
             }
-        } catch (NullPointerException ignored) {} //When there isn't any transmitter, it'll throw this exception.
+        } catch (NullPointerException ignored) {
+        } //When there isn't any transmitter, it'll throw this exception.
 
         try {
             for (IWirelessPoint point : channel.getScreens()) {
                 point.getLocation().getBlock().setType(Material.AIR);
             }
-        } catch (NullPointerException ignored) {} //When there isn't any screen, it'll throw this exception.
+        } catch (NullPointerException ignored) {
+        } //When there isn't any screen, it'll throw this exception.
     }
 
     //Getters
@@ -341,38 +344,37 @@ public class SignManager {
         return getScreenLocations(channel);
     }
 
-    public SignType getSignType(String data){
+    public SignType getSignType(String data) {
         return getSignType(data, null);
     }
 
-    public SignType getSignType(String data, String extraData){
-        if(isTransmitter(data))
+    public SignType getSignType(String data, String extraData) {
+        if (isTransmitter(data))
             return SignType.TRANSMITTER;
 
-        if(isScreen(data))
+        if (isScreen(data))
             return SignType.SCREEN;
 
-        if(isReceiver(data)){
-            if(extraData == null)
-                return SignType.RECEIVER;
-            else
-                return getReceiverType(extraData);
-        }
+        if (isReceiver(data))
+            return getReceiverType(extraData);
 
         return null;
     }
 
-    public SignType getReceiverType(String data){
-        if(isReceiverInverter(data))
+    public SignType getReceiverType(String data) {
+        if (data == null)
+            return SignType.RECEIVER_NORMAL;
+
+        if (isReceiverInverter(data))
             return SignType.RECEIVER_INVERTER;
 
-        if(isReceiverDelayer(data))
+        if (isReceiverDelayer(data))
             return SignType.RECEIVER_DELAYER;
 
-        if(isReceiverClock(data))
+        if (isReceiverClock(data))
             return SignType.RECEIVER_CLOCK;
 
-        if(isReceiverSwitch(data))
+        if (isReceiverSwitch(data))
             return SignType.RECEIVER_SWITCH;
 
         return SignType.RECEIVER_NORMAL;
@@ -424,7 +426,7 @@ public class SignManager {
         }
         return false;
     }
-    
+
     public boolean isReceiverDelayer(String data) {
         for (String tag : Main.getStrings().tagsReceiverDelayerType) {
             if (data.equalsIgnoreCase(tag)) {
@@ -433,7 +435,7 @@ public class SignManager {
         }
         return false;
     }
-    
+
     public boolean isReceiverClock(String data) {
         for (String tag : Main.getStrings().tagsReceiverClockType) {
             if (data.equalsIgnoreCase(tag)) {
@@ -442,7 +444,7 @@ public class SignManager {
         }
         return false;
     }
-    
+
     public boolean isReceiverSwitch(String data) {
         for (String tag : Main.getStrings().tagsReceiverSwitchType) {
             if (data.equalsIgnoreCase(tag)) {
