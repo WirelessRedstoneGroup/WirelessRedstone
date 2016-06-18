@@ -21,11 +21,6 @@ public class WirelessReceiverInverter extends WirelessReceiver {
     @Override
     public void turnOn(String channelName) {
         super.turnOff(channelName);
-        Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
-        sign.setLine(1, channelName);
-        sign.setLine(2, Main.getStrings().tagsReceiverInverterType.get(0));
-        sign.update();
     }
 
     @Override
@@ -36,6 +31,8 @@ public class WirelessReceiverInverter extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName){
         Sign sign = (Sign) getLocation().getBlock().getState();
+        sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
+        sign.setLine(1, channelName);
         sign.setLine(2, Main.getStrings().tagsReceiverInverterType.get(0));
         sign.update();
     }

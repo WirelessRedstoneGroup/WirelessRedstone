@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.gravitydevelopment.updater.Updater;
+import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
@@ -31,6 +32,7 @@ public class Main extends JavaPlugin{
     private static Updater updater;
     private static Metrics metrics;
     private static WorldEditHooker worldEditHooker;
+    private static CommandManager commandManager;
 
     private ConfigManager config;
     private BukkitTask updateTask;
@@ -65,6 +67,9 @@ public class Main extends JavaPlugin{
     public static WorldEditHooker getWorldEditHooker() {
         return worldEditHooker;
     }
+    public static CommandManager getCommandManager() {
+        return commandManager;
+    }
 
     public static void setWorldEditHooker(WorldEditHooker worldEditHooker) {
         Main.worldEditHooker = worldEditHooker;
@@ -85,6 +90,7 @@ public class Main extends JavaPlugin{
 
         updateTask = null;
         worldEditHooker = null;
+        commandManager = null;
         metrics = null;
         updater = null;
         stringManager = null;
@@ -109,6 +115,7 @@ public class Main extends JavaPlugin{
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
         globalCache = new GlobalCache(config.getCacheRefreshRate());
         permissionsManager = new PermissionsManager();
+        commandManager = new CommandManager();
 
         PluginManager pm = getServer().getPluginManager();
 
@@ -144,8 +151,7 @@ public class Main extends JavaPlugin{
                         public void run() {
                             try {
                                 if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
-                                    getWRLogger()
-                                            .info(Main.getStrings().newUpdateAvailable);
+                                    getWRLogger().info(Main.getStrings().newUpdateAvailable);
                                 }
                             } catch (Exception ex) {
                                 WRLogger.warning("Failed to check for updates. Turn on debug mode to see the stack trace.");
@@ -155,6 +161,12 @@ public class Main extends JavaPlugin{
                         }
                     }, 0, 20 * 60 * 30);
         }
+
+        WRLogger.info("Loading commands...");
+        getCommand("wirelessredstone").setExecutor(commandManager);
+        getCommand("wr").setExecutor(commandManager);
+        getCommand("wredstone").setExecutor(commandManager);
+        getCommand("wifi").setExecutor(commandManager);
 
         WRLogger.info("Loading metrics...");
         loadMetrics();
