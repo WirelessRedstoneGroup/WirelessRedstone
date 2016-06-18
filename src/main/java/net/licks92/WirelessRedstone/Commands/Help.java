@@ -51,7 +51,7 @@ public class Help extends WirelessCommand {
         // 2*3 = 6 ; 6 - 3 = 3
 
         Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false);
-        Utils.sendFeedback(ChatColor.WHITE + "Page " + page + " of" + totalPages, sender, false);
+        Utils.sendFeedback(ChatColor.WHITE + "Page " + page + " of " + totalPages, sender, false);
 
         if (totalPages == 0)
             Utils.sendFeedback(Main.getStrings().listEmpty, sender, true);

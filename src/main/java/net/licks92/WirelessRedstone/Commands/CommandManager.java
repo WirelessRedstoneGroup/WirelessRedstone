@@ -23,6 +23,7 @@ public class CommandManager implements CommandExecutor {
         cmds.add(new Help());
         cmds.add(new Version());
         cmds.add(new Activate());
+        cmds.add(new Info());
         cmds.add(new Remove());
     }
 
@@ -34,7 +35,7 @@ public class CommandManager implements CommandExecutor {
                 int timer = 0;
                 for (WirelessCommand gcmd : cmds) {
                     if (timer == 8) {
-                        Utils.sendFeedback("Use /wr help 2 for the next page", sender, false); //TODO: Add this string to the stringloader
+                        Utils.sendFeedback("Use /wr help 2 for the next page.", sender, false); //TODO: Add this string to the stringloader
                         break;
                     }
 

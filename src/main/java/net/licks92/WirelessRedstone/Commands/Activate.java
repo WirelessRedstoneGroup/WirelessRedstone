@@ -6,7 +6,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.command.CommandSender;
 
-@CommandInfo(description = "Activate a channel (for a certain amount of ms)", usage = "<channel> [time]", aliases = {"activate"},
+@CommandInfo(description = "Activate a channel (for a certain amount of ms)", usage = "<channel> [time]", aliases = {"activate", "a"},
         permission = "commands.activate", canUseInConsole = true)
 public class Activate extends WirelessCommand {
 
