@@ -22,9 +22,11 @@ public class CommandManager implements CommandExecutor {
         cmds = new ArrayList<>();
         cmds.add(new Help());
         cmds.add(new Version());
-        cmds.add(new Activate());
-        cmds.add(new Info());
+        cmds.add(new Create());
         cmds.add(new Remove());
+        cmds.add(new Info());
+        cmds.add(new Activate());
+        cmds.add(new Teleport());
     }
 
     @Override

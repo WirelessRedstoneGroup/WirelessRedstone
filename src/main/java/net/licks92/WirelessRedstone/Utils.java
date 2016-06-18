@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Signs.IWirelessPoint;
+import net.licks92.WirelessRedstone.Signs.SignType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -284,7 +285,38 @@ public class Utils {
         }
     }
 
-    public static String getTeleportString(String playerName){
+    public static SignType getSignType(String string) {
+        switch (string.toUpperCase()) {
+            case "TRANSMITTER":
+            case "TRANSMITTERS":
+            case "T":
+                return SignType.TRANSMITTER;
+            case "SCREEN":
+            case "SCREENS":
+            case "S":
+                return SignType.SCREEN;
+            case "RECEIVER":
+            case "RECEIVERS":
+            case "R":
+                return SignType.RECEIVER_NORMAL;
+            case "INVERTER":
+            case "I":
+                return SignType.RECEIVER_INVERTER;
+            case "CLOCK":
+            case "C":
+                return SignType.RECEIVER_CLOCK;
+            case "SWITCH":
+                return SignType.RECEIVER_SWITCH;
+            case "DELAYER":
+            case "DELAY":
+            case "D":
+                return SignType.RECEIVER_DELAYER;
+            default:
+                return null;
+        }
+    }
+
+    public static String getTeleportString(String playerName) {
         return "tellraw " + playerName + " " + "[\"\",{\"text\":\"[\",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"\\\u27A4\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"] \",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
     }
 }

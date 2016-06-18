@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandInfo(description = "Shows WirelessChannel information", usage = "<channel> [sign type]", aliases = {"info", "i"},
+@CommandInfo(description = "Shows WirelessChannel information", usage = "<channel> [signtype]", aliases = {"info", "i"},
         permission = "commands.info", canUseInConsole = true)
 public class Info extends WirelessCommand {
 
@@ -27,25 +27,8 @@ public class Info extends WirelessCommand {
 
         SignType signType = null;
 
-        if(args.length >= 2) {
-            switch (args[1].toUpperCase()){
-                case "TRANSMITTER":
-                case "TRANSMITTERS":
-                case "T":
-                    signType = SignType.TRANSMITTER;
-                    break;
-                case "SCREEN":
-                case "SCREENS":
-                case "S":
-                    signType = SignType.SCREEN;
-                    break;
-                case "RECEIVER":
-                case "RECEIVERS":
-                case "R":
-                    signType = SignType.RECEIVER;
-                    break;
-            }
-        }
+        if(args.length >= 2)
+            signType = Utils.getSignType(args[1]);
 
         if(signType == null){
             Utils.sendFeedback(ChatColor.GRAY + "---- " + ChatColor.GREEN + "WirelessChannel " + channel.getName() + ChatColor.GRAY + " ----",
