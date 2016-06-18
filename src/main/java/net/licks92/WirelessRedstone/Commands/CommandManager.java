@@ -23,6 +23,7 @@ public class CommandManager implements CommandExecutor {
         cmds.add(new Help());
         cmds.add(new Version());
         cmds.add(new Activate());
+        cmds.add(new Remove());
     }
 
     @Override
@@ -75,7 +76,7 @@ public class CommandManager implements CommandExecutor {
             }
 
             if (!wanted.getClass().getAnnotation(CommandInfo.class).canUseInConsole() && !(sender instanceof Player)) {
-                Utils.sendFeedback("Only in-game players can use this command.", sender, false); //TODO: Add this string to the stringloader
+                Utils.sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader
                 return true;
             }
 
