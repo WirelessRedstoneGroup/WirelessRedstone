@@ -42,6 +42,7 @@ permissions:
             wirelessredstone.commands.activate: true
             wirelessredstone.commands.version: true
             wirelessredstone.commands.tp: true
+            wirelessredstone.commands.version: true
     wirelessredstone.admin.*:
         description: Gives you access to all admin commands
         children:

@@ -32,11 +32,11 @@ public class WirelessChannel implements ConfigurationSerializable {
     private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
     private List<WirelessScreen> screens = new LinkedList<WirelessScreen>();
 
-    public WirelessChannel(final String name) {
+    public WirelessChannel(String name) {
         this.setName(name);
     }
 
-    public WirelessChannel(final Map<String, Object> map) {
+    public WirelessChannel(Map<String, Object> map) {
         this.setId((Integer) map.get("id"));
         this.setName((String) map.get("name"));
         this.setOwners((List<String>) map.get("owners"));
@@ -86,9 +86,9 @@ public class WirelessChannel implements ConfigurationSerializable {
                 screen.turnOn();
             }
         } catch (RuntimeException e) {
-            Main.getWRLogger().severe("Error while turning on the receivers of channel "
-                    + name
+            Main.getWRLogger().severe("Error while turning on the receivers of channel " + name
                     + ". Please turn the debug mode on to get more informations.");
+
             if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
@@ -117,6 +117,7 @@ public class WirelessChannel implements ConfigurationSerializable {
         } catch (RuntimeException e) {
             Main.getWRLogger()
                     .severe("Error while updating redstone onBlockRedstoneChange for Screens, turn on the Debug Mode to get more informations.");
+
             if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }

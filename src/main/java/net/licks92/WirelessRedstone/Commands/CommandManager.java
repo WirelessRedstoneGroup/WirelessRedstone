@@ -21,6 +21,8 @@ public class CommandManager implements CommandExecutor {
     public CommandManager() {
         cmds = new ArrayList<>();
         cmds.add(new Help());
+        cmds.add(new Version());
+        cmds.add(new Activate());
     }
 
     @Override
@@ -38,8 +40,7 @@ public class CommandManager implements CommandExecutor {
                     CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
                     if (sender.hasPermission("wirelessredstone." + info.permission())) {
                         Utils.sendFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
-                                + StringUtils.join(info.aliases(), ":") + " "
-                                + info.usage() + ChatColor.WHITE + " - "
+                                + StringUtils.join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
                                 + ChatColor.GRAY + info.description(), sender, false);
                         timer++;
                     }
@@ -90,5 +91,12 @@ public class CommandManager implements CommandExecutor {
 
     public List<WirelessCommand> getCommands() {
         return cmds;
+    }
+
+    private String getCommandUsage(CommandInfo info){
+        if(info.usage().equalsIgnoreCase(""))
+            return "";
+        else
+            return " " + info.usage();
     }
 }

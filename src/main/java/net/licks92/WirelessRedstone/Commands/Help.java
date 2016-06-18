@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Help extends WirelessCommand {
 
     @Override
-    public void onCommand(CommandSender sender, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) { //TODO: Add all these strings to the stringloader
         Integer page = 1;
         if (args.length > 0) {
             try {
