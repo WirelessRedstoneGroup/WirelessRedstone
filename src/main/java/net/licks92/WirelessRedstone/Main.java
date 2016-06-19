@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.gravitydevelopment.updater.Updater;
+import net.licks92.WirelessRedstone.Commands.AdminCommandManager;
 import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;
@@ -20,7 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.mcstats.Metrics;
 
-public class Main extends JavaPlugin{
+public class Main extends JavaPlugin {
 
     private static Main instance;
     private static GlobalCache globalCache; //GlobalCache -> Manage global cache, SignManager -> Manage WireBox functions
@@ -33,6 +34,7 @@ public class Main extends JavaPlugin{
     private static Metrics metrics;
     private static WorldEditHooker worldEditHooker;
     private static CommandManager commandManager;
+    private static AdminCommandManager adminCommandManager;
 
     private ConfigManager config;
     private BukkitTask updateTask;
@@ -40,33 +42,43 @@ public class Main extends JavaPlugin{
     public static Main getInstance() {
         return instance;
     }
+
     public static GlobalCache getGlobalCache() {
         return globalCache;
     }
+
     public static SignManager getSignManager() {
         return signManager;
     }
+
     public static WRLogger getWRLogger() {
         return WRLogger;
     }
+
     public static StringManager getStrings() {
         return stringManager;
     }
+
     public static IWirelessStorageConfiguration getStorage() {
         return storageManager.getStorage();
-    };
+    }
+
     public static PermissionsManager getPermissionsManager() {
         return permissionsManager;
     }
+
     public static Updater getUpdater() {
         return updater;
     }
+
     public static Metrics getMetrics() {
         return metrics;
     }
+
     public static WorldEditHooker getWorldEditHooker() {
         return worldEditHooker;
     }
+
     public static CommandManager getCommandManager() {
         return commandManager;
     }
@@ -79,11 +91,11 @@ public class Main extends JavaPlugin{
 
     @Override
     public void onDisable() {
-        try{
+        try {
 //            WorldEditHooker.unRegister();
             Main.getStorage().updateReceivers();
             storageManager.getStorage().close();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             WRLogger.severe("An error occured when disabling the plugin!");
             ex.printStackTrace();
         }
@@ -91,6 +103,7 @@ public class Main extends JavaPlugin{
         updateTask = null;
         worldEditHooker = null;
         commandManager = null;
+        adminCommandManager = null;
         metrics = null;
         updater = null;
         stringManager = null;
@@ -102,12 +115,12 @@ public class Main extends JavaPlugin{
     }
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         instance = this;
         config = ConfigManager.getConfig();
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
 
-        if(config.getDebugMode())
+        if (config.getDebugMode())
             WRLogger.info("Debug mode enabled!");
 
         stringManager = new StringLoader(config.getLanguage());
@@ -116,10 +129,11 @@ public class Main extends JavaPlugin{
         globalCache = new GlobalCache(config.getCacheRefreshRate());
         permissionsManager = new PermissionsManager();
         commandManager = new CommandManager();
+        adminCommandManager = new AdminCommandManager();
 
         PluginManager pm = getServer().getPluginManager();
 
-        if(!Utils.isCompatible()){
+        if (!Utils.isCompatible()) {
             WRLogger.severe("**********");
             WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
             WRLogger.severe("**********");
@@ -129,7 +143,7 @@ public class Main extends JavaPlugin{
         WRLogger.info("Loading Chunks...");
         Utils.loadChunks();
 
-        if(pm.isPluginEnabled("WorldEdit")) {
+        if (pm.isPluginEnabled("WorldEdit")) {
             WRLogger.info("Loading WorldEdit support...");
             new WorldEditLoader();
         } else
@@ -155,7 +169,7 @@ public class Main extends JavaPlugin{
                                 }
                             } catch (Exception ex) {
                                 WRLogger.warning("Failed to check for updates. Turn on debug mode to see the stack trace.");
-                                if(ConfigManager.getConfig().getDebugMode())
+                                if (ConfigManager.getConfig().getDebugMode())
                                     ex.printStackTrace();
                             }
                         }
@@ -168,6 +182,9 @@ public class Main extends JavaPlugin{
         getCommand("wredstone").setExecutor(commandManager);
         getCommand("wifi").setExecutor(commandManager);
 
+        getCommand("wradmin").setExecutor(adminCommandManager);
+        getCommand("wra").setExecutor(adminCommandManager);
+
         WRLogger.info("Loading metrics...");
         loadMetrics();
 
@@ -177,7 +194,7 @@ public class Main extends JavaPlugin{
     private void loadMetrics() {
         try {
             metrics = new Metrics(this);
-            
+
             // Channel metrics
             Metrics.Graph channelGraph = metrics.createGraph("Channel metrics");
             channelGraph.addPlotter(new Metrics.Plotter("Total channels") {
@@ -231,7 +248,7 @@ public class Main extends JavaPlugin{
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.DEFAULT).size();
                     }
                     return total;
@@ -241,7 +258,7 @@ public class Main extends JavaPlugin{
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.INVERTER).size();
                     }
                     return total;
@@ -251,7 +268,7 @@ public class Main extends JavaPlugin{
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.DELAYER).size();
                     }
                     return total;
@@ -261,7 +278,7 @@ public class Main extends JavaPlugin{
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.CLOCK).size();
                     }
                     return total;
@@ -271,7 +288,7 @@ public class Main extends JavaPlugin{
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for(WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.SWITCH).size();
                     }
                     return total;
@@ -324,7 +341,7 @@ public class Main extends JavaPlugin{
             metrics.start();
         } catch (Exception e) {
             WRLogger.warning("Failed to load metrics. Turn on debug mode to see the stack trace.");
-            if(ConfigManager.getConfig().getDebugMode())
+            if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
     }

@@ -4,11 +4,16 @@ website: http://dev.bukkit.org/server-mods/wireless-redstone/
 authors: [licks92, Bart0110]
 version: 3.0
 description: The reference in long-distance redstone connections! Create your own wifi-redstone network with WirelessRedstone!
-softdepend: [Vault, WorldEdit]
+softdepend: [Vault, WorldEdit, Multiverse-Core, MultiWorld]
 commands:
    wirelessredstone:
       aliases: [wr, wredstone, wifi]
       description: WirelessRedstone menu
+      usage: |
+             Example: /<command> help
+   wradmin:
+      aliases: [wra]
+      description: WirelessRedstone admin command
       usage: |
              Example: /<command> help
 permissions:
