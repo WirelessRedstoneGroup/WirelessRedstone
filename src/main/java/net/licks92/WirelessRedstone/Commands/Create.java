@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone.Commands;
 import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(description = "Create a WirelessPoint", usage = "<channel> <signtype> [sign details]", aliases = {"create", "c"},
-        permission = "commands.create", canUseInConsole = false)
+        permission = "commands.create", canUseInConsole = false, canUseInCommandBlock = false)
 public class Create extends WirelessCommand {
 
     @Override
@@ -25,6 +26,8 @@ public class Create extends WirelessCommand {
             Utils.sendFeedback("Incorrect sign type.", sender, true); //TODO: Add this string to the stringloader
             return;
         }
+
+        String cname = args[0];
         SignType type = Utils.getSignType(args[1]);
 
         switch (type) {
@@ -37,9 +40,9 @@ public class Create extends WirelessCommand {
                 break;
         }
 
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(args[0]);
+        WirelessChannel channel = Main.getStorage().getWirelessChannel(cname);
         if (channel != null) {
-            if (!hasAccessToChannel(sender, args[0])) {
+            if (!hasAccessToChannel(sender, cname)) {
                 Utils.sendFeedback(Main.getStrings().playerDoesntHaveAccessToChannel, sender, true);
                 return;
             }
@@ -55,26 +58,36 @@ public class Create extends WirelessCommand {
 
         location.getBlock().setType(Material.SIGN_POST);
         Sign sign = (Sign) location.getBlock().getState();
-        sign.setLine(1, args[0]);
+        sign.setLine(1, cname);
 
-        switch (type) { //TODO: Add sign to storage
+        switch (type) {
             case TRANSMITTER:
                 sign.setLine(0, Main.getStrings().tagsTransmitter.get(0));
+                sign.update();
+                Main.getSignManager().addWirelessTransmitter(cname, location.getBlock(), player);
                 break;
             case SCREEN:
                 sign.setLine(0, Main.getStrings().tagsScreen.get(0));
+                sign.update();
+                Main.getSignManager().addWirelessScreen(cname, location.getBlock(), player);
                 break;
             case RECEIVER_NORMAL:
                 sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
                 sign.setLine(2, Main.getStrings().tagsReceiverDefaultType.get(0));
+                sign.update();
+                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.DEFAULT);
                 break;
             case RECEIVER_INVERTER:
                 sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
                 sign.setLine(2, Main.getStrings().tagsReceiverInverterType.get(0));
+                sign.update();
+                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.INVERTER);
                 break;
             case RECEIVER_SWITCH:
                 sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
                 sign.setLine(2, Main.getStrings().tagsReceiverSwitchType.get(0));
+                sign.update();
+                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.SWITCH);
                 break;
             case RECEIVER_DELAYER:
                 Integer delay;
@@ -90,6 +103,8 @@ public class Create extends WirelessCommand {
                 sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
                 sign.setLine(2, Main.getStrings().tagsReceiverDelayerType.get(0));
                 sign.setLine(3, delay.toString());
+                sign.update();
+                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.DELAYER);
                 break;
             case RECEIVER_CLOCK:
                 Integer pulse;
@@ -105,9 +120,9 @@ public class Create extends WirelessCommand {
                 sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
                 sign.setLine(2, Main.getStrings().tagsReceiverClockType.get(0));
                 sign.setLine(3, pulse.toString());
+                sign.update();
+                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.CLOCK);
                 break;
         }
-
-        sign.update();
     }
 }

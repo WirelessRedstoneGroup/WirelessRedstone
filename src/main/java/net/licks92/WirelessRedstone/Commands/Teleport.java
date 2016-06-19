@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(description = "Teleport to specific sign", usage = "<channel> <type> <signID>", aliases = {"tp"},
-        permission = "commands.teleport", canUseInConsole = false)
+        permission = "commands.teleport", canUseInConsole = false, canUseInCommandBlock = false)
 public class Teleport extends WirelessCommand {
 
     @Override

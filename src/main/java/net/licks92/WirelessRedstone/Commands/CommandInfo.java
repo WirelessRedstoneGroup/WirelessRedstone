@@ -15,4 +15,5 @@ public @interface CommandInfo {
 	String permission();
 
 	boolean canUseInConsole();
+	boolean canUseInCommandBlock();
 }

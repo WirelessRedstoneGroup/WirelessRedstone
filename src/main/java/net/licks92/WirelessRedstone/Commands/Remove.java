@@ -5,7 +5,7 @@ import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Remove WirelessChannel", usage = "<channel>", aliases = {"remove"},
-        permission = "commands.remove", canUseInConsole = true)
+        permission = "commands.remove", canUseInConsole = true, canUseInCommandBlock = false)
 public class Remove extends WirelessCommand {
 
     @Override

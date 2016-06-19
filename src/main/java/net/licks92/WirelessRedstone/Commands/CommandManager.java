@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class CommandManager implements CommandExecutor {
         cmds.add(new Info());
         cmds.add(new Activate());
         cmds.add(new Teleport());
+        cmds.add(new Lock());
     }
 
     @Override
@@ -36,7 +38,9 @@ public class CommandManager implements CommandExecutor {
             if (args.length == 0) {
                 int timer = 0;
                 for (WirelessCommand gcmd : cmds) {
-                    if (timer == 8) {
+                    if (timer == 0)
+                        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false);
+                    if (timer >= 8) {
                         Utils.sendFeedback("Use /wr help 2 for the next page.", sender, false); //TODO: Add this string to the stringloader
                         break;
                     }
@@ -78,7 +82,12 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
 
-            if (!wanted.getClass().getAnnotation(CommandInfo.class).canUseInConsole() && !(sender instanceof Player)) {
+            if(!wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock() && !(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
+                Main.getWRLogger().info("Commandblocks are not allowed to run command: /wr " + args[0]);
+                return true;
+            }
+
+            if (!wanted.getClass().getAnnotation(CommandInfo.class).canUseInConsole() && sender instanceof ConsoleCommandSender) {
                 Utils.sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader
                 return true;
             }

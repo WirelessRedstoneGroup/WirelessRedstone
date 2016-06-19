@@ -5,7 +5,7 @@ import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Get wirelessredstone version", usage = "", aliases = {"version", "v"},
-        permission = "commands.version", canUseInConsole = true)
+        permission = "commands.version", canUseInConsole = true, canUseInCommandBlock = true)
 public class Version extends WirelessCommand {
 
     @Override
