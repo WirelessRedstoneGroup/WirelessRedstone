@@ -15,9 +15,9 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-//    Using regex atm, checking if that works fine
-//    public static char[] badCharacters = {'|', '-', '*', '/', '<', '>', ' ', '=', '~',
-//            '!', '^', '(', ')', ':', '`', '.'};
+//    Currently blocking all bad characters from EVERY config
+    public static char[] badCharacters = {'|', '-', '*', '/', '<', '>', ' ', '=', '~',
+            '!', '^', '(', ')', ':', '`', '.'};
 
     public static String getBukkitVersion() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();

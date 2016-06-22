@@ -23,6 +23,8 @@ import org.mcstats.Metrics;
 
 public class Main extends JavaPlugin {
 
+    private Boolean fullyStarted = false;
+
     private static Main instance;
     private static GlobalCache globalCache; //GlobalCache -> Manage global cache, SignManager -> Manage WireBox functions
     private static SignManager signManager;
@@ -91,14 +93,16 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        try {
-//            WorldEditHooker.unRegister();
-            Main.getStorage().updateReceivers();
-            storageManager.getStorage().close();
-        } catch (Exception ex) {
-            WRLogger.severe("An error occured when disabling the plugin!");
-            ex.printStackTrace();
+        if (fullyStarted) {
+            try {
+                Main.getStorage().updateReceivers();
+                storageManager.getStorage().close();
+            } catch (Exception ex) {
+                WRLogger.severe("An error occured when disabling the plugin!");
+                ex.printStackTrace();
+            }
         }
+        fullyStarted = false;
 
         updateTask = null;
         worldEditHooker = null;
@@ -126,6 +130,12 @@ public class Main extends JavaPlugin {
         stringManager = new StringLoader(config.getLanguage());
         signManager = new SignManager();
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
+
+        if (!storageManager.getStorage().initStorage()) {
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+
         globalCache = new GlobalCache(config.getCacheRefreshRate());
         permissionsManager = new PermissionsManager();
         commandManager = new CommandManager();
@@ -137,6 +147,7 @@ public class Main extends JavaPlugin {
             WRLogger.severe("**********");
             WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
             WRLogger.severe("**********");
+            getPluginLoader().disablePlugin(this);
             return;
         }
 
@@ -188,6 +199,7 @@ public class Main extends JavaPlugin {
         WRLogger.info("Loading metrics...");
         loadMetrics();
 
+        fullyStarted = true;
         WRLogger.info("Plugin is now loaded");
     }
 

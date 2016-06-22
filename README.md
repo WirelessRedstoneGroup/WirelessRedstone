@@ -17,12 +17,14 @@ None at the moment
 - [x] Sign logic
 - [x] WorldEdit
 - [x] Listeners
-- [ ] Command
+- [x] Commands
+- [ ] Admin commands
 - [x] Metrics
 - [x] Permissions
 - [x] Updater
-- [ ] Add remaining strings to stringloader
+- [ ] Add remaining strings to the stringloader
 - [ ] Documentation
+- [ ] Add converter to convert old files (YAML -> Direction, SQLite -> Whole new system)
 
 #### Storage
 - [x] Yaml (Only the convert feature isn't ready)

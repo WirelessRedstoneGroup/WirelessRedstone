@@ -60,7 +60,7 @@ public class Info extends WirelessCommand {
                                 .replaceAll("%%YCOORD", transmitter.getY() + "").replaceAll("%%ZCOORD", transmitter.getZ() + ""));
                     }
                     break;
-                case RECEIVER:
+                case RECEIVER_NORMAL:
                     if(channel.getReceivers().size() == 0){
                         Utils.sendFeedback("No signs found.", sender, true); //TODO: Add this string to the stringloader
                         return;

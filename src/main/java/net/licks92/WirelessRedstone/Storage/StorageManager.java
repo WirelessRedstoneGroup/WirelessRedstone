@@ -11,13 +11,15 @@ public class StorageManager {
     public StorageManager(StorageType type, String channelFolder) {
         File channelFolderFile = new File(Main.getInstance().getDataFolder(), channelFolder);
         channelFolderFile.mkdir();
-        switch (type) { //TODO: Add SQLITE and MYSQL support
+        switch (type) { //TODO: Add MYSQL support
             case SQLITE:
+                storage = new SQLiteStorage(channelFolder);
                 break;
             case YAML:
                 storage = new YamlStorage(channelFolder);
                 break;
             case MYSQL:
+                storage = new YamlStorage(channelFolder);
                 break;
             default:
                 break;

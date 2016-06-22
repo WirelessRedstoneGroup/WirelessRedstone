@@ -19,8 +19,8 @@ import java.util.zip.ZipOutputStream;
 
 public class YamlStorage implements IWirelessStorageConfiguration {
 
-    private final File channelFolder;
-    private final String channelFolderStr;
+    private File channelFolder;
+    private String channelFolderStr;
 
     public YamlStorage(String channelFolder) {
         this.channelFolder = new File(Main.getInstance().getDataFolder(), channelFolder);
@@ -169,19 +169,25 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         return true;
     }
 
+    //WipeData should only delete the config not the signs
     @Override
     public boolean wipeData() {
         //Backup the channels folder first.
         if(channelFolder.listFiles().length > 0)
             backupData("yml");
 
+        ArrayList<File> files = new ArrayList<>();
+
         //Then remove the channels and the files.
-        for (File f : channelFolder.listFiles()) {
-            String name = f.getName();
+        for (File file : channelFolder.listFiles()) {
+            String name = file.getName();
             int pos = name.lastIndexOf(".");
-            if (pos > 0) {
-                removeWirelessChannel(name.substring(0, pos));
-            }
+            setWirelessChannel(name.substring(0, pos), null);
+            files.add(file);
+        }
+
+        for(File file : files){
+            file.delete();
         }
         return true;
     }
@@ -500,7 +506,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public StorageType canConvert() {
         try {
             for (File file : channelFolder.listFiles()) {
-                if (file.getName().contains("MYSQL")) {
+                if (file.getName().contains(".MYSQL")) {
                     return StorageType.MYSQL;
                 }
             }
