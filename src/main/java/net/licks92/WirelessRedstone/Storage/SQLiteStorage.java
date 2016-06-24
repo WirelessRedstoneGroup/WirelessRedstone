@@ -3,13 +3,15 @@ package net.licks92.WirelessRedstone.Storage;
 import com.husky.sqlite.SQLite;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Libs.CreateBuilder;
+import net.licks92.WirelessRedstone.Libs.DeleteBuilder;
 import net.licks92.WirelessRedstone.Libs.InsertBuilder;
+import net.licks92.WirelessRedstone.Libs.UpdateBuilder;
 import net.licks92.WirelessRedstone.Main;
-import net.licks92.WirelessRedstone.Signs.IWirelessPoint;
-import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.*;
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 
 import java.io.File;
 import java.sql.ResultSet;
@@ -17,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class SQLiteStorage implements IWirelessStorageConfiguration {
 
@@ -56,7 +59,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             Main.getWRLogger().info("Successfully closed SQLite connection.");
         } catch (SQLException e) {
             Main.getWRLogger().warning("Cannot close SQLite connection.");
-            if(ConfigManager.getConfig().getDebugMode())
+            if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
 
@@ -107,12 +110,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     createWirelessPoint(channel.getName(), ipoint);
                 }
 
-                if (Main.getGlobalCache() == null) Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        Main.getGlobalCache().update();
-                    }
-                }, 1L);
+                if (Main.getGlobalCache() == null)
+                    Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            Main.getGlobalCache().update();
+                        }
+                    }, 1L);
                 else Main.getGlobalCache().update();
                 return true;
             } catch (SQLException ex) {
@@ -125,32 +129,134 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean createWirelessPoint(String channelName, IWirelessPoint point) {
-        return false;
+        if (!sqlTableExists(channelName)) {
+            Main.getWRLogger().severe("Could not create this wireless point in the channel " + channelName + ", it does not exist!");
+        }
+
+        Integer isWallSign;
+        String signType;
+
+        if (point instanceof WirelessTransmitter) {
+            signType = "transmitter";
+        } else if (point instanceof WirelessScreen) {
+            signType = "screen";
+        } else if (point instanceof WirelessReceiver) {
+            if (point instanceof WirelessReceiverInverter) signType = "receiver_inverter";
+            else if (point instanceof WirelessReceiverDelayer)
+                signType = "receiver_delayer_" + ((WirelessReceiverDelayer) (point)).getDelay();
+            else if (point instanceof WirelessReceiverSwitch) {
+                boolean state;
+                if (Main.getSignManager().switchState.get(((WirelessReceiverSwitch) (point)).getLocation()) != null)
+                    state = Main.getSignManager().switchState.get(((WirelessReceiverSwitch) (point)).getLocation());
+                else state = false;
+                signType = "receiver_switch_" + state;
+            } else if (point instanceof WirelessReceiverClock)
+                signType = "receiver_clock_" + ((WirelessReceiverClock) (point)).getDelay();
+            else signType = "receiver";
+        } else {
+            return false;
+        }
+
+        if (point.getIsWallSign())
+            isWallSign = 1;
+        else
+            isWallSign = 0;
+
+        try {
+            Statement statement = sqLite.getConnection().createStatement();
+            statement.executeUpdate(new InsertBuilder(getDatabaseFriendlyName(channelName))
+                    .addColumnWithValue(sqlSignType, signType)
+                    .addColumnWithValue(sqlSignX, point.getX())
+                    .addColumnWithValue(sqlSignY, point.getY())
+                    .addColumnWithValue(sqlSignZ, point.getZ())
+                    .addColumnWithValue(sqlSignWorld, point.getWorld())
+                    .addColumnWithValue(sqlDirection, point.getDirection().toString().toUpperCase())
+                    .addColumnWithValue(sqlSignOwner, point.getOwner())
+                    .addColumnWithValue(sqlIsWallSign, isWallSign)
+                    .toString());
+            statement.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return true;
     }
 
     @Override
     public boolean removeIWirelessPoint(String channelName, Location loc) {
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel == null) return false;
+
+        for (WirelessReceiver receiver : channel.getReceivers()) {
+            if (Utils.sameLocation(receiver.getLocation(), loc)) return removeWirelessReceiver(channelName, loc);
+        }
+        for (WirelessTransmitter transmitter : channel.getTransmitters()) {
+            if (Utils.sameLocation(transmitter.getLocation(), loc)) return removeWirelessTransmitter(channelName, loc);
+        }
+        for (WirelessScreen screen : channel.getScreens()) {
+            if (Utils.sameLocation(screen.getLocation(), loc)) return removeWirelessScreen(channelName, loc);
+        }
         return false;
     }
 
     @Override
     public boolean removeWirelessReceiver(String channelName, Location loc) {
-        return false;
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeReceiverAt(loc);
+            return removeWirelessPoint(channelName, loc, loc.getWorld().getName());
+        } else return false;
     }
 
     @Override
     public boolean removeWirelessTransmitter(String channelName, Location loc) {
-        return false;
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeTransmitterAt(loc);
+            return removeWirelessPoint(channelName, loc, loc.getWorld().getName());
+        } else return false;
     }
 
     @Override
     public boolean removeWirelessScreen(String channelName, Location loc) {
-        return false;
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeScreenAt(loc);
+            return removeWirelessPoint(channelName, loc, loc.getWorld().getName());
+        } else return false;
     }
 
     @Override
     public boolean renameWirelessChannel(String channelName, String newChannelName) {
-        return false;
+        WirelessChannel channel = getWirelessChannel(channelName);
+
+        List<IWirelessPoint> signs = new ArrayList<IWirelessPoint>();
+
+        signs.addAll(channel.getReceivers());
+        signs.addAll(channel.getTransmitters());
+        signs.addAll(channel.getScreens());
+
+        for (IWirelessPoint sign : signs) {
+            Location loc = new Location(Bukkit.getWorld(sign.getWorld()), sign.getX(), sign.getY(), sign.getZ());
+            Sign signBlock = (Sign) loc.getBlock();
+            signBlock.setLine(1, newChannelName);
+        }
+
+        try {
+            Statement statement = sqLite.getConnection().createStatement();
+
+            statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channelName))
+                    .set(sqlChannelName + "=" + newChannelName)
+                    .where(sqlChannelName + "=" + channelName)
+                    .toString());
+            statement.executeUpdate("RENAME TABLE " + channelName + " TO " + newChannelName);
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     @Override
@@ -229,7 +335,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     return StorageType.SQLITE;
                 }
             }
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+        }
 
         return null;
     }
@@ -259,7 +366,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     }
 
-    private boolean initiate(boolean allowConvert){
+    private boolean initiate(boolean allowConvert) {
         Main.getWRLogger().info("Establishing connection to database...");
 
         try {
@@ -267,7 +374,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         } catch (SQLException | ClassNotFoundException ex) {
             Main.getWRLogger().severe("Error while starting plugin. Message: " + ex.getLocalizedMessage() + ". Enable debug mode to see the full stack trace.");
 
-            if(ConfigManager.getConfig().getDebugMode())
+            if (ConfigManager.getConfig().getDebugMode())
                 ex.printStackTrace();
 
             Main.getWRLogger().severe("**********");
@@ -308,6 +415,27 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private boolean removeWirelessPoint(String channelName, Location loc, String world) {
+        try {
+            Statement statement = sqLite.getConnection().createStatement();
+            String sql = new DeleteBuilder(getDatabaseFriendlyName(channelName))
+                    .where(sqlSignX + "=" + loc.getBlockX())
+                    .where(sqlSignY + "=" + loc.getBlockY())
+                    .where(sqlSignZ + "=" + loc.getBlockZ())
+                    .where(sqlSignWorld + "=" + world)
+                    .toString();
+            statement.executeUpdate(sql);
+            Main.getWRLogger().debug("Statement to delete wireless sign : " + sql);
+            statement.close();
+            Main.getGlobalCache().update();
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     private String getNormalName(String asciiName) {
