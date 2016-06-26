@@ -14,12 +14,15 @@ import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class SQLiteStorage implements IWirelessStorageConfiguration {
 
@@ -289,12 +292,114 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean backupData(String extension) {
-        return false;
+        try {
+            String zipName = "WRBackup " + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
+                    + Calendar.getInstance().get(Calendar.MONTH) + "-" + Calendar.getInstance().get(Calendar.YEAR)
+                    + "_" + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "." + Calendar.getInstance().get(Calendar.MINUTE)
+                    + "." + Calendar.getInstance().get(Calendar.SECOND);
+            FileOutputStream fos = new FileOutputStream((channelFolder.getCanonicalPath().split(channelFolder.getName())[0]) + zipName + ".zip");
+            ZipOutputStream zos = new ZipOutputStream(fos);
+
+            for (File file : channelFolder.listFiles()) {
+                if (!file.isDirectory() && file.getName().contains("." + extension)) {
+                    FileInputStream fis = new FileInputStream(file);
+
+                    ZipEntry zipEntry = new ZipEntry(file.getName());
+                    zos.putNextEntry(zipEntry);
+
+                    byte[] bytes = new byte[1024];
+                    int length;
+
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zos.write(bytes, 0, length);
+                    }
+
+                    zos.closeEntry();
+                    fis.close();
+                }
+            }
+
+            zos.close();
+            fos.close();
+
+            Main.getWRLogger().info("Channels saved in archive: " + zipName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     @Override
     public boolean purgeData() {
-        return false;
+        try {
+            // Get the names of all the tables
+            Collection<WirelessChannel> channels = new ArrayList<WirelessChannel>();
+            channels = getAllChannels();
+
+            ArrayList<String> remove = new ArrayList<String>();
+            ArrayList<IWirelessPoint> removeSigns = new ArrayList<IWirelessPoint>();
+
+            // Erase channel if empty or world doesn't exist
+            for (WirelessChannel channel : channels) {
+                HashMap<Location, String> receivers = new HashMap<Location, String>();
+                HashMap<Location, String> transmitters = new HashMap<Location, String>();
+                HashMap<Location, String> screens = new HashMap<Location, String>();
+                ArrayList<Location> locationCheck = new ArrayList<Location>();
+
+                for (WirelessTransmitter transmitter : channel.getTransmitters()) {
+                    if (locationCheck.contains(transmitter.getLocation()))
+                        receivers.put(transmitter.getLocation(), channel.getName() + "~" + transmitter.getWorld());
+                    else locationCheck.add(transmitter.getLocation());
+                    if (Bukkit.getWorld(transmitter.getWorld()) == null) {
+                        transmitters.put(transmitter.getLocation(), channel.getName() + "~" + transmitter.getWorld());
+                    }
+                }
+
+                for (WirelessReceiver receiver : channel.getReceivers()) {
+                    if (locationCheck.contains(receiver.getLocation()))
+                        receivers.put(receiver.getLocation(), channel.getName() + "~" + receiver.getWorld());
+                    else locationCheck.add(receiver.getLocation());
+                    if (Bukkit.getWorld(receiver.getWorld()) == null) {
+                        receivers.put(receiver.getLocation(), channel.getName() + "~" + receiver.getWorld());
+                    }
+                }
+
+                for (WirelessScreen screen : channel.getScreens()) {
+                    if (locationCheck.contains(screen.getLocation()))
+                        receivers.put(screen.getLocation(), channel.getName() + "~" + screen.getWorld());
+                    else locationCheck.add(screen.getLocation());
+                    if (Bukkit.getWorld(screen.getWorld()) == null) {
+                        screens.put(screen.getLocation(), channel.getName() + "~" + screen.getWorld());
+                    }
+                }
+
+                for (Map.Entry<Location, String> receiverRemove : receivers.entrySet()) {
+                    removeWirelessReceiver(receiverRemove.getValue().split("~")[0], receiverRemove.getKey(), receiverRemove.getValue().split("~")[1]);
+                }
+                for (Map.Entry<Location, String> transmitterRemove : transmitters.entrySet()) {
+                    removeWirelessTransmitter(transmitterRemove.getValue().split("~")[0], transmitterRemove.getKey(), transmitterRemove.getValue().split("~")[1]);
+                }
+                for (Map.Entry<Location, String> screenRemove : screens.entrySet()) {
+                    removeWirelessScreen(screenRemove.getValue().split("~")[0], screenRemove.getKey(), screenRemove.getValue().split("~")[1]);
+                }
+
+                if ((channel.getReceivers().size() < 1) && (channel.getTransmitters().size() < 1) && (channel.getScreens().size() < 1)) {
+                    remove.add(channel.getName());
+                }
+            }
+
+            for (String channelRemove : remove) {
+                removeWirelessChannel(channelRemove);
+            }
+
+            return true;
+        } catch (Exception e) {
+            Main.getWRLogger().severe("An error occured. Enable debug mode to see the stacktraces.");
+            if (ConfigManager.getConfig().getDebugMode()) {
+                e.printStackTrace();
+            }
+            return false;
+        }
     }
 
     @Override
@@ -304,21 +409,222 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean isChannelEmpty(WirelessChannel channel) {
-        return false;
+        return (channel.getReceivers().size() < 1) && (channel.getTransmitters().size() < 1) && (channel.getScreens().size() < 1);
     }
 
     @Override
     public Collection<WirelessChannel> getAllChannels() {
-        return null;
+        Statement statement;
+        try {
+            statement = sqLite.getConnection().createStatement();
+            ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
+
+            ResultSet rs = null;
+
+            try {
+                rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
+            } catch (NullPointerException ex) {
+                Main.getWRLogger().severe("SQL: NullPointerException when asking for the list of channels!");
+                return new ArrayList<WirelessChannel>();
+            }
+            ArrayList<String> channelNames = new ArrayList<String>();
+            while (rs.next()) {
+                channelNames.add(getNormalName(rs.getString("name")));
+            }
+            rs.close();
+            statement.close();
+
+            for (String channelName : channelNames) {
+                channels.add(getWirelessChannel(channelName));
+            }
+            return channels;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException ignored) {
+
+        }
+        return null; // Channel not found
     }
 
     @Override
-    public WirelessChannel getWirelessChannel(String channelName) {
-        return null;
+    public WirelessChannel getWirelessChannel(String r_channelName) {
+        try {
+            Statement statement = sqLite.getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
+            ArrayList<String> channels = new ArrayList<String>();
+
+            while (rs.next()) {
+                channels.add(getNormalName(rs.getString("name")));
+            }
+            rs.close(); // Always close the ResultSet
+
+            for (String channelName : channels) {
+                if (channelName.equals(r_channelName)) {
+                    // Get the ResultSet from the table we want
+                    ResultSet rsChannelInfo = statement.executeQuery("SELECT * FROM " + getDatabaseFriendlyName(channelName));
+                    try {
+                        rsChannelInfo.getString("name");
+                    } catch (SQLException ex) {
+                        statement.executeUpdate("DROP TABLE " + getDatabaseFriendlyName(channelName));
+                        rsChannelInfo.close();
+                        statement.close();
+                        return null;
+                    }
+
+                    // Create an empty WirelessChannel
+                    WirelessChannel channel = new WirelessChannel(rsChannelInfo.getString(sqlChannelName));
+
+                    // Set the Id, the name, and the locked variable
+                    channel.setId(rsChannelInfo.getInt(sqlChannelId));
+                    if (rsChannelInfo.getInt(sqlChannelLocked) == 1) channel.setLocked(true);
+                    else if (rsChannelInfo.getInt(sqlChannelLocked) == 0) channel.setLocked(false);
+                    else channel.setLocked(false);
+
+                    // Set the owners
+                    ArrayList<String> owners = new ArrayList<String>();
+                    while (rsChannelInfo.next()) {
+                        if (rsChannelInfo.getString(sqlChannelOwners) != null)
+                            owners.add(rsChannelInfo.getString(sqlChannelOwners));
+                    }
+                    channel.setOwners(owners);
+                    rsChannelInfo.close();
+
+                    // Because a SQLite ResultSet is TYPE_FORWARD only, we have
+                    // to create a third ResultSet and close the second
+                    ResultSet rsSigns = statement.executeQuery("SELECT * FROM " + getDatabaseFriendlyName(channelName));
+
+                    // Set the wireless signs
+                    ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
+                    ArrayList<WirelessTransmitter> transmitters = new ArrayList<WirelessTransmitter>();
+                    ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
+                    rsSigns.next();// Because first row does not contain a wireless sign
+                    while (rsSigns.next()) {
+                        if (rsSigns.getString(sqlSignType).equals("receiver")) {
+                            WirelessReceiver receiver = new WirelessReceiver();
+                            receiver.setDirection(Utils.intToBlockFaceSign(rsSigns.getInt(sqlDirection)));
+                            receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            receiver.setOwner(rsSigns.getString(sqlSignOwner));
+                            receiver.setWorld(rsSigns.getString(sqlSignWorld));
+                            receiver.setX(rsSigns.getInt(sqlSignX));
+                            receiver.setY(rsSigns.getInt(sqlSignY));
+                            receiver.setZ(rsSigns.getInt(sqlSignZ));
+                            receivers.add(receiver);
+                        } else if (rsSigns.getString(sqlSignType).equals("receiver_inverter")) {
+                            WirelessReceiverInverter receiver = new WirelessReceiverInverter();
+                            receiver.setDirection(Utils.intToBlockFaceSign(rsSigns.getInt(sqlDirection)));
+                            receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            receiver.setOwner(rsSigns.getString(sqlSignOwner));
+                            receiver.setWorld(rsSigns.getString(sqlSignWorld));
+                            receiver.setX(rsSigns.getInt(sqlSignX));
+                            receiver.setY(rsSigns.getInt(sqlSignY));
+                            receiver.setZ(rsSigns.getInt(sqlSignZ));
+                            receivers.add(receiver);
+                        } else if (rsSigns.getString(sqlSignType).contains("receiver_delayer_")) {
+                            String signtype = rsSigns.getString(sqlSignType);
+                            signtype = signtype.split("receiver_delayer_")[1];
+                            int delay;
+                            try {
+                                delay = Integer.parseInt(signtype);
+                            } catch (NumberFormatException ex) {
+                                delay = 0;
+                            }
+                            WirelessReceiverDelayer receiver = new WirelessReceiverDelayer(delay);
+                            receiver.setDirection(Utils.intToBlockFaceSign(rsSigns.getInt(sqlDirection)));
+                            receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            receiver.setOwner(rsSigns.getString(sqlSignOwner));
+                            receiver.setWorld(rsSigns.getString(sqlSignWorld));
+                            receiver.setX(rsSigns.getInt(sqlSignX));
+                            receiver.setY(rsSigns.getInt(sqlSignY));
+                            receiver.setZ(rsSigns.getInt(sqlSignZ));
+                            receivers.add(receiver);
+                        } else if (rsSigns.getString(sqlSignType).contains("receiver_switch_")) {
+                            String signtype = rsSigns.getString(sqlSignType);
+                            signtype = signtype.split("receiver_switch_")[1];
+                            boolean state;
+                            try {
+                                state = Boolean.parseBoolean(signtype);
+                            } catch (NumberFormatException ex) {
+                                state = false;
+                            }
+                            WirelessReceiverSwitch receiver = new WirelessReceiverSwitch(state);
+                            receiver.setDirection(Utils.intToBlockFaceSign(rsSigns.getInt(sqlDirection)));
+                            receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            receiver.setOwner(rsSigns.getString(sqlSignOwner));
+                            receiver.setWorld(rsSigns.getString(sqlSignWorld));
+                            receiver.setX(rsSigns.getInt(sqlSignX));
+                            receiver.setY(rsSigns.getInt(sqlSignY));
+                            receiver.setZ(rsSigns.getInt(sqlSignZ));
+                            receivers.add(receiver);
+                        } else if (rsSigns.getString(sqlSignType).contains("receiver_clock_")) {
+                            String signtype = rsSigns.getString(sqlSignType);
+                            signtype = signtype.split("receiver_clock_")[1];
+                            int delay;
+                            try {
+                                delay = Integer.parseInt(signtype);
+                            } catch (NumberFormatException ex) {
+                                delay = 20;
+                            }
+                            WirelessReceiverClock receiver = new WirelessReceiverClock(delay);
+                            receiver.setDirection(Utils.intToBlockFaceSign(rsSigns.getInt(sqlDirection)));
+                            receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            receiver.setOwner(rsSigns.getString(sqlSignOwner));
+                            receiver.setWorld(rsSigns.getString(sqlSignWorld));
+                            receiver.setX(rsSigns.getInt(sqlSignX));
+                            receiver.setY(rsSigns.getInt(sqlSignY));
+                            receiver.setZ(rsSigns.getInt(sqlSignZ));
+                            receivers.add(receiver);
+                        } else if (rsSigns.getString(sqlSignType).equals("transmitter")) {
+                            WirelessTransmitter transmitter = new WirelessTransmitter();
+                            transmitter.setDirection(Utils.intToBlockFaceSign(rsSigns.getInt(sqlDirection)));
+                            transmitter.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            transmitter.setOwner(rsSigns.getString(sqlSignOwner));
+                            transmitter.setWorld(rsSigns.getString(sqlSignWorld));
+                            transmitter.setX(rsSigns.getInt(sqlSignX));
+                            transmitter.setY(rsSigns.getInt(sqlSignY));
+                            transmitter.setZ(rsSigns.getInt(sqlSignZ));
+                            transmitters.add(transmitter);
+                        }
+                        if (rsSigns.getString(sqlSignType).equals("screen")) {
+                            WirelessScreen screen = new WirelessScreen();
+                            screen.setDirection(Utils.intToBlockFaceSign(rsSigns.getInt(sqlDirection)));
+                            screen.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            screen.setOwner(rsSigns.getString(sqlSignOwner));
+                            screen.setWorld(rsSigns.getString(sqlSignWorld));
+                            screen.setX(rsSigns.getInt(sqlSignX));
+                            screen.setY(rsSigns.getInt(sqlSignY));
+                            screen.setZ(rsSigns.getInt(sqlSignZ));
+                            screens.add(screen);
+                        }
+                    }
+                    channel.setReceivers(receivers);
+                    channel.setTransmitters(transmitters);
+                    channel.setScreens(screens);
+
+                    // Done. Return channel
+                    rsSigns.close();
+                    statement.close();
+                    return channel;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Channel not found
     }
 
     @Override
     public IWirelessPoint getWirelessRedstoneSign(Location loc) {
+        for (WirelessChannel channel : getAllChannels()) {
+            for (WirelessReceiver receiver : channel.getReceivers()) {
+                if (Utils.sameLocation(receiver.getLocation(), loc)) return receiver;
+            }
+            for (WirelessTransmitter transmitter : channel.getTransmitters()) {
+                if (Utils.sameLocation(transmitter.getLocation(), loc)) return transmitter;
+            }
+            for (WirelessScreen screen : channel.getScreens()) {
+                if (Utils.sameLocation(screen.getLocation(), loc)) return screen;
+            }
+        }
         return null;
     }
 
@@ -343,27 +649,83 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public String getWirelessChannelName(Location loc) {
+        for (WirelessChannel channel : getAllChannels()) {
+            for (WirelessReceiver receiver : channel.getReceivers()) {
+                if (Utils.sameLocation(receiver.getLocation(), loc)) return channel.getName();
+            }
+            for (WirelessTransmitter transmitter : channel.getTransmitters()) {
+                if (Utils.sameLocation(transmitter.getLocation(), loc)) return channel.getName();
+            }
+            for (WirelessScreen screen : channel.getScreens()) {
+                if (Utils.sameLocation(screen.getLocation(), loc)) return channel.getName();
+            }
+        }
         return null;
     }
 
     @Override
     public void updateChannel(String channelName, WirelessChannel channel) {
+        try {
+            int locked = (channel.isLocked()) ? 1 : 0;
+            Statement statement = sqLite.getConnection().createStatement();
 
+            statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channelName))
+                    .set(sqlChannelName + "=" + channel.getName())
+                    .set(sqlChannelLocked + "=" + locked)
+                    .where(sqlChannelId + "=" + channel.getId())
+                    .toString());
+
+            // Then update the owners
+            /*
+			 * Temporary disabled because it makes the plugin crashing.
+			 * statement.executeUpdate("ALTER TABLE " + getDBName(channelName) +
+			 * " DROP COLUMN " + sqlChannelOwners);
+			 * statement.executeUpdate("ALTER TABLE " + getDBName(channelName) +
+			 * " ADD COLUMN " + sqlChannelOwners); for(String owner :
+			 * channel.getOwners()) { statement.executeUpdate("INSERT INTO " +
+			 * getDBName(channelName) + " (" + sqlChannelOwners + ") VALUES " +
+			 * owner); }
+			 */
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateReceivers() {
-
+        for (WirelessChannel channel : getAllChannels()) {
+            for (WirelessReceiver receiver : channel.getReceivers()) {
+                if (receiver instanceof WirelessReceiverSwitch) {
+                    Main.getWRLogger().debug("Updating Switcher from channel " + channel.getName());
+                    updateSwitch(channel, receiver);
+                }
+            }
+        }
     }
 
     @Override
     public void checkChannel(String channelName) {
-
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            if (isChannelEmpty(channel)) removeWirelessChannel(channelName);
+        }
     }
 
     @Override
     public void removeWirelessChannel(String channelName) {
-
+        try {
+            Main.getSignManager().removeSigns(getWirelessChannel(channelName));
+            if (!sqlTableExists(channelName)) return;
+            Statement statement = sqLite.getConnection().createStatement();
+            statement.executeUpdate("DROP TABLE " + getDatabaseFriendlyName(channelName));
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Main.getGlobalCache().update();
+        }
     }
 
     private boolean initiate(boolean allowConvert) {
@@ -417,6 +779,25 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         }
     }
 
+    private void updateSwitch(WirelessChannel channel, WirelessReceiver receiver) {
+        try {
+            Statement statement = sqLite.getConnection().createStatement();
+
+            statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channel.getName()))
+                    .set(sqlSignType + "=" + "receiver_switch_" + ((WirelessReceiverSwitch) receiver).getState())
+                    .where(sqlSignWorld + "=" + receiver.getWorld())
+                    .where(sqlSignX + "=" + receiver.getX())
+                    .where(sqlSignY + "=" + receiver.getY())
+                    .where(sqlSignZ + "=" + receiver.getZ())
+                    .toString());
+
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private boolean removeWirelessPoint(String channelName, Location loc, String world) {
         try {
             Statement statement = sqLite.getConnection().createStatement();
@@ -430,12 +811,45 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             Main.getWRLogger().debug("Statement to delete wireless sign : " + sql);
             statement.close();
             Main.getGlobalCache().update();
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Private method to purge data. Don't use it anywhere else
+     */
+    private boolean removeWirelessReceiver(String channelName, Location loc, String world) {
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeReceiverAt(loc, world);
+            return removeWirelessPoint(channelName, loc, world);
+        } else return false;
+    }
+
+    /**
+     * Private method to purge data. Don't use it anywhere else
+     */
+    private boolean removeWirelessTransmitter(String channelName, Location loc, String world) {
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeTransmitterAt(loc, world);
+            return removeWirelessPoint(channelName, loc, world);
+        } else return false;
+    }
+
+    /**
+     * Private method to purge data. Don't use it anywhere else
+     */
+    private boolean removeWirelessScreen(String channelName, Location loc, String world) {
+        WirelessChannel channel = getWirelessChannel(channelName);
+        if (channel != null) {
+            channel.removeScreenAt(loc, world);
+            return removeWirelessPoint(channelName, loc, world);
+        } else return false;
     }
 
     private String getNormalName(String asciiName) {
