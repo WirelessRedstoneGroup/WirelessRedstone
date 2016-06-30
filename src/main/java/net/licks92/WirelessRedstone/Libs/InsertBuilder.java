@@ -38,8 +38,8 @@ public class InsertBuilder {
     }
 
     public InsertBuilder addColumnWithValue(String column, Object value){
-        this.columns.add(column);
-        this.values.add(value.toString());
+        this.columns.add("'" + column + "'");
+        this.values.add("'" + value.toString() + "'");
         return this;
     }
 
@@ -47,7 +47,7 @@ public class InsertBuilder {
     public String toString() {
         StringBuilder sql = new StringBuilder("INSERT INTO ");
 
-        sql.append(table);
+        sql.append("'").append(table).append("'");
 
         appendList(sql, columns, " (", ", ", ")");
         appendList(sql, values, " VALUES (", ", ", ")");

@@ -33,7 +33,7 @@ public class CreateBuilder {
     }
 
     public CreateBuilder addColumn(String column, String type){
-        this.columns.add(column + " " + type);
+        this.columns.add("'" + column + "' " + type);
         return this;
     }
 
@@ -44,7 +44,7 @@ public class CreateBuilder {
         if(ifNotExist)
             sql.append("IF NOT EXISTS ");
 
-        sql.append(table);
+        sql.append("'").append(table).append("'");
         appendList(sql, columns, " (", ", ", ")");
 
         return sql.toString();

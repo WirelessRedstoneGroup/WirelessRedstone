@@ -33,9 +33,9 @@ public class DeleteBuilder {
 
     @Override
     public String toString() {
-        StringBuilder sql = new StringBuilder("DELETE ");
+        StringBuilder sql = new StringBuilder("DELETE FROM ");
 
-        sql.append(table);
+        sql.append("'").append(table).append("'");
 
         appendList(sql, wheres, " WHERE ", " AND ", "");
 

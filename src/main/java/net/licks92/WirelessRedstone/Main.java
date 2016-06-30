@@ -89,7 +89,7 @@ public class Main extends JavaPlugin {
         Main.worldEditHooker = worldEditHooker;
     }
 
-    private static final String CHANNEL_FOLDER = "/channels";
+    private static final String CHANNEL_FOLDER = "channels";
 
     @Override
     public void onDisable() {

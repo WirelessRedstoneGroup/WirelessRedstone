@@ -1,12 +1,12 @@
 package net.licks92.WirelessRedstone.Storage;
 
-import com.husky.sqlite.SQLite;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Libs.CreateBuilder;
 import net.licks92.WirelessRedstone.Libs.DeleteBuilder;
 import net.licks92.WirelessRedstone.Libs.InsertBuilder;
 import net.licks92.WirelessRedstone.Libs.UpdateBuilder;
 import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.SQLite;
 import net.licks92.WirelessRedstone.Signs.*;
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,6 +31,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     private File channelFolder;
     private String channelFolderStr;
     private SQLite sqLite;
+    private Connection connection;
 
     private String sqlIsWallSign = "isWallSign";
     private String sqlDirection = "direction";
@@ -89,7 +91,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                         .addColumn(sqlSignType, "char(255)").addColumn(sqlSignX, "int")
                         .addColumn(sqlSignY, "int").addColumn(sqlSignZ, "int")
                         .addColumn(sqlSignWorld, "char(255)").addColumn(sqlSignOwner, "char(255)")
-                        .toString());
+                        .setIfNotExist(false).toString());
                 statement.executeUpdate(new InsertBuilder(getDatabaseFriendlyName(channel.getName()))
                         .addColumnWithValue(sqlChannelId, channel.getId())
                         .addColumnWithValue(sqlChannelName, channel.getName())
@@ -167,7 +169,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             isWallSign = 0;
 
         try {
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(new InsertBuilder(getDatabaseFriendlyName(channelName))
                     .addColumnWithValue(sqlSignType, signType)
                     .addColumnWithValue(sqlSignX, point.getX())
@@ -247,13 +249,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         }
 
         try {
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
 
             statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channelName))
-                    .set(sqlChannelName + "=" + newChannelName)
-                    .where(sqlChannelName + "=" + channelName)
+                    .set(sqlChannelName + "='" + newChannelName + "'")
+                    .where(sqlChannelName + "='" + channelName + "'")
                     .toString());
-            statement.executeUpdate("RENAME TABLE " + channelName + " TO " + newChannelName);
+            statement.executeUpdate("RENAME TABLE '" + channelName + "' TO '" + newChannelName + "'");
 
             statement.close();
         } catch (SQLException e) {
@@ -270,7 +272,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
         try {
             // Get the names of all the tables
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
             ArrayList<String> tables = new ArrayList<String>();
             while (rs.next()) {
@@ -443,7 +445,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public Collection<WirelessChannel> getAllChannels() {
         Statement statement;
         try {
-            statement = sqLite.getConnection().createStatement();
+            statement = connection.createStatement();
             ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 
             ResultSet rs = null;
@@ -476,7 +478,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     @Override
     public WirelessChannel getWirelessChannel(String r_channelName) {
         try {
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
             ArrayList<String> channels = new ArrayList<String>();
 
@@ -665,7 +667,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             }
             for (File file : channelFolder.listFiles()) {
                 if (file.getName().contains(".yml")) {
-                    return StorageType.SQLITE;
+                    return StorageType.YAML;
                 }
             }
         } catch (NullPointerException ignored) {
@@ -694,12 +696,12 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public void updateChannel(String channelName, WirelessChannel channel) {
         try {
             int locked = (channel.isLocked()) ? 1 : 0;
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
 
             statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channelName))
-                    .set(sqlChannelName + "=" + channel.getName())
-                    .set(sqlChannelLocked + "=" + locked)
-                    .where(sqlChannelId + "=" + channel.getId())
+                    .set(sqlChannelName + "='" + channel.getName() + "'")
+                    .set(sqlChannelLocked + "='" + locked + "'")
+                    .where(sqlChannelId + "='" + channel.getId() + "'")
                     .toString());
 
             // Then update the owners
@@ -745,7 +747,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         try {
             Main.getSignManager().removeSigns(getWirelessChannel(channelName));
             if (!sqlTableExists(channelName)) return;
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE " + getDatabaseFriendlyName(channelName));
             statement.close();
         } catch (SQLException e) {
@@ -759,7 +761,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         Main.getWRLogger().info("Establishing connection to database...");
 
         try {
-            sqLite.openConnection();
+            connection = sqLite.openConnection();
         } catch (SQLException | ClassNotFoundException ex) {
             Main.getWRLogger().severe("Error while starting plugin. Message: " + ex.getLocalizedMessage() + ". Enable debug mode to see the full stack trace.");
 
@@ -786,7 +788,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private boolean sqlTableExists(String name) {
         try {
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = \"table\"");
 
             while (rs.next()) {
@@ -808,14 +810,14 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private void updateSwitch(WirelessChannel channel, WirelessReceiver receiver) {
         try {
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
 
             statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channel.getName()))
-                    .set(sqlSignType + "=" + "receiver_switch_" + ((WirelessReceiverSwitch) receiver).getState())
-                    .where(sqlSignWorld + "=" + receiver.getWorld())
-                    .where(sqlSignX + "=" + receiver.getX())
-                    .where(sqlSignY + "=" + receiver.getY())
-                    .where(sqlSignZ + "=" + receiver.getZ())
+                    .set(sqlSignType + "='" + "receiver_switch_" + ((WirelessReceiverSwitch) receiver).getState() + "'")
+                    .where(sqlSignWorld + "='" + receiver.getWorld() + "'")
+                    .where(sqlSignX + "='" + receiver.getX() + "'")
+                    .where(sqlSignY + "='" + receiver.getY() + "'")
+                    .where(sqlSignZ + "='" + receiver.getZ() + "'")
                     .toString());
 
             statement.close();
@@ -827,15 +829,15 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private boolean removeWirelessPoint(String channelName, Location loc, String world) {
         try {
-            Statement statement = sqLite.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             String sql = new DeleteBuilder(getDatabaseFriendlyName(channelName))
-                    .where(sqlSignX + "=" + loc.getBlockX())
-                    .where(sqlSignY + "=" + loc.getBlockY())
-                    .where(sqlSignZ + "=" + loc.getBlockZ())
-                    .where(sqlSignWorld + "=" + world)
+                    .where(sqlSignX + "='" + loc.getBlockX() + "'")
+                    .where(sqlSignY + "='" + loc.getBlockY() + "'")
+                    .where(sqlSignZ + "='" + loc.getBlockZ() + "'")
+                    .where(sqlSignWorld + "='" + world + "'")
                     .toString();
-            statement.executeUpdate(sql);
             Main.getWRLogger().debug("Statement to delete wireless sign : " + sql);
+            statement.executeUpdate(sql);
             statement.close();
             Main.getGlobalCache().update();
         } catch (SQLException ex) {

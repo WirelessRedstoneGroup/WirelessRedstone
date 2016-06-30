@@ -114,6 +114,8 @@ public class ConfigManager {
                 return StorageType.YAML;
             case "MYSQL":
                 return StorageType.MYSQL;
+            case "SQLITE":
+                return StorageType.SQLITE;
             default:
                 return StorageType.YAML; //TODO: Switch back to SQLITE
         }

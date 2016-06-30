@@ -22,6 +22,7 @@ public class StorageManager {
                 storage = new YamlStorage(channelFolder);
                 break;
             default:
+                storage = new YamlStorage(channelFolder);
                 break;
         }
     }

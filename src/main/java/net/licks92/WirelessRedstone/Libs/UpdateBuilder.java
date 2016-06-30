@@ -41,7 +41,7 @@ public class UpdateBuilder {
     public String toString() {
         StringBuilder sql = new StringBuilder("UPDATE ");
 
-        sql.append(table);
+        sql.append("'").append(table).append("'");
 
         appendList(sql, sets, " SET ", ", ", "");
         appendList(sql, wheres, " WHERE ", " AND ", "");
