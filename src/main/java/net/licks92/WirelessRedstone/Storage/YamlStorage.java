@@ -88,18 +88,18 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
     public boolean removeIWirelessPoint(String channelName, Location loc) {
         WirelessChannel channel = getWirelessChannel(channelName);
-        if(channel == null)
+        if (channel == null)
             return false;
-        for(WirelessReceiver receiver : channel.getReceivers()){
-            if(Utils.sameLocation(receiver.getLocation(), loc))
+        for (WirelessReceiver receiver : channel.getReceivers()) {
+            if (Utils.sameLocation(receiver.getLocation(), loc))
                 return removeWirelessReceiver(channelName, loc);
         }
-        for(WirelessTransmitter transmitter : channel.getTransmitters()){
-            if(Utils.sameLocation(transmitter.getLocation(), loc))
+        for (WirelessTransmitter transmitter : channel.getTransmitters()) {
+            if (Utils.sameLocation(transmitter.getLocation(), loc))
                 return removeWirelessTransmitter(channelName, loc);
         }
-        for(WirelessScreen screen : channel.getScreens()){
-            if(Utils.sameLocation(screen.getLocation(), loc))
+        for (WirelessScreen screen : channel.getScreens()) {
+            if (Utils.sameLocation(screen.getLocation(), loc))
                 return removeWirelessScreen(channelName, loc);
         }
         return false;
@@ -173,7 +173,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
     public boolean wipeData() {
         //Backup the channels folder first.
-        if(channelFolder.listFiles().length > 0)
+        if (channelFolder.listFiles().length > 0)
             backupData("yml");
 
         ArrayList<File> files = new ArrayList<>();
@@ -186,7 +186,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             files.add(file);
         }
 
-        for(File file : files){
+        for (File file : files) {
             file.delete();
         }
         return true;
@@ -252,7 +252,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                 ArrayList<Location> locationCheck = new ArrayList<Location>();
 
                 for (WirelessReceiver receiver : channel.getReceivers()) {
-                    if(locationCheck.contains(receiver.getLocation()))
+                    if (locationCheck.contains(receiver.getLocation()))
                         receivers.put(receiver.getLocation(), channel.getName()
                                 + "~" + receiver.getWorld());
                     else
@@ -264,7 +264,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                 }
                 for (WirelessTransmitter transmitter : channel
                         .getTransmitters()) {
-                    if(locationCheck.contains(transmitter.getLocation()))
+                    if (locationCheck.contains(transmitter.getLocation()))
                         receivers.put(transmitter.getLocation(), channel.getName()
                                 + "~" + transmitter.getWorld());
                     else
@@ -277,7 +277,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                     }
                 }
                 for (WirelessScreen screen : channel.getScreens()) {
-                    if(locationCheck.contains(screen.getLocation()))
+                    if (locationCheck.contains(screen.getLocation()))
                         receivers.put(screen.getLocation(), channel.getName()
                                 + "~" + screen.getWorld());
                     else
@@ -330,39 +330,32 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean convertFromAnotherStorage(StorageType type) { //TODO: Finish this after creating support for SQLite
-//        Main.getWRLogger().info("Backuping the channels/ folder before transfer.");
-//        boolean canConinue = true;
-//        if(type == 2)
-//            canConinue = backupData("db");
-//
-//        if (!canConinue) {
-//            WirelessRedstone.getWRLogger().severe("Backup failed! Data transfer abort...");
-//            return false;
-//        } else {
-//            WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
-//
-//            if(type == 2) {
-//                SQLiteStorage sql = new SQLiteStorage(channelFolderStr, plugin);
-//                sql.init(false);
-//                for (WirelessChannel channel : sql.getAllChannels()) {
-//                    createWirelessChannel(channel);
-//                }
-//                sql.close();
-//                for (File f : channelFolder.listFiles()) {
-//                    if (f.getName().contains(".db")) {
-//                        f.delete();
-//                    }
-//                }
-//            } else if(type == 3) {
-//                MySQLStorage sql = new MySQLStorage(channelFolderStr, plugin);
-//                sql.init(false);
-//                for (WirelessChannel channel : sql.getAllChannels()) {
-//                    //Something fails here! Channels do not transfer the transmitter that's strange!
-//                    createWirelessChannel(channel);
-//                }
-//                sql.close();
-//            }
-//        }
+        Main.getWRLogger().info("Backuping the channels/ folder before transfer.");
+        boolean canConinue = true;
+
+        if (type == StorageType.SQLITE)
+            canConinue = backupData("db");
+
+        if (!canConinue) {
+            Main.getWRLogger().severe("Backup failed! Data transfer abort...");
+            return false;
+        } else {
+            Main.getWRLogger().info("Backup done. Starting data transfer...");
+
+            if (type == StorageType.SQLITE) {
+                SQLiteStorage sql = new SQLiteStorage(channelFolderStr);
+                sql.initiate(false);
+                for (WirelessChannel channel : sql.getAllChannels()) {
+                    createWirelessChannel(channel);
+                }
+                sql.close();
+                for (File f : channelFolder.listFiles()) {
+                    if (f.getName().contains(".db")) {
+                        f.delete();
+                    }
+                }
+            }
+        }
         return true;
     }
 
@@ -433,17 +426,17 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public IWirelessPoint getWirelessRedstoneSign(Location loc) {
-        for(WirelessChannel channel : getAllChannels()){
-            for(WirelessReceiver receiver : channel.getReceivers()){
-                if(Utils.sameLocation(receiver.getLocation(), loc))
+        for (WirelessChannel channel : getAllChannels()) {
+            for (WirelessReceiver receiver : channel.getReceivers()) {
+                if (Utils.sameLocation(receiver.getLocation(), loc))
                     return receiver;
             }
-            for(WirelessTransmitter transmitter : channel.getTransmitters()){
-                if(Utils.sameLocation(transmitter.getLocation(), loc))
+            for (WirelessTransmitter transmitter : channel.getTransmitters()) {
+                if (Utils.sameLocation(transmitter.getLocation(), loc))
                     return transmitter;
             }
-            for(WirelessScreen screen : channel.getScreens()){
-                if(Utils.sameLocation(screen.getLocation(), loc))
+            for (WirelessScreen screen : channel.getScreens()) {
+                if (Utils.sameLocation(screen.getLocation(), loc))
                     return screen;
             }
         }
@@ -452,17 +445,17 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public String getWirelessChannelName(Location loc) {
-        for(WirelessChannel channel : getAllChannels()){
-            for(WirelessReceiver receiver : channel.getReceivers()){
-                if(Utils.sameLocation(receiver.getLocation(), loc))
+        for (WirelessChannel channel : getAllChannels()) {
+            for (WirelessReceiver receiver : channel.getReceivers()) {
+                if (Utils.sameLocation(receiver.getLocation(), loc))
                     return channel.getName();
             }
-            for(WirelessTransmitter transmitter : channel.getTransmitters()){
-                if(Utils.sameLocation(transmitter.getLocation(), loc))
+            for (WirelessTransmitter transmitter : channel.getTransmitters()) {
+                if (Utils.sameLocation(transmitter.getLocation(), loc))
                     return channel.getName();
             }
-            for(WirelessScreen screen : channel.getScreens()){
-                if(Utils.sameLocation(screen.getLocation(), loc))
+            for (WirelessScreen screen : channel.getScreens()) {
+                if (Utils.sameLocation(screen.getLocation(), loc))
                     return channel.getName();
             }
         }
@@ -476,7 +469,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public void updateReceivers() {
-        for(WirelessChannel channel : getAllChannels()){
+        for (WirelessChannel channel : getAllChannels()) {
             updateChannel(channel.getName(), channel);
         }
     }
@@ -484,7 +477,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
     public void checkChannel(String channelName) {
         WirelessChannel channel = getWirelessChannel(channelName);
-        if(channel != null) {
+        if (channel != null) {
             if (isChannelEmpty(channel))
                 removeWirelessChannel(channelName);
         }
@@ -515,12 +508,13 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                     return StorageType.SQLITE;
                 }
             }
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+        }
 
         return null;
     }
 
-    private boolean initiate(boolean allowConvert){
+    public boolean initiate(boolean allowConvert) {
         if (canConvert() != null && allowConvert) {
             Main.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");
             Main.getWRLogger().info("Beginning data transfer to Yaml...");
