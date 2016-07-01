@@ -23,6 +23,7 @@ public class AdminCommandManager implements CommandExecutor {
         cmds = new ArrayList<>();
         cmds.add(new AdminAddOwner());
         cmds.add(new AdminRemoveOwner());
+        cmds.add(new AdminWipeData());
     }
 
     @Override

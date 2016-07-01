@@ -1,5 +1,6 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.Libs;
 
+import net.licks92.WirelessRedstone.Main;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
