@@ -276,9 +276,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             statement.close();
 
             // Erase all the tables
-//            for (String channelName : tables) {
-//                removeWirelessChannel(channelName);
-//            }
+            for (String channelName : tables) {
+                removeWirelessChannel(channelName, false);
+            }
 
             return true;
         } catch (SQLException e) {
@@ -738,8 +738,14 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public void removeWirelessChannel(String channelName) {
+        removeWirelessChannel(channelName, true);
+    }
+
+    private void removeWirelessChannel(String channelName, Boolean removeSigns) {
         try {
-            Main.getSignManager().removeSigns(getWirelessChannel(channelName));
+            if (removeSigns)
+                Main.getSignManager().removeSigns(getWirelessChannel(channelName));
+
             if (!sqlTableExists(channelName)) return;
             Statement statement = sqLite.getConnection().createStatement();
             statement.executeUpdate("DROP TABLE " + getDatabaseFriendlyName(channelName));
