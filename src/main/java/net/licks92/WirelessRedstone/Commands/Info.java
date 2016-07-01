@@ -45,19 +45,23 @@ public class Info extends WirelessCommand {
                 return;
             }
 
-            switch (signType) { //TODO: Replace %%COMMAND
+            Integer index;
+            switch (signType) {
                 case TRANSMITTER:
                     if(channel.getTransmitters().size() == 0){
                         Utils.sendFeedback("No signs found.", sender, true); //TODO: Add this string to the stringloader
                         return;
                     }
 
+                    index = 0;
                     for(WirelessTransmitter transmitter : channel.getTransmitters()){
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getTeleportString(sender.getName())
                                 .replaceAll("%%HOVERTEXT", "Click me to teleport to the sign location!")
                                 .replaceAll("%%NAME", channel.getName()).replaceAll("%%TYPE", "transmitter")
                                 .replaceAll("%%WORLD", transmitter.getWorld()).replaceAll("%%XCOORD", transmitter.getX() + "")
-                                .replaceAll("%%YCOORD", transmitter.getY() + "").replaceAll("%%ZCOORD", transmitter.getZ() + ""));
+                                .replaceAll("%%YCOORD", transmitter.getY() + "").replaceAll("%%ZCOORD", transmitter.getZ() + "")
+                                .replaceAll("%%COMMAND", "/wr tp " + channel.getName() + " transmitter " + index));
+                        index++;
                     }
                     break;
                 case RECEIVER_NORMAL:
@@ -66,12 +70,15 @@ public class Info extends WirelessCommand {
                         return;
                     }
 
+                    index = 0;
                     for(WirelessReceiver receiver : channel.getReceivers()){
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getTeleportString(sender.getName())
                                 .replaceAll("%%HOVERTEXT", "Click me to teleport to the sign location!")
                                 .replaceAll("%%NAME", channel.getName()).replaceAll("%%TYPE", "receiver")
                                 .replaceAll("%%WORLD", receiver.getWorld()).replaceAll("%%XCOORD", receiver.getX() + "")
-                                .replaceAll("%%YCOORD", receiver.getY() + "").replaceAll("%%ZCOORD", receiver.getZ() + ""));
+                                .replaceAll("%%YCOORD", receiver.getY() + "").replaceAll("%%ZCOORD", receiver.getZ() + "")
+                                .replaceAll("%%COMMAND", "/wr tp " + channel.getName() + " receiver " + index));
+                        index++;
                     }
                     break;
                 case SCREEN:
@@ -80,12 +87,15 @@ public class Info extends WirelessCommand {
                         return;
                     }
 
+                    index = 0;
                     for(WirelessScreen screen : channel.getScreens()){
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getTeleportString(sender.getName())
                                 .replaceAll("%%HOVERTEXT", "Click me to teleport to the sign location!")
                                 .replaceAll("%%NAME", channel.getName()).replaceAll("%%TYPE", "screen")
                                 .replaceAll("%%WORLD", screen.getWorld()).replaceAll("%%XCOORD", screen.getX() + "")
-                                .replaceAll("%%YCOORD", screen.getY() + "").replaceAll("%%ZCOORD", screen.getZ() + ""));
+                                .replaceAll("%%YCOORD", screen.getY() + "").replaceAll("%%ZCOORD", screen.getZ() + "")
+                                .replaceAll("%%COMMAND", "/wr tp " + channel.getName() + " screen " + index));
+                        index++;
                     }
                     break;
             }
