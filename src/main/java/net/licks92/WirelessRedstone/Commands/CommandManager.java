@@ -77,7 +77,7 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
 
-            if (!sender.hasPermission("wirelessredstone." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
+            if (!sender.hasPermission("wirelessredstone.commands." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
                 Utils.sendFeedback(Main.getStrings().playerDoesntHavePermission, sender, true, true);
                 return true;
             }

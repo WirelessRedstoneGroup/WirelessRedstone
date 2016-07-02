@@ -1,5 +1,7 @@
-package net.licks92.WirelessRedstone.Commands;
+package net.licks92.WirelessRedstone.Commands.Admin;
 
+import net.licks92.WirelessRedstone.Commands.CommandInfo;
+import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
 import org.apache.commons.lang.StringUtils;
@@ -23,7 +25,9 @@ public class AdminCommandManager implements CommandExecutor {
         cmds = new ArrayList<>();
         cmds.add(new AdminAddOwner());
         cmds.add(new AdminRemoveOwner());
+        cmds.add(new AdminConvert());
         cmds.add(new AdminBackup());
+        cmds.add(new AdminRestore());
         cmds.add(new AdminPurge());
         cmds.add(new AdminWipeData());
     }

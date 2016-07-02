@@ -1,7 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.gravitydevelopment.updater.Updater;
-import net.licks92.WirelessRedstone.Commands.AdminCommandManager;
+import net.licks92.WirelessRedstone.Commands.Admin.AdminCommandManager;
 import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 
 @CommandInfo(aliases = {"help", "h"}, description = "Show all available commands",
-        permission = "commands.help", usage = "[page]", canUseInConsole = true, canUseInCommandBlock = true)
+        permission = "help", usage = "[page]", canUseInConsole = true, canUseInCommandBlock = true)
 public class Help extends WirelessCommand {
 
     @Override

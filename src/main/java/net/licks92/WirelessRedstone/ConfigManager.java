@@ -58,6 +58,10 @@ public class ConfigManager {
         }
     }
 
+    public void setStorageType (StorageType storageType) {
+        config.set(ConfigPaths.SAVEMODE.getValue(), storageType.toString().toUpperCase());
+    }
+
     public boolean getDebugMode(){
         return config.getBoolean(ConfigPaths.DEBUGMODE.getValue(), false);
     }

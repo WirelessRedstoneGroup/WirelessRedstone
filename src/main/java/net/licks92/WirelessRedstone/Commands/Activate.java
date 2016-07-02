@@ -7,7 +7,7 @@ import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Activate a channel (for a certain amount of ms)", usage = "<channel> [time]", aliases = {"activate", "a"},
-        permission = "commands.activate", canUseInConsole = true, canUseInCommandBlock = true)
+        permission = "activate", canUseInConsole = true, canUseInCommandBlock = true)
 public class Activate extends WirelessCommand {
 
     @Override

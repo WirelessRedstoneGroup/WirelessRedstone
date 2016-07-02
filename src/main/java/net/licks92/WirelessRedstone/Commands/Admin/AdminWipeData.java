@@ -1,8 +1,11 @@
-package net.licks92.WirelessRedstone.Commands;
+package net.licks92.WirelessRedstone.Commands.Admin;
 
+import net.licks92.WirelessRedstone.Commands.CommandInfo;
+import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ public class AdminWipeData extends WirelessCommand {
     @Override
     public void onCommand(final CommandSender sender, String[] args) {
         if (!confirmation.contains(sender.getName())) {
-            Utils.sendFeedback(Main.getStrings().DBAboutToBeDeleted, sender, true);
+            Utils.sendFeedback(ChatColor.BOLD + Main.getStrings().DBAboutToBeDeleted, sender, true);
 
             confirmation.add(sender.getName());
 

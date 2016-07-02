@@ -21,14 +21,14 @@ public class PermissionsManager {
     private final String canActivateChannel = "wirelessredstone.commands.activate";
     private final String canSeeVersion = "wirelessredstone.commands.version";
     private final String canTeleportToSign = "wirelessredstone.commands.tp";
-    private final String canRestoreData = "wirelessredstone.commands.restore";
     //Admin
     private final String isWirelessAdmin = "wirelessredstone.admin.isAdmin";
     private final String canWipeData = "wirelessredstone.admin.wipedata";
     private final String canBackupData = "wirelessredstone.admin.backupdata";
     private final String canPurgeData = "wirelessredstone.admin.purgedata";
     private final String canConvertData = "wirelessredstone.admin.convertdata";
-    
+    private final String canRestoreData = "wirelessredstone.admin.restoredata";
+
     public boolean canCreateReceiver(Player player) {
         return player.hasPermission(canCreateReceiver);
     }

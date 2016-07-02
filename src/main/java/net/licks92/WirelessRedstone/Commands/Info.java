@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(description = "Shows WirelessChannel information", usage = "<channel> [signtype]", aliases = {"info", "i"},
-        permission = "commands.info", canUseInConsole = true, canUseInCommandBlock = true)
+        permission = "info", canUseInConsole = true, canUseInCommandBlock = true)
 public class Info extends WirelessCommand {
 
     @Override

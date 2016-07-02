@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(description = "Create a WirelessPoint", usage = "<channel> <signtype> [sign details]", aliases = {"create", "c"},
-        permission = "commands.create", canUseInConsole = false, canUseInCommandBlock = false)
+        permission = "create", canUseInConsole = false, canUseInCommandBlock = false)
 public class Create extends WirelessCommand {
 
     @Override

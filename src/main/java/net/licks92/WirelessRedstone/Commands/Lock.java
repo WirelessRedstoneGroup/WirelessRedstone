@@ -6,7 +6,7 @@ import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Toggle/set locked state for WirelessChannel", usage = "<channel> [state]", aliases = {"lock"},
-        permission = "commands.lock", canUseInConsole = true, canUseInCommandBlock = true)
+        permission = "lock", canUseInConsole = true, canUseInCommandBlock = true)
 public class Lock extends WirelessCommand {
 
     @Override

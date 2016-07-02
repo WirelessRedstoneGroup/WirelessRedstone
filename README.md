@@ -27,6 +27,6 @@ None at the moment
 - [ ] Add converter to convert old files (YAML -> Direction, SQLite -> Whole new system)
 
 #### Storage
-- [x] Yaml (Only the convert feature isn't ready)
-- [ ] SQLite
+- [x] Yaml
+- [X] SQLite
 - [ ] MySQL

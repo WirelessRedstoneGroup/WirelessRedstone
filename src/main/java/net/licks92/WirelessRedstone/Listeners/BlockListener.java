@@ -87,7 +87,7 @@ public class BlockListener implements Listener {
                             }
                             break;
                         case RECEIVER_NORMAL:
-                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                            if (!Main.getPermissionsManager().canCreateReceiver(event.getPlayer())) {
                                 event.setCancelled(true);
                                 event.getBlock().setType(Material.AIR);
                                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
@@ -103,7 +103,7 @@ public class BlockListener implements Listener {
                             }
                             break;
                         case RECEIVER_INVERTER:
-                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                            if (!Main.getPermissionsManager().canCreateReceiver(event.getPlayer())) {
                                 event.setCancelled(true);
                                 event.getBlock().setType(Material.AIR);
                                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
@@ -119,7 +119,7 @@ public class BlockListener implements Listener {
                             }
                             break;
                         case RECEIVER_DELAYER:
-                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                            if (!Main.getPermissionsManager().canCreateReceiver(event.getPlayer())) {
                                 event.setCancelled(true);
                                 event.getBlock().setType(Material.AIR);
                                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
@@ -135,7 +135,7 @@ public class BlockListener implements Listener {
                             }
                             break;
                         case RECEIVER_CLOCK:
-                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                            if (!Main.getPermissionsManager().canCreateReceiver(event.getPlayer())) {
                                 event.setCancelled(true);
                                 event.getBlock().setType(Material.AIR);
                                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
@@ -151,7 +151,7 @@ public class BlockListener implements Listener {
                             }
                             break;
                         case RECEIVER_SWITCH:
-                            if (!Main.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
+                            if (!Main.getPermissionsManager().canCreateReceiver(event.getPlayer())) {
                                 event.setCancelled(true);
                                 event.getBlock().setType(Material.AIR);
                                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));

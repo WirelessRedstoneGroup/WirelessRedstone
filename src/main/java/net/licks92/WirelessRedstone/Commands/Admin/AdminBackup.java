@@ -1,5 +1,7 @@
-package net.licks92.WirelessRedstone.Commands;
+package net.licks92.WirelessRedstone.Commands.Admin;
 
+import net.licks92.WirelessRedstone.Commands.CommandInfo;
+import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
