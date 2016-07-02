@@ -23,6 +23,8 @@ public class AdminCommandManager implements CommandExecutor {
         cmds = new ArrayList<>();
         cmds.add(new AdminAddOwner());
         cmds.add(new AdminRemoveOwner());
+        cmds.add(new AdminBackup());
+        cmds.add(new AdminPurge());
         cmds.add(new AdminWipeData());
     }
 
