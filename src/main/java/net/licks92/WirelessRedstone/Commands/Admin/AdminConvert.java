@@ -11,7 +11,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 @CommandInfo(description = "Convert all channels to another database", usage = "<storage type>", aliases = {"convert"},
         permission = "convertdata", canUseInConsole = true, canUseInCommandBlock = false)
@@ -51,16 +50,7 @@ public class AdminConvert extends WirelessCommand {
                     return;
                 }
 
-                ArrayList<Integer> remove = new ArrayList<Integer>();
-                for (Map.Entry<Integer, String> task : Main.getSignManager().clockTasks.entrySet()) {
-                    Bukkit.getScheduler().cancelTask(task.getKey());
-                    remove.add(task.getKey());
-                    Main.getWRLogger().debug("Stopped clock task " + task);
-                }
-                for (Integer i : remove) {
-                    Main.getSignManager().clockTasks.remove(i);
-                }
-                remove.clear();
+                Main.getSignManager().stopAllClocks();
 
                 ConfigManager.getConfig().setStorageType(StorageType.YAML);
                 Main.getStorage().backupData("yml");
@@ -74,16 +64,7 @@ public class AdminConvert extends WirelessCommand {
                     return;
                 }
 
-                ArrayList<Integer> remove = new ArrayList<Integer>();
-                for (Map.Entry<Integer, String> task : Main.getSignManager().clockTasks.entrySet()) {
-                    Bukkit.getScheduler().cancelTask(task.getKey());
-                    remove.add(task.getKey());
-                    Main.getWRLogger().debug("Stopped clock task " + task);
-                }
-                for (Integer i : remove) {
-                    Main.getSignManager().clockTasks.remove(i);
-                }
-                remove.clear();
+                Main.getSignManager().stopAllClocks();
 
                 ConfigManager.getConfig().setStorageType(StorageType.SQLITE);
                 Main.getStorage().backupData("db");

@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class SQLiteStorage implements IWirelessStorageConfiguration {
@@ -671,6 +672,24 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     }
 
     @Override
+    public StorageType restoreData() {
+        try {
+            if (getLastBackup() == null) {
+                if (ConfigManager.getConfig().getDebugMode())
+                    Main.getWRLogger().debug("Couldn't get last backup, aborting restore");
+                return null;
+            }
+
+            File mainFolder = new File(channelFolder.getCanonicalPath().split(channelFolder.getName())[0]);
+
+            return unZip(mainFolder + File.separator + getLastBackup(), channelFolder.getAbsolutePath());
+        } catch (Exception e) {
+            if (ConfigManager.getConfig().getDebugMode()) e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public String getWirelessChannelName(Location loc) {
         for (WirelessChannel channel : getAllChannels()) {
             for (WirelessReceiver receiver : channel.getReceivers()) {
@@ -911,5 +930,80 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             }
         }
         return normalName;
+    }
+
+    private String getLastBackup() {
+        ArrayList<String> files = new ArrayList<String>();
+        try {
+            File folder = new File(channelFolder.getCanonicalPath().split(channelFolder.getName())[0]);
+            for (final File fileEntry : folder.listFiles()) {
+                if (!fileEntry.isDirectory() && fileEntry.getName().startsWith("WRBackup")) {
+                    files.add(fileEntry.getName());
+                }
+            }
+        } catch (Exception e) {
+            if (ConfigManager.getConfig().getDebugMode()) e.printStackTrace();
+            return null;
+        }
+
+        return (!files.isEmpty()) ? files.get(files.size() - 1) : null;
+    }
+
+    private StorageType unZip(String zipFile, String outputFolder) {
+        byte[] buffer = new byte[1024];
+        try {
+            //create output directory is not exists
+            File folder = new File(outputFolder);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+            ZipEntry ze = zis.getNextEntry();
+
+            StorageType returnValue = null;
+            while (ze != null) {
+                String fileName = ze.getName();
+                File newFile = new File(outputFolder + File.separator + fileName);
+
+                if (ConfigManager.getConfig().getDebugMode())
+                    Main.getWRLogger().debug("File unziped: " + newFile.getAbsoluteFile());
+
+                if (fileName.endsWith(".db")) {
+                    returnValue = StorageType.SQLITE;
+                    if (ConfigManager.getConfig().getDebugMode())
+                        Main.getWRLogger().debug("Found SQLite file! Changing storage type to SQLite after restore.");
+                } else if (fileName.endsWith(".yml")) {
+                    returnValue = StorageType.YAML;
+                    if (ConfigManager.getConfig().getDebugMode())
+                        Main.getWRLogger().debug("Found yml file! Changing storage type to yml after restore.");
+                }
+
+                //create all non exists folders
+                //else you will hit FileNotFoundException for compressed folder
+                new File(newFile.getParent()).mkdirs();
+
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+            zis.closeEntry();
+            zis.close();
+
+            if (ConfigManager.getConfig().getDebugMode())
+                Main.getWRLogger().debug("Unpacking zip done!");
+
+            return returnValue;
+        } catch (IOException ex) {
+            if (ConfigManager.getConfig().getDebugMode())
+                ex.printStackTrace();
+        }
+        return null;
     }
 }

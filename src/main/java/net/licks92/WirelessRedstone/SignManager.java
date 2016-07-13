@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Signs.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SignManager {
 
@@ -461,5 +463,20 @@ public class SignManager {
                     || Main.getStorage().getWirelessChannel(channelname).getOwners().contains(player.getName());
         }
         return true;
+    }
+
+    // Utils
+
+    public void stopAllClocks() {
+        ArrayList<Integer> remove = new ArrayList<Integer>();
+        for (Map.Entry<Integer, String> task : Main.getSignManager().clockTasks.entrySet()) {
+            Bukkit.getScheduler().cancelTask(task.getKey());
+            remove.add(task.getKey());
+            Main.getWRLogger().debug("Stopped clock task " + task);
+        }
+        for (Integer i : remove) {
+            Main.getSignManager().clockTasks.remove(i);
+        }
+        remove.clear();
     }
 }

@@ -31,6 +31,7 @@ public interface IWirelessStorageConfiguration {
     IWirelessPoint getWirelessRedstoneSign(Location loc);
 
     StorageType canConvert();
+    StorageType restoreData();
 
     String getWirelessChannelName(Location loc);
 
