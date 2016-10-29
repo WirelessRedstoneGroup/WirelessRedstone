@@ -18,7 +18,7 @@ None at the moment
 - [x] WorldEdit
 - [x] Listeners
 - [x] Commands
-- [ ] Admin commands
+- [x] Admin commands
 - [x] Metrics
 - [x] Permissions
 - [x] Updater
