@@ -42,9 +42,9 @@ public class AdminConvert extends WirelessCommand {
 
         confirmation.remove(sender.getName());
 
-        switch (args[0]) {
-            case "yml":
-            case "yaml": {
+        switch (args[0].toUpperCase()) {
+            case "YML":
+            case "YAML": {
                 if (ConfigManager.getConfig().getStorageType() == StorageType.YAML) {
                     Utils.sendFeedback(Main.getStrings().convertSameType, sender, true);
                     return;
@@ -58,6 +58,7 @@ public class AdminConvert extends WirelessCommand {
                 break;
             }
 
+            case "SQL":
             case "SQLITE": {
                 if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE) {
                     Utils.sendFeedback(Main.getStrings().convertSameType, sender, true);

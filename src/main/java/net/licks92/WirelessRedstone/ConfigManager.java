@@ -60,6 +60,7 @@ public class ConfigManager {
 
     public void setStorageType (StorageType storageType) {
         config.set(ConfigPaths.SAVEMODE.getValue(), storageType.toString().toUpperCase());
+        save();
     }
 
     public boolean getDebugMode(){
