@@ -95,12 +95,6 @@
             <version>R7</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>net.gravitydevelopment.updater</groupId>
-            <artifactId>updater</artifactId>
-            <version>2.4</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <repositories>
@@ -119,10 +113,6 @@
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
-        </repository>
-        <repository>
-            <id>gravity-repo-github</id>
-            <url>https://bart-0110.github.io/GravityUpdaterRepoMirror/</url>
         </repository>
     </repositories>
 </project>
