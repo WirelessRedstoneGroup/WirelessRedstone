@@ -42,14 +42,11 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
                         "Couldn't create the configuration file!");
             }
             createFromTemplate(plugin.getResource("config.yml"));
+            getConfig().options().copyHeader(true);
+            getConfig().options().copyDefaults(true);
+            plugin.saveConfig();
+            reloadConfig();
         }
-
-        // Loading and saving
-        /*
-		 * getConfig().options().copyHeader(true);
-		 * getConfig().options().copyDefaults(true); plugin.saveConfig();
-		 * reloadConfig();
-		 */
     }
 
     private void createFromTemplate(final InputStream input) {
@@ -133,7 +130,9 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
     }
 
     @Override
-    public void updateReceivers() { storage.updateReceivers(); }
+    public void updateReceivers() {
+        storage.updateReceivers();
+    }
 
     public boolean backupData() {
         String extension = null;
@@ -141,7 +140,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
             extension = "db";
         else if (getSaveOption().equalsIgnoreCase("YML") || getSaveOption().equalsIgnoreCase("YAML"))
             extension = "yml";
-        if(extension == null)
+        if (extension == null)
             return true;
         return storage.backupData(extension);
     }
@@ -241,7 +240,7 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
                     initStorage();
                 }
             }, 1L);
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
             return false;
         }
         return true;

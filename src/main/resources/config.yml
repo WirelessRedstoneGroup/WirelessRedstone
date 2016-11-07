@@ -14,7 +14,7 @@
 # InteractTransmitterTime  The time in milliseconds you activate a transmitter if you interact with it
 # CacheRefreshFrequency    Cache refresh time in seconds, it's recommended to leave this value as it is
 # gateLogic                The logic of the transmitters (more info can be found on the Minecraft redstone circuit wiki), available options: OR, IGNORE (no logic/old logic from version <2.0)
-# saveOption               Save the channels in YML, SQLITE or MYSQL format
+# saveOption               Save the channels in YML or SQLITE. MYSQL isn't supported yet
 # MYSQL..                  Options for MySQL, you can ignore it if you don't use it
 
 ConfigVersion: 1
@@ -33,7 +33,7 @@ gateLogic: OR
 saveOption: SQLITE
 MySQL:
   host: localhost
-  port: '3306'
+  port: 3306
   database: WirelessRedstone
   username: root
   password: root
