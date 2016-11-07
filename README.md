@@ -8,7 +8,7 @@ Welcome on the official page of the Wireless Redstone plugin
 
 None at the moment
 
-## Rebuild development
+## Development
 
 - [ ] Debug everything
 - [x] Configuration
@@ -24,7 +24,7 @@ None at the moment
 - [x] Updater
 - [ ] Add remaining strings to the stringloader
 - [ ] Documentation
-- [ ] Add converter to convert old files (YAML -> Direction, SQLite -> Whole new system)
+- [ ] Add converter to convert old storage files to the new system (YAML -> Direction, SQLite -> Rebuild tables)
 
 #### Storage
 - [x] Yaml
