@@ -24,10 +24,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.3</version>
                 <configuration>
-                    <finalName>${project.name}</finalName>
-
                     <artifactSet>
                         <includes>
                             <include>org.mcstats.*:*</include>
@@ -61,8 +59,8 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <sourceFile>${basedir}/target/WirelessRedstone.jar</sourceFile>
-                            <destinationFile>${basedir}/target/WirelessRedstone v${version}.jar</destinationFile>
+                            <sourceFile>${basedir}/target/WirelessRedstone-${version}.jar</sourceFile>
+                            <destinationFile>${basedir}/target/WirelessRedstone.jar</destinationFile>
                         </configuration>
                     </execution>
                 </executions>
