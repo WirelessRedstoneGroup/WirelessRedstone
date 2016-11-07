@@ -59,7 +59,7 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <sourceFile>${basedir}/target/WirelessRedstone-${version}.jar</sourceFile>
+                            <sourceFile>${basedir}/target/WirelessRedstone-${project.version}.jar</sourceFile>
                             <destinationFile>${basedir}/target/WirelessRedstone.jar</destinationFile>
                         </configuration>
                     </execution>
