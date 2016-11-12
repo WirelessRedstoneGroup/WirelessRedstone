@@ -23,7 +23,6 @@ import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.mcstats.Metrics;
 
 /**
  * This class is the main class of the plugin. It controls the Configuration,
@@ -160,209 +159,211 @@ public class WirelessRedstone extends JavaPlugin {
         LoadChunks();
 
         // Metrics
-        try {
-            metrics = new Metrics(this);
+        if (config.getMetrics()) {
+            try {
+                metrics = new Metrics(this);
 
-            // Channel metrics
-            final Metrics.Graph channelGraph = metrics.createGraph("Channel metrics");
-            channelGraph.addPlotter(new Metrics.Plotter("Total channels") {
-                @Override
-                public int getValue() {
-                    return config.getAllChannels().size();
-                }
-            });
-            channelGraph.addPlotter(new Metrics.Plotter("Total signs") {
-                @Override
-                public int getValue() {
-                    return cache.getAllSigns().size();
-                }
-            });
-
-            // Sign Metrics
-            final Metrics.Graph signGraph = metrics.createGraph("Sign metrics");
-            signGraph.addPlotter(new Metrics.Plotter("Transmitters") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for (WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getTransmitters().size();
+                // Channel metrics
+                final Metrics.Graph channelGraph = metrics.createGraph("Channel metrics");
+                channelGraph.addPlotter(new Metrics.Plotter("Total channels") {
+                    @Override
+                    public int getValue() {
+                        return config.getAllChannels().size();
                     }
-                    return total;
-                }
-            });
-            signGraph.addPlotter(new Metrics.Plotter("Receivers") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for (WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getReceivers().size();
+                });
+                channelGraph.addPlotter(new Metrics.Plotter("Total signs") {
+                    @Override
+                    public int getValue() {
+                        return cache.getAllSigns().size();
                     }
-                    return total;
-                }
-            });
-            signGraph.addPlotter(new Metrics.Plotter("Screens") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for (WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getScreens().size();
+                });
+
+                // Sign Metrics
+                final Metrics.Graph signGraph = metrics.createGraph("Sign metrics");
+                signGraph.addPlotter(new Metrics.Plotter("Transmitters") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getTransmitters().size();
+                        }
+                        return total;
                     }
-                    return total;
-                }
-            });
-
-            final Metrics.Graph storageGraph = metrics.createGraph("Storage used");
-            storageGraph.addPlotter(new Metrics.Plotter("SQLite") {
-                @Override
-                public int getValue() {
-                    if (config.getSaveOption().equalsIgnoreCase("SQLITE")) {
-                        return 1;
-                    } else {
-                        return 0;
+                });
+                signGraph.addPlotter(new Metrics.Plotter("Receivers") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getReceivers().size();
+                        }
+                        return total;
                     }
-                }
-            });
-
-            storageGraph.addPlotter(new Metrics.Plotter("MySQL") {
-                @Override
-                public int getValue() {
-                    if (config.getSaveOption().equalsIgnoreCase("MYSQL")) {
-                        return 1;
-                    } else {
-                        return 0;
+                });
+                signGraph.addPlotter(new Metrics.Plotter("Screens") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getScreens().size();
+                        }
+                        return total;
                     }
-                }
-            });
+                });
 
-            storageGraph.addPlotter(new Metrics.Plotter("Yaml") {
-                @Override
-                public int getValue() {
-                    if (config.getSaveOption().equalsIgnoreCase("YAML") || config.getSaveOption().equalsIgnoreCase("YML")) {
-                        return 1;
-                    } else {
-                        return 0;
+                final Metrics.Graph storageGraph = metrics.createGraph("Storage used");
+                storageGraph.addPlotter(new Metrics.Plotter("SQLite") {
+                    @Override
+                    public int getValue() {
+                        if (config.getSaveOption().equalsIgnoreCase("SQLITE")) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     }
-                }
-            });
+                });
 
-            final Metrics.Graph receiverTypesProportion = metrics
-                    .createGraph("Different types of receivers");
-
-            receiverTypesProportion.addPlotter(new Metrics.Plotter("Default") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for(WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getReceiversOfType(WirelessReceiver.Type.Default).size();
+                storageGraph.addPlotter(new Metrics.Plotter("MySQL") {
+                    @Override
+                    public int getValue() {
+                        if (config.getSaveOption().equalsIgnoreCase("MYSQL")) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     }
-                    return total;
-                }
-            });
-            receiverTypesProportion.addPlotter(new Metrics.Plotter("Inverters") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for(WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getReceiversOfType(WirelessReceiver.Type.Inverter).size();
+                });
+
+                storageGraph.addPlotter(new Metrics.Plotter("Yaml") {
+                    @Override
+                    public int getValue() {
+                        if (config.getSaveOption().equalsIgnoreCase("YAML") || config.getSaveOption().equalsIgnoreCase("YML")) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     }
-                    return total;
-                }
-            });
-            receiverTypesProportion.addPlotter(new Metrics.Plotter("Delayers") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for(WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getReceiversOfType(WirelessReceiver.Type.Delayer).size();
+                });
+
+                final Metrics.Graph receiverTypesProportion = metrics
+                        .createGraph("Different types of receivers");
+
+                receiverTypesProportion.addPlotter(new Metrics.Plotter("Default") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getReceiversOfType(WirelessReceiver.Type.Default).size();
+                        }
+                        return total;
                     }
-                    return total;
-                }
-            });
-            receiverTypesProportion.addPlotter(new Metrics.Plotter("Clocks") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for(WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getReceiversOfType(WirelessReceiver.Type.Clock).size();
+                });
+                receiverTypesProportion.addPlotter(new Metrics.Plotter("Inverters") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getReceiversOfType(WirelessReceiver.Type.Inverter).size();
+                        }
+                        return total;
                     }
-                    return total;
-                }
-            });
-            receiverTypesProportion.addPlotter(new Metrics.Plotter("Switchers") {
-                @Override
-                public int getValue() {
-                    int total = 0;
-                    for(WirelessChannel channel : config.getAllChannels()) {
-                        total += channel.getReceiversOfType(WirelessReceiver.Type.Switch).size();
+                });
+                receiverTypesProportion.addPlotter(new Metrics.Plotter("Delayers") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getReceiversOfType(WirelessReceiver.Type.Delayer).size();
+                        }
+                        return total;
                     }
-                    return total;
-                }
-            });
+                });
+                receiverTypesProportion.addPlotter(new Metrics.Plotter("Clocks") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getReceiversOfType(WirelessReceiver.Type.Clock).size();
+                        }
+                        return total;
+                    }
+                });
+                receiverTypesProportion.addPlotter(new Metrics.Plotter("Switchers") {
+                    @Override
+                    public int getValue() {
+                        int total = 0;
+                        for (WirelessChannel channel : config.getAllChannels()) {
+                            total += channel.getReceiversOfType(WirelessReceiver.Type.Switch).size();
+                        }
+                        return total;
+                    }
+                });
 
-            final Metrics.Graph permissionsGraph = metrics
-                    .createGraph("Plugin used for Permissions");
-            permissionsGraph.addPlotter(new Metrics.Plotter("Vault") {
-                @Override
-                public int getValue() {
-                    if (permissions.permPlugin.equalsIgnoreCase("Vault"))
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
+                final Metrics.Graph permissionsGraph = metrics
+                        .createGraph("Plugin used for Permissions");
+                permissionsGraph.addPlotter(new Metrics.Plotter("Vault") {
+                    @Override
+                    public int getValue() {
+                        if (permissions.permPlugin.equalsIgnoreCase("Vault"))
+                            return 1;
+                        else
+                            return 0;
+                    }
+                });
 
-            permissionsGraph.addPlotter(new Metrics.Plotter("PermissionsEx") {
-                @Override
-                public int getValue() {
-                    if (permissions.permPlugin.equalsIgnoreCase("PermissionsEx"))
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
+                permissionsGraph.addPlotter(new Metrics.Plotter("PermissionsEx") {
+                    @Override
+                    public int getValue() {
+                        if (permissions.permPlugin.equalsIgnoreCase("PermissionsEx"))
+                            return 1;
+                        else
+                            return 0;
+                    }
+                });
 
-            permissionsGraph.addPlotter(new Metrics.Plotter("PermissionsBukkit") {
-                @Override
-                public int getValue() {
-                    if (permissions.permPlugin.equalsIgnoreCase("PermissionsBukkit"))
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
+                permissionsGraph.addPlotter(new Metrics.Plotter("PermissionsBukkit") {
+                    @Override
+                    public int getValue() {
+                        if (permissions.permPlugin.equalsIgnoreCase("PermissionsBukkit"))
+                            return 1;
+                        else
+                            return 0;
+                    }
+                });
 
-            permissionsGraph.addPlotter(new Metrics.Plotter("bPermissions") {
-                @Override
-                public int getValue() {
-                    if (permissions.permPlugin.equalsIgnoreCase("bPermissions"))
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
+                permissionsGraph.addPlotter(new Metrics.Plotter("bPermissions") {
+                    @Override
+                    public int getValue() {
+                        if (permissions.permPlugin.equalsIgnoreCase("bPermissions"))
+                            return 1;
+                        else
+                            return 0;
+                    }
+                });
 
-            permissionsGraph.addPlotter(new Metrics.Plotter("GroupManager") {
-                @Override
-                public int getValue() {
-                    if (permissions.permPlugin.equalsIgnoreCase("GroupManager"))
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
-            metrics.start();
+                permissionsGraph.addPlotter(new Metrics.Plotter("GroupManager") {
+                    @Override
+                    public int getValue() {
+                        if (permissions.permPlugin.equalsIgnoreCase("GroupManager"))
+                            return 1;
+                        else
+                            return 0;
+                    }
+                });
+                metrics.start();
 
-            permissionsGraph.addPlotter(new Metrics.Plotter("Bukkit OP Permissions") {
-                @Override
-                public int getValue() {
-                    if (permissions.permPlugin.equalsIgnoreCase("Bukkit OP Permissions"))
-                        return 1;
-                    else
-                        return 0;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+                permissionsGraph.addPlotter(new Metrics.Plotter("Bukkit OP Permissions") {
+                    @Override
+                    public int getValue() {
+                        if (permissions.permPlugin.equalsIgnoreCase("Bukkit OP Permissions"))
+                            return 1;
+                        else
+                            return 0;
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         // Loading finished !

@@ -443,4 +443,8 @@ public class WirelessConfiguration implements IWirelessStorageConfiguration {
     public boolean getSilentMode() {
         return getConfig().getBoolean("SilentMode", false);
     }
+
+    public boolean getMetrics() {
+        return getConfig().getBoolean("Metrics", true);
+    }
 }
