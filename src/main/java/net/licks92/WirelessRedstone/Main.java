@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone;
 
-import net.gravitydevelopment.updater.Updater;
 import net.licks92.WirelessRedstone.Commands.Admin.AdminCommandManager;
 import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
@@ -15,7 +14,6 @@ import net.licks92.WirelessRedstone.String.StringLoader;
 import net.licks92.WirelessRedstone.String.StringManager;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -165,26 +163,8 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new PlayerListener(), this);
 
-        WRLogger.info("Loading updater...");
-        updater = new Updater(this, 37345, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
-
-        if (ConfigManager.getConfig().getUpdateCheck()) {
-            updateTask = Bukkit.getServer().getScheduler()
-                    .runTaskTimerAsynchronously(this, new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
-                                    getWRLogger().info(Main.getStrings().newUpdateAvailable);
-                                }
-                            } catch (Exception ex) {
-                                WRLogger.warning("Failed to check for updates. Turn on debug mode to see the stack trace.");
-                                if (ConfigManager.getConfig().getDebugMode())
-                                    ex.printStackTrace();
-                            }
-                        }
-                    }, 0, 20 * 60 * 30);
-        }
+        if (config.getUpdateCheck())
+            updater = new Updater();
 
         WRLogger.info("Loading commands...");
         getCommand("wirelessredstone").setExecutor(commandManager);

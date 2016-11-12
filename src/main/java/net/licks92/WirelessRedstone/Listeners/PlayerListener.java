@@ -1,35 +1,33 @@
 package net.licks92.WirelessRedstone.Listeners;
 
-import net.gravitydevelopment.updater.Updater;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.*;
 import net.licks92.WirelessRedstone.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener implements Listener {
 
-    @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent event) {
-        if (Main.getPermissionsManager().isWirelessAdmin(event.getPlayer())) {
-            if (Main.getUpdater().getResult() == Updater.UpdateResult.UPDATE_AVAILABLE
-                    && ConfigManager.getConfig().getUpdateCheck()) {
-                Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        Utils.sendFeedback(Main.getStrings().newUpdateAvailable, event.getPlayer(), false);
-                    }
-                }, 2L); //This runnable makes sure this is the last message if the player joins
-            }
-        }
-    }
+    //TODO: Enable update notification
+//    @EventHandler
+//    public void onPlayerJoin(final PlayerJoinEvent event) {
+//        if (Main.getPermissionsManager().isWirelessAdmin(event.getPlayer())) {
+//            if (Main.getUpdater().getResult() == Updater.UpdateResult.UPDATE_AVAILABLE
+//                    && ConfigManager.getConfig().getUpdateCheck()) {
+//                Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Utils.sendFeedback(Main.getStrings().newUpdateAvailable, event.getPlayer(), false);
+//                    }
+//                }, 2L); //This runnable makes sure this is the last message if the player joins
+//            }
+//        }
+//    }
 
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEvent event) {
