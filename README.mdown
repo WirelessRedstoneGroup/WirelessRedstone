@@ -1,5 +1,5 @@
 ### Status
-[![Build Status](https://travis-ci.org/Bart-0110/WirelessRedstone.svg?branch=master)](https://travis-ci.org/Bart-0110/WirelessRedstone)
+[![Build Status](https://travis-ci.org/WirelessRedstoneGroup/WirelessRedstone.svg?branch=master)](https://travis-ci.org/WirelessRedstoneGroup/WirelessRedstone)
 
 ## WirelessRedstone
 Welcome on the official page of the Wireless Redstone plugin
