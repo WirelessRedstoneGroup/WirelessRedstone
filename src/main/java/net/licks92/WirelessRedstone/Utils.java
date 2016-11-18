@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-//    Currently blocking all bad characters from EVERY config
+    //Currently blocking all bad characters from EVERY config
     public static char[] badCharacters = {'|', '-', '*', '/', '<', '>', ' ', '=', '~',
             '!', '^', '(', ')', ':', '`', '.'};
 
@@ -213,7 +213,9 @@ public class Utils {
                 || tempBlock.getType() == Material.WOOD_STEP
                 || tempBlock.getType() == Material.STEP
                 || tempBlock.getType() == Material.TNT
-                || tempBlock.getType() == Material.SEA_LANTERN);
+                || tempBlock.getType() == Material.SEA_LANTERN
+                || (tempBlock.getTypeId() >= 219 && tempBlock.getTypeId() <= 234) //We could use Material but we need to specify every color
+        );
     }
 
     public static boolean isValidLocation(Block block) {
@@ -232,7 +234,9 @@ public class Utils {
                 || tempBlock.getType() == Material.REDSTONE_LAMP_OFF
                 || tempBlock.getType() == Material.LEAVES
                 || tempBlock.getType() == Material.TNT
-                || tempBlock.getType() == Material.SEA_LANTERN);
+                || tempBlock.getType() == Material.SEA_LANTERN
+                || (tempBlock.getTypeId() >= 219 && tempBlock.getTypeId() <= 234) //We could use Material but we need to specify every color
+        );
     }
 
     public static void signWarning(Block block, Integer code) {
@@ -318,5 +322,9 @@ public class Utils {
 
     public static String getTeleportString(String playerName) {
         return "tellraw " + playerName + " " + "[\"\",{\"text\":\"[\",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"\\\u27A4\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"] \",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
+    }
+
+    public static boolean isSpigot() {
+        return Bukkit.getVersion().contains("Spigot");
     }
 }

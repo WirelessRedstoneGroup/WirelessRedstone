@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class Updater {
-    private static String updateUrl = "https://bart-0110.github.io/WirelessRedstoneUpdate/update.json";
+    private static String updateUrl = "https://wirelessredstonegroup.github.io/WirelessRedstoneUpdate/update.json";
     private static int maxChangelogLines = 2;
 
     private static boolean debug;
@@ -72,13 +72,17 @@ public class Updater {
             reader.setLenient(true);
             JsonObject root = new JsonParser().parse(reader).getAsJsonObject();
 
-            String latestVerion = root.getAsJsonObject("latest").get("version").getAsString();
+            String latestVerion;
+            if (Utils.isSpigot())
+                latestVerion = root.getAsJsonObject("latest").get("spigotversion").getAsString();
+            else
+                latestVerion = root.getAsJsonObject("latest").get("bukkitversion").getAsString();
 
             JsonObject version = root.getAsJsonObject("versions").getAsJsonObject(latestVerion);
-            String downloadUrl = version.get("downloadUrl").getAsString();
+            String downloadUrl = version.getAsJsonObject(Utils.isSpigot() ? "spigot" : "bukkit").get("downloadUrl").getAsString();
             String changelog = version.get("changelog").getAsString();
 
-            Main.getWRLogger().debug("Comparing " + Main.getInstance().getDescription().getVersion() + " vs " + latestVerion);
+            Main.getWRLogger().debug("Comparing " + Main.getInstance().getDescription().getVersion() + " vs " + latestVerion + (Utils.isSpigot() ? "-spigot" : "-bukkit"));
 
             Semver sem = new Semver(latestVerion);
             if (sem.isGreaterThan(Main.getInstance().getDescription().getVersion())) {
