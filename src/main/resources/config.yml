@@ -18,7 +18,7 @@
 # saveOption               Save the channels in YML or SQLITE. MYSQL isn't supported yet.
 # MYSQL..                  Options for MySQL, you can ignore it if you don't use it.
 
-ConfigVersion: 1
+ConfigVersion: 2
 Language: en
 ColourfulLogging: true
 CheckForUpdates: true

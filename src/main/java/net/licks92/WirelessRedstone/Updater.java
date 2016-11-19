@@ -99,30 +99,39 @@ public class Updater {
     }
 
     private static void showUpdate(String latestVersion, String downloadUrl, String changelog) {
-        String consoleLog = "Version " + latestVersion + " is availible! Download it here: " + downloadUrl + "\nChangelog: ";
+        Main.getWRLogger().info("Version " + latestVersion + " is availible! Download it here: " + downloadUrl);
+        Main.getWRLogger().info("Changelog: ");
 
         ArrayList<Player> adminPlayers = new ArrayList<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Main.getPermissionsManager().isWirelessAdmin(player)) {
                 adminPlayers.add(player);
-                Utils.sendFeedback("Version " + latestVersion + " is availible! Download it here: " + downloadUrl, player, false);
+                Utils.sendFeedback("Version " + latestVersion + " is availible! Download it here: ", player, false);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getDownloadUrl(player.getName())
+                        .replaceAll("%%TEXT", (Utils.isSpigot() ? "Spigot" : "Bukkit") + " download page")
+                        .replaceAll("%%HOVERTEXT", "Click to go to website")
+                        .replaceAll("%%LINK", downloadUrl));
                 Utils.sendFeedback("Changelog: ", player, false);
             }
         }
 
         String[] splitedChangelog = changelog.split("#");
+        int currentLine = 0;
         for (String line : splitedChangelog) {
             if (line.equalsIgnoreCase(""))
                 continue;
 
-            consoleLog += "\n - " + line.replaceAll("#", "");
+            if (currentLine > maxChangelogLines)
+                continue;
+
+            Main.getWRLogger().info(" - " + line.replaceAll("#", ""));
 
             for (Player player : adminPlayers) {
                 player.sendMessage(" - " + line);
             }
+            currentLine++;
         }
 
-        Main.getWRLogger().info(consoleLog);
     }
 
     private static void showError(Exception e, String text) {

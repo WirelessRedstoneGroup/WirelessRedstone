@@ -320,11 +320,15 @@ public class Utils {
         }
     }
 
+    public static boolean isSpigot() {
+        return Bukkit.getVersion().contains("Spigot");
+    }
+
     public static String getTeleportString(String playerName) {
         return "tellraw " + playerName + " " + "[\"\",{\"text\":\"[\",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"\\\u27A4\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"] \",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
     }
 
-    public static boolean isSpigot() {
-        return Bukkit.getVersion().contains("Spigot");
+    public static String getDownloadUrl(String playerName) {
+        return  "tellraw " + playerName + " " + "[\"\",{\"text\":\"%%TEXT\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"%%LINK\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
     }
 }
