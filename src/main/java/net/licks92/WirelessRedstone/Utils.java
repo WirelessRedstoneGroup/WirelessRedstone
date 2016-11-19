@@ -43,11 +43,21 @@ public class Utils {
         sendFeedback(message, sender, error, false);
     }
 
+    public static void sendCommandFeedback(String message, CommandSender sender, boolean error) {
+        sendCommandFeedback(message, sender, error, false);
+    }
+
     public static void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
         if (ConfigManager.getConfig().getSilentMode() && checkSilent)
             return;
         sender.sendMessage(ChatColor.GRAY + "[" + ChatColor.RED + "WirelessRedstone" + ChatColor.GRAY + "] "
                 + (error ? ChatColor.RED : ChatColor.GREEN) + message);
+    }
+
+    public static void sendCommandFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
+        if (ConfigManager.getConfig().getSilentMode() && checkSilent)
+            return;
+        sender.sendMessage((error ? ChatColor.RED : ChatColor.GREEN) + message);
     }
 
     public static boolean containsBadChar(String string) {
@@ -318,6 +328,23 @@ public class Utils {
             default:
                 return null;
         }
+    }
+
+    public static String getDatabaseFriendlyName(String normalName) {
+        try {
+            Integer.parseInt(normalName);
+            normalName = "num_" + normalName;
+        } catch (NumberFormatException ignored) {
+        }
+
+        for (char character : badCharacters) {
+            if (normalName.contains(String.valueOf(character))) {
+                String ascii = "" + (int) character;
+                String code = "_char_" + ascii + "_";
+                normalName = normalName.replace(String.valueOf(character), code);
+            }
+        }
+        return normalName;
     }
 
     public static boolean isSpigot() {

@@ -1,5 +1,7 @@
 package net.licks92.WirelessRedstone.Libs;
 
+import net.licks92.WirelessRedstone.Main;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,8 @@ public class UpdateBuilder {
 
         appendList(sql, sets, " SET ", ", ", "");
         appendList(sql, wheres, " WHERE ", " AND ", "");
+
+        Main.getWRLogger().debug("UpdateBuilder: " + sql.toString());
 
         return sql.toString();
     }

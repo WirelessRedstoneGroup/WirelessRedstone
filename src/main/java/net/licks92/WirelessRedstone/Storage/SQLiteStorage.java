@@ -28,18 +28,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     private String channelFolderStr;
     private SQLite sqLite;
 
-    private String sqlIsWallSign = "isWallSign";
-    private String sqlDirection = "direction";
-    private String sqlChannelId = "id";
-    private String sqlChannelName = "name";
-    private String sqlChannelLocked = "locked";
-    private String sqlChannelOwners = "owners";
-    private String sqlSignOwner = "signOwner";
-    private String sqlSignWorld = "world";
-    private String sqlSignX = "x";
-    private String sqlSignY = "y";
-    private String sqlSignZ = "z";
-    private String sqlSignType = "signType";
+    private String sqlIsWallSign = SQLiteMap.sqlIsWallSign;
+    private String sqlDirection = SQLiteMap.sqlDirection;
+    private String sqlChannelId = SQLiteMap.sqlDirection;
+    private String sqlChannelName = SQLiteMap.sqlChannelName;
+    private String sqlChannelLocked = SQLiteMap.sqlChannelLocked;
+    private String sqlChannelOwners = SQLiteMap.sqlChannelOwners;
+    private String sqlSignOwner = SQLiteMap.sqlSignOwner;
+    private String sqlSignWorld = SQLiteMap.sqlSignWorld;
+    private String sqlSignX = SQLiteMap.sqlSignX;
+    private String sqlSignY = SQLiteMap.sqlSignY;
+    private String sqlSignZ = SQLiteMap.sqlSignZ;
+    private String sqlSignType = SQLiteMap.sqlSignType;
 
 
     public SQLiteStorage(String channelFolder) {
@@ -79,7 +79,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             try {
                 // Create the table
                 Statement statement = sqLite.getConnection().createStatement();
-                statement.executeUpdate(new CreateBuilder(getDatabaseFriendlyName(channel.getName()))
+                statement.executeUpdate(new CreateBuilder(Utils.getDatabaseFriendlyName(channel.getName()))
                         .addColumn(sqlChannelId, "int").addColumn(sqlChannelName, "char(64)")
                         .addColumn(sqlChannelLocked, "int(1)").addColumn(sqlChannelOwners, "char(255)")
                         .addColumn(sqlDirection, "char(255)").addColumn(sqlIsWallSign, "int(1)")
@@ -87,7 +87,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                         .addColumn(sqlSignY, "int").addColumn(sqlSignZ, "int")
                         .addColumn(sqlSignWorld, "char(255)").addColumn(sqlSignOwner, "char(255)")
                         .setIfNotExist(false).toString());
-                statement.executeUpdate(new InsertBuilder(getDatabaseFriendlyName(channel.getName()))
+                statement.executeUpdate(new InsertBuilder(Utils.getDatabaseFriendlyName(channel.getName()))
                         .addColumnWithValue(sqlChannelId, channel.getId())
                         .addColumnWithValue(sqlChannelName, channel.getName())
                         .addColumnWithValue(sqlChannelLocked, 0)
@@ -165,7 +165,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
         try {
             Statement statement = sqLite.getConnection().createStatement();
-            statement.executeUpdate(new InsertBuilder(getDatabaseFriendlyName(channelName))
+            statement.executeUpdate(new InsertBuilder(Utils.getDatabaseFriendlyName(channelName))
                     .addColumnWithValue(sqlSignType, signType)
                     .addColumnWithValue(sqlSignX, point.getX())
                     .addColumnWithValue(sqlSignY, point.getY())
@@ -246,7 +246,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         try {
             Statement statement = sqLite.getConnection().createStatement();
 
-            statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channelName))
+            statement.executeUpdate(new UpdateBuilder(Utils.getDatabaseFriendlyName(channelName))
                     .set(sqlChannelName + "='" + newChannelName + "'")
                     .where(sqlChannelName + "='" + channelName + "'")
                     .toString());
@@ -485,11 +485,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             for (String channelName : channels) {
                 if (channelName.equals(r_channelName)) {
                     // Get the ResultSet from the table we want
-                    ResultSet rsChannelInfo = statement.executeQuery("SELECT * FROM " + getDatabaseFriendlyName(channelName));
+                    ResultSet rsChannelInfo = statement.executeQuery("SELECT * FROM " + Utils.getDatabaseFriendlyName(channelName));
                     try {
                         rsChannelInfo.getString("name");
                     } catch (SQLException ex) {
-                        statement.executeUpdate("DROP TABLE " + getDatabaseFriendlyName(channelName));
+                        statement.executeUpdate("DROP TABLE " + Utils.getDatabaseFriendlyName(channelName));
                         rsChannelInfo.close();
                         statement.close();
                         return null;
@@ -515,7 +515,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
                     // Because a SQLite ResultSet is TYPE_FORWARD only, we have
                     // to create a third ResultSet and close the second
-                    ResultSet rsSigns = statement.executeQuery("SELECT * FROM " + getDatabaseFriendlyName(channelName));
+                    ResultSet rsSigns = statement.executeQuery("SELECT * FROM " + Utils.getDatabaseFriendlyName(channelName));
 
                     // Set the wireless signs
                     ArrayList<WirelessReceiver> receivers = new ArrayList<WirelessReceiver>();
@@ -523,10 +523,23 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     ArrayList<WirelessScreen> screens = new ArrayList<WirelessScreen>();
                     rsSigns.next();// Because first row does not contain a wireless sign
                     while (rsSigns.next()) {
+                        if (rsSigns.getString(sqlSignType) == null)
+                            continue;
+
                         if (rsSigns.getString(sqlSignType).equals("receiver")) {
                             WirelessReceiver receiver = new WirelessReceiver();
-                            receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
                             receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            try {
+                                receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                try {
+                                    Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
+                                    if (receiver.getIsWallSign())
+                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                    else
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                } catch (NumberFormatException ignored) {}
+                            }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
                             receiver.setX(rsSigns.getInt(sqlSignX));
@@ -535,8 +548,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                             receivers.add(receiver);
                         } else if (rsSigns.getString(sqlSignType).equals("receiver_inverter")) {
                             WirelessReceiverInverter receiver = new WirelessReceiverInverter();
-                            receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
                             receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            try {
+                                receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                try {
+                                    Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
+                                    if (receiver.getIsWallSign())
+                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                    else
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                } catch (NumberFormatException ignored) {}
+                            }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
                             receiver.setX(rsSigns.getInt(sqlSignX));
@@ -553,8 +576,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 delay = 0;
                             }
                             WirelessReceiverDelayer receiver = new WirelessReceiverDelayer(delay);
-                            receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
                             receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            try {
+                                receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                try {
+                                    Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
+                                    if (receiver.getIsWallSign())
+                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                    else
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                } catch (NumberFormatException ignored) {}
+                            }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
                             receiver.setX(rsSigns.getInt(sqlSignX));
@@ -571,8 +604,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 state = false;
                             }
                             WirelessReceiverSwitch receiver = new WirelessReceiverSwitch(state);
-                            receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
                             receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            try {
+                                receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                try {
+                                    Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
+                                    if (receiver.getIsWallSign())
+                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                    else
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                } catch (NumberFormatException ignored) {}
+                            }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
                             receiver.setX(rsSigns.getInt(sqlSignX));
@@ -589,8 +632,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 delay = 20;
                             }
                             WirelessReceiverClock receiver = new WirelessReceiverClock(delay);
-                            receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
                             receiver.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            try {
+                                receiver.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                try {
+                                    Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
+                                    if (receiver.getIsWallSign())
+                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                    else
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                } catch (NumberFormatException ignored) {}
+                            }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
                             receiver.setX(rsSigns.getInt(sqlSignX));
@@ -599,8 +652,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                             receivers.add(receiver);
                         } else if (rsSigns.getString(sqlSignType).equals("transmitter")) {
                             WirelessTransmitter transmitter = new WirelessTransmitter();
-                            transmitter.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
                             transmitter.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            try {
+                                transmitter.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                try {
+                                    Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
+                                    if (transmitter.getIsWallSign())
+                                        transmitter.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                    else
+                                        transmitter.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                } catch (NumberFormatException ignored) {}
+                            }
                             transmitter.setOwner(rsSigns.getString(sqlSignOwner));
                             transmitter.setWorld(rsSigns.getString(sqlSignWorld));
                             transmitter.setX(rsSigns.getInt(sqlSignX));
@@ -610,8 +673,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                         }
                         if (rsSigns.getString(sqlSignType).equals("screen")) {
                             WirelessScreen screen = new WirelessScreen();
-                            screen.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
                             screen.setIsWallSign(rsSigns.getBoolean(sqlIsWallSign));
+                            try {
+                                screen.setDirection(BlockFace.valueOf(rsSigns.getString(sqlDirection).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                try {
+                                    Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
+                                    if (screen.getIsWallSign())
+                                        screen.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                    else
+                                        screen.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                } catch (NumberFormatException ignored) {}
+                            }
                             screen.setOwner(rsSigns.getString(sqlSignOwner));
                             screen.setWorld(rsSigns.getString(sqlSignWorld));
                             screen.setX(rsSigns.getInt(sqlSignX));
@@ -711,7 +784,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             int locked = (channel.isLocked()) ? 1 : 0;
             Statement statement = sqLite.getConnection().createStatement();
 
-            statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channelName))
+            statement.executeUpdate(new UpdateBuilder(Utils.getDatabaseFriendlyName(channelName))
                     .set(sqlChannelName + "='" + channel.getName() + "'")
                     .set(sqlChannelLocked + "='" + locked + "'")
                     .where(sqlChannelId + "='" + channel.getId() + "'")
@@ -767,7 +840,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
             if (!sqlTableExists(channelName)) return;
             Statement statement = sqLite.getConnection().createStatement();
-            statement.executeUpdate("DROP TABLE " + getDatabaseFriendlyName(channelName));
+            statement.executeUpdate("DROP TABLE " + Utils.getDatabaseFriendlyName(channelName));
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -831,7 +904,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         try {
             Statement statement = sqLite.getConnection().createStatement();
 
-            statement.executeUpdate(new UpdateBuilder(getDatabaseFriendlyName(channel.getName()))
+            statement.executeUpdate(new UpdateBuilder(Utils.getDatabaseFriendlyName(channel.getName()))
                     .set(sqlSignType + "='" + "receiver_switch_" + ((WirelessReceiverSwitch) receiver).getState() + "'")
                     .where(sqlSignWorld + "='" + receiver.getWorld() + "'")
                     .where(sqlSignX + "='" + receiver.getX() + "'")
@@ -849,7 +922,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     private boolean removeWirelessPoint(String channelName, Location loc, String world) {
         try {
             Statement statement = sqLite.getConnection().createStatement();
-            String sql = new DeleteBuilder(getDatabaseFriendlyName(channelName))
+            String sql = new DeleteBuilder(Utils.getDatabaseFriendlyName(channelName))
                     .where(sqlSignX + "='" + loc.getBlockX() + "'")
                     .where(sqlSignY + "='" + loc.getBlockY() + "'")
                     .where(sqlSignZ + "='" + loc.getBlockZ() + "'")
@@ -913,23 +986,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             }
         }
         return asciiName;
-    }
-
-    private String getDatabaseFriendlyName(String normalName) {
-        try {
-            Integer.parseInt(normalName);
-            normalName = "num_" + normalName;
-        } catch (NumberFormatException ignored) {
-        }
-
-        for (char character : Utils.badCharacters) {
-            if (normalName.contains(String.valueOf(character))) {
-                String ascii = "" + (int) character;
-                String code = "_char_" + ascii + "_";
-                normalName = normalName.replace(String.valueOf(character), code);
-            }
-        }
-        return normalName;
     }
 
     private String getLastBackup() {

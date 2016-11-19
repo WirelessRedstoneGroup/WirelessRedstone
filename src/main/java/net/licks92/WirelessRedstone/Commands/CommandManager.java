@@ -39,7 +39,7 @@ public class CommandManager implements CommandExecutor {
                 int timer = 0;
                 for (WirelessCommand gcmd : cmds) {
                     if (timer == 0)
-                        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false);
+                        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false); //TODO: Add this string to the stringloader
                     if (timer >= 8) {
                         Utils.sendFeedback("Use /wr help 2 for the next page.", sender, false); //TODO: Add this string to the stringloader
                         break;
@@ -47,7 +47,7 @@ public class CommandManager implements CommandExecutor {
 
                     CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
                     if (sender.hasPermission("wirelessredstone." + info.permission())) {
-                        Utils.sendFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
+                        Utils.sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
                                 + StringUtils.join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
                                 + ChatColor.GRAY + info.description(), sender, false);
                         timer++;

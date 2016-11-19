@@ -124,6 +124,16 @@ public class Main extends JavaPlugin {
         if (config.getDebugMode())
             WRLogger.info("Debug mode enabled!");
 
+        if (config.getConfigVersion() <= 1) {
+            if (!(new ConfigConverter(config.getConfigVersion(), CHANNEL_FOLDER).success())){
+                WRLogger.severe("**********");
+                WRLogger.severe("Updating config files FAILED! To prevent further damages the plugin is now disabled.");
+                WRLogger.severe("**********");
+                getPluginLoader().disablePlugin(this);
+                return;
+            }
+        }
+
         stringManager = new StringLoader(config.getLanguage());
         signManager = new SignManager();
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
@@ -175,8 +185,10 @@ public class Main extends JavaPlugin {
         getCommand("wradmin").setExecutor(adminCommandManager);
         getCommand("wra").setExecutor(adminCommandManager);
 
-        WRLogger.info("Loading metrics...");
-        loadMetrics();
+        if (config.getMetrics()) {
+            WRLogger.info("Loading metrics...");
+            loadMetrics();
+        }
 
         fullyStarted = true;
         WRLogger.info("Plugin is now loaded");

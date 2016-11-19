@@ -58,61 +58,74 @@ public class ConfigManager {
         }
     }
 
-    public void setStorageType (StorageType storageType) {
+    public void setStorageType(StorageType storageType) {
         config.set(ConfigPaths.SAVEMODE.getValue(), storageType.toString().toUpperCase());
         save();
     }
 
-    public boolean getDebugMode(){
+    public void setValue(ConfigPaths configPaths, Object object) {
+        config.set(configPaths.getValue(), object);
+        save();
+    }
+
+    public Integer getConfigVersion() {
+        return config.getInt(ConfigPaths.CONFIGVERSION.getValue(), 1);
+    }
+
+    public boolean getDebugMode() {
         return config.getBoolean(ConfigPaths.DEBUGMODE.getValue(), false);
     }
 
-    public boolean getColorLogging(){
+    public boolean getColorLogging() {
         return config.getBoolean(ConfigPaths.COLORLOGGING.getValue(), true);
     }
 
-    public boolean getUpdateCheck(){
+    public boolean getUpdateCheck() {
         return config.getBoolean(ConfigPaths.UPDATECHECK.getValue(), true);
     }
 
-    public boolean getCancelChunkUnload(){
+    public boolean getCancelChunkUnload() {
         return config.getBoolean(ConfigPaths.CANCELCHUNKUNLOAD.getValue(), true);
     }
 
-    public boolean getVault(){
+    public boolean getVault() {
         return config.getBoolean(ConfigPaths.USEVAULT.getValue(), true);
     }
 
-    public boolean getSilentMode(){
+    public boolean getSilentMode() {
         return config.getBoolean(ConfigPaths.SILENTMODE.getValue(), false);
     }
 
-    public boolean getDropSignBroken(){
+    public boolean getDropSignBroken() {
         return config.getBoolean(ConfigPaths.DROPSIGNBROKEN.getValue(), true);
     }
 
-    public boolean useORLogic(){
+    public boolean getMetrics() {
+        return config.getBoolean(ConfigPaths.METRICS.getValue(), true);
+    }
+
+    public boolean useORLogic() {
         return !config.getString(ConfigPaths.GATELOGIC.getValue(), "OR").equalsIgnoreCase("IGNORE");
     }
 
-    public Integer getCancelChunkUnloadRange(){
+    public Integer getCancelChunkUnloadRange() {
         return config.getInt(ConfigPaths.CANCELCHUNKUNLOADRANGE.getValue(), 4);
     }
 
-    public Integer getInteractTransmitterTime(){
+    public Integer getInteractTransmitterTime() {
         return config.getInt(ConfigPaths.INTERACTTRANSMITTERTIME.getValue(), 1000);
     }
 
-    public Integer getCacheRefreshRate(){
+    public Integer getCacheRefreshRate() {
         return config.getInt(ConfigPaths.CACHEREFRESHRATE.getValue(), 150);
     }
 
-    public String getLanguage(){
+    public String getLanguage() {
         return config.getString(ConfigPaths.LANGUAGE.getValue(), "en");
     }
 
-    public StorageType getStorageType(){
-        switch (config.getString(ConfigPaths.SAVEMODE.getValue(), "SQLITE").toUpperCase()){
+    public StorageType getStorageType() {
+        switch (config.getString(ConfigPaths.SAVEMODE.getValue(), "SQLITE").toUpperCase()) {
             case "YAML":
                 return StorageType.YAML;
             case "YML":
@@ -122,15 +135,18 @@ public class ConfigManager {
             case "SQLITE":
                 return StorageType.SQLITE;
             default:
-                return StorageType.YAML; //TODO: Switch back to SQLITE
+                return StorageType.SQLITE;
         }
     }
 }
 
 enum ConfigPaths {
-    DEBUGMODE("DebugMode"), LANGUAGE("Language"), COLORLOGGING("ColourfulLogging"), UPDATECHECK("CheckForUpdates"), CANCELCHUNKUNLOAD("cancelChunkUnloads"),
-        CANCELCHUNKUNLOADRANGE("cancelChunkUnloadRange"), USEVAULT("UseVault"), SILENTMODE("SilentMode"), INTERACTTRANSMITTERTIME("InteractTransmitterTime"),
-        CACHEREFRESHRATE("CacheRefreshFrequency"), GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken");
+    CONFIGVERSION("ConfigVersion"), DEBUGMODE("DebugMode"), LANGUAGE("Language"), COLORLOGGING("ColourfulLogging"),
+    UPDATECHECK("CheckForUpdates"), CANCELCHUNKUNLOAD("cancelChunkUnloads"),
+    CANCELCHUNKUNLOADRANGE("cancelChunkUnloadRange"), USEVAULT("UseVault"), SILENTMODE("SilentMode"),
+    INTERACTTRANSMITTERTIME("InteractTransmitterTime"), CACHEREFRESHRATE("CacheRefreshFrequency"),
+    GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken"),
+    METRICS("Metrics");
 
     private String name;
 

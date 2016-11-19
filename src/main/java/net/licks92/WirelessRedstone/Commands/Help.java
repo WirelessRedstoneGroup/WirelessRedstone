@@ -59,7 +59,7 @@ public class Help extends WirelessCommand {
         else {
             for (Integer i = currentItem; i < (currentItem + maxItemsPerPage); i++) {
                 if (!(i >= commandListLength))
-                    Utils.sendFeedback(commandList.get(i), sender, false);
+                    Utils.sendCommandFeedback(commandList.get(i), sender, false);
             }
         }
     }
