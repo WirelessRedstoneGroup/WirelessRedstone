@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SerializableAs("WirelessScreen")
-public class WirelessScreen implements ConfigurationSerializable, IWirelessPoint{
+public class WirelessScreen implements ConfigurationSerializable, IWirelessPoint {
 
     private String owner;
     private int x;
@@ -23,16 +23,30 @@ public class WirelessScreen implements ConfigurationSerializable, IWirelessPoint
     private BlockFace direction = BlockFace.SELF;
     private boolean isWallSign = false;
 
-    public WirelessScreen() {}
+    public WirelessScreen() {
+    }
 
     public WirelessScreen(Map<String, Object> map) {
         owner = (String) map.get("owner");
         world = (String) map.get("world");
-        direction = (BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase());
         isWallSign = (Boolean) map.get("isWallSign");
         x = (Integer) map.get("x");
         y = (Integer) map.get("y");
         z = (Integer) map.get("z");
+
+
+        try {
+            direction = (BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            try {
+                Integer directionInt = Integer.parseInt(map.get("direction").toString());
+                if (isWallSign) //This is maybe redundent, needs more testing
+                    direction = Utils.intToBlockFaceSign(directionInt);
+                else
+                    direction = Utils.intToBlockFaceSign(directionInt);
+            } catch (NumberFormatException ignored) {
+            }
+        }
     }
 
     @Override
@@ -82,7 +96,7 @@ public class WirelessScreen implements ConfigurationSerializable, IWirelessPoint
 
     @Override
     public void setDirection(int direction) {
-        if(isWallSign)
+        if (isWallSign)
             this.direction = Utils.intToBlockFaceWallSign(direction);
         else
             this.direction = Utils.intToBlockFaceSign(direction);

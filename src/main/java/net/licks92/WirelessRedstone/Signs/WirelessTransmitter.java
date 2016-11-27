@@ -28,11 +28,23 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     public WirelessTransmitter(Map<String, Object> map) {
         owner = (String) map.get("owner");
         world = (String) map.get("world");
-        direction = (BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase());
         isWallSign = (Boolean) map.get("isWallSign");
         x = (Integer) map.get("x");
         y = (Integer) map.get("y");
         z = (Integer) map.get("z");
+
+        try {
+            direction = (BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            try {
+                Integer directionInt = Integer.parseInt(map.get("direction").toString());
+                if (isWallSign) //This is maybe redundent, needs more testing
+                    direction = Utils.intToBlockFaceSign(directionInt);
+                else
+                    direction = Utils.intToBlockFaceSign(directionInt);
+            } catch (NumberFormatException ignored) {
+            }
+        }
     }
 
     @Override

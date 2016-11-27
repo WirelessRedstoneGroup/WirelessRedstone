@@ -24,7 +24,7 @@ Welcome on the official page of the Wireless Redstone plugin
 - [x] Updater
 - [ ] Add remaining strings to the stringloader
 - [ ] Documentation
-- [ ] Add converter to convert old storage files to the new system (YAML -> Direction, SQLite -> Rebuild tables)
+- [X] Add database support from 2.X
 
 #### Storage
 - [x] Yaml
@@ -37,7 +37,7 @@ Welcome on the official page of the Wireless Redstone plugin
 WirelessRedstone is released under the [Apache 2.0 license](LICENSE).
 
 ```
-Copyright 2016 WirelessRedstone Group
+Copyright 2016 WirelessRedstoneGroup
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

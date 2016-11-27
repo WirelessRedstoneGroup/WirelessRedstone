@@ -535,7 +535,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {}
@@ -555,7 +555,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {}
@@ -583,7 +583,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {}
@@ -611,7 +611,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {}
@@ -639,7 +639,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {}
@@ -659,7 +659,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (transmitter.getIsWallSign())
-                                        transmitter.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                        transmitter.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         transmitter.setDirection(Utils.intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {}
@@ -680,7 +680,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (screen.getIsWallSign())
-                                        screen.setDirection(Utils.intToBlockFaceWallSign(directionInt));
+                                        screen.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         screen.setDirection(Utils.intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {}

@@ -15,7 +15,8 @@ public class ConfigConverter {
                 File channelFolderFile = new File(Main.getInstance().getDataFolder(), channelFolder);
                 channelFolderFile.mkdir();
 
-                if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE) {
+                if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE
+                        && new File(channelFolderFile + File.separator + "channels.db").exists()) {
                     new File(channelFolderFile + File.separator + "WirelessRedstoneDatabase.db").delete();
                     FileUtil.copy(new File(channelFolderFile + File.separator + "channels.db"), new File(channelFolderFile + File.separator + "WirelessRedstoneDatabase.db"));
                 }
