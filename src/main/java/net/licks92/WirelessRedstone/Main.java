@@ -16,7 +16,6 @@ import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 public class Main extends JavaPlugin {
 
@@ -36,7 +35,6 @@ public class Main extends JavaPlugin {
     private static AdminCommandManager adminCommandManager;
 
     private ConfigManager config;
-    private BukkitTask updateTask;
 
     public static Main getInstance() {
         return instance;
@@ -101,7 +99,6 @@ public class Main extends JavaPlugin {
         }
         fullyStarted = false;
 
-        updateTask = null;
         worldEditHooker = null;
         commandManager = null;
         adminCommandManager = null;
@@ -127,7 +124,7 @@ public class Main extends JavaPlugin {
         if (config.getConfigVersion() <= 1) {
             if (!(new ConfigConverter(config.getConfigVersion(), CHANNEL_FOLDER).success())){
                 WRLogger.severe("**********");
-                WRLogger.severe("Updating config files FAILED! To prevent further damages the plugin is now disabled.");
+                WRLogger.severe("Updating config files FAILED! The plugin is now disabled to prevent further damages.");
                 WRLogger.severe("**********");
                 getPluginLoader().disablePlugin(this);
                 return;
@@ -158,16 +155,16 @@ public class Main extends JavaPlugin {
             return;
         }
 
-        WRLogger.info("Loading Chunks...");
+        WRLogger.debug("Loading Chunks...");
         Utils.loadChunks();
 
         if (pm.isPluginEnabled("WorldEdit")) {
-            WRLogger.info("Loading WorldEdit support...");
+            WRLogger.debug("Loading WorldEdit support...");
             new WorldEditLoader();
         } else
-            WRLogger.info("WorldEdit not enabled. Skipping WorldEdit support.");
+            WRLogger.debug("WorldEdit not enabled. Skipping WorldEdit support.");
 
-        WRLogger.info("Loading listeners...");
+        WRLogger.debug("Loading listeners...");
         //Don't need to store the instance because we won't touch it.
         pm.registerEvents(new WorldListener(), this);
         pm.registerEvents(new BlockListener(), this);
@@ -176,7 +173,7 @@ public class Main extends JavaPlugin {
         if (config.getUpdateCheck())
             updater = new Updater();
 
-        WRLogger.info("Loading commands...");
+        WRLogger.debug("Loading commands...");
         getCommand("wirelessredstone").setExecutor(commandManager);
         getCommand("wr").setExecutor(commandManager);
         getCommand("wredstone").setExecutor(commandManager);
@@ -186,7 +183,7 @@ public class Main extends JavaPlugin {
         getCommand("wra").setExecutor(adminCommandManager);
 
         if (config.getMetrics()) {
-            WRLogger.info("Loading metrics...");
+            WRLogger.debug("Loading metrics...");
             loadMetrics();
         }
 
