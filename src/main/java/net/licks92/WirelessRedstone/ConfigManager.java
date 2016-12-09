@@ -1,7 +1,6 @@
 package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Storage.StorageType;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -15,7 +14,7 @@ public class ConfigManager {
     }
 
     private final File file;
-    private final FileConfiguration config;
+    private final YamlConfiguration config;
 
     private ConfigManager(final String fileName) {
         if (!Main.getInstance().getDataFolder().exists()) {
@@ -56,6 +55,14 @@ public class ConfigManager {
         } catch (final Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void copyDefaults(){
+        if (config == null)
+            return;
+
+        config.options().copyHeader(true);
+        config.options().copyDefaults(true);
     }
 
     public void setStorageType(StorageType storageType) {

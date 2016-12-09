@@ -22,6 +22,8 @@ public class ConfigConverter {
                     FileUtil.copy(new File(channelFolderFile + File.separator + "channels.db"), new File(channelFolderFile + File.separator + "WirelessRedstoneDatabase.db"));
                 }
 
+                ConfigManager.getConfig().copyDefaults();
+
                 ConfigManager.getConfig().setValue(ConfigPaths.CONFIGVERSION, 2);
                 ConfigManager.getConfig().setValue(ConfigPaths.UPDATECHECK, true);
 
