@@ -1,13 +1,15 @@
 package net.licks92.WirelessRedstone.Libs;
 
+import com.sun.rowset.CachedRowSetImpl;
 import net.licks92.WirelessRedstone.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import javax.sql.rowset.CachedRowSet;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.concurrent.*;
 
 public class SQLite {
 
@@ -53,5 +55,77 @@ public class SQLite {
 
     public void closeConnection() throws SQLException {
         connection.close();
+    }
+
+    public ResultSet query(final PreparedStatement preparedStatement) {
+        try {
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public CachedRowSet query_test(final PreparedStatement preparedStatement) {
+        CachedRowSet rowSet = null;
+
+        if (getConnection() != null) {
+            try {
+                ExecutorService exe = Executors.newCachedThreadPool();
+
+                Future<CachedRowSet> future = exe.submit(new Callable<CachedRowSet>() {
+                    public CachedRowSet call() {
+                        try {
+                            ResultSet resultSet = preparedStatement.executeQuery();
+
+                            CachedRowSet cachedRowSet = new CachedRowSetImpl();
+                            cachedRowSet.populate(resultSet);
+                            resultSet.close();
+
+//                            preparedStatement.getConnection().close();
+                            preparedStatement.close();
+                            if (cachedRowSet.next()) {
+                                return cachedRowSet;
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+
+                        return null;
+                    }
+                });
+
+                if (future.get() != null) {
+                    rowSet = future.get();
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return rowSet;
+    }
+
+    /*
+     * Execute a query
+     *
+     * @param preparedStatement query to be executed.
+     */
+    public void execute(final PreparedStatement preparedStatement) {
+        if (getConnection() != null) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        preparedStatement.execute();
+
+//                        preparedStatement.getConnection().close();
+                        preparedStatement.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 }
