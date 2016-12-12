@@ -53,7 +53,7 @@ public class AdminConvert extends WirelessCommand {
                 Main.getSignManager().stopAllClocks();
 
                 ConfigManager.getConfig().setStorageType(StorageType.YAML);
-                Main.getStorage().backupData("yml");
+//                Main.getStorage().backupData("yml");
                 Main.getStorage().close();
                 break;
             }
@@ -68,7 +68,7 @@ public class AdminConvert extends WirelessCommand {
                 Main.getSignManager().stopAllClocks();
 
                 ConfigManager.getConfig().setStorageType(StorageType.SQLITE);
-                Main.getStorage().backupData("db");
+//                Main.getStorage().backupData("db");
                 Main.getStorage().close();
                 break;
             }
