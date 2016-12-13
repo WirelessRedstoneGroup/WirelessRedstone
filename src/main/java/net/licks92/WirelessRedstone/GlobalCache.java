@@ -102,7 +102,6 @@ public class GlobalCache {
             allChannels = returnChannelList;
             allSigns = returnlist;
             allSignLocations = returnlistLocations;
-            Main.getWRLogger().debug(allSignLocations.toString());
             allReceiverLocations = returnReceiverLocations;
         }
     }
