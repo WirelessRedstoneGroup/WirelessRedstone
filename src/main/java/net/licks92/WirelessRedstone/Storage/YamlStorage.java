@@ -20,6 +20,8 @@ import java.util.zip.ZipOutputStream;
 
 public class YamlStorage implements IWirelessStorageConfiguration {
 
+    private Boolean useGlobalCache = true;
+
     private File channelFolder;
     private String channelFolderStr;
 
@@ -369,6 +371,13 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Collection<WirelessChannel> getAllChannels() {
+        if (useGlobalCache && Main.getGlobalCache() != null) {
+            if (Main.getGlobalCache().getAllChannels() != null) {
+//                Main.getWRLogger().debug("Accessed all WirelessChannel from cache");
+                return Main.getGlobalCache().getAllChannels();
+            }
+        }
+
         List<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 
         for (File f : channelFolder.listFiles(new YamlFilter())) {
@@ -566,6 +575,8 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Main.getGlobalCache().update();
     }
 
     /**

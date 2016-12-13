@@ -195,6 +195,10 @@ public class Main extends JavaPlugin {
         WRLogger.info("Plugin is now loaded");
     }
 
+    public void resetStorageManager() {
+        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
+    }
+
     private void loadMetrics() {
         try {
             metrics = new Metrics(this);

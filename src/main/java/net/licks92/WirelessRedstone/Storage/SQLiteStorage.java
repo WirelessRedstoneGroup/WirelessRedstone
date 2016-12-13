@@ -89,14 +89,19 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                         .addColumn(sqlSignY, "int").addColumn(sqlSignZ, "int")
                         .addColumn(sqlSignWorld, "char(255)").addColumn(sqlSignOwner, "char(255)")
                         .setIfNotExist(false).toString());
-                sqLite.execute(create);
+//                sqLite.execute(create);
+                create.execute();
+                create.close();
+
                 PreparedStatement insert = sqLite.getConnection().prepareStatement(new InsertBuilder(Utils.getDatabaseFriendlyName(channel.getName()))
                         .addColumnWithValue(sqlChannelId, channel.getId())
                         .addColumnWithValue(sqlChannelName, channel.getName())
                         .addColumnWithValue(sqlChannelLocked, 0)
                         .addColumnWithValue(sqlChannelOwners, channel.getOwners().get(0))
                         .toString());
-                sqLite.execute(insert);
+//                sqLite.execute(insert);
+                insert.execute();
+                insert.close();
 
                 // Create the wireless points
                 ArrayList<IWirelessPoint> points = new ArrayList<IWirelessPoint>();
