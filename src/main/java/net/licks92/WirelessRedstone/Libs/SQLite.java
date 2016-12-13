@@ -16,14 +16,16 @@ public class SQLite {
     private Plugin plugin;
     private String path;
     private Connection connection;
+    private Boolean updateGlobalCache;
 
-    public SQLite(Plugin plugin, String path) {
+    public SQLite(Plugin plugin, String path, Boolean updateGlobalCache) {
         this.plugin = plugin;
         this.path = path;
+        this.updateGlobalCache = updateGlobalCache;
     }
 
     public Connection openConnection() throws SQLException, ClassNotFoundException {
-        if(connection != null)
+        if (connection != null)
             return connection;
 
         if (!plugin.getDataFolder().exists()) {
@@ -112,6 +114,16 @@ public class SQLite {
      * @param preparedStatement query to be executed.
      */
     public void execute(final PreparedStatement preparedStatement) {
+        execute(preparedStatement, updateGlobalCache);
+    }
+
+    /*
+    * Execute a query
+    *
+    * @param preparedStatement query to be executed.
+    * @param updateGlobalCache update the global cache
+    */
+    public void execute(final PreparedStatement preparedStatement, final Boolean updateGlobalCache) {
         if (getConnection() != null) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
                 @Override
@@ -121,6 +133,17 @@ public class SQLite {
 
 //                        preparedStatement.getConnection().close();
                         preparedStatement.close();
+
+                        if (updateGlobalCache) {
+                            if (Main.getGlobalCache() == null)
+                                Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Main.getGlobalCache().update();
+                                    }
+                                }, 1L);
+                            else Main.getGlobalCache().update();
+                        }
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }

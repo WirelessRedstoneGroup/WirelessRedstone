@@ -33,6 +33,9 @@ public class ConfigManager {
         }
 
         config = YamlConfiguration.loadConfiguration(file);
+
+        if (getCacheRefreshRate() < 60 || getCacheRefreshRate() > 480)
+            setValue(ConfigPaths.CACHEREFRESHRATE, (getCacheRefreshRate() < 60) ? 60 : 480);
     }
 
     /* Extract files out of the jar file. */

@@ -12,11 +12,11 @@ import java.util.List;
 
 public class GlobalCache {
 
-    private Collection<WirelessChannel> allChannels;
-    private ArrayList<IWirelessPoint> allSigns;
-    private ArrayList<Location> allReceiverLocations;
-    private ArrayList<Location> allSignLocations;
-    private BukkitTask refreshingTask;
+    private Collection<WirelessChannel> allChannels = null;
+    private ArrayList<IWirelessPoint> allSigns = null;
+    private ArrayList<Location> allReceiverLocations = null;
+    private ArrayList<Location> allSignLocations = null;
+    private BukkitTask refreshingTask = null;
 
     public GlobalCache(Integer refreshTime){
         //At plugin startup we have to directly update the cache.

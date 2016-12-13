@@ -25,6 +25,8 @@ import java.util.zip.ZipOutputStream;
 
 public class SQLiteStorage implements IWirelessStorageConfiguration {
 
+    private Boolean useGlobalCache = true;
+
     private File channelFolder;
     private String channelFolderStr;
     private SQLite sqLite;
@@ -46,7 +48,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public SQLiteStorage(String channelFolder) {
         this.channelFolder = new File(Main.getInstance().getDataFolder(), channelFolder);
         this.channelFolderStr = channelFolder;
-        this.sqLite = new SQLite(Main.getInstance(), channelFolder + File.separator + "WirelessRedstoneDatabase.db");
+        this.sqLite = new SQLite(Main.getInstance(), channelFolder + File.separator + "WirelessRedstoneDatabase.db", useGlobalCache);
     }
 
     @Override
@@ -110,15 +112,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 for (IWirelessPoint ipoint : points) {
                     createWirelessPoint(channel.getName(), ipoint);
                 }
-
-                if (Main.getGlobalCache() == null)
-                    Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            Main.getGlobalCache().update();
-                        }
-                    }, 1L);
-                else Main.getGlobalCache().update();
                 return true;
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -434,6 +427,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Collection<WirelessChannel> getAllChannels() {
+        if (useGlobalCache && Main.getGlobalCache() != null) {
+            if (Main.getGlobalCache().getAllChannels() != null) {
+//                Main.getWRLogger().debug("Accessed all WirelessChannel from cache");
+                return Main.getGlobalCache().getAllChannels();
+            }
+        }
+
         try {
             ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
 
@@ -466,6 +466,22 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public WirelessChannel getWirelessChannel(String r_channelName) {
+        if (useGlobalCache && Main.getGlobalCache() != null) {
+            if (Main.getGlobalCache().getAllChannels() != null) {
+                WirelessChannel channel = null;
+
+                for (WirelessChannel cacheChannel : Main.getGlobalCache().getAllChannels()) {
+                    if (cacheChannel.getName().equalsIgnoreCase(r_channelName)) {
+                        channel = cacheChannel;
+                        break;
+                    }
+                }
+
+//                Main.getWRLogger().debug("Accessed WirelessChannel from cache");
+                return channel;
+            }
+        }
+
         try {
             PreparedStatement master = sqLite.getConnection().prepareStatement("SELECT `name` FROM sqlite_master WHERE type = \"table\"");
             ResultSet rs = sqLite.query(master);
@@ -534,7 +550,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
@@ -554,7 +571,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
@@ -582,7 +600,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
@@ -610,7 +629,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
@@ -638,7 +658,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                             receiver.setOwner(rsSigns.getString(sqlSignOwner));
                             receiver.setWorld(rsSigns.getString(sqlSignWorld));
@@ -658,7 +679,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                         transmitter.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         transmitter.setDirection(Utils.intToBlockFaceSign(directionInt));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                             transmitter.setOwner(rsSigns.getString(sqlSignOwner));
                             transmitter.setWorld(rsSigns.getString(sqlSignWorld));
@@ -679,7 +701,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                         screen.setDirection(Utils.intToBlockFaceSign(directionInt));
                                     else
                                         screen.setDirection(Utils.intToBlockFaceSign(directionInt));
-                                } catch (NumberFormatException ignored) {}
+                                } catch (NumberFormatException ignored) {
+                                }
                             }
                             screen.setOwner(rsSigns.getString(sqlSignOwner));
                             screen.setWorld(rsSigns.getString(sqlSignWorld));
@@ -1049,5 +1072,16 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 ex.printStackTrace();
         }
         return null;
+    }
+
+    private void updateGlobalCache() {
+        if (Main.getGlobalCache() == null)
+            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    Main.getGlobalCache().update();
+                }
+            }, 1L);
+        else Main.getGlobalCache().update();
     }
 }
