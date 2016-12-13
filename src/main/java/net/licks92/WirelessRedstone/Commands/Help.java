@@ -40,6 +40,9 @@ public class Help extends WirelessCommand {
         for (Integer i = 0; i < commandListLength / maxItemsPerPage; i++)
             totalPages++;
 
+        if(commandListLength % maxItemsPerPage == 0)
+            totalPages--;
+
         if (page > totalPages) {
             if (totalPages > 1)
                 Utils.sendFeedback("There are only " + totalPages + " pages.", sender, true);

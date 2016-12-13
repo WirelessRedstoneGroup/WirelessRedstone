@@ -49,7 +49,7 @@ public class AdminCommandManager implements CommandExecutor {
 
                     CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
                     if (sender.hasPermission("wirelessredstone.admin." + info.permission())) {
-                        Utils.sendFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wra "
+                        Utils.sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wra "
                                 + StringUtils.join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
                                 + ChatColor.GRAY + info.description(), sender, false);
                         timer++;

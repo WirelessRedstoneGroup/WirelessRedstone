@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-@CommandInfo(description = "Get all channels", usage = "[page]", aliases = {""},
+@CommandInfo(description = "Get all channels", usage = "[page]", aliases = {"list", "l"},
         permission = "list", canUseInConsole = true, canUseInCommandBlock = false)
 public class AdminList extends WirelessCommand {
 
@@ -32,11 +32,14 @@ public class AdminList extends WirelessCommand {
         }
 
         Integer channelListLength = Main.getStorage().getAllChannels().size();
-        Integer maxItemsPerPage = 8;
+        Integer maxItemsPerPage = 10;
         Integer totalPages = 1;
 
         for (Integer i = 0; i < channelListLength / maxItemsPerPage; i++)
             totalPages++;
+
+        if(channelListLength % maxItemsPerPage == 0)
+            totalPages--;
 
         if (page > totalPages) {
             if (totalPages > 1)

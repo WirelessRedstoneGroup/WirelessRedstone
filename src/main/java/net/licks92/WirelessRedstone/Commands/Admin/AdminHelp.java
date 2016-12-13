@@ -29,7 +29,7 @@ public class AdminHelp extends WirelessCommand {
         ArrayList<String> commandList = new ArrayList<>();
         for (WirelessCommand gcmd : Main.getAdminCommandManager().getCommands()) {
             CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
-            commandList.add(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
+            commandList.add(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wra "
                     + StringUtils.join(info.aliases(), ":") + " "
                     + info.usage() + ChatColor.WHITE + " - "
                     + ChatColor.GRAY + info.description());
@@ -41,6 +41,9 @@ public class AdminHelp extends WirelessCommand {
 
         for (Integer i = 0; i < commandListLength / maxItemsPerPage; i++)
             totalPages++;
+
+        if(commandListLength % maxItemsPerPage == 0)
+            totalPages--;
 
         if (page > totalPages) {
             if (totalPages > 1)
