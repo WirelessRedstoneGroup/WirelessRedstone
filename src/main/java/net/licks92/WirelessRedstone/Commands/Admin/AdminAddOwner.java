@@ -7,7 +7,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.command.CommandSender;
 
-@CommandInfo(description = "Add owner to WirlessChannel", usage = "<channel> <playername>", aliases = "addowner",
+@CommandInfo(description = "Add owner to WirlessChannel", usage = "<channel> <playername>", aliases = {"addowner"},
         permission = "addOwner", canUseInConsole = true, canUseInCommandBlock = false)
 public class AdminAddOwner extends WirelessCommand {
 

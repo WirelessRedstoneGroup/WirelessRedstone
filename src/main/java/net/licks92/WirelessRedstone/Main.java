@@ -80,6 +80,10 @@ public class Main extends JavaPlugin {
         return commandManager;
     }
 
+    public static AdminCommandManager getAdminCommandManager() {
+        return adminCommandManager;
+    }
+
     public static void setWorldEditHooker(WorldEditHooker worldEditHooker) {
         Main.worldEditHooker = worldEditHooker;
     }
