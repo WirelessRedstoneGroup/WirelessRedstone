@@ -40,7 +40,7 @@ public class GlobalCache {
                     ArrayList<Location> returnlistLocations = new ArrayList<Location>();
                     ArrayList<Location> returnReceiverLocations = new ArrayList<Location>();
                     Collection<WirelessChannel> returnChannelList = new ArrayList<WirelessChannel>();
-                    returnChannelList = Main.getStorage().getAllChannels();
+                    returnChannelList = Main.getStorage().getAllChannels(true);
 
                     for (WirelessChannel channel : returnChannelList) {
                         try {
@@ -75,7 +75,7 @@ public class GlobalCache {
             ArrayList<Location> returnlistLocations = new ArrayList<Location>();
             ArrayList<Location> returnReceiverLocations = new ArrayList<Location>();
             Collection<WirelessChannel> returnChannelList = new ArrayList<WirelessChannel>();
-            returnChannelList = Main.getStorage().getAllChannels();
+            returnChannelList = Main.getStorage().getAllChannels(true);
 
             for (WirelessChannel channel : returnChannelList) {
                 try {
@@ -102,6 +102,7 @@ public class GlobalCache {
             allChannels = returnChannelList;
             allSigns = returnlist;
             allSignLocations = returnlistLocations;
+            Main.getWRLogger().debug(allSignLocations.toString());
             allReceiverLocations = returnReceiverLocations;
         }
     }

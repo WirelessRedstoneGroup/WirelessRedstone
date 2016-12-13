@@ -59,7 +59,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean createWirelessPoint(String channelName, IWirelessPoint point) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (point instanceof WirelessReceiver) {
             Main.getWRLogger().debug("Yaml config: Creating a receiver of class "
                     + point.getClass());
@@ -90,7 +90,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeIWirelessPoint(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel == null)
             return false;
         for (WirelessReceiver receiver : channel.getReceivers()) {
@@ -110,7 +110,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeWirelessReceiver(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeReceiverAt(loc);
             updateChannel(channelName, channel);
@@ -121,7 +121,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeWirelessTransmitter(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeTransmitterAt(loc);
             updateChannel(channelName, channel);
@@ -132,7 +132,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeWirelessScreen(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeScreenAt(loc);
             updateChannel(channelName, channel);
@@ -143,7 +143,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean renameWirelessChannel(String channelName, String newChannelName) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
 
         List<IWirelessPoint> signs = new ArrayList<IWirelessPoint>();
 
@@ -371,7 +371,12 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Collection<WirelessChannel> getAllChannels() {
-        if (useGlobalCache && Main.getGlobalCache() != null) {
+        return getAllChannels(false);
+    }
+
+    @Override
+    public Collection<WirelessChannel> getAllChannels(Boolean forceUpdate) {
+        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
             if (Main.getGlobalCache().getAllChannels() != null) {
 //                Main.getWRLogger().debug("Accessed all WirelessChannel from cache");
                 return Main.getGlobalCache().getAllChannels();
@@ -413,6 +418,27 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public WirelessChannel getWirelessChannel(String channelName) {
+        return getWirelessChannel(channelName, false);
+    }
+
+    @Override
+    public WirelessChannel getWirelessChannel(String channelName, Boolean forceUpdate) {
+        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
+            if (Main.getGlobalCache().getAllChannels() != null) {
+                WirelessChannel channel = null;
+
+                for (WirelessChannel cacheChannel : Main.getGlobalCache().getAllChannels()) {
+                    if (cacheChannel.getName().equalsIgnoreCase(channelName)) {
+                        channel = cacheChannel;
+                        break;
+                    }
+                }
+
+//                Main.getWRLogger().debug("Accessed WirelessChannel from cache");
+                return channel;
+            }
+        }
+
         FileConfiguration channelConfig = new YamlConfiguration();
         try {
             File channelFile = new File(channelFolder, channelName + ".yml");
@@ -495,7 +521,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public void removeWirelessChannel(String channelName) {
-        Main.getSignManager().removeSigns(getWirelessChannel(channelName));
+        Main.getSignManager().removeSigns(getWirelessChannel(channelName, true));
         setWirelessChannel(channelName, null);
         for (File f : channelFolder.listFiles()) {
             if (f.getName().equals(channelName + ".yml")) {
@@ -583,7 +609,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
      * Private method to purge data. Don't use it anywhere else
      */
     private boolean removeWirelessReceiver(String channelName, Location loc, String world) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeReceiverAt(loc, world);
             updateChannel(channelName, channel);
@@ -596,7 +622,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
      * Private method to purge data. Don't use it anywhere else
      */
     private boolean removeWirelessTransmitter(String channelName, Location loc, String world) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeTransmitterAt(loc, world);
             updateChannel(channelName, channel);
@@ -609,7 +635,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
      * Private method to purge data. Don't use it anywhere else
      */
     private boolean removeWirelessScreen(String channelName, Location loc, String world) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeScreenAt(loc, world);
             updateChannel(channelName, channel);

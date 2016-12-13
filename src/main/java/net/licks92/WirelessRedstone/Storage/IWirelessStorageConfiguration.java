@@ -25,8 +25,10 @@ public interface IWirelessStorageConfiguration {
 
     // Only call this on startup or channel refresh
     Collection<WirelessChannel> getAllChannels();
+    Collection<WirelessChannel> getAllChannels(Boolean forceUpdate);
 
     WirelessChannel getWirelessChannel(String channelName);
+    WirelessChannel getWirelessChannel(String channelName, Boolean forceUpdate);
 
     IWirelessPoint getWirelessRedstoneSign(Location loc);
 

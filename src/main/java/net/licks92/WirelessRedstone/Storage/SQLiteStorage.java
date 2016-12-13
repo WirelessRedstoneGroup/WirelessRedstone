@@ -89,6 +89,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                         .addColumn(sqlSignY, "int").addColumn(sqlSignZ, "int")
                         .addColumn(sqlSignWorld, "char(255)").addColumn(sqlSignOwner, "char(255)")
                         .setIfNotExist(false).toString());
+
+                //We can't async this statement because it is to important and it can cause nullpointer exceptions while inserting data
 //                sqLite.execute(create);
                 create.execute();
                 create.close();
@@ -99,6 +101,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                         .addColumnWithValue(sqlChannelLocked, 0)
                         .addColumnWithValue(sqlChannelOwners, channel.getOwners().get(0))
                         .toString());
+
 //                sqLite.execute(insert);
                 insert.execute();
                 insert.close();
@@ -182,7 +185,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeIWirelessPoint(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel == null) return false;
 
         for (WirelessReceiver receiver : channel.getReceivers()) {
@@ -199,7 +202,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeWirelessReceiver(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeReceiverAt(loc);
             return removeWirelessPoint(channelName, loc, loc.getWorld().getName());
@@ -208,7 +211,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeWirelessTransmitter(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeTransmitterAt(loc);
             return removeWirelessPoint(channelName, loc, loc.getWorld().getName());
@@ -217,7 +220,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean removeWirelessScreen(String channelName, Location loc) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeScreenAt(loc);
             return removeWirelessPoint(channelName, loc, loc.getWorld().getName());
@@ -226,7 +229,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean renameWirelessChannel(String channelName, String newChannelName) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
 
         List<IWirelessPoint> signs = new ArrayList<IWirelessPoint>();
 
@@ -432,7 +435,12 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Collection<WirelessChannel> getAllChannels() {
-        if (useGlobalCache && Main.getGlobalCache() != null) {
+        return getAllChannels(false);
+    }
+
+    @Override
+    public Collection<WirelessChannel> getAllChannels(Boolean forceUpdate) {
+        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
             if (Main.getGlobalCache().getAllChannels() != null) {
 //                Main.getWRLogger().debug("Accessed all WirelessChannel from cache");
                 return Main.getGlobalCache().getAllChannels();
@@ -458,7 +466,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             rs.close();
 
             for (String channelName : channelNames) {
-                channels.add(getWirelessChannel(channelName));
+                channels.add(getWirelessChannel(channelName, forceUpdate));
             }
             return channels;
         } catch (SQLException e) {
@@ -471,7 +479,12 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public WirelessChannel getWirelessChannel(String r_channelName) {
-        if (useGlobalCache && Main.getGlobalCache() != null) {
+        return getWirelessChannel(r_channelName, false);
+    }
+
+    @Override
+    public WirelessChannel getWirelessChannel(String r_channelName, Boolean forceUpdate) {
+        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
             if (Main.getGlobalCache().getAllChannels() != null) {
                 WirelessChannel channel = null;
 
@@ -857,7 +870,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     private void removeWirelessChannel(String channelName, Boolean removeSigns) {
         try {
             if (removeSigns)
-                Main.getSignManager().removeSigns(getWirelessChannel(channelName));
+                Main.getSignManager().removeSigns(getWirelessChannel(channelName, true));
 
             if (!sqlTableExists(channelName)) return;
             PreparedStatement drop = sqLite.getConnection().prepareStatement("DROP TABLE " + Utils.getDatabaseFriendlyName(channelName));
@@ -960,7 +973,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
      * Private method to purge data. Don't use it anywhere else
      */
     private boolean removeWirelessReceiver(String channelName, Location loc, String world) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeReceiverAt(loc, world);
             return removeWirelessPoint(channelName, loc, world);
@@ -971,7 +984,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
      * Private method to purge data. Don't use it anywhere else
      */
     private boolean removeWirelessTransmitter(String channelName, Location loc, String world) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeTransmitterAt(loc, world);
             return removeWirelessPoint(channelName, loc, world);
@@ -982,7 +995,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
      * Private method to purge data. Don't use it anywhere else
      */
     private boolean removeWirelessScreen(String channelName, Location loc, String world) {
-        WirelessChannel channel = getWirelessChannel(channelName);
+        WirelessChannel channel = getWirelessChannel(channelName, true);
         if (channel != null) {
             channel.removeScreenAt(loc, world);
             return removeWirelessPoint(channelName, loc, world);
@@ -1077,16 +1090,5 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 ex.printStackTrace();
         }
         return null;
-    }
-
-    private void updateGlobalCache() {
-        if (Main.getGlobalCache() == null)
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    Main.getGlobalCache().update();
-                }
-            }, 1L);
-        else Main.getGlobalCache().update();
     }
 }
