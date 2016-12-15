@@ -883,7 +883,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     }
 
     public boolean initiate(boolean allowConvert) {
-        Main.getWRLogger().info("Establishing sqLite.getConnection() to database...");
+        Main.getWRLogger().debug("Establishing sqLite.getConnection() to database...");
 
         try {
             sqLite.openConnection();
@@ -899,7 +899,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             return false;
         }
 
-        Main.getWRLogger().info("sqLite.getConnection() established.");
+        Main.getWRLogger().debug("sqLite.getConnection() established.");
 
         if (canConvert() != null && allowConvert) {
             Main.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");

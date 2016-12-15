@@ -13,18 +13,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Updater {
-    private static String updateUrl = "https://wirelessredstonegroup.github.io/WirelessRedstoneUpdate/update.json";
-    private static int maxChangelogLines = 2;
+    private String updateUrl = "https://wirelessredstonegroup.github.io/WirelessRedstoneUpdate/update.json";
+    private int maxChangelogLines = 2;
 
-    private static boolean debug;
+    private boolean debug;
     private BukkitTask task;
+
+    private String latestVersion = null, downloadUrl = null, changelog = null;
 
     public Updater() {
         Main.getWRLogger().debug("Loading updater...");
         debug = ConfigManager.getConfig().getDebugMode();
-        task = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new Runnable() {
+        task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), new Runnable() {
             @Override
             public void run() {
                 checkForUpdate();
@@ -32,7 +35,7 @@ public class Updater {
         }, 1, 20 * 60 * 15); //1 sec = 20 ticks -> minutes -> every quarter
     }
 
-    private static void checkForUpdate() {
+    private void checkForUpdate() {
         Main.getWRLogger().debug("Checking for update...");
 
         URL url = null;
@@ -87,8 +90,15 @@ public class Updater {
             Semver sem = new Semver(latestVerion);
             if (sem.isGreaterThan(Main.getInstance().getDescription().getVersion())) {
                 Main.getWRLogger().debug("New update!");
-                showUpdate(latestVerion, downloadUrl, changelog);
+                this.latestVersion = latestVerion;
+                this.downloadUrl = downloadUrl;
+                this.changelog = changelog;
+
+                showUpdate();
             } else {
+                this.latestVersion = null;
+                this.downloadUrl = null;
+                this.changelog = null;
                 Main.getWRLogger().debug("No update availible");
             }
         } catch (Exception e) {
@@ -98,43 +108,57 @@ public class Updater {
         request.disconnect();
     }
 
-    private static void showUpdate(String latestVersion, String downloadUrl, String changelog) {
-        Main.getWRLogger().info("Version " + latestVersion + " is availible! Download it here: " + downloadUrl);
-        Main.getWRLogger().info("Changelog: ");
-
-        ArrayList<Player> adminPlayers = new ArrayList<>();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (Main.getPermissionsManager().isWirelessAdmin(player)) {
-                adminPlayers.add(player);
-                Utils.sendFeedback("Version " + latestVersion + " is availible! Download it here: ", player, false);
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getDownloadUrl(player.getName())
-                        .replaceAll("%%TEXT", (Utils.isSpigot() ? "Spigot" : "Bukkit") + " download page")
-                        .replaceAll("%%HOVERTEXT", "Click to go to website")
-                        .replaceAll("%%LINK", downloadUrl));
-                Utils.sendFeedback("Changelog: ", player, false);
-            }
-        }
-
-        String[] splitedChangelog = changelog.split("#");
-        int currentLine = 0;
-        for (String line : splitedChangelog) {
-            if (line.equalsIgnoreCase(""))
-                continue;
-
-            if (currentLine > maxChangelogLines)
-                continue;
-
-            Main.getWRLogger().info(" - " + line.replaceAll("#", ""));
-
-            for (Player player : adminPlayers) {
-                player.sendMessage(" - " + line);
-            }
-            currentLine++;
-        }
-
+    public void showUpdate() {
+        if (latestVersion != null && downloadUrl != null && changelog != null)
+            showUpdate(latestVersion, downloadUrl, changelog, Bukkit.getOnlinePlayers());
     }
 
-    private static void showError(Exception e, String text) {
+    public void showUpdate(Collection<Player> players) {
+        if (latestVersion != null && downloadUrl != null && changelog != null)
+            showUpdate(latestVersion, downloadUrl, changelog, players);
+    }
+
+    private void showUpdate(final String latestVersion, final String downloadUrl, final String changelog, final Collection<? extends Player> checkPlayers) {
+        Bukkit.getScheduler().runTask(Main.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                Main.getWRLogger().info("Version " + latestVersion + " is availible! Download it here: " + downloadUrl);
+                Main.getWRLogger().info("Changelog: ");
+
+                ArrayList<Player> adminPlayers = new ArrayList<>();
+                for (Player player : checkPlayers) {
+                    if (Main.getPermissionsManager().isWirelessAdmin(player)) {
+                        adminPlayers.add(player);
+                        Utils.sendFeedback("Version " + latestVersion + " is availible! Download it here: ", player, false);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getDownloadUrl(player.getName())
+                                .replaceAll("%%TEXT", (Utils.isSpigot() ? "Spigot" : "Bukkit") + " download page")
+                                .replaceAll("%%HOVERTEXT", "Click to go to website")
+                                .replaceAll("%%LINK", downloadUrl));
+                        Utils.sendFeedback("Changelog: ", player, false);
+                    }
+                }
+
+                String[] splitedChangelog = changelog.split("#");
+                int currentLine = 0;
+                for (String line : splitedChangelog) {
+                    if (line.equalsIgnoreCase(""))
+                        continue;
+
+                    if (currentLine > maxChangelogLines)
+                        continue;
+
+                    Main.getWRLogger().info(" - " + line.replaceAll("#", ""));
+
+                    for (Player player : adminPlayers) {
+                        player.sendMessage(" - " + line);
+                    }
+                    currentLine++;
+                }
+            }
+        });
+    }
+
+    private void showError(Exception e, String text) {
         if (debug)
             e.printStackTrace();
         Main.getWRLogger().warning(text);

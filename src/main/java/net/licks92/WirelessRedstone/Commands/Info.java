@@ -38,7 +38,7 @@ public class Info extends WirelessCommand {
             Utils.sendFeedback(ChatColor.GRAY + "Sign Types:", sender, false);
             Utils.sendFeedback(ChatColor.GRAY.toString() + channel.getTransmitters().size() + ChatColor.GREEN + " transmitters, "
                     + ChatColor.GRAY + channel.getReceivers().size() + ChatColor.GREEN + " receivers, "
-                    + ChatColor.GRAY + channel.getScreens().size() + ChatColor.GREEN + " screens", sender, false); //Java why the fuck do I need to add toString()
+                    + ChatColor.GRAY + channel.getScreens().size() + ChatColor.GREEN + " screens", sender, false);
         } else {
             if(!(sender instanceof Player)){
                 Utils.sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader (-> CommandManager)

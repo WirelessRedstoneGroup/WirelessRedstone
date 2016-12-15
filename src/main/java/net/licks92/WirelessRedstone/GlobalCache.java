@@ -36,74 +36,47 @@ public class GlobalCache {
         if (async)
             Bukkit.getServer().getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
                 public void run() {
-                    ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
-                    ArrayList<Location> returnlistLocations = new ArrayList<Location>();
-                    ArrayList<Location> returnReceiverLocations = new ArrayList<Location>();
-                    Collection<WirelessChannel> returnChannelList = new ArrayList<WirelessChannel>();
-                    returnChannelList = Main.getStorage().getAllChannels(true);
-
-                    for (WirelessChannel channel : returnChannelList) {
-                        try {
-                            for (IWirelessPoint point : channel.getReceivers()) {
-                                returnlist.add(point);
-                                returnlistLocations.add(point.getLocation());
-                                returnReceiverLocations.add(point.getLocation());
-                            }
-
-                            for (IWirelessPoint point : channel.getTransmitters()) {
-                                returnlist.add(point);
-                                returnlistLocations.add(point.getLocation());
-                            }
-
-                            for (IWirelessPoint point : channel.getScreens()) {
-                                returnlist.add(point);
-                                returnlistLocations.add(point.getLocation());
-                            }
-                        } catch (Exception ignored) {
-
-                        }
-                    }
-
-                    allChannels = returnChannelList;
-                    allSigns = returnlist;
-                    allSignLocations = returnlistLocations;
-                    allReceiverLocations = returnReceiverLocations;
+                    updateList();
                 }
             });
         else {
-            ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
-            ArrayList<Location> returnlistLocations = new ArrayList<Location>();
-            ArrayList<Location> returnReceiverLocations = new ArrayList<Location>();
-            Collection<WirelessChannel> returnChannelList = new ArrayList<WirelessChannel>();
-            returnChannelList = Main.getStorage().getAllChannels(true);
-
-            for (WirelessChannel channel : returnChannelList) {
-                try {
-                    for (IWirelessPoint point : channel.getReceivers()) {
-                        returnlist.add(point);
-                        returnlistLocations.add(point.getLocation());
-                        returnReceiverLocations.add(point.getLocation());
-                    }
-
-                    for (IWirelessPoint point : channel.getTransmitters()) {
-                        returnlist.add(point);
-                        returnlistLocations.add(point.getLocation());
-                    }
-
-                    for (IWirelessPoint point : channel.getScreens()) {
-                        returnlist.add(point);
-                        returnlistLocations.add(point.getLocation());
-                    }
-                } catch (Exception ignored) {
-
-                }
-            }
-
-            allChannels = returnChannelList;
-            allSigns = returnlist;
-            allSignLocations = returnlistLocations;
-            allReceiverLocations = returnReceiverLocations;
+            updateList();
         }
+    }
+
+    private void updateList(){
+        ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
+        ArrayList<Location> returnlistLocations = new ArrayList<Location>();
+        ArrayList<Location> returnReceiverLocations = new ArrayList<Location>();
+        Collection<WirelessChannel> returnChannelList = new ArrayList<WirelessChannel>();
+        returnChannelList = Main.getStorage().getAllChannels(true);
+
+        for (WirelessChannel channel : returnChannelList) {
+            try {
+                for (IWirelessPoint point : channel.getReceivers()) {
+                    returnlist.add(point);
+                    returnlistLocations.add(point.getLocation());
+                    returnReceiverLocations.add(point.getLocation());
+                }
+
+                for (IWirelessPoint point : channel.getTransmitters()) {
+                    returnlist.add(point);
+                    returnlistLocations.add(point.getLocation());
+                }
+
+                for (IWirelessPoint point : channel.getScreens()) {
+                    returnlist.add(point);
+                    returnlistLocations.add(point.getLocation());
+                }
+            } catch (Exception ignored) {
+
+            }
+        }
+
+        allChannels = returnChannelList;
+        allSigns = returnlist;
+        allSignLocations = returnlistLocations;
+        allReceiverLocations = returnReceiverLocations;
     }
 
     public void update() {

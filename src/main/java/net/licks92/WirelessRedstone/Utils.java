@@ -356,6 +356,6 @@ public class Utils {
     }
 
     public static String getDownloadUrl(String playerName) {
-        return  "tellraw " + playerName + " " + "[\"\",{\"text\":\"%%TEXT\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"%%LINK\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
+        return  "tellraw " + playerName + " " + "[\"\",{\"text\":\"%%TEXT\",\"color\":\"blue\",\"italic\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"%%LINK\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
     }
 }
