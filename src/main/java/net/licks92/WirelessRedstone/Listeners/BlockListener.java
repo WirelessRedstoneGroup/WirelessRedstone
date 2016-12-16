@@ -34,7 +34,7 @@ public class BlockListener implements Listener {
                 return;
             }
 
-            if (event.getLine(1).equalsIgnoreCase("")){
+            if (event.getLine(1).equalsIgnoreCase("")) {
                 event.getBlock().setType(Material.AIR);
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                 Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
@@ -280,7 +280,7 @@ public class BlockListener implements Listener {
         if (event.getOldCurrent() == event.getNewCurrent())
             return;
 
-        if(event.getBlock().getState() instanceof Sign){
+        if (event.getBlock().getState() instanceof Sign) {
             Sign signObject = (Sign) event.getBlock().getState();
 
             if (Main.getSignManager().getSignType(signObject.getLine(0)) != SignType.TRANSMITTER)
@@ -310,7 +310,7 @@ public class BlockListener implements Listener {
         }
 
         BlockRedstoneEvent e = null;
-        switch (event.getBlock().getType()){
+        switch (event.getBlock().getType()) {
             case LEVER:
             case STONE_BUTTON:
             case WOOD_BUTTON:
@@ -334,7 +334,7 @@ public class BlockListener implements Listener {
                 break;
         }
 
-        for (BlockFace blockFace : Utils.getEveryBlockFace(true)){
+        for (BlockFace blockFace : Utils.getEveryBlockFace(true)) {
             if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
                 Sign signObject = (Sign) event.getBlock().getRelative(blockFace).getState();
 

@@ -430,7 +430,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean isChannelEmpty(WirelessChannel channel) {
-        return (channel.getReceivers().size() < 1) && (channel.getTransmitters().size() < 1) && (channel.getScreens().size() < 1);
+        return channel == null || (channel.getReceivers().size() < 1) && (channel.getTransmitters().size() < 1) && (channel.getScreens().size() < 1);
     }
 
     @Override
