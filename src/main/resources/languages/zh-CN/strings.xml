@@ -9,7 +9,7 @@
 		<backupFailed>备份失败!</backupFailed>
 		<channelDoesNotExist>此频道不存在！</channelDoesNotExist>
 		<channelLocked>此频道被锁定！</channelLocked>
-		<channelNameContainsInvalidCaracters>此通道名称包含无效caracters！（这个单词我也不知道）</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>此通道名称包含无效caracters！（这个单词我也不知道）</channelNameContainsInvalidCharacters>
 		<channelRemoved>这个频道被移除！</channelRemoved>
 		<channelRemovedCauseNoSign>频道被移除，没有更多的牌子在这个世界上</channelRemovedCauseNoSign>
 		<channelUnlocked>频道被解锁！</channelUnlocked>

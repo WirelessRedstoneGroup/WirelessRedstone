@@ -37,7 +37,7 @@ public class SignManager {
         Boolean isWallSign = (cblock.getType() == Material.WALL_SIGN);
 
         if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCaracters, player, true);
+            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
@@ -137,7 +137,7 @@ public class SignManager {
             channel.addReceiver(receiver);
 
             if (!Main.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCaracters, player, true);
+                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
@@ -162,7 +162,7 @@ public class SignManager {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
 
         if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCaracters, player, true);
+            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
@@ -191,7 +191,7 @@ public class SignManager {
             channel.addTransmitter(transmitter);
 
             if (!Main.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCaracters, player, true);
+                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
@@ -215,7 +215,7 @@ public class SignManager {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
 
         if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCaracters, player, true);
+            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
@@ -244,7 +244,7 @@ public class SignManager {
             channel.addScreen(screen);
 
             if (!Main.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCaracters, player, true);
+                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 

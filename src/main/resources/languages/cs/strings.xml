@@ -9,7 +9,7 @@
 		<backupFailed>Zálohování selhalo!</backupFailed>
 		<channelDoesNotExist>Tento kanál neexistuje!</channelDoesNotExist>
 		<channelLocked>Kánál zamčen!</channelLocked>
-		<channelNameContainsInvalidCaracters>Tento název kanálu obsahuje neplatné znaky!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Tento název kanálu obsahuje neplatné znaky!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Tento kanál byl odstraněn!</channelRemoved>
 		<channelRemovedCauseNoSign>Kanál odstraněn, žádné cedulky ve světě</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanál odemčený!</channelUnlocked>

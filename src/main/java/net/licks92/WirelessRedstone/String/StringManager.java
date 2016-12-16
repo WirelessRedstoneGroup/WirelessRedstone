@@ -12,7 +12,7 @@ public class StringManager {
     public String backupFailed;
     public String channelDoesNotExist;
     public String channelLocked;
-    public String channelNameContainsInvalidCaracters;
+    public String channelNameContainsInvalidCharacters;
     public String channelRemoved;
     public String channelRemovedCauseNoSign;
     public String channelUnlocked;

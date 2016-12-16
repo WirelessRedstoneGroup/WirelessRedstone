@@ -9,7 +9,7 @@
 		<backupFailed>Backup failed!</backupFailed>
 		<channelDoesNotExist>This channel doesn't exist!</channelDoesNotExist>
 		<channelLocked>Channel locked !</channelLocked>
-		<channelNameContainsInvalidCaracters>This channel name contains invalid caracters !</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>This channel name contains invalid caracters !</channelNameContainsInvalidCharacters>
 		<channelRemoved>This channel has been removed!</channelRemoved>
 		<channelRemovedCauseNoSign>Channel removed, no more signs in the worlds</channelRemovedCauseNoSign>
 		<channelUnlocked>Channel unlocked !</channelUnlocked>

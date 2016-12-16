@@ -9,7 +9,7 @@
 		<backupFailed>Backup gefaald!</backupFailed>
 		<channelDoesNotExist>Dit kanaal bestaat niet!</channelDoesNotExist>
 		<channelLocked>Kanaal beveiligd!</channelLocked>
-		<channelNameContainsInvalidCaracters>Dit kanaal naam bevat foute letters</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Dit kanaal naam bevat foute letters</channelNameContainsInvalidCharacters>
 		<channelRemoved>Dit kanaal is verwijderd</channelRemoved>
 		<channelRemovedCauseNoSign>Kanaal verwijderd. Het kanaal bevat geen borden meer in deze wereld.</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanaal gedeblokkeerd!</channelUnlocked>

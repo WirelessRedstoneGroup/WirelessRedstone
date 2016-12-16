@@ -9,7 +9,7 @@
 		<backupFailed>Tworzenie kopii zapasowej nie powiodlo sie!</backupFailed>
 		<channelDoesNotExist>Ten kanal nie istnieje!</channelDoesNotExist>
 		<channelLocked>Kanal zablokowany!</channelLocked>
-		<channelNameContainsInvalidCaracters>Nazwa kanalu ma w sobie nieprawidlowe znaki!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Nazwa kanalu ma w sobie nieprawidlowe znaki!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Ten kanal zostal usuniety!</channelRemoved>
 		<channelRemovedCauseNoSign>Kanal usuniety, brak innych znakow na swiecie</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanal odblokowany!</channelUnlocked>

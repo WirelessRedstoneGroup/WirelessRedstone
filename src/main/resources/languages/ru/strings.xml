@@ -9,7 +9,7 @@
 		<backupFailed>Backup не удался!</backupFailed>
 		<channelDoesNotExist>Этот канал не существует!</channelDoesNotExist>
 		<channelLocked>Канал закрыт !</channelLocked>
-		<channelNameContainsInvalidCaracters>Это название канала содержит недопустимые символы !</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Это название канала содержит недопустимые символы !</channelNameContainsInvalidCharacters>
 		<channelRemoved>Канал был удален!</channelRemoved>
 		<channelRemovedCauseNoSign>Канал удален, не более знаков в миров</channelRemovedCauseNoSign>
 		<channelUnlocked>Канал открыт !</channelUnlocked>

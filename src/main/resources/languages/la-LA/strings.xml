@@ -9,7 +9,7 @@
 		<backupFailed>Duplicationem defuit!</backupFailed>
 		<channelDoesNotExist>Hunc canalem non existit!</channelDoesNotExist>
 		<channelLocked>Canalem clausit!</channelLocked>
-		<channelNameContainsInvalidCaracters>Hoc nomen canalem characteres invalidos continet!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Hoc nomen canalem characteres invalidos continet!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Hunc canelem removatum est!</channelRemoved>
 		<channelRemovedCauseNoSign>Canelem removit, signi absunt</channelRemovedCauseNoSign>
 		<channelUnlocked>Canalem aperuit!</channelUnlocked>

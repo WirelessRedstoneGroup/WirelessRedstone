@@ -9,7 +9,7 @@
 		<backupFailed>Falha ao fazer bakkup!</backupFailed>
 		<channelDoesNotExist>Este canal nao existe!</channelDoesNotExist>
 		<channelLocked>Canal bloqueado!</channelLocked>
-		<channelNameContainsInvalidCaracters>O nome desse canal contem caracteres invalidos!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>O nome desse canal contem caracteres invalidos!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Esse canal foi removido!</channelRemoved>
 		<channelRemovedCauseNoSign>Canal removido, nao ha mais placas nos mundos</channelRemovedCauseNoSign>
 		<channelUnlocked>Canal desbloqueado!</channelUnlocked>

@@ -9,7 +9,7 @@
 		<backupFailed>백업 실패!</backupFailed>
 		<channelDoesNotExist>이 채널은 존재하지 않습니다!</channelDoesNotExist>
 		<channelLocked>채널을 잠궜습니다 !</channelLocked>
-		<channelNameContainsInvalidCaracters>채널 이름에 잘못된 문자가 있습니다!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>채널 이름에 잘못된 문자가 있습니다!</channelNameContainsInvalidCharacters>
 		<channelRemoved>채널이 제거되었습니다!</channelRemoved>
 		<channelRemovedCauseNoSign>채널이 제거되었습니다, 월드에 표지판이 없습니다</channelRemovedCauseNoSign>
 		<channelUnlocked>채널을 잠금해제하였습니다 !</channelUnlocked>

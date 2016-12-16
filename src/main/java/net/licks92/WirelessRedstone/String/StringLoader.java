@@ -83,10 +83,10 @@ public class StringLoader extends StringManager {
                                     .getElementsByTagName("channelUnlocked")
                                     .item(0).getTextContent();
                         if (PMElement
-                                .getElementsByTagName("channelNameContainsInvalidCaracters").item(0) != null)
-                            this.channelNameContainsInvalidCaracters = PMElement
+                                .getElementsByTagName("channelNameContainsInvalidCharacters").item(0) != null)
+                            this.channelNameContainsInvalidCharacters = PMElement
                                     .getElementsByTagName(
-                                            "channelNameContainsInvalidCaracters")
+                                            "channelNameContainsInvalidCharacters")
                                     .item(0).getTextContent();
                         if (PMElement.getElementsByTagName("channelRemoved").item(0) != null)
                             this.channelRemoved = PMElement
