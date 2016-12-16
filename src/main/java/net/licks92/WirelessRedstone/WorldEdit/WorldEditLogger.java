@@ -27,12 +27,20 @@ public class WorldEditLogger extends AbstractLoggingExtent {
             return;
         }
 
-        org.bukkit.World world = ((BukkitWorld)this.eventWorld).getWorld();
+        org.bukkit.World world = ((BukkitWorld) this.eventWorld).getWorld();
+
+        if (world == null || position == null)
+            return;
+
         Block block = world.getBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ());
-        for(Location loc : Main.getGlobalCache().getAllSignLocations()){
-            if(Utils.sameLocation(loc, block.getLocation())){
+
+        if (Main.getGlobalCache() == null)
+            return;
+
+        for (Location loc : Main.getGlobalCache().getAllSignLocations()) {
+            if (Utils.sameLocation(loc, block.getLocation())) {
                 String channelName = Main.getStorage().getWirelessChannelName(loc);
-                if(Main.getStorage().removeIWirelessPoint(channelName, loc)){
+                if (Main.getStorage().removeIWirelessPoint(channelName, loc)) {
                     Main.getStorage().checkChannel(channelName);
                     Main.getWRLogger().debug("Removed sign because of WorldEdit");
                 } else {

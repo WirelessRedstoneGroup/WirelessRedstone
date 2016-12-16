@@ -9,6 +9,7 @@ import javax.sql.rowset.CachedRowSet;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.concurrent.*;
 
 public class SQLite {
@@ -18,10 +19,14 @@ public class SQLite {
     private Connection connection;
     private Boolean updateGlobalCache;
 
+    private ArrayList<PreparedStatement> preparedStatements;
+    private boolean isProcessing = false;
+
     public SQLite(Plugin plugin, String path, Boolean updateGlobalCache) {
         this.plugin = plugin;
         this.path = path;
         this.updateGlobalCache = updateGlobalCache;
+        this.preparedStatements = new ArrayList<>();
     }
 
     public Connection openConnection() throws SQLException, ClassNotFoundException {
@@ -124,14 +129,22 @@ public class SQLite {
     * @param updateGlobalCache update the global cache
     */
     public void execute(final PreparedStatement preparedStatement, final Boolean updateGlobalCache) {
+        preparedStatements.add(preparedStatement);
+
+        if (!isProcessing){
+            proceedStatement(preparedStatements.get(0), updateGlobalCache);
+        }
+    }
+
+    private void proceedStatement(final PreparedStatement preparedStatement, final Boolean updateGlobalCache) {
         if (getConnection() != null) {
+            isProcessing = true;
+
             Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
                 @Override
                 public void run() {
                     try {
                         preparedStatement.execute();
-
-//                        preparedStatement.getConnection().close();
                         preparedStatement.close();
 
                         if (updateGlobalCache) {
@@ -144,6 +157,13 @@ public class SQLite {
                                 }, 1L);
                             else Main.getGlobalCache().update();
                         }
+
+                        preparedStatements.remove(0);
+
+                        if (preparedStatements.size() > 0)
+                            proceedStatement(preparedStatements.get(0), updateGlobalCache);
+                        else
+                            isProcessing = false;
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
