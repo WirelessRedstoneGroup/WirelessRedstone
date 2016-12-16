@@ -152,10 +152,10 @@ public class SQLite {
                                 Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
                                     @Override
                                     public void run() {
-                                        Main.getGlobalCache().update();
+                                        Main.getGlobalCache().update(false); //We are already asking this async
                                     }
                                 }, 1L);
-                            else Main.getGlobalCache().update();
+                            else Main.getGlobalCache().update(false);
                         }
 
                         preparedStatements.remove(0);
