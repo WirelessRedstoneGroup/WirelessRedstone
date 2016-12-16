@@ -945,7 +945,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
             update.execute();
             update.close();
-            Main.getGlobalCache().update();
         } catch (SQLException e) {
             e.printStackTrace();
         }
