@@ -943,7 +943,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     .where(sqlSignZ + "='" + receiver.getZ() + "'")
                     .toString());
 
-            sqLite.execute(update);
+            update.execute();
+            update.close();
+            Main.getGlobalCache().update();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -960,7 +962,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             Main.getWRLogger().debug("Statement to delete wireless sign : " + sql);
             PreparedStatement delete = sqLite.getConnection().prepareStatement(sql);
             sqLite.execute(delete);
-            Main.getGlobalCache().update();
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
