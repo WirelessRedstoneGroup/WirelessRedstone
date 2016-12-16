@@ -62,7 +62,7 @@ public class Utils {
 
     public static boolean containsBadChar(String string) {
         //Check if string contains something different then a-z 0-9. It also checks if it contains a tab char
-        Pattern p = Pattern.compile("([^a-z0-9-_]|[\\t])", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("([^a-z0-9_]|[\\t])", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(string);
 
         return m.find();
