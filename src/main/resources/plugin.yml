@@ -59,6 +59,7 @@ permissions:
             wirelessredstone.admin.convertdata: true
             wirelessredstone.admin.purgedata: true
             wirelessredstone.admin.restoredata: true
+            wirelessredstone.admin.updatecache: true
     wirelessredstone.create.transmitter:
         description: Allows you to create a transmitter
         default: op
@@ -124,4 +125,7 @@ permissions:
         default: op
     wirelessredstone.admin.restoredata:
         description: Allows you to restore the database from the latest backup.
+        default: op
+    wirelessredstone.admin.updatecache:
+        description: Allows you to update the global cache.
         default: op

@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.*;
 
 public class SQLite {
@@ -22,11 +24,57 @@ public class SQLite {
     private ArrayList<PreparedStatement> preparedStatements;
     private boolean isProcessing = false;
 
-    public SQLite(Plugin plugin, String path, Boolean updateGlobalCache) {
+    public SQLite(Plugin plugin, String path, final Boolean updateGlobalCache) {
         this.plugin = plugin;
         this.path = path;
         this.updateGlobalCache = updateGlobalCache;
         this.preparedStatements = new ArrayList<>();
+
+        final Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (Main.getInstance() == null){
+                    timer.cancel();
+                    return;
+                }
+
+                if (!Main.getInstance().isEnabled()) { // Plugin was disabled
+                    timer.cancel();
+                    return;
+                }
+
+                if (getConnection() != null) {
+                    try {
+                        if (preparedStatements.size() > 0) {
+                            PreparedStatement preparedStatement = preparedStatements.get(0);
+
+                            if (preparedStatement == null) {
+                                return;
+                            }
+
+                            preparedStatement.execute();
+                            preparedStatement.close();
+
+                            if (updateGlobalCache) {
+                                if (Main.getGlobalCache() == null)
+                                    Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Main.getGlobalCache().update(false); //We are already asking this async
+                                        }
+                                    }, 1L);
+                                else Main.getGlobalCache().update(false);
+                            }
+
+                            preparedStatements.remove(0);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, 100, 100);
     }
 
     public Connection openConnection() throws SQLException, ClassNotFoundException {
@@ -130,45 +178,5 @@ public class SQLite {
     */
     public void execute(final PreparedStatement preparedStatement, final Boolean updateGlobalCache) {
         preparedStatements.add(preparedStatement);
-
-        if (!isProcessing){
-            proceedStatement(preparedStatements.get(0), updateGlobalCache);
-        }
-    }
-
-    private void proceedStatement(final PreparedStatement preparedStatement, final Boolean updateGlobalCache) {
-        if (getConnection() != null) {
-            isProcessing = true;
-
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        preparedStatement.execute();
-                        preparedStatement.close();
-
-                        if (updateGlobalCache) {
-                            if (Main.getGlobalCache() == null)
-                                Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Main.getGlobalCache().update(false); //We are already asking this async
-                                    }
-                                }, 1L);
-                            else Main.getGlobalCache().update(false);
-                        }
-
-                        preparedStatements.remove(0);
-
-                        if (preparedStatements.size() > 0)
-                            proceedStatement(preparedStatements.get(0), updateGlobalCache);
-                        else
-                            isProcessing = false;
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
     }
 }

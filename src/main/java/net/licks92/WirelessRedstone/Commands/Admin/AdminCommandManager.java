@@ -32,6 +32,7 @@ public class AdminCommandManager implements CommandExecutor {
         cmds.add(new AdminRestore());
         cmds.add(new AdminPurge());
         cmds.add(new AdminWipeData());
+        cmds.add(new AdminUpdateCache());
     }
 
     @Override
@@ -84,7 +85,7 @@ public class AdminCommandManager implements CommandExecutor {
                 return true;
             }
 
-            if (!(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
+            if (!(sender instanceof Player || sender instanceof ConsoleCommandSender) && !wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock()) {
                 Main.getWRLogger().info("Commandblocks are not allowed to run command: /wradmin " + args[0]);
                 return true;
             }
