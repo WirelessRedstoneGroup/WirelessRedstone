@@ -574,6 +574,18 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                 Main.getWRLogger().info("Done! All the channels are now stored in the Yaml Files.");
             }
         }
+
+        Collection<String> remove = new ArrayList<>();
+
+        for (WirelessChannel channel : getAllChannels()) {
+            if ((channel.getReceivers().size() < 1) && (channel.getTransmitters().size() < 1) && (channel.getScreens().size() < 1)) {
+                remove.add(channel.getName());
+            }
+        }
+
+        for (String channelRemove : remove) {
+            removeWirelessChannel(channelRemove);
+        }
         return true;
     }
 
@@ -600,7 +612,14 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             e.printStackTrace();
         }
 
-        Main.getGlobalCache().update();
+        if (Main.getGlobalCache() == null)
+            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    Main.getGlobalCache().update();
+                }
+            }, 1L);
+        else Main.getGlobalCache().update();
     }
 
     /**

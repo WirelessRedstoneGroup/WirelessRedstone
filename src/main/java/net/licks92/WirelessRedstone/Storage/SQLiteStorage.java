@@ -448,7 +448,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         }
 
         try {
-            ArrayList<WirelessChannel> channels = new ArrayList<WirelessChannel>();
+            ArrayList<WirelessChannel> channels = new ArrayList<>();
 
             ResultSet rs = null;
 
@@ -457,9 +457,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 rs = sqLite.query(master);
             } catch (NullPointerException ex) {
                 Main.getWRLogger().severe("SQL: NullPointerException when asking for the list of channels!");
-                return new ArrayList<WirelessChannel>();
+                return new ArrayList<>();
             }
-            ArrayList<String> channelNames = new ArrayList<String>();
+            ArrayList<String> channelNames = new ArrayList<>();
             while (rs.next()) {
                 channelNames.add(getNormalName(rs.getString("name")));
             }
@@ -468,6 +468,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             for (String channelName : channelNames) {
                 channels.add(getWirelessChannel(channelName, forceUpdate));
             }
+
             return channels;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -878,7 +879,14 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Main.getGlobalCache().update();
+            if (Main.getGlobalCache() == null)
+                Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Main.getGlobalCache().update();
+                    }
+                }, 1L);
+            else Main.getGlobalCache().update();
         }
     }
 
@@ -907,6 +915,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             if (convertFromAnotherStorage(canConvert())) {
                 Main.getWRLogger().info("Done! All the channels are now stored in the SQLite database.");
             }
+        }
+
+        Collection<String> remove = new ArrayList<>();
+
+        for (WirelessChannel channel : getAllChannels()) {
+            if ((channel.getReceivers().size() < 1) && (channel.getTransmitters().size() < 1) && (channel.getScreens().size() < 1)) {
+                remove.add(channel.getName());
+            }
+        }
+
+        for (String channelRemove : remove) {
+            removeWirelessChannel(channelRemove);
         }
         return true;
     }
