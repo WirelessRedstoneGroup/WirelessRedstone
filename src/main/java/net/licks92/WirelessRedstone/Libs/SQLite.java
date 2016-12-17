@@ -1,7 +1,7 @@
 package net.licks92.WirelessRedstone.Libs;
 
 import com.sun.rowset.CachedRowSetImpl;
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -34,12 +34,12 @@ public class SQLite {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (Main.getInstance() == null){
+                if (WirelessRedstone.getInstance() == null){
                     timer.cancel();
                     return;
                 }
 
-                if (!Main.getInstance().isEnabled()) { // Plugin was disabled
+                if (!WirelessRedstone.getInstance().isEnabled()) { // Plugin was disabled
                     timer.cancel();
                     return;
                 }
@@ -57,14 +57,14 @@ public class SQLite {
                             preparedStatement.close();
 
                             if (updateGlobalCache) {
-                                if (Main.getGlobalCache() == null)
-                                    Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                                if (WirelessRedstone.getGlobalCache() == null)
+                                    Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                                         @Override
                                         public void run() {
-                                            Main.getGlobalCache().update(false); //We are already asking this async
+                                            WirelessRedstone.getGlobalCache().update(false); //We are already asking this async
                                         }
                                     }, 1L);
-                                else Main.getGlobalCache().update(false);
+                                else WirelessRedstone.getGlobalCache().update(false);
                             }
 
                             preparedStatements.remove(0);
@@ -88,9 +88,9 @@ public class SQLite {
         if (!(file.exists())) {
             try {
                 file.createNewFile();
-                Main.getWRLogger().debug("Created new DB file.");
+                WirelessRedstone.getWRLogger().debug("Created new DB file.");
             } catch (IOException e) {
-                Main.getWRLogger().debug("Unable to create database!");
+                WirelessRedstone.getWRLogger().debug("Unable to create database!");
             }
         }
 
@@ -98,7 +98,7 @@ public class SQLite {
         connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder().toPath().toString() + File.separator
                 + path);
 
-        Main.getWRLogger().debug("jdbc:sqlite:" + plugin.getDataFolder().toPath().toString() + File.separator
+        WirelessRedstone.getWRLogger().debug("jdbc:sqlite:" + plugin.getDataFolder().toPath().toString() + File.separator
                 + path);
 
         return connection;

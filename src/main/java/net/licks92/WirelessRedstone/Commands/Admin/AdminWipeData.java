@@ -2,8 +2,8 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -19,11 +19,11 @@ public class AdminWipeData extends WirelessCommand {
     @Override
     public void onCommand(final CommandSender sender, String[] args) {
         if (!confirmation.contains(sender.getName())) {
-            Utils.sendFeedback(ChatColor.BOLD + Main.getStrings().DBAboutToBeDeleted, sender, true);
+            Utils.sendFeedback(ChatColor.BOLD + WirelessRedstone.getStrings().DBAboutToBeDeleted, sender, true);
 
             confirmation.add(sender.getName());
 
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     confirmation.remove(sender.getName());
@@ -35,10 +35,10 @@ public class AdminWipeData extends WirelessCommand {
 
         confirmation.remove(sender.getName());
 
-        if (Main.getStorage().wipeData()) {
-            Utils.sendFeedback(Main.getStrings().DBDeleted, sender, false);
+        if (WirelessRedstone.getStorage().wipeData()) {
+            Utils.sendFeedback(WirelessRedstone.getStrings().DBDeleted, sender, false);
         } else {
-            Utils.sendFeedback(Main.getStrings().DBNotDeleted, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().DBNotDeleted, sender, true);
         }
     }
 }

@@ -280,7 +280,7 @@ public class Utils {
 
     public static void loadChunks() {
         if (ConfigManager.getConfig().getCancelChunkUnload()) {
-            for (IWirelessPoint point : Main.getGlobalCache().getAllSigns()) {
+            for (IWirelessPoint point : WirelessRedstone.getGlobalCache().getAllSigns()) {
                 Location location = point.getLocation();
                 if (location.getWorld() == null)
                     continue; // world currently not loaded.

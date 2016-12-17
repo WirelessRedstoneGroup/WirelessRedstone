@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.Storage;
 
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 
 import java.io.File;
 
@@ -9,7 +9,7 @@ public class StorageManager {
     IWirelessStorageConfiguration storage;
 
     public StorageManager(StorageType type, String channelFolder) {
-        File channelFolderFile = new File(Main.getInstance().getDataFolder(), channelFolder);
+        File channelFolderFile = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
         channelFolderFile.mkdir();
         switch (type) { //TODO: Add MYSQL support
             case SQLITE:

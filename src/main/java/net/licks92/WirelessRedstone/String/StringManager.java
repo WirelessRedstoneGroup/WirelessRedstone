@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.String;
 
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +74,7 @@ public class StringManager {
         tagsReceiverClockType = new ArrayList<String>();
         tagsReceiverSwitchType = new ArrayList<String>();
 
-        Main.getWRLogger().debug("Loading the tags...");
+        WirelessRedstone.getWRLogger().debug("Loading the tags...");
 
         tellRawString = "tellraw %%PLAYER [\"\",{\"text\":\"[\",\"color\":\"dark_blue\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"\\u27A4\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"] \",\"color\":\"dark_blue\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}}]";
 

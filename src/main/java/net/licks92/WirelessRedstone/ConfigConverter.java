@@ -13,7 +13,7 @@ public class ConfigConverter {
         switch (upgrade) {
             case 1: {
                 File channelFolderFile;
-                channelFolderFile = new File(Main.getInstance().getDataFolder(), channelFolder);
+                channelFolderFile = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
                 channelFolderFile.mkdir();
 
                 if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE

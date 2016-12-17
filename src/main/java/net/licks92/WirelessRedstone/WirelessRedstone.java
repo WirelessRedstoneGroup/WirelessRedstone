@@ -17,11 +17,11 @@ import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin {
+public class WirelessRedstone extends JavaPlugin {
 
     private Boolean fullyStarted = false;
 
-    private static Main instance;
+    private static WirelessRedstone instance;
     private static GlobalCache globalCache; //GlobalCache -> Manage global cache, SignManager -> Manage WireBox functions
     private static SignManager signManager;
     private static WRLogger WRLogger;
@@ -36,7 +36,7 @@ public class Main extends JavaPlugin {
 
     private ConfigManager config;
 
-    public static Main getInstance() {
+    public static WirelessRedstone getInstance() {
         return instance;
     }
 
@@ -85,7 +85,7 @@ public class Main extends JavaPlugin {
     }
 
     public static void setWorldEditHooker(WorldEditHooker worldEditHooker) {
-        Main.worldEditHooker = worldEditHooker;
+        WirelessRedstone.worldEditHooker = worldEditHooker;
     }
 
     private static final String CHANNEL_FOLDER = "channels";
@@ -94,8 +94,8 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         if (fullyStarted) {
             try {
-                Main.getSignManager().stopAllClocks();
-                Main.getStorage().updateReceivers();
+                WirelessRedstone.getSignManager().stopAllClocks();
+                WirelessRedstone.getStorage().updateReceivers();
                 storageManager.getStorage().close();
             } catch (Exception ex) {
                 WRLogger.severe("An error occured when disabling the plugin!");
@@ -209,13 +209,13 @@ public class Main extends JavaPlugin {
             channelGraph.addPlotter(new Metrics.Plotter("Total channels") {
                 @Override
                 public int getValue() {
-                    return Main.getStorage().getAllChannels().size();
+                    return WirelessRedstone.getStorage().getAllChannels().size();
                 }
             });
             channelGraph.addPlotter(new Metrics.Plotter("Total signs") {
                 @Override
                 public int getValue() {
-                    return Main.getGlobalCache().getAllSigns().size();
+                    return WirelessRedstone.getGlobalCache().getAllSigns().size();
                 }
             });
 
@@ -225,7 +225,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getTransmitters().size();
                     }
                     return total;
@@ -235,7 +235,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getReceivers().size();
                     }
                     return total;
@@ -245,7 +245,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getScreens().size();
                     }
                     return total;
@@ -257,7 +257,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.DEFAULT).size();
                     }
                     return total;
@@ -267,7 +267,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.INVERTER).size();
                     }
                     return total;
@@ -277,7 +277,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.DELAYER).size();
                     }
                     return total;
@@ -287,7 +287,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.CLOCK).size();
                     }
                     return total;
@@ -297,7 +297,7 @@ public class Main extends JavaPlugin {
                 @Override
                 public int getValue() {
                     int total = 0;
-                    for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
                         total += channel.getReceiversOfType(WirelessReceiver.Type.SWITCH).size();
                     }
                     return total;

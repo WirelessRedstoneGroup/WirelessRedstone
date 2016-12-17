@@ -3,9 +3,9 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Storage.StorageType;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -15,37 +15,37 @@ public class AdminRestore extends WirelessCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        switch (Main.getStorage().restoreData()) {
+        switch (WirelessRedstone.getStorage().restoreData()) {
             case YAML: {
                 if (ConfigManager.getConfig().getStorageType() != StorageType.YAML) {
-                    Main.getSignManager().stopAllClocks();
+                    WirelessRedstone.getSignManager().stopAllClocks();
 
                     ConfigManager.getConfig().setStorageType(StorageType.YAML);
-                    Main.getStorage().close();
+                    WirelessRedstone.getStorage().close();
 
-                    Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                         @Override
                         public void run() {
-                            Main.getStorage().initStorage();
+                            WirelessRedstone.getStorage().initStorage();
                         }
                     }, 1L);
                 }
 
-                Utils.sendFeedback(Main.getStrings().restoreDataDone, sender, false);
+                Utils.sendFeedback(WirelessRedstone.getStrings().restoreDataDone, sender, false);
                 break;
             }
 
             case SQLITE: {
                 if (ConfigManager.getConfig().getStorageType() != StorageType.SQLITE) {
-                    Main.getSignManager().stopAllClocks();
+                    WirelessRedstone.getSignManager().stopAllClocks();
 
                     ConfigManager.getConfig().setStorageType(StorageType.SQLITE);
-                    Main.getStorage().close();
+                    WirelessRedstone.getStorage().close();
 
-                    Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                         @Override
                         public void run() {
-                            Main.getStorage().initStorage();
+                            WirelessRedstone.getStorage().initStorage();
                         }
                     }, 1L);
                 }
@@ -54,7 +54,7 @@ public class AdminRestore extends WirelessCommand {
             }
 
             default:
-                Utils.sendFeedback(Main.getStrings().restoreDataFailed, sender, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().restoreDataFailed, sender, true);
                 break;
         }
     }

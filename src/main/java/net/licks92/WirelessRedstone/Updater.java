@@ -25,9 +25,9 @@ public class Updater {
     private String latestVersion = null, downloadUrl = null, changelog = null;
 
     public Updater() {
-        Main.getWRLogger().debug("Loading updater...");
+        WirelessRedstone.getWRLogger().debug("Loading updater...");
         debug = ConfigManager.getConfig().getDebugMode();
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), new Runnable() {
+        task = Bukkit.getScheduler().runTaskTimerAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
                 checkForUpdate();
@@ -36,7 +36,7 @@ public class Updater {
     }
 
     private void checkForUpdate() {
-        Main.getWRLogger().debug("Checking for update...");
+        WirelessRedstone.getWRLogger().debug("Checking for update...");
 
         URL url = null;
         try {
@@ -85,11 +85,11 @@ public class Updater {
             String downloadUrl = version.getAsJsonObject(Utils.isSpigot() ? "spigot" : "bukkit").get("downloadUrl").getAsString();
             String changelog = version.get("changelog").getAsString();
 
-            Main.getWRLogger().debug("Comparing " + Main.getInstance().getDescription().getVersion() + " vs " + latestVersion + (Utils.isSpigot() ? "-spigot" : "-bukkit"));
+            WirelessRedstone.getWRLogger().debug("Comparing " + WirelessRedstone.getInstance().getDescription().getVersion() + " vs " + latestVersion + (Utils.isSpigot() ? "-spigot" : "-bukkit"));
 
             Semver sem = new Semver(latestVersion);
-            if (sem.isGreaterThan(Main.getInstance().getDescription().getVersion())) {
-                Main.getWRLogger().debug("New update!");
+            if (sem.isGreaterThan(WirelessRedstone.getInstance().getDescription().getVersion())) {
+                WirelessRedstone.getWRLogger().debug("New update!");
                 this.latestVersion = latestVersion;
                 this.downloadUrl = downloadUrl;
                 this.changelog = changelog;
@@ -99,7 +99,7 @@ public class Updater {
                 this.latestVersion = null;
                 this.downloadUrl = null;
                 this.changelog = null;
-                Main.getWRLogger().debug("No update availible");
+                WirelessRedstone.getWRLogger().debug("No update availible");
             }
         } catch (Exception e) {
             showError(e, "Error while parsing JSON file. Skipping update check.");
@@ -114,15 +114,15 @@ public class Updater {
     }
 
     private void showUpdate(final String latestVersion, final String downloadUrl, final String changelog, final Collection<? extends Player> checkPlayers) {
-        Bukkit.getScheduler().runTask(Main.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Main.getWRLogger().info("Version " + latestVersion + " is availible! Download it here: " + downloadUrl);
-                Main.getWRLogger().info("Changelog: ");
+                WirelessRedstone.getWRLogger().info("Version " + latestVersion + " is availible! Download it here: " + downloadUrl);
+                WirelessRedstone.getWRLogger().info("Changelog: ");
 
                 ArrayList<Player> adminPlayers = new ArrayList<>();
                 for (Player player : checkPlayers) {
-                    if (Main.getPermissionsManager().isWirelessAdmin(player)) {
+                    if (WirelessRedstone.getPermissionsManager().isWirelessAdmin(player)) {
                         adminPlayers.add(player);
                         Utils.sendFeedback("Version " + latestVersion + " is availible! Download it here: ", player, false);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getDownloadUrl(player.getName())
@@ -142,7 +142,7 @@ public class Updater {
                     if (currentLine > maxChangelogLines)
                         continue;
 
-                    Main.getWRLogger().info(" - " + line.replaceAll("#", ""));
+                    WirelessRedstone.getWRLogger().info(" - " + line.replaceAll("#", ""));
 
                     for (Player player : adminPlayers) {
                         player.sendMessage(" - " + line);
@@ -156,6 +156,6 @@ public class Updater {
     private void showError(Exception e, String text) {
         if (debug)
             e.printStackTrace();
-        Main.getWRLogger().warning(text);
+        WirelessRedstone.getWRLogger().warning(text);
     }
 }

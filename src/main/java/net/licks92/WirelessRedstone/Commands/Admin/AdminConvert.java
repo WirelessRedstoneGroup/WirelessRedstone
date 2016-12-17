@@ -3,9 +3,9 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Storage.StorageType;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -21,16 +21,16 @@ public class AdminConvert extends WirelessCommand {
     @Override
     public void onCommand(final CommandSender sender, String[] args) {
         if (args.length == 0) {
-            Utils.sendFeedback(Main.getStrings().tooFewArguments, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
             return;
         }
 
         if (!confirmation.contains(sender.getName())) {
-            Utils.sendFeedback(ChatColor.BOLD + Main.getStrings().convertContinue.replaceAll("%%STORAGETYPE", args[0]), sender, true);
+            Utils.sendFeedback(ChatColor.BOLD + WirelessRedstone.getStrings().convertContinue.replaceAll("%%STORAGETYPE", args[0]), sender, true);
 
             confirmation.add(sender.getName());
 
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     confirmation.remove(sender.getName());
@@ -46,51 +46,51 @@ public class AdminConvert extends WirelessCommand {
             case "YML":
             case "YAML": {
                 if (ConfigManager.getConfig().getStorageType() == StorageType.YAML) {
-                    Utils.sendFeedback(Main.getStrings().convertSameType, sender, true);
+                    Utils.sendFeedback(WirelessRedstone.getStrings().convertSameType, sender, true);
                     return;
                 }
 
-                Main.getSignManager().stopAllClocks();
+                WirelessRedstone.getSignManager().stopAllClocks();
 
                 ConfigManager.getConfig().setStorageType(StorageType.YAML);
-//                Main.getStorage().backupData("yml");
-                Main.getStorage().close();
+//                WirelessRedstone.getStorage().backupData("yml");
+                WirelessRedstone.getStorage().close();
 
-                Main.getInstance().resetStorageManager();
-                Main.getStorage().initStorage();
+                WirelessRedstone.getInstance().resetStorageManager();
+                WirelessRedstone.getStorage().initStorage();
                 break;
             }
 
             case "SQL":
             case "SQLITE": {
                 if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE) {
-                    Utils.sendFeedback(Main.getStrings().convertSameType, sender, true);
+                    Utils.sendFeedback(WirelessRedstone.getStrings().convertSameType, sender, true);
                     return;
                 }
 
-                Main.getSignManager().stopAllClocks();
+                WirelessRedstone.getSignManager().stopAllClocks();
 
                 ConfigManager.getConfig().setStorageType(StorageType.SQLITE);
-//                Main.getStorage().backupData("db");
-                Main.getStorage().close();
+//                WirelessRedstone.getStorage().backupData("db");
+                WirelessRedstone.getStorage().close();
 
-                Main.getInstance().resetStorageManager();
-                Main.getStorage().initStorage();
+                WirelessRedstone.getInstance().resetStorageManager();
+                WirelessRedstone.getStorage().initStorage();
                 break;
             }
 
             default:
-                Utils.sendFeedback(Main.getStrings().convertFailed, sender, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().convertFailed, sender, true);
                 return;
         }
 
-        Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Main.getStorage().initStorage();
+                WirelessRedstone.getStorage().initStorage();
             }
         }, 1L);
 
-        Utils.sendFeedback(Main.getStrings().convertDone, sender, false);
+        Utils.sendFeedback(WirelessRedstone.getStrings().convertDone, sender, false);
     }
 }

@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.WorldEdit;
 
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 
 public class WorldEditLoader {
@@ -24,9 +24,9 @@ public class WorldEditLoader {
             }
             if (validVersion) {
                 WorldEditHooker.register();
-                Main.getWRLogger().debug("Hooked into WorldEdit");
+                WirelessRedstone.getWRLogger().debug("Hooked into WorldEdit");
             } else {
-                Main.getWRLogger().severe("Error while hooking worldedit. Invalid WorldEdit version.");
+                WirelessRedstone.getWRLogger().severe("Error while hooking worldedit. Invalid WorldEdit version.");
             }
         }
         catch (Exception e) {

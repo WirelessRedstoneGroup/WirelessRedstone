@@ -2,8 +2,8 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Purge database", usage = "", aliases = {"purge"},
@@ -12,10 +12,10 @@ public class AdminPurge extends WirelessCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (Main.getStorage().purgeData()) {
-            Utils.sendFeedback(Main.getStrings().purgeDataDone, sender, false);
+        if (WirelessRedstone.getStorage().purgeData()) {
+            Utils.sendFeedback(WirelessRedstone.getStrings().purgeDataDone, sender, false);
         } else {
-            Utils.sendFeedback(Main.getStrings().purgeDataFailed, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().purgeDataFailed, sender, true);
         }
     }
 }

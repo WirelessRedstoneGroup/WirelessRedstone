@@ -2,8 +2,8 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -57,7 +57,7 @@ public class AdminCommandManager implements CommandExecutor {
                     }
                 }
                 if (timer == 0) {
-                    Utils.sendFeedback(Main.getStrings().playerDoesntHavePermission, sender, true, true);
+                    Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
                 }
 
                 return true;
@@ -76,17 +76,17 @@ public class AdminCommandManager implements CommandExecutor {
             }
 
             if (wanted == null) {
-                Utils.sendFeedback(Main.getStrings().subCommandDoesNotExist, sender, true, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().subCommandDoesNotExist, sender, true, true);
                 return true;
             }
 
             if (!sender.hasPermission("wirelessredstone.admin." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
-                Utils.sendFeedback(Main.getStrings().playerDoesntHavePermission, sender, true, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
                 return true;
             }
 
             if (!(sender instanceof Player || sender instanceof ConsoleCommandSender) && !wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock()) {
-                Main.getWRLogger().info("Commandblocks are not allowed to run command: /wradmin " + args[0]);
+                WirelessRedstone.getWRLogger().info("Commandblocks are not allowed to run command: /wradmin " + args[0]);
                 return true;
             }
 

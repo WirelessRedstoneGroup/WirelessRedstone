@@ -2,9 +2,9 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Add owner to WirlessChannel", usage = "<channel> <playername>", aliases = {"addowner"},
@@ -14,7 +14,7 @@ public class AdminAddOwner extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            Utils.sendFeedback(Main.getStrings().tooFewArguments, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
             return;
         }
 
@@ -22,13 +22,13 @@ public class AdminAddOwner extends WirelessCommand {
         String playerName = args[1];
 
         if (!hasAccessToChannel(sender, channelName)) {
-            Utils.sendFeedback(Main.getStrings().playerDoesntHaveAccessToChannel, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
             return;
         }
 
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(channelName);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(channelName);
         if (channel == null) {
-            Utils.sendFeedback(Main.getStrings().channelDoesNotExist, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().channelDoesNotExist, sender, true);
             return;
         }
 
@@ -38,9 +38,9 @@ public class AdminAddOwner extends WirelessCommand {
         }
 
         channel.addOwner(playerName);
-        Main.getStorage().updateChannel(channelName, channel);
+        WirelessRedstone.getStorage().updateChannel(channelName, channel);
 
-        Main.getWRLogger().info("Channel " + channelName + " has been updated. Player " + playerName + " has been added to the owner list.");
+        WirelessRedstone.getWRLogger().info("Channel " + channelName + " has been updated. Player " + playerName + " has been added to the owner list.");
         Utils.sendFeedback("User " + playerName + " is added to channel " + channelName, sender, false);  //TODO: Add string to stringloader
     }
 }

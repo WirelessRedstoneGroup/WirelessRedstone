@@ -1,7 +1,7 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -205,9 +205,9 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 
     public void changeSignContent(Block block, String channelName) {
         Sign signtemp = (Sign) block.getState();
-        signtemp.setLine(0, Main.getStrings().tagsReceiver.get(0));
+        signtemp.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
         signtemp.setLine(1, channelName);
-        signtemp.setLine(2, Main.getStrings().tagsReceiverDefaultType.get(0));
+        signtemp.setLine(2, WirelessRedstone.getStrings().tagsReceiverDefaultType.get(0));
         signtemp.update(true);
     }
 }

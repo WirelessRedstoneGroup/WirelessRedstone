@@ -1,7 +1,7 @@
 package net.licks92.WirelessRedstone.Commands;
 
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -54,7 +54,7 @@ public class CommandManager implements CommandExecutor {
                     }
                 }
                 if (timer == 0) {
-                    Utils.sendFeedback(Main.getStrings().playerDoesntHavePermission, sender, true, true);
+                    Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
                 }
 
                 return true;
@@ -73,17 +73,17 @@ public class CommandManager implements CommandExecutor {
             }
 
             if (wanted == null) {
-                Utils.sendFeedback(Main.getStrings().subCommandDoesNotExist, sender, true, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().subCommandDoesNotExist, sender, true, true);
                 return true;
             }
 
             if (!sender.hasPermission("wirelessredstone.commands." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
-                Utils.sendFeedback(Main.getStrings().playerDoesntHavePermission, sender, true, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
                 return true;
             }
 
             if(!wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock() && !(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
-                Main.getWRLogger().info("Commandblocks are not allowed to run command: /wr " + args[0]);
+                WirelessRedstone.getWRLogger().info("Commandblocks are not allowed to run command: /wr " + args[0]);
                 return true;
             }
 

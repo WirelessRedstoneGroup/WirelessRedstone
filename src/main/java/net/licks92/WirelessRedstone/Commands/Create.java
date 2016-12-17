@@ -1,10 +1,10 @@
 package net.licks92.WirelessRedstone.Commands;
 
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -18,7 +18,7 @@ public class Create extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            Utils.sendFeedback(Main.getStrings().tooFewArguments, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
             return;
         }
 
@@ -34,16 +34,16 @@ public class Create extends WirelessCommand {
             case RECEIVER_CLOCK:
             case RECEIVER_DELAYER:
                 if (args.length < 3) {
-                    Utils.sendFeedback(Main.getStrings().tooFewArguments, sender, true);
+                    Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
                     return;
                 }
                 break;
         }
 
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(cname);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(cname);
         if (channel != null) {
             if (!hasAccessToChannel(sender, cname)) {
-                Utils.sendFeedback(Main.getStrings().playerDoesntHaveAccessToChannel, sender, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
                 return;
             }
         }
@@ -62,32 +62,32 @@ public class Create extends WirelessCommand {
 
         switch (type) {
             case TRANSMITTER:
-                sign.setLine(0, Main.getStrings().tagsTransmitter.get(0));
+                sign.setLine(0, WirelessRedstone.getStrings().tagsTransmitter.get(0));
                 sign.update();
-                Main.getSignManager().addWirelessTransmitter(cname, location.getBlock(), player);
+                WirelessRedstone.getSignManager().addWirelessTransmitter(cname, location.getBlock(), player);
                 break;
             case SCREEN:
-                sign.setLine(0, Main.getStrings().tagsScreen.get(0));
+                sign.setLine(0, WirelessRedstone.getStrings().tagsScreen.get(0));
                 sign.update();
-                Main.getSignManager().addWirelessScreen(cname, location.getBlock(), player);
+                WirelessRedstone.getSignManager().addWirelessScreen(cname, location.getBlock(), player);
                 break;
             case RECEIVER_NORMAL:
-                sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
-                sign.setLine(2, Main.getStrings().tagsReceiverDefaultType.get(0));
+                sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+                sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverDefaultType.get(0));
                 sign.update();
-                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.DEFAULT);
+                WirelessRedstone.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.DEFAULT);
                 break;
             case RECEIVER_INVERTER:
-                sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
-                sign.setLine(2, Main.getStrings().tagsReceiverInverterType.get(0));
+                sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+                sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverInverterType.get(0));
                 sign.update();
-                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.INVERTER);
+                WirelessRedstone.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.INVERTER);
                 break;
             case RECEIVER_SWITCH:
-                sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
-                sign.setLine(2, Main.getStrings().tagsReceiverSwitchType.get(0));
+                sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+                sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverSwitchType.get(0));
                 sign.update();
-                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.SWITCH);
+                WirelessRedstone.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.SWITCH);
                 break;
             case RECEIVER_DELAYER:
                 Integer delay;
@@ -100,11 +100,11 @@ public class Create extends WirelessCommand {
                     return;
                 }
 
-                sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
-                sign.setLine(2, Main.getStrings().tagsReceiverDelayerType.get(0));
+                sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+                sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverDelayerType.get(0));
                 sign.setLine(3, delay.toString());
                 sign.update();
-                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.DELAYER);
+                WirelessRedstone.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.DELAYER);
                 break;
             case RECEIVER_CLOCK:
                 Integer pulse;
@@ -117,11 +117,11 @@ public class Create extends WirelessCommand {
                     return;
                 }
 
-                sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
-                sign.setLine(2, Main.getStrings().tagsReceiverClockType.get(0));
+                sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+                sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverClockType.get(0));
                 sign.setLine(3, pulse.toString());
                 sign.update();
-                Main.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.CLOCK);
+                WirelessRedstone.getSignManager().addWirelessReceiver(cname, location.getBlock(), player, WirelessReceiver.Type.CLOCK);
                 break;
         }
     }

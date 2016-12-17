@@ -1,9 +1,9 @@
 package net.licks92.WirelessRedstone.Storage;
 
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.*;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -26,7 +26,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     private String channelFolderStr;
 
     public YamlStorage(String channelFolder) {
-        this.channelFolder = new File(Main.getInstance().getDataFolder(), channelFolder);
+        this.channelFolder = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
         this.channelFolderStr = channelFolder;
 
         //Initialize the serialization
@@ -61,23 +61,23 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public boolean createWirelessPoint(String channelName, IWirelessPoint point) {
         WirelessChannel channel = getWirelessChannel(channelName, true);
         if (point instanceof WirelessReceiver) {
-            Main.getWRLogger().debug("Yaml config: Creating a receiver of class "
+            WirelessRedstone.getWRLogger().debug("Yaml config: Creating a receiver of class "
                     + point.getClass());
             if (point instanceof WirelessReceiverInverter) {
                 channel.addReceiver((WirelessReceiverInverter) point);
-                Main.getWRLogger().debug("Yaml Config: Adding an inverter");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an inverter");
             } else if (point instanceof WirelessReceiverSwitch) {
                 channel.addReceiver((WirelessReceiverSwitch) point);
-                Main.getWRLogger().debug("Yaml Config: Adding an Switch");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an Switch");
             } else if (point instanceof WirelessReceiverDelayer) {
                 channel.addReceiver((WirelessReceiverDelayer) point);
-                Main.getWRLogger().debug("Yaml Config: Adding an Delayer");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an Delayer");
             } else if (point instanceof WirelessReceiverClock) {
                 channel.addReceiver((WirelessReceiverClock) point);
-                Main.getWRLogger().debug("Yaml Config: Adding an Clock");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding an Clock");
             } else {
                 channel.addReceiver((WirelessReceiver) point);
-                Main.getWRLogger().debug("Yaml Config: Adding a default receiver");
+                WirelessRedstone.getWRLogger().debug("Yaml Config: Adding a default receiver");
             }
         } else if (point instanceof WirelessTransmitter)
             channel.addTransmitter((WirelessTransmitter) point);
@@ -230,7 +230,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             zos.close();
             fos.close();
 
-            Main.getWRLogger().info("Channels saved in archive : " + zipName);
+            WirelessRedstone.getWRLogger().info("Channels saved in archive : " + zipName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -318,12 +318,12 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             }
 
             for (String channelRemove : remove) {
-                Main.getStorage().removeWirelessChannel(channelRemove);
+                WirelessRedstone.getStorage().removeWirelessChannel(channelRemove);
             }
 
             return true;
         } catch (Exception e) {
-            Main.getWRLogger().severe("An error occured. Enable debug mode to see the stacktraces.");
+            WirelessRedstone.getWRLogger().severe("An error occured. Enable debug mode to see the stacktraces.");
             if (ConfigManager.getConfig().getDebugMode()) {
                 e.printStackTrace();
             }
@@ -333,17 +333,17 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean convertFromAnotherStorage(StorageType type) { //TODO: Finish this after creating support for SQLite
-        Main.getWRLogger().info("Backuping the channels/ folder before transfer.");
+        WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
         boolean canConinue = true;
 
         if (type == StorageType.SQLITE)
             canConinue = backupData("db");
 
         if (!canConinue) {
-            Main.getWRLogger().severe("Backup failed! Data transfer abort...");
+            WirelessRedstone.getWRLogger().severe("Backup failed! Data transfer abort...");
             return false;
         } else {
-            Main.getWRLogger().info("Backup done. Starting data transfer...");
+            WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
 
             if (type == StorageType.SQLITE) {
                 SQLiteStorage sql = new SQLiteStorage(channelFolderStr);
@@ -374,10 +374,10 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Collection<WirelessChannel> getAllChannels(Boolean forceUpdate) {
-        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
-            if (Main.getGlobalCache().getAllChannels() != null) {
-//                Main.getWRLogger().debug("Accessed all WirelessChannel from cache");
-                return Main.getGlobalCache().getAllChannels();
+        if (useGlobalCache && WirelessRedstone.getGlobalCache() != null && !forceUpdate) {
+            if (WirelessRedstone.getGlobalCache().getAllChannels() != null) {
+//                WirelessRedstone.getWRLogger().debug("Accessed all WirelessChannel from cache");
+                return WirelessRedstone.getGlobalCache().getAllChannels();
             }
         }
 
@@ -401,12 +401,12 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             Object channel = channelConfig.get(channelName);
             if (channel instanceof WirelessChannel) {
                 channels.add((WirelessChannel) channel);
-                Main.getWRLogger().debug("Found channel: " + ((WirelessChannel) channel).getName());
+                WirelessRedstone.getWRLogger().debug("Found channel: " + ((WirelessChannel) channel).getName());
             } else if (channel == null) {
-                Main.getWRLogger().debug("File " + f.getName() + " does not contain a Wireless Channel. Removing it.");
+                WirelessRedstone.getWRLogger().debug("File " + f.getName() + " does not contain a Wireless Channel. Removing it.");
                 f.delete();
             } else
-                Main.getWRLogger().warning("Channel " + channel + " is not of type WirelessChannel.");
+                WirelessRedstone.getWRLogger().warning("Channel " + channel + " is not of type WirelessChannel.");
         }
         if (channels.isEmpty()) {
             return new ArrayList<WirelessChannel>();
@@ -421,18 +421,18 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public WirelessChannel getWirelessChannel(String channelName, Boolean forceUpdate) {
-        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
-            if (Main.getGlobalCache().getAllChannels() != null) {
+        if (useGlobalCache && WirelessRedstone.getGlobalCache() != null && !forceUpdate) {
+            if (WirelessRedstone.getGlobalCache().getAllChannels() != null) {
                 WirelessChannel channel = null;
 
-                for (WirelessChannel cacheChannel : Main.getGlobalCache().getAllChannels()) {
+                for (WirelessChannel cacheChannel : WirelessRedstone.getGlobalCache().getAllChannels()) {
                     if (cacheChannel.getName().equalsIgnoreCase(channelName)) {
                         channel = cacheChannel;
                         break;
                     }
                 }
 
-//                Main.getWRLogger().debug("Accessed WirelessChannel from cache");
+//                WirelessRedstone.getWRLogger().debug("Accessed WirelessChannel from cache");
                 return channel;
             }
         }
@@ -442,7 +442,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             File channelFile = new File(channelFolder, channelName + ".yml");
             channelConfig.load(channelFile);
         } catch (FileNotFoundException e) {
-            Main.getWRLogger().debug("File " + channelName + ".yml wasn't found in the channels folder, returning null.");
+            WirelessRedstone.getWRLogger().debug("File " + channelName + ".yml wasn't found in the channels folder, returning null.");
             return null;
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
@@ -452,7 +452,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         if (channel == null)
             return null;
         else if (!(channel instanceof WirelessChannel)) {
-            Main.getWRLogger().warning("Channel " + channelName + " does not seem to be of type WirelessChannel.");
+            WirelessRedstone.getWRLogger().warning("Channel " + channelName + " does not seem to be of type WirelessChannel.");
             return null;
         } else
             return (WirelessChannel) channel;
@@ -519,14 +519,14 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public void removeWirelessChannel(String channelName) {
-        Main.getSignManager().removeSigns(getWirelessChannel(channelName, true));
+        WirelessRedstone.getSignManager().removeSigns(getWirelessChannel(channelName, true));
         setWirelessChannel(channelName, null);
         for (File f : channelFolder.listFiles()) {
             if (f.getName().equals(channelName + ".yml")) {
                 f.delete();
             }
         }
-        Main.getWRLogger().debug("Channel " + channelName + " successfully removed and file deleted.");
+        WirelessRedstone.getWRLogger().debug("Channel " + channelName + " successfully removed and file deleted.");
     }
 
     @Override
@@ -553,7 +553,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         try {
             if (getLastBackup() == null) {
                 if (ConfigManager.getConfig().getDebugMode())
-                    Main.getWRLogger().debug("Couldn't get last backup, aborting restore");
+                    WirelessRedstone.getWRLogger().debug("Couldn't get last backup, aborting restore");
                 return null;
             }
 
@@ -568,10 +568,10 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     public boolean initiate(boolean allowConvert) {
         if (canConvert() != null && allowConvert) {
-            Main.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");
-            Main.getWRLogger().info("Beginning data transfer to Yaml...");
+            WirelessRedstone.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");
+            WirelessRedstone.getWRLogger().info("Beginning data transfer to Yaml...");
             if (convertFromAnotherStorage(canConvert())) {
-                Main.getWRLogger().info("Done! All the channels are now stored in the Yaml Files.");
+                WirelessRedstone.getWRLogger().info("Done! All the channels are now stored in the Yaml Files.");
             }
         }
 
@@ -612,14 +612,14 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             e.printStackTrace();
         }
 
-        if (Main.getGlobalCache() == null)
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+        if (WirelessRedstone.getGlobalCache() == null)
+            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    Main.getGlobalCache().update();
+                    WirelessRedstone.getGlobalCache().update();
                 }
             }, 1L);
-        else Main.getGlobalCache().update();
+        else WirelessRedstone.getGlobalCache().update();
     }
 
     /**
@@ -696,16 +696,16 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                 File newFile = new File(outputFolder + File.separator + fileName);
 
                 if (ConfigManager.getConfig().getDebugMode())
-                    Main.getWRLogger().debug("File unziped: " + newFile.getAbsoluteFile());
+                    WirelessRedstone.getWRLogger().debug("File unziped: " + newFile.getAbsoluteFile());
 
                 if (fileName.endsWith(".db")) {
                     returnValue = StorageType.SQLITE;
                     if (ConfigManager.getConfig().getDebugMode())
-                        Main.getWRLogger().debug("Found SQLite file! Changing storage type to SQLite after restore.");
+                        WirelessRedstone.getWRLogger().debug("Found SQLite file! Changing storage type to SQLite after restore.");
                 } else if (fileName.endsWith(".yml")) {
                     returnValue = StorageType.YAML;
                     if (ConfigManager.getConfig().getDebugMode())
-                        Main.getWRLogger().debug("Found yml file! Changing storage type to yml after restore.");
+                        WirelessRedstone.getWRLogger().debug("Found yml file! Changing storage type to yml after restore.");
                 }
 
                 //create all non exists folders
@@ -726,7 +726,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             zis.close();
 
             if (ConfigManager.getConfig().getDebugMode())
-                Main.getWRLogger().debug("Unpacking zip done!");
+                WirelessRedstone.getWRLogger().debug("Unpacking zip done!");
 
             return returnValue;
         } catch (IOException ex) {

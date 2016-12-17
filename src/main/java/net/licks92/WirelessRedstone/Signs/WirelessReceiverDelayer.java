@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -48,7 +48,7 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
     @Override
     public void turnOff(final String channelName) {
         int delayInTicks = delay / 50;
-        Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
                 superTurnOff(channelName);
@@ -59,9 +59,9 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName){
         Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
+        sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, Main.getStrings().tagsReceiverDelayerType.get(0));
+        sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverDelayerType.get(0));
         sign.setLine(3, Integer.toString(delay));
         sign.update();
     }

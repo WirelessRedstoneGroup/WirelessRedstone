@@ -2,9 +2,9 @@ package net.licks92.WirelessRedstone.Storage;
 
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Libs.*;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.*;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -46,9 +46,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
 
     public SQLiteStorage(String channelFolder) {
-        this.channelFolder = new File(Main.getInstance().getDataFolder(), channelFolder);
+        this.channelFolder = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
         this.channelFolderStr = channelFolder;
-        this.sqLite = new SQLite(Main.getInstance(), channelFolder + File.separator + "WirelessRedstoneDatabase.db", useGlobalCache);
+        this.sqLite = new SQLite(WirelessRedstone.getInstance(), channelFolder + File.separator + "WirelessRedstoneDatabase.db", useGlobalCache);
     }
 
     @Override
@@ -60,9 +60,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public boolean close() {
         try {
             sqLite.closeConnection();
-            Main.getWRLogger().info("Successfully closed SQLite sqLite.getConnection().");
+            WirelessRedstone.getWRLogger().info("Successfully closed SQLite sqLite.getConnection().");
         } catch (SQLException e) {
-            Main.getWRLogger().warning("Cannot close SQLite sqLite.getConnection().");
+            WirelessRedstone.getWRLogger().warning("Cannot close SQLite sqLite.getConnection().");
             if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
@@ -75,7 +75,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         if (!sqlTableExists(channel.getName())) {
             // Get the type of the sign that has been created
             if (channel.getReceivers().isEmpty() && channel.getTransmitters().isEmpty() && channel.getScreens().isEmpty()) {
-                Main.getWRLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
+                WirelessRedstone.getWRLogger().severe("Channel created with no IWirelessPoint in, stopping the creation of the channel.");
                 return false;
             }
 
@@ -125,14 +125,14 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 ex.printStackTrace();
             }
         }
-        Main.getWRLogger().debug("Tried to create a channel that already exists in the database");
+        WirelessRedstone.getWRLogger().debug("Tried to create a channel that already exists in the database");
         return false;
     }
 
     @Override
     public boolean createWirelessPoint(String channelName, IWirelessPoint point) {
         if (!sqlTableExists(channelName)) {
-            Main.getWRLogger().severe("Could not create this wireless point in the channel " + channelName + ", it does not exist!");
+            WirelessRedstone.getWRLogger().severe("Could not create this wireless point in the channel " + channelName + ", it does not exist!");
         }
 
         Integer isWallSign;
@@ -148,8 +148,8 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 signType = "receiver_delayer_" + ((WirelessReceiverDelayer) (point)).getDelay();
             else if (point instanceof WirelessReceiverSwitch) {
                 boolean state;
-                if (Main.getSignManager().switchState.get(((WirelessReceiverSwitch) (point)).getLocation()) != null)
-                    state = Main.getSignManager().switchState.get(((WirelessReceiverSwitch) (point)).getLocation());
+                if (WirelessRedstone.getSignManager().switchState.get(((WirelessReceiverSwitch) (point)).getLocation()) != null)
+                    state = WirelessRedstone.getSignManager().switchState.get(((WirelessReceiverSwitch) (point)).getLocation());
                 else state = false;
                 signType = "receiver_switch_" + state;
             } else if (point instanceof WirelessReceiverClock)
@@ -317,7 +317,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             zos.close();
             fos.close();
 
-            Main.getWRLogger().info("Channels saved in archive: " + zipName);
+            WirelessRedstone.getWRLogger().info("Channels saved in archive: " + zipName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -389,7 +389,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
             return true;
         } catch (Exception e) {
-            Main.getWRLogger().severe("An error occured. Enable debug mode to see the stacktraces.");
+            WirelessRedstone.getWRLogger().severe("An error occured. Enable debug mode to see the stacktraces.");
             if (ConfigManager.getConfig().getDebugMode()) {
                 e.printStackTrace();
             }
@@ -399,17 +399,17 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean convertFromAnotherStorage(StorageType type) {
-        Main.getWRLogger().info("Backuping the channels/ folder before transfer.");
+        WirelessRedstone.getWRLogger().info("Backuping the channels/ folder before transfer.");
         boolean canConinue = true;
 
         if (type == StorageType.YAML)
             canConinue = backupData("yml");
 
         if (!canConinue) {
-            Main.getWRLogger().severe("Backup failed! Data transfer abort...");
+            WirelessRedstone.getWRLogger().severe("Backup failed! Data transfer abort...");
             return false;
         } else {
-            Main.getWRLogger().info("Backup done. Starting data transfer...");
+            WirelessRedstone.getWRLogger().info("Backup done. Starting data transfer...");
 
             if (type == StorageType.YAML) {
                 YamlStorage yaml = new YamlStorage(channelFolderStr);
@@ -440,10 +440,10 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public Collection<WirelessChannel> getAllChannels(Boolean forceUpdate) {
-        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
-            if (Main.getGlobalCache().getAllChannels() != null) {
-//                Main.getWRLogger().debug("Accessed all WirelessChannel from cache");
-                return Main.getGlobalCache().getAllChannels();
+        if (useGlobalCache && WirelessRedstone.getGlobalCache() != null && !forceUpdate) {
+            if (WirelessRedstone.getGlobalCache().getAllChannels() != null) {
+//                WirelessRedstone.getWRLogger().debug("Accessed all WirelessChannel from cache");
+                return WirelessRedstone.getGlobalCache().getAllChannels();
             }
         }
 
@@ -456,7 +456,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 PreparedStatement master = sqLite.getConnection().prepareStatement("SELECT `name` FROM sqlite_master WHERE type = \"table\"");
                 rs = sqLite.query(master);
             } catch (NullPointerException ex) {
-                Main.getWRLogger().severe("SQL: NullPointerException when asking for the list of channels!");
+                WirelessRedstone.getWRLogger().severe("SQL: NullPointerException when asking for the list of channels!");
                 return new ArrayList<>();
             }
             ArrayList<String> channelNames = new ArrayList<>();
@@ -485,18 +485,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     @Override
     public WirelessChannel getWirelessChannel(String r_channelName, Boolean forceUpdate) {
-        if (useGlobalCache && Main.getGlobalCache() != null && !forceUpdate) {
-            if (Main.getGlobalCache().getAllChannels() != null) {
+        if (useGlobalCache && WirelessRedstone.getGlobalCache() != null && !forceUpdate) {
+            if (WirelessRedstone.getGlobalCache().getAllChannels() != null) {
                 WirelessChannel channel = null;
 
-                for (WirelessChannel cacheChannel : Main.getGlobalCache().getAllChannels()) {
+                for (WirelessChannel cacheChannel : WirelessRedstone.getGlobalCache().getAllChannels()) {
                     if (cacheChannel.getName().equalsIgnoreCase(r_channelName)) {
                         channel = cacheChannel;
                         break;
                     }
                 }
 
-//                Main.getWRLogger().debug("Accessed WirelessChannel from cache");
+//                WirelessRedstone.getWRLogger().debug("Accessed WirelessChannel from cache");
                 return channel;
             }
         }
@@ -786,7 +786,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         try {
             if (getLastBackup() == null) {
                 if (ConfigManager.getConfig().getDebugMode())
-                    Main.getWRLogger().debug("Couldn't get last backup, aborting restore");
+                    WirelessRedstone.getWRLogger().debug("Couldn't get last backup, aborting restore");
                 return null;
             }
 
@@ -848,7 +848,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         for (WirelessChannel channel : getAllChannels()) {
             for (WirelessReceiver receiver : channel.getReceivers()) {
                 if (receiver instanceof WirelessReceiverSwitch) {
-                    Main.getWRLogger().debug("Updating Switcher from channel " + channel.getName());
+                    WirelessRedstone.getWRLogger().debug("Updating Switcher from channel " + channel.getName());
                     updateSwitch(channel, receiver);
                 }
             }
@@ -871,7 +871,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     private void removeWirelessChannel(String channelName, Boolean removeSigns) {
         try {
             if (removeSigns)
-                Main.getSignManager().removeSigns(getWirelessChannel(channelName, true));
+                WirelessRedstone.getSignManager().removeSigns(getWirelessChannel(channelName, true));
 
             if (!sqlTableExists(channelName)) return;
             PreparedStatement drop = sqLite.getConnection().prepareStatement("DROP TABLE " + Utils.getDatabaseFriendlyName(channelName));
@@ -879,41 +879,41 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (Main.getGlobalCache() == null)
-                Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+            if (WirelessRedstone.getGlobalCache() == null)
+                Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                     @Override
                     public void run() {
-                        Main.getGlobalCache().update();
+                        WirelessRedstone.getGlobalCache().update();
                     }
                 }, 1L);
-            else Main.getGlobalCache().update();
+            else WirelessRedstone.getGlobalCache().update();
         }
     }
 
     public boolean initiate(boolean allowConvert) {
-        Main.getWRLogger().debug("Establishing sqLite.getConnection() to database...");
+        WirelessRedstone.getWRLogger().debug("Establishing sqLite.getConnection() to database...");
 
         try {
             sqLite.openConnection();
         } catch (SQLException | ClassNotFoundException ex) {
-            Main.getWRLogger().severe("Error while starting plugin. Message: " + ex.getLocalizedMessage() + ". Enable debug mode to see the full stack trace.");
+            WirelessRedstone.getWRLogger().severe("Error while starting plugin. Message: " + ex.getLocalizedMessage() + ". Enable debug mode to see the full stack trace.");
 
             if (ConfigManager.getConfig().getDebugMode())
                 ex.printStackTrace();
 
-            Main.getWRLogger().severe("**********");
-            Main.getWRLogger().severe("Plugin can't connect to the SQLite database. Shutting down plugin...");
-            Main.getWRLogger().severe("**********");
+            WirelessRedstone.getWRLogger().severe("**********");
+            WirelessRedstone.getWRLogger().severe("Plugin can't connect to the SQLite database. Shutting down plugin...");
+            WirelessRedstone.getWRLogger().severe("**********");
             return false;
         }
 
-        Main.getWRLogger().debug("sqLite.getConnection() established.");
+        WirelessRedstone.getWRLogger().debug("sqLite.getConnection() established.");
 
         if (canConvert() != null && allowConvert) {
-            Main.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");
-            Main.getWRLogger().info("Beginning data transfer to SQLite...");
+            WirelessRedstone.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");
+            WirelessRedstone.getWRLogger().info("Beginning data transfer to SQLite...");
             if (convertFromAnotherStorage(canConvert())) {
-                Main.getWRLogger().info("Done! All the channels are now stored in the SQLite database.");
+                WirelessRedstone.getWRLogger().info("Done! All the channels are now stored in the SQLite database.");
             }
         }
 
@@ -978,7 +978,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     .where(sqlSignZ + "='" + loc.getBlockZ() + "'")
                     .where(sqlSignWorld + "='" + world + "'")
                     .toString();
-            Main.getWRLogger().debug("Statement to delete wireless sign : " + sql);
+            WirelessRedstone.getWRLogger().debug("Statement to delete wireless sign : " + sql);
             PreparedStatement delete = sqLite.getConnection().prepareStatement(sql);
             sqLite.execute(delete);
         } catch (SQLException ex) {
@@ -1072,16 +1072,16 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 File newFile = new File(outputFolder + File.separator + fileName);
 
                 if (ConfigManager.getConfig().getDebugMode())
-                    Main.getWRLogger().debug("File unziped: " + newFile.getAbsoluteFile());
+                    WirelessRedstone.getWRLogger().debug("File unziped: " + newFile.getAbsoluteFile());
 
                 if (fileName.endsWith(".db")) {
                     returnValue = StorageType.SQLITE;
                     if (ConfigManager.getConfig().getDebugMode())
-                        Main.getWRLogger().debug("Found SQLite file! Changing storage type to SQLite after restore.");
+                        WirelessRedstone.getWRLogger().debug("Found SQLite file! Changing storage type to SQLite after restore.");
                 } else if (fileName.endsWith(".yml")) {
                     returnValue = StorageType.YAML;
                     if (ConfigManager.getConfig().getDebugMode())
-                        Main.getWRLogger().debug("Found yml file! Changing storage type to yml after restore.");
+                        WirelessRedstone.getWRLogger().debug("Found yml file! Changing storage type to yml after restore.");
                 }
 
                 //create all non exists folders
@@ -1102,7 +1102,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             zis.close();
 
             if (ConfigManager.getConfig().getDebugMode())
-                Main.getWRLogger().debug("Unpacking zip done!");
+                WirelessRedstone.getWRLogger().debug("Unpacking zip done!");
 
             return returnValue;
         } catch (IOException ex) {

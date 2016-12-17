@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.String;
 
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -18,7 +18,7 @@ public class StringLoader extends StringManager {
     private final String fallbackLanguage= "en";
 
     public StringLoader(String language){
-        Main plugin = Main.getInstance();
+        WirelessRedstone plugin = WirelessRedstone.getInstance();
 
         InputStream stream = plugin.getResource(stringFolder + language + "/strings.xml");
 
@@ -26,7 +26,7 @@ public class StringLoader extends StringManager {
             loadFromStream(plugin.getResource(stringFolder + fallbackLanguage + "/strings.xml")); //Load english strings in case the translated string isn't available
             loadFromStream(stream);
         } else {
-            Main.getWRLogger().warning("You've set the language to " + language + " in your configuration. " +
+            WirelessRedstone.getWRLogger().warning("You've set the language to " + language + " in your configuration. " +
                     "This language isn't available. The plugin will use English as language.");
 
             loadFromStream(plugin.getResource(stringFolder + fallbackLanguage + "/strings.xml"));
@@ -46,7 +46,7 @@ public class StringLoader extends StringManager {
                 switch (rootNodes.item(i).getNodeName()) {
                     case "tags": // Load the tags
                         final Element tagsElement = (Element) rootNodes.item(i);
-                        Main.getWRLogger().debug(
+                        WirelessRedstone.getWRLogger().debug(
                                 "Loading the tags...");
 
                         if (tagsElement.getElementsByTagName("chatTag").item(0) != null)
@@ -58,7 +58,7 @@ public class StringLoader extends StringManager {
 
                     case "playermessages": // Load the PM strings
                         Element PMElement = (Element) rootNodes.item(i);
-                        Main.getWRLogger().debug(
+                        WirelessRedstone.getWRLogger().debug(
                                 "Loading the player messages ..");
 
                         if (PMElement.getElementsByTagName("backupDone").item(0) != null)
@@ -275,7 +275,7 @@ public class StringLoader extends StringManager {
 
                     case "logmessages": // Load the LM strings
                         Element LMElement = (Element) rootNodes.item(i);
-                        Main.getWRLogger().debug(
+                        WirelessRedstone.getWRLogger().debug(
                                 "Loading the log messages ..");
 
                         if (LMElement
@@ -287,13 +287,13 @@ public class StringLoader extends StringManager {
                 }
             }
         } catch (ParserConfigurationException e) {
-            Main.getWRLogger().severe(
+            WirelessRedstone.getWRLogger().severe(
                     "Error while loading the xml parser.");
         } catch (SAXException | IOException e) {
-            Main.getWRLogger().severe(
+            WirelessRedstone.getWRLogger().severe(
                     "Error while parsing the xml file.");
         } catch (NullPointerException e) {
-            Main.getWRLogger().severe(
+            WirelessRedstone.getWRLogger().severe(
                     "Your strings file is not correctly written.");
             e.printStackTrace();
         }

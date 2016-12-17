@@ -1,8 +1,8 @@
 package net.licks92.WirelessRedstone.Commands;
 
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,18 +14,18 @@ public class Teleport extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            Utils.sendFeedback(Main.getStrings().tooFewArguments, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
             return;
         }
 
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(args[0]);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(args[0]);
         if (channel == null) {
-            Utils.sendFeedback(Main.getStrings().channelDoesNotExist, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().channelDoesNotExist, sender, true);
             return;
         }
 
         if (!hasAccessToChannel(sender, args[0])) {
-            Utils.sendFeedback(Main.getStrings().playerDoesntHaveAccessToChannel, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
             return;
         }
 

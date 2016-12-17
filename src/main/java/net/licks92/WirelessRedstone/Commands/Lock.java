@@ -1,8 +1,8 @@
 package net.licks92.WirelessRedstone.Commands;
 
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Toggle/set locked state for WirelessChannel", usage = "<channel> [state]", aliases = {"lock"},
@@ -12,14 +12,14 @@ public class Lock extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            Utils.sendFeedback(Main.getStrings().tooFewArguments, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
             return;
         }
 
         String cname = args[0];
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(cname);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(cname);
         if (channel == null) {
-            Utils.sendFeedback(Main.getStrings().channelDoesNotExist, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().channelDoesNotExist, sender, true);
             return;
         }
 
@@ -30,7 +30,7 @@ public class Lock extends WirelessCommand {
         }
 
         channel.setLocked(newState);
-        Main.getStorage().updateChannel(args[0], channel);
+        WirelessRedstone.getStorage().updateChannel(args[0], channel);
         Utils.sendFeedback("Successfully changed locked state to " + newState + ".", sender, false); //TODO: Add this string to the stringloader
     }
 }

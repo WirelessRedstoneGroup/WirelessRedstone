@@ -24,7 +24,7 @@ public class GlobalCache {
 
         Integer timeInTicks = refreshTime * 20;
 
-        refreshingTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), new Runnable() {
+        refreshingTask = Bukkit.getScheduler().runTaskTimerAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
                 update();
@@ -34,7 +34,7 @@ public class GlobalCache {
 
     private void updateAllSigns(boolean async) {
         if (async)
-            Bukkit.getServer().getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
+            Bukkit.getServer().getScheduler().runTaskAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
                 public void run() {
                     updateList();
                 }
@@ -49,7 +49,7 @@ public class GlobalCache {
         ArrayList<Location> returnlistLocations = new ArrayList<Location>();
         ArrayList<Location> returnReceiverLocations = new ArrayList<Location>();
         Collection<WirelessChannel> returnChannelList = new ArrayList<WirelessChannel>();
-        returnChannelList = Main.getStorage().getAllChannels(true);
+        returnChannelList = WirelessRedstone.getStorage().getAllChannels(true);
 
         for (WirelessChannel channel : returnChannelList) {
             try {

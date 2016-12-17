@@ -1,8 +1,8 @@
 package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.IWirelessPoint;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -18,7 +18,7 @@ public class WorldListener implements Listener {
         if (!event.isCancelled()) {
             if (ConfigManager.getConfig().getCancelChunkUnload()) {
                 try {
-                    List<IWirelessPoint> points = Main.getGlobalCache().getAllSigns();
+                    List<IWirelessPoint> points = WirelessRedstone.getGlobalCache().getAllSigns();
                     for (IWirelessPoint point : points) {
                         if (Math.abs(event.getChunk().getX() - point.getLocation().getBlock().getChunk().getX())
                                 > ConfigManager.getConfig().getCancelChunkUnloadRange()) {

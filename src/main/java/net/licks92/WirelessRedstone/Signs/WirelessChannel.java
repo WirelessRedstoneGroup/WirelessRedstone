@@ -2,8 +2,8 @@ package net.licks92.WirelessRedstone.Signs;
 
 import com.avaje.ebean.validation.NotNull;
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -52,7 +52,7 @@ public class WirelessChannel implements ConfigurationSerializable {
 
     public void turnOn(Integer time) {
         if (isLocked()) {
-            Main.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
+            WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
             return;
         }
 
@@ -71,7 +71,7 @@ public class WirelessChannel implements ConfigurationSerializable {
 
     public void turnOn() {
         if (isLocked()) {
-            Main.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
+            WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
             return;
         }
         // Turning on the receivers ONLY if the channel isn't active.
@@ -86,14 +86,14 @@ public class WirelessChannel implements ConfigurationSerializable {
                 screen.turnOn();
             }
         } catch (RuntimeException e) {
-            Main.getWRLogger().severe("Error while turning on the receivers of channel " + name
+            WirelessRedstone.getWRLogger().severe("Error while turning on the receivers of channel " + name
                     + ". Please turn the debug mode on to get more informations.");
 
             if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
-        if (!Main.getSignManager().activeChannels.contains(getName())) {
-            Main.getSignManager().activeChannels.add(getName());
+        if (!WirelessRedstone.getSignManager().activeChannels.contains(getName())) {
+            WirelessRedstone.getSignManager().activeChannels.add(getName());
         }
     }
 
@@ -115,45 +115,45 @@ public class WirelessChannel implements ConfigurationSerializable {
                 screen.turnOff();
             }
         } catch (RuntimeException e) {
-            Main.getWRLogger()
+            WirelessRedstone.getWRLogger()
                     .severe("Error while updating redstone onBlockRedstoneChange for Screens, turn on the Debug Mode to get more informations.");
 
             if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
         }
-        if (Main.getSignManager().activeChannels.contains(getName())) {
-            Main.getSignManager().activeChannels.remove(getName());
+        if (WirelessRedstone.getSignManager().activeChannels.contains(getName())) {
+            WirelessRedstone.getSignManager().activeChannels.remove(getName());
         }
     }
 
     public void startClock(BukkitTask task) {
-        Main.getSignManager().clockTasks.put(task.getTaskId(),
+        WirelessRedstone.getSignManager().clockTasks.put(task.getTaskId(),
                 getName());
-        Main.getWRLogger().debug(
+        WirelessRedstone.getWRLogger().debug(
                 "Added clock task " + task.getTaskId()
                         + " to te list for circuit " + getName());
     }
 
     public void stopClock() {
         ArrayList<Integer> remove = new ArrayList<Integer>();
-        for (Map.Entry<Integer, String> task : Main.getSignManager().clockTasks
+        for (Map.Entry<Integer, String> task : WirelessRedstone.getSignManager().clockTasks
                 .entrySet()) {
             if (!task.getValue().equalsIgnoreCase(getName())) {
                 continue;
             }
             Bukkit.getScheduler().cancelTask(task.getKey());
             remove.add(task.getKey());
-            Main.getWRLogger().debug("Stopped clock task " + task);
+            WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
         }
         for (Integer i : remove) {
-            Main.getSignManager().clockTasks.remove(i);
+            WirelessRedstone.getSignManager().clockTasks.remove(i);
         }
         remove.clear();
     }
 
     public void toggle(Integer redstoneValue, Block block) {
         if (redstoneValue > 0) {
-            if (Main.getSignManager().activeChannels
+            if (WirelessRedstone.getSignManager().activeChannels
                     .contains(getName())) {
                 return;
             }

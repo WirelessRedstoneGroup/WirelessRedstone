@@ -17,16 +17,16 @@ public class ConfigManager {
     private final YamlConfiguration config;
 
     private ConfigManager(final String fileName) {
-        if (!Main.getInstance().getDataFolder().exists()) {
-            Main.getInstance().getDataFolder().mkdir();
+        if (!WirelessRedstone.getInstance().getDataFolder().exists()) {
+            WirelessRedstone.getInstance().getDataFolder().mkdir();
         }
 
-        file = new File(Main.getInstance().getDataFolder(), fileName + ".yml");
+        file = new File(WirelessRedstone.getInstance().getDataFolder(), fileName + ".yml");
 
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                copyStream(Main.getInstance().getResource("config.yml"), new FileOutputStream(file));
+                copyStream(WirelessRedstone.getInstance().getResource("config.yml"), new FileOutputStream(file));
             } catch (final Exception e) {
                 e.printStackTrace();
             }

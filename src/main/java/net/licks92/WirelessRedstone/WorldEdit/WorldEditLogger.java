@@ -7,8 +7,8 @@ import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.extent.Extent;
 import com.sk89q.worldedit.extent.logging.AbstractLoggingExtent;
 import com.sk89q.worldedit.world.World;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -34,17 +34,17 @@ public class WorldEditLogger extends AbstractLoggingExtent {
 
         Block block = world.getBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ());
 
-        if (Main.getGlobalCache() == null)
+        if (WirelessRedstone.getGlobalCache() == null)
             return;
 
-        for (Location loc : Main.getGlobalCache().getAllSignLocations()) {
+        for (Location loc : WirelessRedstone.getGlobalCache().getAllSignLocations()) {
             if (Utils.sameLocation(loc, block.getLocation())) {
-                String channelName = Main.getStorage().getWirelessChannelName(loc);
-                if (Main.getStorage().removeIWirelessPoint(channelName, loc)) {
-                    Main.getStorage().checkChannel(channelName);
-                    Main.getWRLogger().debug("Removed sign because of WorldEdit");
+                String channelName = WirelessRedstone.getStorage().getWirelessChannelName(loc);
+                if (WirelessRedstone.getStorage().removeIWirelessPoint(channelName, loc)) {
+                    WirelessRedstone.getStorage().checkChannel(channelName);
+                    WirelessRedstone.getWRLogger().debug("Removed sign because of WorldEdit");
                 } else {
-                    Main.getWRLogger().debug("Couldn't remove sign. WorldEdit was the remover");
+                    WirelessRedstone.getWRLogger().debug("Couldn't remove sign. WorldEdit was the remover");
                 }
             }
         }

@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -31,9 +31,9 @@ public class WirelessReceiverInverter extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName){
         Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
+        sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, Main.getStrings().tagsReceiverInverterType.get(0));
+        sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverInverterType.get(0));
         sign.update();
     }
 }

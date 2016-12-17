@@ -23,7 +23,7 @@ public class SignManager {
 
     public boolean addWirelessReceiver(String cname, Block cblock, Player player, WirelessReceiver.Type type) {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
-        Main.getWRLogger().debug("Adding a receiver at location "
+        WirelessRedstone.getWRLogger().debug("Adding a receiver at location "
                 + cblock.getLocation().getBlockX() + ","
                 + cblock.getLocation().getBlockY() + ","
                 + cblock.getLocation().getBlockZ() + ", facing "
@@ -37,28 +37,28 @@ public class SignManager {
         Boolean isWallSign = (cblock.getType() == Material.WALL_SIGN);
 
         if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(cname);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(cname);
 
         if (isWallSign) {
             isWallSign = true;
             if (!Utils.isValidWallLocation(cblock)) {
-                Utils.sendFeedback(Main.getStrings().playerCannotCreateReceiverOnBlock, player, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateReceiverOnBlock, player, true);
                 return false;
             }
         } else {
             if (!Utils.isValidLocation(cblock)) {
-                Utils.sendFeedback(Main.getStrings().playerCannotCreateReceiverOnBlock, player, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateReceiverOnBlock, player, true);
                 return false;
             }
         }
 
         Boolean newChannel = false;
         if (channel == null) {
-            Main.getWRLogger().debug("The channel doesn't exist. Creating it and adding the receiver in it.");
+            WirelessRedstone.getWRLogger().debug("The channel doesn't exist. Creating it and adding the receiver in it.");
 
             channel = new WirelessChannel(cname);
             channel.addOwner(player.getName());
@@ -136,18 +136,18 @@ public class SignManager {
         if (newChannel) {
             channel.addReceiver(receiver);
 
-            if (!Main.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
+            if (!WirelessRedstone.getStorage().createWirelessChannel(channel)) {
+                Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
-            Utils.sendFeedback(Main.getStrings().playerCreatedChannel, player, false);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
         } else {
-            Main.getStorage().createWirelessPoint(cname, receiver);
-            Utils.sendFeedback(Main.getStrings().playerExtendedChannel, player, false);
+            WirelessRedstone.getStorage().createWirelessPoint(cname, receiver);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
         }
 
-        Main.getGlobalCache().update();
+        WirelessRedstone.getGlobalCache().update();
         return true;
 
     }
@@ -162,15 +162,15 @@ public class SignManager {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
 
         if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(cname);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(cname);
 
         Boolean newChannel = false;
         if (channel == null) {
-            Main.getWRLogger().debug("The channel doesn't exist. Creating it and adding the transmitter in it.");
+            WirelessRedstone.getWRLogger().debug("The channel doesn't exist. Creating it and adding the transmitter in it.");
 
             channel = new WirelessChannel(cname);
             channel.addOwner(player.getName());
@@ -190,18 +190,18 @@ public class SignManager {
         if (newChannel) {
             channel.addTransmitter(transmitter);
 
-            if (!Main.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
+            if (!WirelessRedstone.getStorage().createWirelessChannel(channel)) {
+                Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
-            Utils.sendFeedback(Main.getStrings().playerCreatedChannel, player, false);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
         } else {
-            Main.getStorage().createWirelessPoint(cname, transmitter);
-            Utils.sendFeedback(Main.getStrings().playerExtendedChannel, player, false);
+            WirelessRedstone.getStorage().createWirelessPoint(cname, transmitter);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
         }
 
-        Main.getGlobalCache().update();
+        WirelessRedstone.getGlobalCache().update();
         return true;
     }
 
@@ -215,15 +215,15 @@ public class SignManager {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
 
         if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(cname);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(cname);
 
         Boolean newChannel = false;
         if (channel == null) {
-            Main.getWRLogger().debug("The channel doesn't exist. Creating it and adding the screen in it.");
+            WirelessRedstone.getWRLogger().debug("The channel doesn't exist. Creating it and adding the screen in it.");
 
             channel = new WirelessChannel(cname);
             channel.addOwner(player.getName());
@@ -243,42 +243,42 @@ public class SignManager {
         if (newChannel) {
             channel.addScreen(screen);
 
-            if (!Main.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(Main.getStrings().channelNameContainsInvalidCharacters, player, true);
+            if (!WirelessRedstone.getStorage().createWirelessChannel(channel)) {
+                Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
-            Utils.sendFeedback(Main.getStrings().playerCreatedChannel, player, false);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
         } else {
-            Main.getStorage().createWirelessPoint(cname, screen);
-            Utils.sendFeedback(Main.getStrings().playerExtendedChannel, player, false);
+            WirelessRedstone.getStorage().createWirelessPoint(cname, screen);
+            Utils.sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
         }
 
-        Main.getGlobalCache().update();
+        WirelessRedstone.getGlobalCache().update();
         return true;
     }
 
     //Remove
 
     public boolean removeWirelessReceiver(String cname, Location loc) {
-        if (Main.getStorage().removeWirelessReceiver(cname, loc)) {
-            Main.getGlobalCache().update();
+        if (WirelessRedstone.getStorage().removeWirelessReceiver(cname, loc)) {
+            WirelessRedstone.getGlobalCache().update();
             return true;
         } else
             return false;
     }
 
     public boolean removeWirelessTransmitter(String cname, Location loc) {
-        if (Main.getStorage().removeWirelessTransmitter(cname, loc)) {
-            Main.getGlobalCache().update();
+        if (WirelessRedstone.getStorage().removeWirelessTransmitter(cname, loc)) {
+            WirelessRedstone.getGlobalCache().update();
             return true;
         } else
             return false;
     }
 
     public boolean removeWirelessScreen(String cname, Location loc) {
-        if (Main.getStorage().removeWirelessScreen(cname, loc)) {
-            Main.getGlobalCache().update();
+        if (WirelessRedstone.getStorage().removeWirelessScreen(cname, loc)) {
+            WirelessRedstone.getGlobalCache().update();
             return true;
         } else
             return false;
@@ -321,7 +321,7 @@ public class SignManager {
     }
 
     public ArrayList<Location> getReceiverLocations(String channelname) {
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(channelname);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(channelname);
         if (channel == null)
             return new ArrayList<Location>();
 
@@ -337,7 +337,7 @@ public class SignManager {
     }
 
     public ArrayList<Location> getScreenLocations(String channelname) {
-        WirelessChannel channel = Main.getStorage().getWirelessChannel(channelname);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(channelname);
         if (channel == null)
             return new ArrayList<Location>();
 
@@ -386,7 +386,7 @@ public class SignManager {
     //Checkers
 
     public boolean isTransmitter(String data) {
-        for (String tag : Main.getStrings().tagsTransmitter) {
+        for (String tag : WirelessRedstone.getStrings().tagsTransmitter) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -395,7 +395,7 @@ public class SignManager {
     }
 
     public boolean isScreen(String data) {
-        for (String tag : Main.getStrings().tagsScreen) {
+        for (String tag : WirelessRedstone.getStrings().tagsScreen) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -404,7 +404,7 @@ public class SignManager {
     }
 
     public boolean isReceiver(String data) {
-        for (String tag : Main.getStrings().tagsReceiver) {
+        for (String tag : WirelessRedstone.getStrings().tagsReceiver) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -413,7 +413,7 @@ public class SignManager {
     }
 
     public boolean isReceiverDefault(String data) {
-        for (String tag : Main.getStrings().tagsReceiverDefaultType) {
+        for (String tag : WirelessRedstone.getStrings().tagsReceiverDefaultType) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -422,7 +422,7 @@ public class SignManager {
     }
 
     public boolean isReceiverInverter(String data) {
-        for (String tag : Main.getStrings().tagsReceiverInverterType) {
+        for (String tag : WirelessRedstone.getStrings().tagsReceiverInverterType) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -431,7 +431,7 @@ public class SignManager {
     }
 
     public boolean isReceiverDelayer(String data) {
-        for (String tag : Main.getStrings().tagsReceiverDelayerType) {
+        for (String tag : WirelessRedstone.getStrings().tagsReceiverDelayerType) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -440,7 +440,7 @@ public class SignManager {
     }
 
     public boolean isReceiverClock(String data) {
-        for (String tag : Main.getStrings().tagsReceiverClockType) {
+        for (String tag : WirelessRedstone.getStrings().tagsReceiverClockType) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -449,7 +449,7 @@ public class SignManager {
     }
 
     public boolean isReceiverSwitch(String data) {
-        for (String tag : Main.getStrings().tagsReceiverSwitchType) {
+        for (String tag : WirelessRedstone.getStrings().tagsReceiverSwitchType) {
             if (data.equalsIgnoreCase(tag)) {
                 return true;
             }
@@ -458,9 +458,9 @@ public class SignManager {
     }
 
     public boolean hasAccessToChannel(Player player, String channelname) {
-        if (Main.getStorage().getWirelessChannel(channelname) != null) {
-            return Main.getPermissionsManager().isWirelessAdmin(player)
-                    || Main.getStorage().getWirelessChannel(channelname).getOwners().contains(player.getName());
+        if (WirelessRedstone.getStorage().getWirelessChannel(channelname) != null) {
+            return WirelessRedstone.getPermissionsManager().isWirelessAdmin(player)
+                    || WirelessRedstone.getStorage().getWirelessChannel(channelname).getOwners().contains(player.getName());
         }
         return true;
     }
@@ -469,13 +469,13 @@ public class SignManager {
 
     public void stopAllClocks() {
         ArrayList<Integer> remove = new ArrayList<Integer>();
-        for (Map.Entry<Integer, String> task : Main.getSignManager().clockTasks.entrySet()) {
+        for (Map.Entry<Integer, String> task : WirelessRedstone.getSignManager().clockTasks.entrySet()) {
             Bukkit.getScheduler().cancelTask(task.getKey());
             remove.add(task.getKey());
-            Main.getWRLogger().debug("Stopped clock task " + task);
+            WirelessRedstone.getWRLogger().debug("Stopped clock task " + task);
         }
         for (Integer i : remove) {
-            Main.getSignManager().clockTasks.remove(i);
+            WirelessRedstone.getSignManager().clockTasks.remove(i);
         }
         remove.clear();
     }

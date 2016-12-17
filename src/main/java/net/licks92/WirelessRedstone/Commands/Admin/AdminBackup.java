@@ -3,8 +3,8 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Backup all wirelesschannels", usage = "", aliases = {"backup"},
@@ -23,14 +23,14 @@ public class AdminBackup extends WirelessCommand {
                 extension = "db";
                 break;
             default:
-                Utils.sendFeedback(Main.getStrings().backupFailed, sender, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
                 return;
         }
 
-        if (Main.getStorage().backupData(extension)) {
-            Utils.sendFeedback(Main.getStrings().backupDone, sender, false);
+        if (WirelessRedstone.getStorage().backupData(extension)) {
+            Utils.sendFeedback(WirelessRedstone.getStrings().backupDone, sender, false);
         } else {
-            Utils.sendFeedback(Main.getStrings().backupFailed, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
         }
     }
 }

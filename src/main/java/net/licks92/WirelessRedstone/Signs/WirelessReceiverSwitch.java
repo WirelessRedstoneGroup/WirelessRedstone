@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -19,7 +19,7 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     public WirelessReceiverSwitch(final boolean state) {
         super();
         try {
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     setFirstState(state); //The plugin must be fully loaded to call this method, otherwise you get a nullpointers
@@ -37,8 +37,8 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     public Map<String, Object> serialize() {
         Map<String, Object> map = super.serialize();
         boolean state;
-        if (Main.getSignManager().switchState.get(getLocation()) != null)
-            state = Main.getSignManager().switchState.get(getLocation());
+        if (WirelessRedstone.getSignManager().switchState.get(getLocation()) != null)
+            state = WirelessRedstone.getSignManager().switchState.get(getLocation());
         else
             state = false;
         map.put("state", state);
@@ -48,8 +48,8 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     @Override
     public void turnOn(String channelName) {
         boolean state;
-        if (Main.getSignManager().switchState.get(getLocation()) != null)
-            state = Main.getSignManager().switchState.get(getLocation());
+        if (WirelessRedstone.getSignManager().switchState.get(getLocation()) != null)
+            state = WirelessRedstone.getSignManager().switchState.get(getLocation());
         else
             state = false;
 
@@ -73,9 +73,9 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName) {
         Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, Main.getStrings().tagsReceiver.get(0));
+        sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, Main.getStrings().tagsReceiverSwitchType.get(0));
+        sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverSwitchType.get(0));
         sign.update();
     }
 
@@ -84,16 +84,16 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     }
 
     public void setState(boolean state) {
-        Main.getSignManager().switchState.put(getLocation(), state);
+        WirelessRedstone.getSignManager().switchState.put(getLocation(), state);
     }
 
 
     public boolean getState() {
-        return Main.getSignManager().switchState.get(getLocation());
+        return WirelessRedstone.getSignManager().switchState.get(getLocation());
     }
 
     public void setFirstState(boolean state) {
-        if (Main.getSignManager().switchState.get(getLocation()) == null)
-            Main.getSignManager().switchState.put(getLocation(), state);
+        if (WirelessRedstone.getSignManager().switchState.get(getLocation()) == null)
+            WirelessRedstone.getSignManager().switchState.put(getLocation(), state);
     }
 }

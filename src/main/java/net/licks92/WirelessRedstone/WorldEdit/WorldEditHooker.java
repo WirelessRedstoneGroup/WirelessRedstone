@@ -7,7 +7,7 @@ import com.sk89q.worldedit.event.extent.EditSessionEvent;
 import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.util.eventbus.Subscribe;
 import com.sk89q.worldedit.world.World;
-import net.licks92.WirelessRedstone.Main;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 
 public class WorldEditHooker {
@@ -23,14 +23,14 @@ public class WorldEditHooker {
 
     public static void register() {
         try {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(WirelessRedstone.getInstance(), new Runnable() {
                 public void run() {
                     try {
                         WorldEditHooker worldEditHooker = new WorldEditHooker();
-                        Main.setWorldEditHooker(worldEditHooker);
+                        WirelessRedstone.setWorldEditHooker(worldEditHooker);
                         WorldEdit.getInstance().getEventBus().register(worldEditHooker);
                     } catch (Exception e) {
-                        Main.getWRLogger().severe("Error while hooking worldedit");
+                        WirelessRedstone.getWRLogger().severe("Error while hooking worldedit");
                     }
                 }
             }, 0L);
@@ -41,12 +41,12 @@ public class WorldEditHooker {
 
     public static void unRegister(){
         try {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(WirelessRedstone.getInstance(), new Runnable() {
                 public void run() {
                     try {
-                        WorldEdit.getInstance().getEventBus().unregister(Main.getWorldEditHooker());
+                        WorldEdit.getInstance().getEventBus().unregister(WirelessRedstone.getWorldEditHooker());
                     } catch (Exception e) {
-                        Main.getWRLogger().severe("Error while unhooking worldedit");
+                        WirelessRedstone.getWRLogger().severe("Error while unhooking worldedit");
                     }
                 }
             }, 0L);

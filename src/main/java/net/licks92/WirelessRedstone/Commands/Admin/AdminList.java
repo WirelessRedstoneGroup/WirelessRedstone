@@ -2,9 +2,9 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
-import net.licks92.WirelessRedstone.Main;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -21,17 +21,17 @@ public class AdminList extends WirelessCommand {
             try {
                 page = Integer.parseInt(args[0]);
             } catch (NumberFormatException ex) {
-                Utils.sendFeedback(Main.getStrings().pageNumberInferiorToZero, sender, true);
+                Utils.sendFeedback(WirelessRedstone.getStrings().pageNumberInferiorToZero, sender, true);
                 return;
             }
         }
 
         ArrayList<String> channelList = new ArrayList<>();
-        for (WirelessChannel channel : Main.getStorage().getAllChannels()) {
+        for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
             channelList.add(ChatColor.GRAY + "- " + ChatColor.GREEN + channel.getName());
         }
 
-        Integer channelListLength = Main.getStorage().getAllChannels().size();
+        Integer channelListLength = WirelessRedstone.getStorage().getAllChannels().size();
         Integer maxItemsPerPage = 10;
         Integer totalPages = 1;
 
@@ -56,7 +56,7 @@ public class AdminList extends WirelessCommand {
         Utils.sendFeedback(ChatColor.WHITE + "Page " + page + " of " + totalPages, sender, false);
 
         if (totalPages == 0)
-            Utils.sendFeedback(Main.getStrings().listEmpty, sender, true);
+            Utils.sendFeedback(WirelessRedstone.getStrings().listEmpty, sender, true);
         else {
             for (Integer i = currentItem; i < (currentItem + maxItemsPerPage); i++) {
                 if (!(i >= channelListLength))
