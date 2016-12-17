@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone.Commands;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,23 +17,23 @@ public class Create extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
             return;
         }
 
-        if (Utils.getSignType(args[1]) == null) {
-            Utils.sendFeedback("Incorrect sign type.", sender, true); //TODO: Add this string to the stringloader
+        if (WirelessRedstone.getUtils().getSignType(args[1]) == null) {
+            WirelessRedstone.getUtils().sendFeedback("Incorrect sign type.", sender, true); //TODO: Add this string to the stringloader
             return;
         }
 
         String cname = args[0];
-        SignType type = Utils.getSignType(args[1]);
+        SignType type = WirelessRedstone.getUtils().getSignType(args[1]);
 
         switch (type) {
             case RECEIVER_CLOCK:
             case RECEIVER_DELAYER:
                 if (args.length < 3) {
-                    Utils.sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
                     return;
                 }
                 break;
@@ -43,7 +42,7 @@ public class Create extends WirelessCommand {
         WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(cname);
         if (channel != null) {
             if (!hasAccessToChannel(sender, cname)) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
                 return;
             }
         }
@@ -52,7 +51,7 @@ public class Create extends WirelessCommand {
         Location location = player.getLocation();
 
         if(location.getBlock().getType() != Material.AIR) {
-            Utils.sendFeedback("Can't create sign in your location.", sender, true); //TODO: Add this string to the stringloader
+            WirelessRedstone.getUtils().sendFeedback("Can't create sign in your location.", sender, true); //TODO: Add this string to the stringloader
             return;
         }
 
@@ -95,7 +94,7 @@ public class Create extends WirelessCommand {
                 try {
                     delay = Integer.parseInt(args[2]);
                 } catch (NumberFormatException ex) {
-                    Utils.sendFeedback("That is not a number.", sender, true); //TODO: Add this string to the stringloader
+                    WirelessRedstone.getUtils().sendFeedback("That is not a number.", sender, true); //TODO: Add this string to the stringloader
                     location.getBlock().setType(Material.AIR);
                     return;
                 }
@@ -112,7 +111,7 @@ public class Create extends WirelessCommand {
                 try {
                     pulse = Integer.parseInt(args[2]);
                 } catch (NumberFormatException ex) {
-                    Utils.sendFeedback("That is not a number.", sender, true); //TODO: Add this string to the stringloader
+                    WirelessRedstone.getUtils().sendFeedback("That is not a number.", sender, true); //TODO: Add this string to the stringloader
                     location.getBlock().setType(Material.AIR);
                     return;
                 }

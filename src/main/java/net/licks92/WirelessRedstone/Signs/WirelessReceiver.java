@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -46,9 +45,9 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
             try {
                 Integer directionInt = Integer.parseInt(map.get("direction").toString());
                 if (isWallSign) //This is maybe redundent, needs more testing
-                    direction = Utils.intToBlockFaceSign(directionInt);
+                    direction = WirelessRedstone.getUtils().intToBlockFaceSign(directionInt);
                 else
-                    direction = Utils.intToBlockFaceSign(directionInt);
+                    direction = WirelessRedstone.getUtils().intToBlockFaceSign(directionInt);
             } catch (NumberFormatException ignored) {
             }
         }
@@ -102,9 +101,9 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
     @Override
     public void setDirection(int direction) {
         if (isWallSign)
-            this.direction = Utils.intToBlockFaceWallSign(direction);
+            this.direction = WirelessRedstone.getUtils().intToBlockFaceWallSign(direction);
         else
-            this.direction = Utils.intToBlockFaceSign(direction);
+            this.direction = WirelessRedstone.getUtils().intToBlockFaceSign(direction);
     }
 
     @Override
@@ -167,17 +166,17 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
         Block block = getLocation().getBlock();
 
         if (!getIsWallSign()) {
-            if (!Utils.isValidLocation(block))
-                Utils.signWarning(block, 1);
+            if (!WirelessRedstone.getUtils().isValidLocation(block))
+                WirelessRedstone.getUtils().signWarning(block, 1);
             else
                 block.setTypeIdAndData(76, (byte) 0, true);
 
         } else {
             if (block.getType() == Material.WALL_SIGN) {
-                if (!Utils.isValidWallLocation(block))
-                    Utils.signWarning(block, 1);
+                if (!WirelessRedstone.getUtils().isValidWallLocation(block))
+                    WirelessRedstone.getUtils().signWarning(block, 1);
                 else
-                    block.setTypeIdAndData(76, (byte) Utils.torchFaceToInt(getDirection()), true);
+                    block.setTypeIdAndData(76, (byte) WirelessRedstone.getUtils().torchFaceToInt(getDirection()), true);
             }
         }
     }
@@ -191,9 +190,9 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
         int blockID = getIsWallSign() ? 68 : 63;
 
         if (getIsWallSign())
-            directionByte = (byte) Utils.wallSignFaceToInt(getDirection());
+            directionByte = (byte) WirelessRedstone.getUtils().wallSignFaceToInt(getDirection());
         else
-            directionByte = (byte) Utils.signFaceToInt(getDirection());
+            directionByte = (byte) WirelessRedstone.getUtils().signFaceToInt(getDirection());
 
 
         block.setTypeIdAndData(blockID, directionByte, true);

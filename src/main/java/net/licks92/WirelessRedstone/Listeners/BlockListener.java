@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone.Listeners;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -28,14 +27,14 @@ public class BlockListener implements Listener {
             if (event.getLine(1) == null) {
                 event.getBlock().setType(Material.AIR);
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
+                WirelessRedstone.getUtils().sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
                 return;
             }
 
             if (event.getLine(1).equalsIgnoreCase("")) {
                 event.getBlock().setType(Material.AIR);
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
+                WirelessRedstone.getUtils().sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
                 return;
             }
 
@@ -43,7 +42,7 @@ public class BlockListener implements Listener {
 
             if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), event.getLine(1))) {
                 event.setCancelled(true);
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, event.getPlayer(), true);
                 return;
             }
 
@@ -69,14 +68,14 @@ public class BlockListener implements Listener {
             if (sign.getLine(1) == null) {
                 event.getBlock().setType(Material.AIR);
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
+                WirelessRedstone.getUtils().sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
                 return;
             }
 
             if (sign.getLine(1).equalsIgnoreCase("")) {
                 event.getBlock().setType(Material.AIR);
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                Utils.sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
+                WirelessRedstone.getUtils().sendFeedback("No channelname given!", event.getPlayer(), true); //TODO: Add string to stringloader
                 return;
             }
 
@@ -84,7 +83,7 @@ public class BlockListener implements Listener {
 
             if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), sign.getLine(1))) {
                 event.setCancelled(true);
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, event.getPlayer(), true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, event.getPlayer(), true);
                 return;
             }
 
@@ -103,7 +102,7 @@ public class BlockListener implements Listener {
 
             if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), signObject.getLine(1))) {
                 event.setCancelled(true);
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
                 return;
             }
 
@@ -111,16 +110,16 @@ public class BlockListener implements Listener {
                 case TRANSMITTER:
                     if (!WirelessRedstone.getPermissionsManager().canRemoveTransmitter(event.getPlayer())) {
                         event.setCancelled(true);
-                        Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
                         return;
                     }
 
                     if (WirelessRedstone.getSignManager().removeWirelessTransmitter(signObject.getLine(1), event.getBlock().getLocation())) {
-                        Utils.sendFeedback(WirelessRedstone.getStrings().signDestroyed, event.getPlayer(), false);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().signDestroyed, event.getPlayer(), false);
 
                         if (WirelessRedstone.getStorage().isChannelEmpty(WirelessRedstone.getStorage().getWirelessChannel(signObject.getLine(1)))) {
                             WirelessRedstone.getStorage().removeWirelessChannel(signObject.getLine(1));
-                            Utils.sendFeedback(WirelessRedstone.getStrings().channelRemovedCauseNoSign, event.getPlayer(), false);
+                            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelRemovedCauseNoSign, event.getPlayer(), false);
                         }
                     } else {
                         WirelessRedstone.getWRLogger().debug("Receiver wasn't found in the config, but the sign has been successfuly removed!");
@@ -129,16 +128,16 @@ public class BlockListener implements Listener {
                 case SCREEN:
                     if (!WirelessRedstone.getPermissionsManager().canRemoveScreen(event.getPlayer())) {
                         event.setCancelled(true);
-                        Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
                         return;
                     }
 
                     if (WirelessRedstone.getSignManager().removeWirelessScreen(signObject.getLine(1), event.getBlock().getLocation())) {
-                        Utils.sendFeedback(WirelessRedstone.getStrings().signDestroyed, event.getPlayer(), false);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().signDestroyed, event.getPlayer(), false);
 
                         if (WirelessRedstone.getStorage().isChannelEmpty(WirelessRedstone.getStorage().getWirelessChannel(signObject.getLine(1)))) {
                             WirelessRedstone.getStorage().removeWirelessChannel(signObject.getLine(1));
-                            Utils.sendFeedback(WirelessRedstone.getStrings().channelRemovedCauseNoSign, event.getPlayer(), false);
+                            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelRemovedCauseNoSign, event.getPlayer(), false);
                         }
                     } else {
                         WirelessRedstone.getWRLogger().debug("Receiver wasn't found in the config, but the sign has been successfuly removed!");
@@ -147,16 +146,16 @@ public class BlockListener implements Listener {
                 case RECEIVER:
                     if (!WirelessRedstone.getPermissionsManager().canRemoveReceiver(event.getPlayer())) {
                         event.setCancelled(true);
-                        Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotDestroySign, event.getPlayer(), true);
                         return;
                     }
 
                     if (WirelessRedstone.getSignManager().removeWirelessReceiver(signObject.getLine(1), event.getBlock().getLocation())) {
-                        Utils.sendFeedback(WirelessRedstone.getStrings().signDestroyed, event.getPlayer(), false);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().signDestroyed, event.getPlayer(), false);
 
                         if (WirelessRedstone.getStorage().isChannelEmpty(WirelessRedstone.getStorage().getWirelessChannel(signObject.getLine(1)))) {
                             WirelessRedstone.getStorage().removeWirelessChannel(signObject.getLine(1));
-                            Utils.sendFeedback(WirelessRedstone.getStrings().channelRemovedCauseNoSign, event.getPlayer(), false);
+                            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelRemovedCauseNoSign, event.getPlayer(), false);
                         }
                     } else {
                         WirelessRedstone.getWRLogger().debug("Receiver wasn't found in the config, but the sign has been successfuly removed!");
@@ -166,7 +165,7 @@ public class BlockListener implements Listener {
                     break;
             }
         } else {
-            for (BlockFace blockFace : Utils.getEveryBlockFace(false)) {
+            for (BlockFace blockFace : WirelessRedstone.getUtils().getEveryBlockFace(false)) {
                 if (event.getBlock().getRelative(blockFace).getType() == Material.WALL_SIGN) {
                     Sign signObject = (Sign) event.getBlock().getRelative(blockFace).getState();
 
@@ -174,7 +173,7 @@ public class BlockListener implements Listener {
                         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) event.getBlock().getRelative(blockFace).getState().getData();
                         if (sign.getFacing() == blockFace) {
                             event.setCancelled(true);
-                            Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotDestroyBlockAttachedToSign, event.getPlayer(), true, true);
+                            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotDestroyBlockAttachedToSign, event.getPlayer(), true, true);
                             break;
                         }
                     }
@@ -187,7 +186,7 @@ public class BlockListener implements Listener {
                 if (WirelessRedstone.getSignManager().getSignType(signObject.getLine(0)) != null) {
                     if (event.getBlock().getRelative(BlockFace.UP).getType() != Material.WALL_SIGN) {
                         event.setCancelled(true);
-                        Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotDestroyBlockAttachedToSign, event.getPlayer(), true, true);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotDestroyBlockAttachedToSign, event.getPlayer(), true, true);
                     }
                 }
             }
@@ -253,7 +252,7 @@ public class BlockListener implements Listener {
                 break;
         }
 
-        for (BlockFace blockFace : Utils.getEveryBlockFace(true)) {
+        for (BlockFace blockFace : WirelessRedstone.getUtils().getEveryBlockFace(true)) {
             if (event.getBlock().getRelative(blockFace).getState() instanceof Sign) {
                 Sign signObject = (Sign) event.getBlock().getRelative(blockFace).getState();
 
@@ -271,7 +270,7 @@ public class BlockListener implements Listener {
                 if (!WirelessRedstone.getPermissionsManager().canCreateTransmitter(player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
                     return true;
                 }
 
@@ -286,7 +285,7 @@ public class BlockListener implements Listener {
                 if (!WirelessRedstone.getPermissionsManager().canCreateScreen(player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
                     return true;
                 }
 
@@ -301,7 +300,7 @@ public class BlockListener implements Listener {
                 if (!WirelessRedstone.getPermissionsManager().canCreateReceiver(player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
                     return true;
                 }
 
@@ -316,7 +315,7 @@ public class BlockListener implements Listener {
                 if (!WirelessRedstone.getPermissionsManager().canCreateReceiver(player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
                     return true;
                 }
 
@@ -331,7 +330,7 @@ public class BlockListener implements Listener {
                 if (!WirelessRedstone.getPermissionsManager().canCreateReceiver(player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
                     return true;
                 }
 
@@ -346,7 +345,7 @@ public class BlockListener implements Listener {
                 if (!WirelessRedstone.getPermissionsManager().canCreateReceiver(player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
                     return true;
                 }
 
@@ -361,7 +360,7 @@ public class BlockListener implements Listener {
                 if (!WirelessRedstone.getPermissionsManager().canCreateReceiver(player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, player, true);
                     return true;
                 }
 
@@ -396,7 +395,7 @@ public class BlockListener implements Listener {
                     Sign sign = (Sign) b.getState();
                     sign.setLine(1, "ch-" + i);
                     sign.update(true);
-                    Utils.sendFeedback(WirelessRedstone.getStrings().automaticAssigned.replaceAll("%%NAME", "ch-" + i), p, false);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().automaticAssigned.replaceAll("%%NAME", "ch-" + i), p, false);
                     name = "ch-" + i;
                     break;
                 }

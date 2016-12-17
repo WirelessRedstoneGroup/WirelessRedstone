@@ -76,16 +76,16 @@ public class Updater {
             JsonObject root = new JsonParser().parse(reader).getAsJsonObject();
 
             String latestVersion;
-            if (Utils.isSpigot())
+            if (WirelessRedstone.getUtils().isSpigot())
                 latestVersion = root.getAsJsonObject("latest").get("spigotversion").getAsString();
             else
                 latestVersion = root.getAsJsonObject("latest").get("bukkitversion").getAsString();
 
             JsonObject version = root.getAsJsonObject("versions").getAsJsonObject(latestVersion);
-            String downloadUrl = version.getAsJsonObject(Utils.isSpigot() ? "spigot" : "bukkit").get("downloadUrl").getAsString();
+            String downloadUrl = version.getAsJsonObject(WirelessRedstone.getUtils().isSpigot() ? "spigot" : "bukkit").get("downloadUrl").getAsString();
             String changelog = version.get("changelog").getAsString();
 
-            WirelessRedstone.getWRLogger().debug("Comparing " + WirelessRedstone.getInstance().getDescription().getVersion() + " vs " + latestVersion + (Utils.isSpigot() ? "-spigot" : "-bukkit"));
+            WirelessRedstone.getWRLogger().debug("Comparing " + WirelessRedstone.getInstance().getDescription().getVersion() + " vs " + latestVersion + (WirelessRedstone.getUtils().isSpigot() ? "-spigot" : "-bukkit"));
 
             Semver sem = new Semver(latestVersion);
             if (sem.isGreaterThan(WirelessRedstone.getInstance().getDescription().getVersion())) {
@@ -124,12 +124,12 @@ public class Updater {
                 for (Player player : checkPlayers) {
                     if (WirelessRedstone.getPermissionsManager().isWirelessAdmin(player)) {
                         adminPlayers.add(player);
-                        Utils.sendFeedback("Version " + latestVersion + " is availible! Download it here: ", player, false);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getDownloadUrl(player.getName())
-                                .replaceAll("%%TEXT", (Utils.isSpigot() ? "Spigot" : "Bukkit") + " download page")
+                        WirelessRedstone.getUtils().sendFeedback("Version " + latestVersion + " is availible! Download it here: ", player, false);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), WirelessRedstone.getUtils().getDownloadUrl(player.getName())
+                                .replaceAll("%%TEXT", (WirelessRedstone.getUtils().isSpigot() ? "Spigot" : "Bukkit") + " download page")
                                 .replaceAll("%%HOVERTEXT", "Click to go to website")
                                 .replaceAll("%%LINK", downloadUrl));
-                        Utils.sendFeedback("Changelog: ", player, false);
+                        WirelessRedstone.getUtils().sendFeedback("Changelog: ", player, false);
                     }
                 }
 

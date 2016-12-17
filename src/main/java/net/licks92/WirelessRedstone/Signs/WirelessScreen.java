@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -41,9 +40,9 @@ public class WirelessScreen implements ConfigurationSerializable, IWirelessPoint
             try {
                 Integer directionInt = Integer.parseInt(map.get("direction").toString());
                 if (isWallSign) //This is maybe redundent, needs more testing
-                    direction = Utils.intToBlockFaceSign(directionInt);
+                    direction = WirelessRedstone.getUtils().intToBlockFaceSign(directionInt);
                 else
-                    direction = Utils.intToBlockFaceSign(directionInt);
+                    direction = WirelessRedstone.getUtils().intToBlockFaceSign(directionInt);
             } catch (NumberFormatException ignored) {
             }
         }
@@ -97,9 +96,9 @@ public class WirelessScreen implements ConfigurationSerializable, IWirelessPoint
     @Override
     public void setDirection(int direction) {
         if (isWallSign)
-            this.direction = Utils.intToBlockFaceWallSign(direction);
+            this.direction = WirelessRedstone.getUtils().intToBlockFaceWallSign(direction);
         else
-            this.direction = Utils.intToBlockFaceSign(direction);
+            this.direction = WirelessRedstone.getUtils().intToBlockFaceSign(direction);
     }
 
     @Override

@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.command.CommandSender;
 
@@ -23,14 +22,14 @@ public class AdminBackup extends WirelessCommand {
                 extension = "db";
                 break;
             default:
-                Utils.sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
                 return;
         }
 
         if (WirelessRedstone.getStorage().backupData(extension)) {
-            Utils.sendFeedback(WirelessRedstone.getStrings().backupDone, sender, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().backupDone, sender, false);
         } else {
-            Utils.sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
         }
     }
 }

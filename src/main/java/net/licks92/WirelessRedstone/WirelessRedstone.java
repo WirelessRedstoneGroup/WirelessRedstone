@@ -22,6 +22,7 @@ public class WirelessRedstone extends JavaPlugin {
     private Boolean fullyStarted = false;
 
     private static WirelessRedstone instance;
+    private static Utils utils;
     private static GlobalCache globalCache; //GlobalCache -> Manage global cache, SignManager -> Manage WireBox functions
     private static SignManager signManager;
     private static WRLogger WRLogger;
@@ -38,6 +39,10 @@ public class WirelessRedstone extends JavaPlugin {
 
     public static WirelessRedstone getInstance() {
         return instance;
+    }
+
+    public static Utils getUtils() {
+        return utils;
     }
 
     public static GlobalCache getGlobalCache() {
@@ -114,12 +119,14 @@ public class WirelessRedstone extends JavaPlugin {
         globalCache = null;
         signManager = null;
         storageManager = null;
+        utils = null;
         instance = null;
     }
 
     @Override
     public void onEnable() {
         instance = this;
+        utils = new Utils();
         config = ConfigManager.getConfig();
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
 
@@ -152,7 +159,7 @@ public class WirelessRedstone extends JavaPlugin {
 
         PluginManager pm = getServer().getPluginManager();
 
-        if (!Utils.isCompatible()) {
+        if (!WirelessRedstone.getUtils().isCompatible()) {
             WRLogger.severe("**********");
             WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
             WRLogger.severe("**********");
@@ -161,7 +168,7 @@ public class WirelessRedstone extends JavaPlugin {
         }
 
         WRLogger.debug("Loading Chunks...");
-        Utils.loadChunks();
+        WirelessRedstone.getUtils().loadChunks();
 
         if (pm.isPluginEnabled("WorldEdit")) {
             WRLogger.debug("Loading WorldEdit support...");

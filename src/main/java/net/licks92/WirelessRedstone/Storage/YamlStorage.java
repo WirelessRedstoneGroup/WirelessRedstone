@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Storage;
 
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Signs.*;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -94,15 +93,15 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         if (channel == null)
             return false;
         for (WirelessReceiver receiver : channel.getReceivers()) {
-            if (Utils.sameLocation(receiver.getLocation(), loc))
+            if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc))
                 return removeWirelessReceiver(channelName, loc);
         }
         for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-            if (Utils.sameLocation(transmitter.getLocation(), loc))
+            if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc))
                 return removeWirelessTransmitter(channelName, loc);
         }
         for (WirelessScreen screen : channel.getScreens()) {
-            if (Utils.sameLocation(screen.getLocation(), loc))
+            if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc))
                 return removeWirelessScreen(channelName, loc);
         }
         return false;
@@ -462,15 +461,15 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public IWirelessPoint getWirelessRedstoneSign(Location loc) {
         for (WirelessChannel channel : getAllChannels()) {
             for (WirelessReceiver receiver : channel.getReceivers()) {
-                if (Utils.sameLocation(receiver.getLocation(), loc))
+                if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc))
                     return receiver;
             }
             for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-                if (Utils.sameLocation(transmitter.getLocation(), loc))
+                if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc))
                     return transmitter;
             }
             for (WirelessScreen screen : channel.getScreens()) {
-                if (Utils.sameLocation(screen.getLocation(), loc))
+                if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc))
                     return screen;
             }
         }
@@ -481,15 +480,15 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     public String getWirelessChannelName(Location loc) {
         for (WirelessChannel channel : getAllChannels()) {
             for (WirelessReceiver receiver : channel.getReceivers()) {
-                if (Utils.sameLocation(receiver.getLocation(), loc))
+                if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc))
                     return channel.getName();
             }
             for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-                if (Utils.sameLocation(transmitter.getLocation(), loc))
+                if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc))
                     return channel.getName();
             }
             for (WirelessScreen screen : channel.getScreens()) {
-                if (Utils.sameLocation(screen.getLocation(), loc))
+                if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc))
                     return channel.getName();
             }
         }

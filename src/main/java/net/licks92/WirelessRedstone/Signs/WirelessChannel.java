@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Signs;
 
 import com.avaje.ebean.validation.NotNull;
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -103,7 +102,7 @@ public class WirelessChannel implements ConfigurationSerializable {
             for (WirelessReceiver receiver : getReceivers()) {
                 receiver.turnOff(getName());
 
-                for (BlockFace blockFace : Utils.getEveryBlockFace(true)) {
+                for (BlockFace blockFace : WirelessRedstone.getUtils().getEveryBlockFace(true)) {
                     Bukkit.getServer().getPluginManager().callEvent(
                             new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
                                     receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
@@ -177,7 +176,7 @@ public class WirelessChannel implements ConfigurationSerializable {
                 }
             }
 
-            for (BlockFace blockFace : Utils.getEveryBlockFace(true)) {
+            for (BlockFace blockFace : WirelessRedstone.getUtils().getEveryBlockFace(true)) {
                 if (block.getRelative(blockFace).isBlockIndirectlyPowered()
                         || block.getRelative(blockFace)
                         .isBlockIndirectlyPowered()) {

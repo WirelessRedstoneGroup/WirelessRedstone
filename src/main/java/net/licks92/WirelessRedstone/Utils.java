@@ -16,20 +16,20 @@ import java.util.regex.Pattern;
 public class Utils {
 
     //Currently blocking all bad characters from EVERY config
-    public static char[] badCharacters = {'|', '-', '*', '/', '<', '>', ' ', '=', '~',
+    public char[] badCharacters = {'|', '-', '*', '/', '<', '>', ' ', '=', '~',
             '!', '^', '(', ')', ':', '`', '.'};
 
-    public static String getBukkitVersion() {
+    public String getBukkitVersion() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();
         return packageName.substring(packageName.lastIndexOf('.') + 1);
     }
 
-    public static boolean sameLocation(Location loc1, Location loc2) {
+    public boolean sameLocation(Location loc1, Location loc2) {
         return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY()
                 && loc1.getBlockZ() == loc2.getBlockZ() && loc1.getWorld() == loc2.getWorld();
     }
 
-    public static boolean isCompatible() {
+    public boolean isCompatible() {
         try {
             String[] pieces = getBukkitVersion().substring(1).split("_");
 
@@ -39,28 +39,28 @@ public class Utils {
         }
     }
 
-    public static void sendFeedback(String message, CommandSender sender, boolean error) {
+    public void sendFeedback(String message, CommandSender sender, boolean error) {
         sendFeedback(message, sender, error, false);
     }
 
-    public static void sendCommandFeedback(String message, CommandSender sender, boolean error) {
+    public void sendCommandFeedback(String message, CommandSender sender, boolean error) {
         sendCommandFeedback(message, sender, error, false);
     }
 
-    public static void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
+    public void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
         if (ConfigManager.getConfig().getSilentMode() && checkSilent)
             return;
         sender.sendMessage(ChatColor.GRAY + "[" + ChatColor.RED + "WirelessRedstone" + ChatColor.GRAY + "] "
                 + (error ? ChatColor.RED : ChatColor.GREEN) + message);
     }
 
-    public static void sendCommandFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
+    public void sendCommandFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
         if (ConfigManager.getConfig().getSilentMode() && checkSilent)
             return;
         sender.sendMessage((error ? ChatColor.RED : ChatColor.GREEN) + message);
     }
 
-    public static boolean containsBadChar(String string) {
+    public boolean containsBadChar(String string) {
         //Check if string contains something different then a-z 0-9. It also checks if it contains a tab char
         Pattern p = Pattern.compile("([^a-z0-9_]|[\\t])", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(string);
@@ -78,7 +78,7 @@ public class Utils {
     * 4 - North
     * */
 
-    public static int torchFaceToInt(BlockFace face) {
+    public int torchFaceToInt(BlockFace face) {
         switch (face) {
             case NORTH:
                 return 4;
@@ -93,7 +93,7 @@ public class Utils {
         }
     }
 
-    public static BlockFace intToBlockFaceTorch(Integer dir) {
+    public BlockFace intToBlockFaceTorch(Integer dir) {
         switch (dir) {
             case 4:
                 return BlockFace.NORTH;
@@ -117,7 +117,7 @@ public class Utils {
     * 5 - East
     * */
 
-    public static int wallSignFaceToInt(BlockFace face) {
+    public int wallSignFaceToInt(BlockFace face) {
         switch (face) {
             case NORTH:
                 return 0;
@@ -132,7 +132,7 @@ public class Utils {
         }
     }
 
-    public static BlockFace intToBlockFaceWallSign(Integer dir) {
+    public BlockFace intToBlockFaceWallSign(Integer dir) {
         switch (dir) {
             case 0:
                 return BlockFace.NORTH;
@@ -156,7 +156,7 @@ public class Utils {
     * 12 - East
     * */
 
-    public static int signFaceToInt(BlockFace face) {
+    public int signFaceToInt(BlockFace face) {
         switch (face) {
             case NORTH:
                 return 8;
@@ -171,7 +171,7 @@ public class Utils {
         }
     }
 
-    public static BlockFace intToBlockFaceSign(Integer dir) {
+    public BlockFace intToBlockFaceSign(Integer dir) {
         switch (dir) {
             case 8:
                 return BlockFace.NORTH;
@@ -186,7 +186,7 @@ public class Utils {
         }
     }
 
-    public static boolean isValidWallLocation(Block block) {
+    public boolean isValidWallLocation(Block block) {
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) block
                 .getState().getData();
         BlockFace face = sign.getAttachedFace();
@@ -228,7 +228,7 @@ public class Utils {
         );
     }
 
-    public static boolean isValidLocation(Block block) {
+    public boolean isValidLocation(Block block) {
         if (block == null)
             return false;
 
@@ -249,7 +249,7 @@ public class Utils {
         );
     }
 
-    public static void signWarning(Block block, Integer code) {
+    public void signWarning(Block block, Integer code) {
         Sign sign = (Sign) block.getState();
         switch (code) {
             case 1:
@@ -263,7 +263,7 @@ public class Utils {
         }
     }
 
-    public static List<BlockFace> getEveryBlockFace(boolean addUpAndDown) {
+    public List<BlockFace> getEveryBlockFace(boolean addUpAndDown) {
         ArrayList<BlockFace> possibleBlockface = new ArrayList<BlockFace>();
         possibleBlockface.add(BlockFace.NORTH);
         possibleBlockface.add(BlockFace.EAST);
@@ -278,7 +278,7 @@ public class Utils {
         return possibleBlockface;
     }
 
-    public static void loadChunks() {
+    public void loadChunks() {
         if (ConfigManager.getConfig().getCancelChunkUnload()) {
             for (IWirelessPoint point : WirelessRedstone.getGlobalCache().getAllSigns()) {
                 Location location = point.getLocation();
@@ -299,7 +299,7 @@ public class Utils {
         }
     }
 
-    public static SignType getSignType(String string) {
+    public SignType getSignType(String string) {
         switch (string.toUpperCase()) {
             case "TRANSMITTER":
             case "TRANSMITTERS":
@@ -330,7 +330,7 @@ public class Utils {
         }
     }
 
-    public static String getDatabaseFriendlyName(String normalName) {
+    public String getDatabaseFriendlyName(String normalName) {
         try {
             Integer.parseInt(normalName);
             normalName = "num_" + normalName;
@@ -347,15 +347,15 @@ public class Utils {
         return normalName;
     }
 
-    public static boolean isSpigot() {
+    public boolean isSpigot() {
         return Bukkit.getVersion().contains("Spigot");
     }
 
-    public static String getTeleportString(String playerName) {
+    public String getTeleportString(String playerName) {
         return "tellraw " + playerName + " " + "[\"\",{\"text\":\"[\",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"\\\u27A4\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"] \",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
     }
 
-    public static String getDownloadUrl(String playerName) {
-        return  "tellraw " + playerName + " " + "[\"\",{\"text\":\"%%TEXT\",\"color\":\"blue\",\"italic\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"%%LINK\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
+    public String getDownloadUrl(String playerName) {
+        return "tellraw " + playerName + " " + "[\"\",{\"text\":\"%%TEXT\",\"color\":\"blue\",\"italic\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"%%LINK\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\",\"color\":\"gray\"}]}}}]";
     }
 }

@@ -36,8 +36,8 @@ public class SignManager {
         Location loc = cblock.getLocation();
         Boolean isWallSign = (cblock.getType() == Material.WALL_SIGN);
 
-        if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
+        if (WirelessRedstone.getUtils().containsBadChar(cname)) {
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
@@ -45,13 +45,13 @@ public class SignManager {
 
         if (isWallSign) {
             isWallSign = true;
-            if (!Utils.isValidWallLocation(cblock)) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateReceiverOnBlock, player, true);
+            if (!WirelessRedstone.getUtils().isValidWallLocation(cblock)) {
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateReceiverOnBlock, player, true);
                 return false;
             }
         } else {
-            if (!Utils.isValidLocation(cblock)) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateReceiverOnBlock, player, true);
+            if (!WirelessRedstone.getUtils().isValidLocation(cblock)) {
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateReceiverOnBlock, player, true);
                 return false;
             }
         }
@@ -93,11 +93,11 @@ public class SignManager {
                 try {
                     delay = Integer.parseInt(delayStr);
                 } catch (NumberFormatException ex) {
-                    Utils.sendFeedback("The delay must be a number!", player, true); //TODO: Add these strings to the stringloader
+                    WirelessRedstone.getUtils().sendFeedback("The delay must be a number!", player, true); //TODO: Add these strings to the stringloader
                     return false;
                 }
                 if (delay < 50) {
-                    Utils.sendFeedback("The delay must be at least 50ms", player, true);
+                    WirelessRedstone.getUtils().sendFeedback("The delay must be at least 50ms", player, true);
                     return false;
                 }
                 receiver = new WirelessReceiverDelayer(delay);
@@ -109,11 +109,11 @@ public class SignManager {
                 try {
                     clockDelay = Integer.parseInt(clockDelayStr);
                 } catch (NumberFormatException ex) {
-                    Utils.sendFeedback("The delay must be a number!", player, true); //TODO: Add these strings to the stringloader
+                    WirelessRedstone.getUtils().sendFeedback("The delay must be a number!", player, true); //TODO: Add these strings to the stringloader
                     return false;
                 }
                 if (clockDelay < 50) {
-                    Utils.sendFeedback("The delay must be at least 50ms", player, true);
+                    WirelessRedstone.getUtils().sendFeedback("The delay must be at least 50ms", player, true);
                     return false;
                 }
                 receiver = new WirelessReceiverClock(clockDelay);
@@ -137,14 +137,14 @@ public class SignManager {
             channel.addReceiver(receiver);
 
             if (!WirelessRedstone.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
-            Utils.sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
         } else {
             WirelessRedstone.getStorage().createWirelessPoint(cname, receiver);
-            Utils.sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
         }
 
         WirelessRedstone.getGlobalCache().update();
@@ -161,8 +161,8 @@ public class SignManager {
 
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
 
-        if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
+        if (WirelessRedstone.getUtils().containsBadChar(cname)) {
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
@@ -191,14 +191,14 @@ public class SignManager {
             channel.addTransmitter(transmitter);
 
             if (!WirelessRedstone.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
-            Utils.sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
         } else {
             WirelessRedstone.getStorage().createWirelessPoint(cname, transmitter);
-            Utils.sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
         }
 
         WirelessRedstone.getGlobalCache().update();
@@ -214,8 +214,8 @@ public class SignManager {
 
         org.bukkit.material.Sign sign = (org.bukkit.material.Sign) cblock.getState().getData();
 
-        if (Utils.containsBadChar(cname)) {
-            Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
+        if (WirelessRedstone.getUtils().containsBadChar(cname)) {
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
             return false;
         }
 
@@ -244,14 +244,14 @@ public class SignManager {
             channel.addScreen(screen);
 
             if (!WirelessRedstone.getStorage().createWirelessChannel(channel)) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNameContainsInvalidCharacters, player, true);
                 return false;
             }
 
-            Utils.sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCreatedChannel, player, false);
         } else {
             WirelessRedstone.getStorage().createWirelessPoint(cname, screen);
-            Utils.sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerExtendedChannel, player, false);
         }
 
         WirelessRedstone.getGlobalCache().update();

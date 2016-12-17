@@ -1,8 +1,6 @@
 package net.licks92.WirelessRedstone.Commands;
 
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,22 +37,22 @@ public class CommandManager implements CommandExecutor {
                 int timer = 0;
                 for (WirelessCommand gcmd : cmds) {
                     if (timer == 0)
-                        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false); //TODO: Add this string to the stringloader
+                        WirelessRedstone.getUtils().sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false); //TODO: Add this string to the stringloader
                     if (timer >= 8) {
-                        Utils.sendFeedback("Use /wr help 2 for the next page.", sender, false); //TODO: Add this string to the stringloader
+                        WirelessRedstone.getUtils().sendFeedback("Use /wr help 2 for the next page.", sender, false); //TODO: Add this string to the stringloader
                         break;
                     }
 
                     CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
                     if (sender.hasPermission("wirelessredstone." + info.permission())) {
-                        Utils.sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
-                                + StringUtils.join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
+                        WirelessRedstone.getUtils().sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
+                                + StringWirelessRedstone.getUtils().join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
                                 + ChatColor.GRAY + info.description(), sender, false);
                         timer++;
                     }
                 }
                 if (timer == 0) {
-                    Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
                 }
 
                 return true;
@@ -73,12 +71,12 @@ public class CommandManager implements CommandExecutor {
             }
 
             if (wanted == null) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().subCommandDoesNotExist, sender, true, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().subCommandDoesNotExist, sender, true, true);
                 return true;
             }
 
             if (!sender.hasPermission("wirelessredstone.commands." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
                 return true;
             }
 
@@ -88,7 +86,7 @@ public class CommandManager implements CommandExecutor {
             }
 
             if (!wanted.getClass().getAnnotation(CommandInfo.class).canUseInConsole() && sender instanceof ConsoleCommandSender) {
-                Utils.sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader
+                WirelessRedstone.getUtils().sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader
                 return true;
             }
 

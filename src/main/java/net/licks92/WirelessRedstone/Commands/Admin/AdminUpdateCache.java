@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.command.CommandSender;
 
@@ -14,6 +13,6 @@ public class AdminUpdateCache extends WirelessCommand {
     public void onCommand(CommandSender sender, String[] args) {
         WirelessRedstone.getGlobalCache().update(false);
 
-        Utils.sendFeedback("Cache updated", sender, false);
+        WirelessRedstone.getUtils().sendFeedback("Cache updated", sender, false);
     }
 }

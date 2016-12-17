@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone.Storage;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Libs.*;
 import net.licks92.WirelessRedstone.Signs.*;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -81,7 +80,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
             try {
                 // Create the table
-                PreparedStatement create = sqLite.getConnection().prepareStatement(new CreateBuilder(Utils.getDatabaseFriendlyName(channel.getName()))
+                PreparedStatement create = sqLite.getConnection().prepareStatement(new CreateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channel.getName()))
                         .addColumn(sqlChannelId, "int").addColumn(sqlChannelName, "char(64)")
                         .addColumn(sqlChannelLocked, "int(1)").addColumn(sqlChannelOwners, "char(255)")
                         .addColumn(sqlDirection, "char(255)").addColumn(sqlIsWallSign, "int(1)")
@@ -95,7 +94,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 create.execute();
                 create.close();
 
-                PreparedStatement insert = sqLite.getConnection().prepareStatement(new InsertBuilder(Utils.getDatabaseFriendlyName(channel.getName()))
+                PreparedStatement insert = sqLite.getConnection().prepareStatement(new InsertBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channel.getName()))
                         .addColumnWithValue(sqlChannelId, channel.getId())
                         .addColumnWithValue(sqlChannelName, channel.getName())
                         .addColumnWithValue(sqlChannelLocked, 0)
@@ -165,7 +164,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             isWallSign = 0;
 
         try {
-            PreparedStatement insert = sqLite.getConnection().prepareStatement(new InsertBuilder(Utils.getDatabaseFriendlyName(channelName))
+            PreparedStatement insert = sqLite.getConnection().prepareStatement(new InsertBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
                     .addColumnWithValue(sqlSignType, signType)
                     .addColumnWithValue(sqlSignX, point.getX())
                     .addColumnWithValue(sqlSignY, point.getY())
@@ -189,13 +188,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         if (channel == null) return false;
 
         for (WirelessReceiver receiver : channel.getReceivers()) {
-            if (Utils.sameLocation(receiver.getLocation(), loc)) return removeWirelessReceiver(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc)) return removeWirelessReceiver(channelName, loc);
         }
         for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-            if (Utils.sameLocation(transmitter.getLocation(), loc)) return removeWirelessTransmitter(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc)) return removeWirelessTransmitter(channelName, loc);
         }
         for (WirelessScreen screen : channel.getScreens()) {
-            if (Utils.sameLocation(screen.getLocation(), loc)) return removeWirelessScreen(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc)) return removeWirelessScreen(channelName, loc);
         }
         return false;
     }
@@ -244,7 +243,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         }
 
         try {
-            PreparedStatement update = sqLite.getConnection().prepareStatement(new UpdateBuilder(Utils.getDatabaseFriendlyName(channelName))
+            PreparedStatement update = sqLite.getConnection().prepareStatement(new UpdateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
                     .set(sqlChannelName + "='" + newChannelName + "'")
                     .where(sqlChannelName + "='" + channelName + "'")
                     .toString());
@@ -514,12 +513,12 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             for (String channelName : channels) {
                 if (channelName.equals(r_channelName)) {
                     // Get the ResultSet from the table we want
-                    master = sqLite.getConnection().prepareStatement("SELECT * FROM " + Utils.getDatabaseFriendlyName(channelName));
+                    master = sqLite.getConnection().prepareStatement("SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName));
                     ResultSet rsChannelInfo = sqLite.query(master);
                     try {
                         rsChannelInfo.getString("name");
                     } catch (SQLException ex) {
-                        PreparedStatement drop = sqLite.getConnection().prepareStatement("DROP TABLE " + Utils.getDatabaseFriendlyName(channelName));
+                        PreparedStatement drop = sqLite.getConnection().prepareStatement("DROP TABLE " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName));
                         sqLite.execute(drop);
                         rsChannelInfo.close();
                         return null;
@@ -545,7 +544,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
                     // Because a SQLite ResultSet is TYPE_FORWARD only, we have
                     // to create a third ResultSet and close the second
-                    master = sqLite.getConnection().prepareStatement("SELECT * FROM " + Utils.getDatabaseFriendlyName(channelName));
+                    master = sqLite.getConnection().prepareStatement("SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName));
                     ResultSet rsSigns = sqLite.query(master);
 
                     // Set the wireless signs
@@ -566,9 +565,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                     else
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {
                                 }
                             }
@@ -587,9 +586,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                     else
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {
                                 }
                             }
@@ -616,9 +615,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                     else
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {
                                 }
                             }
@@ -645,9 +644,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                     else
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {
                                 }
                             }
@@ -674,9 +673,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (receiver.getIsWallSign())
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                     else
-                                        receiver.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        receiver.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {
                                 }
                             }
@@ -695,9 +694,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (transmitter.getIsWallSign())
-                                        transmitter.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        transmitter.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                     else
-                                        transmitter.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        transmitter.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {
                                 }
                             }
@@ -717,9 +716,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                                 try {
                                     Integer directionInt = Integer.parseInt(rsSigns.getString(sqlDirection));
                                     if (screen.getIsWallSign())
-                                        screen.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        screen.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                     else
-                                        screen.setDirection(Utils.intToBlockFaceSign(directionInt));
+                                        screen.setDirection(WirelessRedstone.getUtils().intToBlockFaceSign(directionInt));
                                 } catch (NumberFormatException ignored) {
                                 }
                             }
@@ -750,13 +749,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public IWirelessPoint getWirelessRedstoneSign(Location loc) {
         for (WirelessChannel channel : getAllChannels()) {
             for (WirelessReceiver receiver : channel.getReceivers()) {
-                if (Utils.sameLocation(receiver.getLocation(), loc)) return receiver;
+                if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc)) return receiver;
             }
             for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-                if (Utils.sameLocation(transmitter.getLocation(), loc)) return transmitter;
+                if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc)) return transmitter;
             }
             for (WirelessScreen screen : channel.getScreens()) {
-                if (Utils.sameLocation(screen.getLocation(), loc)) return screen;
+                if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc)) return screen;
             }
         }
         return null;
@@ -803,13 +802,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public String getWirelessChannelName(Location loc) {
         for (WirelessChannel channel : getAllChannels()) {
             for (WirelessReceiver receiver : channel.getReceivers()) {
-                if (Utils.sameLocation(receiver.getLocation(), loc)) return channel.getName();
+                if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc)) return channel.getName();
             }
             for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-                if (Utils.sameLocation(transmitter.getLocation(), loc)) return channel.getName();
+                if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc)) return channel.getName();
             }
             for (WirelessScreen screen : channel.getScreens()) {
-                if (Utils.sameLocation(screen.getLocation(), loc)) return channel.getName();
+                if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc)) return channel.getName();
             }
         }
         return null;
@@ -819,7 +818,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public void updateChannel(String channelName, WirelessChannel channel) {
         try {
             int locked = (channel.isLocked()) ? 1 : 0;
-            PreparedStatement update = sqLite.getConnection().prepareStatement(new UpdateBuilder(Utils.getDatabaseFriendlyName(channelName))
+            PreparedStatement update = sqLite.getConnection().prepareStatement(new UpdateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
                     .set(sqlChannelName + "='" + channel.getName() + "'")
                     .set(sqlChannelLocked + "='" + locked + "'")
                     .where(sqlChannelId + "='" + channel.getId() + "'")
@@ -874,7 +873,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 WirelessRedstone.getSignManager().removeSigns(getWirelessChannel(channelName, true));
 
             if (!sqlTableExists(channelName)) return;
-            PreparedStatement drop = sqLite.getConnection().prepareStatement("DROP TABLE " + Utils.getDatabaseFriendlyName(channelName));
+            PreparedStatement drop = sqLite.getConnection().prepareStatement("DROP TABLE " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName));
             sqLite.execute(drop);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -955,7 +954,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private void updateSwitch(WirelessChannel channel, WirelessReceiver receiver) {
         try {
-            PreparedStatement update = sqLite.getConnection().prepareStatement(new UpdateBuilder(Utils.getDatabaseFriendlyName(channel.getName()))
+            PreparedStatement update = sqLite.getConnection().prepareStatement(new UpdateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channel.getName()))
                     .set(sqlSignType + "='" + "receiver_switch_" + ((WirelessReceiverSwitch) receiver).getState() + "'")
                     .where(sqlSignWorld + "='" + receiver.getWorld() + "'")
                     .where(sqlSignX + "='" + receiver.getX() + "'")
@@ -972,7 +971,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
     private boolean removeWirelessPoint(String channelName, Location loc, String world) {
         try {
-            String sql = new DeleteBuilder(Utils.getDatabaseFriendlyName(channelName))
+            String sql = new DeleteBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
                     .where(sqlSignX + "='" + loc.getBlockX() + "'")
                     .where(sqlSignY + "='" + loc.getBlockY() + "'")
                     .where(sqlSignZ + "='" + loc.getBlockZ() + "'")
@@ -1027,7 +1026,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             asciiName = asciiName.replace("num_", "");
             return asciiName;
         }
-        for (char character : Utils.badCharacters) {
+        for (char character : WirelessRedstone.getUtils().badCharacters) {
             String ascii = "" + (int) character;
             String code = "_char_" + ascii + "_";
             if (asciiName.contains(code)) {

@@ -7,7 +7,6 @@ import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.extent.Extent;
 import com.sk89q.worldedit.extent.logging.AbstractLoggingExtent;
 import com.sk89q.worldedit.world.World;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -38,7 +37,7 @@ public class WorldEditLogger extends AbstractLoggingExtent {
             return;
 
         for (Location loc : WirelessRedstone.getGlobalCache().getAllSignLocations()) {
-            if (Utils.sameLocation(loc, block.getLocation())) {
+            if (WirelessRedstone.getUtils().sameLocation(loc, block.getLocation())) {
                 String channelName = WirelessRedstone.getStorage().getWirelessChannelName(loc);
                 if (WirelessRedstone.getStorage().removeIWirelessPoint(channelName, loc)) {
                     WirelessRedstone.getStorage().checkChannel(channelName);

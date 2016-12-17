@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Signs.*;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -65,7 +64,7 @@ public class PlayerListener implements Listener {
         if (!signAlreadyExist(event.getClickedBlock().getLocation(), sign.getLine(1))) {
             if (sign.getLine(1) == null) {
                 event.getClickedBlock().breakNaturally();
-                Utils.sendFeedback("No channel name found", event.getPlayer(), true); //TODO: Add this string to the stringloader
+                WirelessRedstone.getUtils().sendFeedback("No channel name found", event.getPlayer(), true); //TODO: Add this string to the stringloader
                 return;
             }
 
@@ -73,7 +72,7 @@ public class PlayerListener implements Listener {
 
             if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), cname)) {
                 event.getClickedBlock().breakNaturally();
-                Utils.sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, event.getPlayer(), false);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, event.getPlayer(), false);
                 return;
             }
 
@@ -140,7 +139,7 @@ public class PlayerListener implements Listener {
             else if (type == SignType.SCREEN)
                 event.getPlayer().performCommand("wr i " + channel.getName());
         } else {
-            Utils.sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, event.getPlayer(), true, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, event.getPlayer(), true, true);
         }
     }
 
@@ -151,7 +150,7 @@ public class PlayerListener implements Listener {
             return false;
 
         for (WirelessReceiver receiver : channel.getReceivers()) {
-            if (Utils.sameLocation(loc, receiver.getLocation())) {
+            if (WirelessRedstone.getUtils().sameLocation(loc, receiver.getLocation())) {
                 exist = true;
                 break;
             }
@@ -159,7 +158,7 @@ public class PlayerListener implements Listener {
 
         if (!exist) {
             for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-                if (Utils.sameLocation(loc, transmitter.getLocation())) {
+                if (WirelessRedstone.getUtils().sameLocation(loc, transmitter.getLocation())) {
                     exist = true;
                     break;
                 }
@@ -168,7 +167,7 @@ public class PlayerListener implements Listener {
 
         if (!exist) {
             for (WirelessScreen screen : channel.getScreens()) {
-                if (Utils.sameLocation(loc, screen.getLocation())) {
+                if (WirelessRedstone.getUtils().sameLocation(loc, screen.getLocation())) {
                     exist = true;
                     break;
                 }

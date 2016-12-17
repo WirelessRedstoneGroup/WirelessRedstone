@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -39,9 +38,9 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
             try {
                 Integer directionInt = Integer.parseInt(map.get("direction").toString());
                 if (isWallSign) //This is maybe redundent, needs more testing
-                    direction = Utils.intToBlockFaceSign(directionInt);
+                    direction = WirelessRedstone.getUtils().intToBlockFaceSign(directionInt);
                 else
-                    direction = Utils.intToBlockFaceSign(directionInt);
+                    direction = WirelessRedstone.getUtils().intToBlockFaceSign(directionInt);
             } catch (NumberFormatException ignored) {
             }
         }
@@ -95,9 +94,9 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
     @Override
     public void setDirection(int direction) {
         if (isWallSign)
-            this.direction = Utils.intToBlockFaceWallSign(direction);
+            this.direction = WirelessRedstone.getUtils().intToBlockFaceWallSign(direction);
         else
-            this.direction = Utils.intToBlockFaceSign(direction);
+            this.direction = WirelessRedstone.getUtils().intToBlockFaceSign(direction);
     }
 
     @Override

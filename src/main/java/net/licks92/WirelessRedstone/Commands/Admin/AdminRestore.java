@@ -4,7 +4,6 @@ import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Storage.StorageType;
-import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -31,7 +30,7 @@ public class AdminRestore extends WirelessCommand {
                     }, 1L);
                 }
 
-                Utils.sendFeedback(WirelessRedstone.getStrings().restoreDataDone, sender, false);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().restoreDataDone, sender, false);
                 break;
             }
 
@@ -54,7 +53,7 @@ public class AdminRestore extends WirelessCommand {
             }
 
             default:
-                Utils.sendFeedback(WirelessRedstone.getStrings().restoreDataFailed, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().restoreDataFailed, sender, true);
                 break;
         }
     }
