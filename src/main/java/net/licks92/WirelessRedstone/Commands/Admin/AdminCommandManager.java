@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone.Commands.Admin;
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,7 +50,7 @@ public class AdminCommandManager implements CommandExecutor {
                     CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
                     if (sender.hasPermission("wirelessredstone.admin." + info.permission())) {
                         WirelessRedstone.getUtils().sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wra "
-                                + StringWirelessRedstone.getUtils().join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
+                                + StringUtils.join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
                                 + ChatColor.GRAY + info.description(), sender, false);
                         timer++;
                     }

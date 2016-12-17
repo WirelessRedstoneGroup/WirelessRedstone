@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone.Commands;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -26,7 +27,7 @@ public class Help extends WirelessCommand {
         for (WirelessCommand gcmd : WirelessRedstone.getCommandManager().getCommands()) {
             CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
             commandList.add(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
-                    + StringWirelessRedstone.getUtils().join(info.aliases(), ":") + " "
+                    + StringUtils.join(info.aliases(), ":") + " "
                     + info.usage() + ChatColor.WHITE + " - "
                     + ChatColor.GRAY + info.description());
         }

@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone.Commands;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -46,7 +47,7 @@ public class CommandManager implements CommandExecutor {
                     CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
                     if (sender.hasPermission("wirelessredstone." + info.permission())) {
                         WirelessRedstone.getUtils().sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
-                                + StringWirelessRedstone.getUtils().join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
+                                + StringUtils.join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
                                 + ChatColor.GRAY + info.description(), sender, false);
                         timer++;
                     }
