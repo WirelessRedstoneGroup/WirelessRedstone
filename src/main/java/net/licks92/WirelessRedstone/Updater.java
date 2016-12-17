@@ -32,7 +32,7 @@ public class Updater {
             public void run() {
                 checkForUpdate();
             }
-        }, 1, 20 * 60 * 15); //1 sec = 20 ticks -> minutes -> every quarter
+        }, 1, 20 * 60 * 30); //1 sec = 20 ticks -> minutes -> every 30 min
     }
 
     private void checkForUpdate() {

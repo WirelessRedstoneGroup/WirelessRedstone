@@ -168,14 +168,14 @@ public class Main extends JavaPlugin {
         } else
             WRLogger.debug("WorldEdit not enabled. Skipping WorldEdit support.");
 
+        if (config.getUpdateCheck())
+            updater = new Updater();
+
         WRLogger.debug("Loading listeners...");
         //Don't need to store the instance because we won't touch it.
         pm.registerEvents(new WorldListener(), this);
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new PlayerListener(), this);
-
-        if (config.getUpdateCheck())
-            updater = new Updater();
 
         WRLogger.debug("Loading commands...");
         getCommand("wirelessredstone").setExecutor(commandManager);

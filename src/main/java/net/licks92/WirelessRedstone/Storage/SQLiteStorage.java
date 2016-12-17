@@ -964,7 +964,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     .toString());
 
             update.execute();
-            update.close();
+            update.close(); //We don't want to update the cache because this is only run when the plugin disables
         } catch (SQLException e) {
             e.printStackTrace();
         }

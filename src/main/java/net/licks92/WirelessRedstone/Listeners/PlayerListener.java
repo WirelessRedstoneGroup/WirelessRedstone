@@ -21,7 +21,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        if (Main.getPermissionsManager().isWirelessAdmin(event.getPlayer())) {
+        if (Main.getPermissionsManager().isWirelessAdmin(event.getPlayer()) && Main.getUpdater() != null) {
             Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
                 @Override
                 public void run() {
