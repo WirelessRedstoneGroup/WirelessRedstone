@@ -75,26 +75,26 @@ public class Updater {
             reader.setLenient(true);
             JsonObject root = new JsonParser().parse(reader).getAsJsonObject();
 
-            String latestVerion;
+            String latestVersion;
             if (Utils.isSpigot())
-                latestVerion = root.getAsJsonObject("latest").get("spigotversion").getAsString();
+                latestVersion = root.getAsJsonObject("latest").get("spigotversion").getAsString();
             else
-                latestVerion = root.getAsJsonObject("latest").get("bukkitversion").getAsString();
+                latestVersion = root.getAsJsonObject("latest").get("bukkitversion").getAsString();
 
-            JsonObject version = root.getAsJsonObject("versions").getAsJsonObject(latestVerion);
+            JsonObject version = root.getAsJsonObject("versions").getAsJsonObject(latestVersion);
             String downloadUrl = version.getAsJsonObject(Utils.isSpigot() ? "spigot" : "bukkit").get("downloadUrl").getAsString();
             String changelog = version.get("changelog").getAsString();
 
-            Main.getWRLogger().debug("Comparing " + Main.getInstance().getDescription().getVersion() + " vs " + latestVerion + (Utils.isSpigot() ? "-spigot" : "-bukkit"));
+            Main.getWRLogger().debug("Comparing " + Main.getInstance().getDescription().getVersion() + " vs " + latestVersion + (Utils.isSpigot() ? "-spigot" : "-bukkit"));
 
-            Semver sem = new Semver(latestVerion);
+            Semver sem = new Semver(latestVersion);
             if (sem.isGreaterThan(Main.getInstance().getDescription().getVersion())) {
                 Main.getWRLogger().debug("New update!");
-                this.latestVersion = latestVerion;
+                this.latestVersion = latestVersion;
                 this.downloadUrl = downloadUrl;
                 this.changelog = changelog;
 
-                showUpdate();
+                showUpdate(latestVersion, downloadUrl, changelog, Bukkit.getOnlinePlayers());
             } else {
                 this.latestVersion = null;
                 this.downloadUrl = null;
@@ -106,11 +106,6 @@ public class Updater {
         }
 
         request.disconnect();
-    }
-
-    public void showUpdate() {
-        if (latestVersion != null && downloadUrl != null && changelog != null)
-            showUpdate(latestVersion, downloadUrl, changelog, Bukkit.getOnlinePlayers());
     }
 
     public void showUpdate(Collection<Player> players) {
