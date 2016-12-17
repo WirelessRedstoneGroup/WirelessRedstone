@@ -94,6 +94,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         if (fullyStarted) {
             try {
+                Main.getSignManager().stopAllClocks();
                 Main.getStorage().updateReceivers();
                 storageManager.getStorage().close();
             } catch (Exception ex) {
