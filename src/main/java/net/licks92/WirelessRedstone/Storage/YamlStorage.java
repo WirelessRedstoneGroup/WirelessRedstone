@@ -51,7 +51,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public boolean createWirelessChannel(WirelessChannel channel) {
-        setWirelessChannel(channel.getName(), channel);
+        setWirelessChannel(channel.getName(), channel, true);
 
         return true;
     }
@@ -82,7 +82,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             channel.addTransmitter((WirelessTransmitter) point);
         else if (point instanceof WirelessScreen)
             channel.addScreen((WirelessScreen) point);
-        setWirelessChannel(channelName, channel);
+        setWirelessChannel(channelName, channel, true);
 
         return true;
     }
@@ -157,7 +157,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         }
 
         //Remove the old channel in the config
-        setWirelessChannel(channelName, null);
+        setWirelessChannel(channelName, null, true);
 
         for (File f : channelFolder.listFiles()) {
             if (f.getName().equals(channelName)) {
@@ -184,7 +184,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         for (File file : channelFolder.listFiles()) {
             String name = file.getName();
             int pos = name.lastIndexOf(".");
-            setWirelessChannel(name.substring(0, pos), null);
+            setWirelessChannel(name.substring(0, pos), null, true);
             files.add(file);
         }
 
@@ -497,13 +497,17 @@ public class YamlStorage implements IWirelessStorageConfiguration {
 
     @Override
     public void updateChannel(String channelName, WirelessChannel channel) {
-        setWirelessChannel(channelName, channel);
+        setWirelessChannel(channelName, channel, true);
+    }
+
+    private void updateChannel(String channelName, WirelessChannel channel, boolean updateCache) {
+        setWirelessChannel(channelName, channel, updateCache);
     }
 
     @Override
     public void updateReceivers() {
         for (WirelessChannel channel : getAllChannels()) {
-            updateChannel(channel.getName(), channel);
+            updateChannel(channel.getName(), channel, false);
         }
     }
 
@@ -519,7 +523,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
     @Override
     public void removeWirelessChannel(String channelName) {
         WirelessRedstone.getSignManager().removeSigns(getWirelessChannel(channelName, true));
-        setWirelessChannel(channelName, null);
+        setWirelessChannel(channelName, null, true);
         for (File f : channelFolder.listFiles()) {
             if (f.getName().equals(channelName + ".yml")) {
                 f.delete();
@@ -588,7 +592,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
         return true;
     }
 
-    private void setWirelessChannel(String channelName, WirelessChannel channel) {
+    private void setWirelessChannel(String channelName, WirelessChannel channel, boolean updateCache) {
         FileConfiguration channelConfig = new YamlConfiguration();
         try {
             File channelFile = new File(channelFolder, channelName + ".yml");
@@ -611,14 +615,16 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             e.printStackTrace();
         }
 
-        if (WirelessRedstone.getGlobalCache() == null)
-            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    WirelessRedstone.getGlobalCache().update();
-                }
-            }, 1L);
-        else WirelessRedstone.getGlobalCache().update();
+        if (updateCache) {
+            if (WirelessRedstone.getGlobalCache() == null)
+                Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        WirelessRedstone.getGlobalCache().update();
+                    }
+                }, 1L);
+            else WirelessRedstone.getGlobalCache().update();
+        }
     }
 
     /**
