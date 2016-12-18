@@ -11,7 +11,7 @@
         <backupFailed>O backup falhou!</backupFailed>
         <channelDoesNotExist>Este canal não existe!</channelDoesNotExist>
         <channelLocked>Canal bloqueado !</channelLocked>
-        <channelNameContainsInvalidCaracters>Este nome do canal contém caracteres inválidos!</channelNameContainsInvalidCaracters>
+        <channelNameContainsInvalidCharacters>Este nome do canal contém caracteres inválidos!</channelNameContainsInvalidCharacters>
         <channelRemoved>Este canal foi removido!</channelRemoved>
         <channelRemovedCauseNoSign>Canal removido, não há mais sinais nos mundos</channelRemovedCauseNoSign>
         <channelUnlocked>Canal desbloqueado!</channelUnlocked>
@@ -57,7 +57,7 @@
         <backupFailed>O backup falhou!</backupFailed>
         <channelDoesNotExist>Este canal não existe!</channelDoesNotExist>
         <channelLocked>Canal bloqueado !</channelLocked>
-        <channelNameContainsInvalidCaracters>Este nome do canal contém caracteres inválidos!</channelNameContainsInvalidCaracters>
+        <channelNameContainsInvalidCharacters>Este nome do canal contém caracteres inválidos!</channelNameContainsInvalidCharacters>
         <channelRemoved>Este canal foi removido!</channelRemoved>
         <channelRemovedCauseNoSign>Canal removido, não há mais sinais nos mundos</channelRemovedCauseNoSign>
         <channelUnlocked>Canal desbloqueado!</channelUnlocked>
@@ -93,7 +93,7 @@
 		<backupFailed>backup falhou!</backupFailed>
 		<channelDoesNotExist>Este canal não existe!</channelDoesNotExist>
 		<channelLocked>canal bloqueado!</channelLocked>
-		<channelNameContainsInvalidCaracters>Este canal contém caracteres inválidos!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Este canal contém caracteres inválidos!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Este canal foi removido!</channelRemoved>
 		<channelRemovedCauseNoSign>Canal removido, não há mais placas nos mundos</channelRemovedCauseNoSign>
 		<channelUnlocked>Canal desbloqueado!</channelUnlocked>

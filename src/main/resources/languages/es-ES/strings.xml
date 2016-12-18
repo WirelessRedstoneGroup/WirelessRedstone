@@ -9,7 +9,7 @@
 		<backupFailed>La copia de seguridad ha fallado!</backupFailed>
 		<channelDoesNotExist>Este canal no existe!</channelDoesNotExist>
 		<channelLocked>Canal bloqueado!</channelLocked>
-		<channelNameContainsInvalidCaracters>El nombre de este canal contiene símbolos inválidos!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>El nombre de este canal contiene símbolos inválidos!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Este canal ha sido eliminado!</channelRemoved>
 		<channelRemovedCauseNoSign>Canal eliminado, no hay más señales en el mundo</channelRemovedCauseNoSign>
 		<channelUnlocked>Canal desbloqueado!</channelUnlocked>

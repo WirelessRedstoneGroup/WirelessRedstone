@@ -9,7 +9,7 @@
 		<backupFailed>バックアップに失敗しました ！</backupFailed>
 		<channelDoesNotExist>このチャンネルは存在しません ！</channelDoesNotExist>
 		<channelLocked>チャネルをロックしました ！</channelLocked>
-		<channelNameContainsInvalidCaracters>チャンネルの名前に使用できない文字列が含まれています。</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>チャンネルの名前に使用できない文字列が含まれています。</channelNameContainsInvalidCharacters>
 		<channelRemoved>チャンネルを削除しました。</channelRemoved>
 		<channelRemovedCauseNoSign>チャンネルを削除しました。現在使用されているチャンネルはありません。</channelRemovedCauseNoSign>
 		<channelUnlocked>ロックを解除しました</channelUnlocked>

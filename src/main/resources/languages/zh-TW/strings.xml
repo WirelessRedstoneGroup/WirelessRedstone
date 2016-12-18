@@ -9,7 +9,7 @@
 		<backupFailed>備份插件失敗</backupFailed>
 		<channelDoesNotExist>此頻道不存在</channelDoesNotExist>
 		<channelLocked>頻道鎖定</channelLocked>
-		<channelNameContainsInvalidCaracters>此通道名稱包含無效字符</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>此通道名稱包含無效字符</channelNameContainsInvalidCharacters>
 		<channelRemoved>該頻道已被刪除</channelRemoved>
 		<channelRemovedCauseNoSign>頻道刪除!在世界上沒有其他的告示牌</channelRemovedCauseNoSign>
 		<channelUnlocked>頻道解鎖</channelUnlocked>

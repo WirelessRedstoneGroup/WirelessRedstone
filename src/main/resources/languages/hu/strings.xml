@@ -9,7 +9,7 @@
 		<backupFailed>Sikertelen kisérlet visszaállítási pont létrehozására!</backupFailed>
 		<channelDoesNotExist>Nem létezik ilyen nevű csatorna!</channelDoesNotExist>
 		<channelLocked>Csatorna lezárva!</channelLocked>
-		<channelNameContainsInvalidCaracters>A csatorna neve nem megfelelő karaktereket tartalmaz!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>A csatorna neve nem megfelelő karaktereket tartalmaz!</channelNameContainsInvalidCharacters>
 		<channelRemoved>A csatorna már elvan távolítva!</channelRemoved>
 		<channelRemovedCauseNoSign>Csatorna eltávolítva, nincs több tábla a világokban.</channelRemovedCauseNoSign>
 		<channelUnlocked>Csatorna zárolás feloldva!</channelUnlocked>

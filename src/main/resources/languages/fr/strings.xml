@@ -9,7 +9,7 @@
 		<backupFailed>La sauvegarde a échoué !</backupFailed>
 		<channelDoesNotExist>Ce réseau n'existe pas !</channelDoesNotExist>
 		<channelLocked>Le réseau est verouillé!</channelLocked>
-		<channelNameContainsInvalidCaracters>Ce nom de réseau contient des caractères invalides !</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Ce nom de réseau contient des caractères invalides !</channelNameContainsInvalidCharacters>
 		<channelRemoved>Ce réseau a été supprimé !</channelRemoved>
 		<channelRemovedCauseNoSign>Le réseau a été supprimé car il n'y a plus aucun point d'accès existant.</channelRemovedCauseNoSign>
 		<channelUnlocked>Le réseau a été débloqué.</channelUnlocked>

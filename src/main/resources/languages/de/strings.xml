@@ -9,7 +9,7 @@
 		<backupFailed>Sicherung fehlgeschlagen!</backupFailed>
 		<channelDoesNotExist>Dieser Kanal existiert nicht!</channelDoesNotExist>
 		<channelLocked>Kanal gesperrt!</channelLocked>
-		<channelNameContainsInvalidCaracters>Dieser Kanalname enthält ungültige Zeichen!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Dieser Kanalname enthält ungültige Zeichen!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Dieser Kanal wurde entfernt!</channelRemoved>
 		<channelRemovedCauseNoSign>Kanal entfernt, keine Schilder mehr in den Welten</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanal freigeschaltet!</channelUnlocked>

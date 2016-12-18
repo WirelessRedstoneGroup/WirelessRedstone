@@ -9,7 +9,7 @@
 		<backupFailed>Varmuuskopiointi epäonnistui!</backupFailed>
 		<channelDoesNotExist>Tätä kanavaa ei ole olemassa!</channelDoesNotExist>
 		<channelLocked>Kanava lukittu !</channelLocked>
-		<channelNameContainsInvalidCaracters>Kanavan nimi sisältää virheellisiä merkkejä !</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Kanavan nimi sisältää virheellisiä merkkejä !</channelNameContainsInvalidCharacters>
 		<channelRemoved>Kanava poistettu!</channelRemoved>
 		<channelRemovedCauseNoSign>Kanava poistetu, ei kylttejä maailmoissa</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanava avattu !</channelUnlocked>

@@ -9,7 +9,7 @@
 		<backupFailed>Error en la còpia de seguretat!</backupFailed>
 		<channelDoesNotExist>Aquest canal no existeix!</channelDoesNotExist>
 		<channelLocked>Canal tancat!</channelLocked>
-		<channelNameContainsInvalidCaracters>El nom del canal té caràcters invalids!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>El nom del canal té caràcters invalids!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Aquest canal s'ha eliminat!</channelRemoved>
 		<channelRemovedCauseNoSign>Canal eliminat, no hi ha més signes en els mons</channelRemovedCauseNoSign>
 		<channelUnlocked>Canal desbloquejat!</channelUnlocked>

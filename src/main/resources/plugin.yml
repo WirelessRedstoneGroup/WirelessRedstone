@@ -2,79 +2,20 @@ name: WirelessRedstone
 main: net.licks92.WirelessRedstone.WirelessRedstone
 website: http://dev.bukkit.org/server-mods/wireless-redstone/
 authors: [licks92, Bart0110]
-version: 2.6.7
+version: 3.0.0
 description: The reference in long-distance redstone connections! Create your own wifi-redstone network with WirelessRedstone!
-softdepend: [Vault, WorldEdit]
+softdepend: [Vault, WorldEdit, Multiverse-Core, MultiWorld]
 commands:
    wirelessredstone:
       aliases: [wr, wredstone, wifi]
       description: WirelessRedstone menu
       usage: |
              Example: /<command> help
-   wrhelp:
-      aliases: [wirelessredstonehelp]
-      description: WirelessRedstone help menu
+   wradmin:
+      aliases: [wra]
+      description: WirelessRedstone admin command
       usage: |
-             Example: /<command>
-   wrt:
-      aliases: [wrtransmitter, createtransmitter, ct]
-      description: Creates a transmitter sign with given channel
-      usage: |
-             Example: /<command> channel
-   wrr:
-      aliases: [wrreceiver, createreceiver, cr]
-      description: Creates a receiver sign with given channel
-      usage: |
-             Example: /<command> channel
-   wrs:
-      aliases: [wrscreen, createscreen, cs]
-      description: Creates a screen sign with given channel
-      usage: |
-             Example: /<command> channel
-   wrr:
-      aliases: [wrreceiver, createreceiver, cr]
-      description: Creates a receiver sign with given channel
-      usage: |
-             Example: /<command> channel
-   wri:
-      aliases: [wrinfo, channelinfo]
-      description: Channel informations
-      usage: |
-             Example: /<command> channel signcategory page
-   wra:
-      aliases: [wradmin]
-      description: Channel admin commands
-      usage: |
-             Example: /<command> subcommand
-   wrlock:
-      aliases: [wrunlock]
-      description: Lock / Unlock a channel
-      usage: |
-             Example /<command> channel
-   wrremove:
-      aliases: [wrdelete]
-      description: Remove a channel with all its signs!
-      usage: |
-             Example: /<command> channel
-   wrlist:
-      aliases: [channellist]
-      description: Lists all channels!
-      usage: |
-             Example: /<command> page
-   wractivate:
-      aliases: [wrtoggle]
-      description: Temporarily turns on a channel for a given time in ms.
-      usage: |
-             Example: /<command> channel time
-   wrversion:
-      aliases: [wrv]
-      description: Shows the version of Wireless-Redstone you have.
-      usage : |
-              Example: /<command>
-   wrtp:
-      description: Teleports you to a channel sign.
-      usage : |
-              Example: /<command>
+             Example: /<command> help
 permissions:
     wirelessredstone.*:
         description: Gives access to all Wireless Redstone commands
@@ -106,6 +47,7 @@ permissions:
             wirelessredstone.commands.activate: true
             wirelessredstone.commands.version: true
             wirelessredstone.commands.tp: true
+            wirelessredstone.commands.version: true
     wirelessredstone.admin.*:
         description: Gives you access to all admin commands
         children:
@@ -115,6 +57,9 @@ permissions:
             wirelessredstone.admin.wipeData: true
             wirelessredstone.admin.backupdata: true
             wirelessredstone.admin.convertdata: true
+            wirelessredstone.admin.purgedata: true
+            wirelessredstone.admin.restoredata: true
+            wirelessredstone.admin.updatecache: true
     wirelessredstone.create.transmitter:
         description: Allows you to create a transmitter
         default: op
@@ -174,4 +119,13 @@ permissions:
         default: op
     wirelessredstone.admin.convertdata:
         description: Allows you to convert the database.
+        default: op
+    wirelessredstone.admin.purgedata:
+        description: Allows you to purge the database.
+        default: op
+    wirelessredstone.admin.restoredata:
+        description: Allows you to restore the database from the latest backup.
+        default: op
+    wirelessredstone.admin.updatecache:
+        description: Allows you to update the global cache.
         default: op

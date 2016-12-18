@@ -9,7 +9,7 @@
 		<backupFailed>Säkerhetskopieringen misslyckades!</backupFailed>
 		<channelDoesNotExist>Den här kanalen finns inte!</channelDoesNotExist>
 		<channelLocked>Kanalen är låst!</channelLocked>
-		<channelNameContainsInvalidCaracters>Detta kanalnamn har ogiltiga bokstäver!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Detta kanalnamn har ogiltiga bokstäver!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Denna kanal har tagits bort!</channelRemoved>
 		<channelRemovedCauseNoSign>Kanalen har blivit borttagen, inga fler skyltar i världarna</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanalen är nu olåst!</channelUnlocked>

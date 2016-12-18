@@ -1,425 +1,364 @@
 package net.licks92.WirelessRedstone;
 
-import net.gravitydevelopment.updater.Updater;
-import net.gravitydevelopment.updater.Updater.UpdateResult;
-import net.gravitydevelopment.updater.Updater.UpdateType;
-import net.licks92.WirelessRedstone.Channel.IWirelessPoint;
-import net.licks92.WirelessRedstone.Channel.WirelessChannel;
-import net.licks92.WirelessRedstone.Channel.WirelessReceiver;
-import net.licks92.WirelessRedstone.Configuration.ConfigurationConverter;
-import net.licks92.WirelessRedstone.Configuration.WirelessConfiguration;
-import net.licks92.WirelessRedstone.Listeners.WirelessBlockListener;
-import net.licks92.WirelessRedstone.Listeners.WirelessPlayerListener;
-import net.licks92.WirelessRedstone.Listeners.WirelessWorldListener;
-import net.licks92.WirelessRedstone.Permissions.WirelessPermissions;
-import net.licks92.WirelessRedstone.Strings.WirelessStrings;
-import net.licks92.WirelessRedstone.Strings.WirelessXMLStringsLoader;
+import net.licks92.WirelessRedstone.Commands.Admin.AdminCommandManager;
+import net.licks92.WirelessRedstone.Commands.CommandManager;
+import net.licks92.WirelessRedstone.Listeners.BlockListener;
+import net.licks92.WirelessRedstone.Listeners.PlayerListener;
+import net.licks92.WirelessRedstone.Listeners.WorldListener;
+import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
+import net.licks92.WirelessRedstone.Storage.IWirelessStorageConfiguration;
+import net.licks92.WirelessRedstone.Storage.StorageManager;
+import net.licks92.WirelessRedstone.Storage.StorageType;
+import net.licks92.WirelessRedstone.String.StringLoader;
+import net.licks92.WirelessRedstone.String.StringManager;
+import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
-import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
-/**
- * This class is the main class of the plugin. It controls the Configuration,
- * the Listeners, it sends the metrics and controls the actions when enabling /
- * disabling.
- *
- * @author licks92
- */
 public class WirelessRedstone extends JavaPlugin {
-    public static WirelessConfiguration config;
-    public static WirelessStrings strings;
-    public static WirelessGlobalCache cache;
-    private static WRLogger logger;
-    public static WireBox WireBox;
-    public WirelessPermissions permissions;
-    public static Permission perms;
-    public WirelessWorldListener worldlistener;
-    public WirelessBlockListener blocklistener;
-    public WirelessPlayerListener playerlistener;
-    private BukkitTask updateChecker;
-    public Updater updater;
+
+    private Boolean fullyStarted = false;
+
     private static WirelessRedstone instance;
+    private static Utils utils;
+    private static GlobalCache globalCache; //GlobalCache -> Manage global cache, SignManager -> Manage WireBox functions
+    private static SignManager signManager;
+    private static WRLogger WRLogger;
+    private static StringManager stringManager;
+    private static StorageManager storageManager;
+    private static PermissionsManager permissionsManager;
+    private static Updater updater;
     private static Metrics metrics;
+    private static WorldEditHooker worldEditHooker;
+    private static CommandManager commandManager;
+    private static AdminCommandManager adminCommandManager;
 
+    private ConfigManager config;
 
-    /**
-     * Wireless Redstone logger
-     *
-     * @return logger
-     */
-    public static WRLogger getWRLogger() {
-        return logger;
+    public static WirelessRedstone getInstance() {
+        return instance;
     }
 
-    /**
-     * Calls the actions to do when disabling the plugin.
-     */
+    public static Utils getUtils() {
+        return utils;
+    }
+
+    public static GlobalCache getGlobalCache() {
+        return globalCache;
+    }
+
+    public static SignManager getSignManager() {
+        return signManager;
+    }
+
+    public static WRLogger getWRLogger() {
+        return WRLogger;
+    }
+
+    public static StringManager getStrings() {
+        return stringManager;
+    }
+
+    public static IWirelessStorageConfiguration getStorage() {
+        return storageManager.getStorage();
+    }
+
+    public static PermissionsManager getPermissionsManager() {
+        return permissionsManager;
+    }
+
+    public static Updater getUpdater() {
+        return updater;
+    }
+
+    public static Metrics getMetrics() {
+        return metrics;
+    }
+
+    public static WorldEditHooker getWorldEditHooker() {
+        return worldEditHooker;
+    }
+
+    public static CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    public static AdminCommandManager getAdminCommandManager() {
+        return adminCommandManager;
+    }
+
+    public static void setWorldEditHooker(WorldEditHooker worldEditHooker) {
+        WirelessRedstone.worldEditHooker = worldEditHooker;
+    }
+
+    private static final String CHANNEL_FOLDER = "channels";
+
     @Override
     public void onDisable() {
-        try {
-            config.updateReceivers();
-            config.close();
-            updateChecker.cancel();
-
-//            metrics = null;
-            instance = null;
-        } catch (Exception ignored) {
+        if (fullyStarted) {
+            try {
+                WirelessRedstone.getSignManager().stopAllClocks();
+                WirelessRedstone.getStorage().updateReceivers();
+                storageManager.getStorage().close();
+            } catch (Exception ex) {
+                WRLogger.severe("An error occured when disabling the plugin!");
+                ex.printStackTrace();
+            }
         }
+        fullyStarted = false;
+
+        worldEditHooker = null;
+        commandManager = null;
+        adminCommandManager = null;
+        metrics = null;
+        updater = null;
+        stringManager = null;
+        WRLogger = null;
+        globalCache = null;
+        signManager = null;
+        storageManager = null;
+        utils = null;
+        instance = null;
     }
 
-    /**
-     * Calls the actions to do when enabling the plugin (i.e when starting the
-     * server)
-     */
     @Override
     public void onEnable() {
         instance = this;
-        PluginDescriptionFile pdFile = getDescription();
+        utils = new Utils();
+        config = ConfigManager.getConfig();
+        WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
 
-        new ConfigurationConverter(this);
+        if (config.getDebugMode())
+            WRLogger.info("Debug mode enabled!");
 
-        WireBox = new WireBox(this);
-        config = new WirelessConfiguration(this);
-        if (config.getDebugMode()) {
-            logger = new WRLogger("[WirelessRedstone]", getServer()
-                    .getConsoleSender(), true, config.getColourfulLogging());
-            logger.info("Debug Mode activated !");
-            logger.info("Log level set to FINEST because of the debug mode");
-        } else {
-            logger = new WRLogger("[WirelessRedstone]", this.getServer()
-                    .getConsoleSender(), false, config.getColourfulLogging());
-        }
-        config.initStorage();
-        cache = new WirelessGlobalCache(this, config.getCacheRefreshFrequency());
-
-        WirelessRedstone.logger.info(pdFile.getName() + " version "
-                + pdFile.getVersion() + " is loading...");
-
-        updater = new Updater(this, 37345, getFile(), UpdateType.NO_DOWNLOAD,
-                true);
-
-        // Load strings
-        strings = new WirelessXMLStringsLoader(this, config.getLanguage());
-        // strings = new WirelessStrings();
-
-        if (config.doCheckForUpdates()) {
-            updateChecker = this.getServer().getScheduler()
-                    .runTaskTimerAsynchronously(getPlugin(), new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
-                                    getWRLogger()
-                                            .info(WirelessRedstone.strings.newUpdateAvailable);
-                                }
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                    }, 0, 20 * 60 * 30);
-        }
-
-        // Load listeners
-        worldlistener = new WirelessWorldListener(this);
-        blocklistener = new WirelessBlockListener(this);
-        playerlistener = new WirelessPlayerListener(this);
-
-        if(Bukkit.getPluginManager().isPluginEnabled("WorldEdit")) {
-            WirelessRedstone.getWRLogger().debug("Hooking into WorldEdit ...");
-            new WorldEditLoader();
-        }
-
-        WirelessRedstone.logger.info("Loading Permissions...");
-
-        permissions = new WirelessPermissions(this);
-        config.save();
-
-        WirelessRedstone.logger.info("Registering commands...");
-        getCommand("wirelessredstone").setExecutor(new WirelessCommands(this));
-        getCommand("wrhelp").setExecutor(new WirelessCommands(this));
-        getCommand("wrr").setExecutor(new WirelessCommands(this));
-        getCommand("wrt").setExecutor(new WirelessCommands(this));
-        getCommand("wrs").setExecutor(new WirelessCommands(this));
-        getCommand("wrremove").setExecutor(new WirelessCommands(this));
-        getCommand("wra").setExecutor(new WirelessCommands(this));
-        getCommand("wrlist").setExecutor(new WirelessCommands(this));
-        getCommand("wri").setExecutor(new WirelessCommands(this));
-        getCommand("wrlock").setExecutor(new WirelessCommands(this));
-        getCommand("wractivate").setExecutor(new WirelessCommands(this));
-        getCommand("wrversion").setExecutor(new WirelessCommands(this));
-        getCommand("wrtp").setExecutor(new WirelessCommands(this));
-
-        WirelessRedstone.logger.info("Loading Chunks...");
-        LoadChunks();
-
-        // Metrics
-        if (config.getMetrics()) {
-            try {
-                metrics = new Metrics(this);
-
-                // Channel metrics
-                final Metrics.Graph channelGraph = metrics.createGraph("Channel metrics");
-                channelGraph.addPlotter(new Metrics.Plotter("Total channels") {
-                    @Override
-                    public int getValue() {
-                        return config.getAllChannels().size();
-                    }
-                });
-                channelGraph.addPlotter(new Metrics.Plotter("Total signs") {
-                    @Override
-                    public int getValue() {
-                        return cache.getAllSigns().size();
-                    }
-                });
-
-                // Sign Metrics
-                final Metrics.Graph signGraph = metrics.createGraph("Sign metrics");
-                signGraph.addPlotter(new Metrics.Plotter("Transmitters") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getTransmitters().size();
-                        }
-                        return total;
-                    }
-                });
-                signGraph.addPlotter(new Metrics.Plotter("Receivers") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getReceivers().size();
-                        }
-                        return total;
-                    }
-                });
-                signGraph.addPlotter(new Metrics.Plotter("Screens") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getScreens().size();
-                        }
-                        return total;
-                    }
-                });
-
-                final Metrics.Graph storageGraph = metrics.createGraph("Storage used");
-                storageGraph.addPlotter(new Metrics.Plotter("SQLite") {
-                    @Override
-                    public int getValue() {
-                        if (config.getSaveOption().equalsIgnoreCase("SQLITE")) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    }
-                });
-
-                storageGraph.addPlotter(new Metrics.Plotter("MySQL") {
-                    @Override
-                    public int getValue() {
-                        if (config.getSaveOption().equalsIgnoreCase("MYSQL")) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    }
-                });
-
-                storageGraph.addPlotter(new Metrics.Plotter("Yaml") {
-                    @Override
-                    public int getValue() {
-                        if (config.getSaveOption().equalsIgnoreCase("YAML") || config.getSaveOption().equalsIgnoreCase("YML")) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    }
-                });
-
-                final Metrics.Graph receiverTypesProportion = metrics
-                        .createGraph("Different types of receivers");
-
-                receiverTypesProportion.addPlotter(new Metrics.Plotter("Default") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getReceiversOfType(WirelessReceiver.Type.Default).size();
-                        }
-                        return total;
-                    }
-                });
-                receiverTypesProportion.addPlotter(new Metrics.Plotter("Inverters") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getReceiversOfType(WirelessReceiver.Type.Inverter).size();
-                        }
-                        return total;
-                    }
-                });
-                receiverTypesProportion.addPlotter(new Metrics.Plotter("Delayers") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getReceiversOfType(WirelessReceiver.Type.Delayer).size();
-                        }
-                        return total;
-                    }
-                });
-                receiverTypesProportion.addPlotter(new Metrics.Plotter("Clocks") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getReceiversOfType(WirelessReceiver.Type.Clock).size();
-                        }
-                        return total;
-                    }
-                });
-                receiverTypesProportion.addPlotter(new Metrics.Plotter("Switchers") {
-                    @Override
-                    public int getValue() {
-                        int total = 0;
-                        for (WirelessChannel channel : config.getAllChannels()) {
-                            total += channel.getReceiversOfType(WirelessReceiver.Type.Switch).size();
-                        }
-                        return total;
-                    }
-                });
-
-                final Metrics.Graph permissionsGraph = metrics
-                        .createGraph("Plugin used for Permissions");
-                permissionsGraph.addPlotter(new Metrics.Plotter("Vault") {
-                    @Override
-                    public int getValue() {
-                        if (permissions.permPlugin.equalsIgnoreCase("Vault"))
-                            return 1;
-                        else
-                            return 0;
-                    }
-                });
-
-                permissionsGraph.addPlotter(new Metrics.Plotter("PermissionsEx") {
-                    @Override
-                    public int getValue() {
-                        if (permissions.permPlugin.equalsIgnoreCase("PermissionsEx"))
-                            return 1;
-                        else
-                            return 0;
-                    }
-                });
-
-                permissionsGraph.addPlotter(new Metrics.Plotter("PermissionsBukkit") {
-                    @Override
-                    public int getValue() {
-                        if (permissions.permPlugin.equalsIgnoreCase("PermissionsBukkit"))
-                            return 1;
-                        else
-                            return 0;
-                    }
-                });
-
-                permissionsGraph.addPlotter(new Metrics.Plotter("bPermissions") {
-                    @Override
-                    public int getValue() {
-                        if (permissions.permPlugin.equalsIgnoreCase("bPermissions"))
-                            return 1;
-                        else
-                            return 0;
-                    }
-                });
-
-                permissionsGraph.addPlotter(new Metrics.Plotter("GroupManager") {
-                    @Override
-                    public int getValue() {
-                        if (permissions.permPlugin.equalsIgnoreCase("GroupManager"))
-                            return 1;
-                        else
-                            return 0;
-                    }
-                });
-                metrics.start();
-
-                permissionsGraph.addPlotter(new Metrics.Plotter("Bukkit OP Permissions") {
-                    @Override
-                    public int getValue() {
-                        if (permissions.permPlugin.equalsIgnoreCase("Bukkit OP Permissions"))
-                            return 1;
-                        else
-                            return 0;
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (config.getConfigVersion() <= 1) {
+            if (!(new ConfigConverter(config.getConfigVersion(), CHANNEL_FOLDER).success())){
+                WRLogger.severe("**********");
+                WRLogger.severe("Updating config files FAILED! The plugin is now disabled to prevent further damages.");
+                WRLogger.severe("**********");
+                getPluginLoader().disablePlugin(this);
+                return;
             }
         }
 
-        // Loading finished !
-        System.out.println(pdFile.getName() + " version " + pdFile.getVersion()
-                + " is enabled!");
+        stringManager = new StringLoader(config.getLanguage());
+        signManager = new SignManager();
+        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
+
+        if (!storageManager.getStorage().initStorage()) {
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        globalCache = new GlobalCache(config.getCacheRefreshRate());
+        permissionsManager = new PermissionsManager();
+        commandManager = new CommandManager();
+        adminCommandManager = new AdminCommandManager();
+
+        PluginManager pm = getServer().getPluginManager();
+
+        if (!WirelessRedstone.getUtils().isCompatible()) {
+            WRLogger.severe("**********");
+            WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
+            WRLogger.severe("**********");
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        WRLogger.debug("Loading Chunks...");
+        WirelessRedstone.getUtils().loadChunks();
+
+        if (pm.isPluginEnabled("WorldEdit")) {
+            WRLogger.debug("Loading WorldEdit support...");
+            new WorldEditLoader();
+        } else
+            WRLogger.debug("WorldEdit not enabled. Skipping WorldEdit support.");
+
+        if (config.getUpdateCheck())
+            updater = new Updater();
+
+        WRLogger.debug("Loading listeners...");
+        //Don't need to store the instance because we won't touch it.
+        pm.registerEvents(new WorldListener(), this);
+        pm.registerEvents(new BlockListener(), this);
+        pm.registerEvents(new PlayerListener(), this);
+
+        WRLogger.debug("Loading commands...");
+        getCommand("wirelessredstone").setExecutor(commandManager);
+        getCommand("wr").setExecutor(commandManager);
+        getCommand("wredstone").setExecutor(commandManager);
+        getCommand("wifi").setExecutor(commandManager);
+
+        getCommand("wradmin").setExecutor(adminCommandManager);
+        getCommand("wra").setExecutor(adminCommandManager);
+
+        if (config.getMetrics()) {
+            WRLogger.debug("Loading metrics...");
+            loadMetrics();
+        }
+
+        fullyStarted = true;
+        WRLogger.info("Plugin is now loaded");
     }
 
-    /**
-     * Load the chunks which contain a wireless sign.
-     */
-    public void LoadChunks() {
-        if (WirelessRedstone.config.isCancelChunkUnloads()) {
-            for (IWirelessPoint point : cache.getAllSigns()) {
-                Location location = point.getLocation();
-                if (location.getWorld() == null)
-                    continue; // world currently not loaded.
+    public void resetStorageManager() {
+        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
+    }
 
-                Chunk center = location.getBlock().getChunk();
-                World world = center.getWorld();
-                int range = WirelessRedstone.config.getChunkUnloadRange();
-                for (int dx = -(range); dx <= range; dx++) {
-                    for (int dz = -(range); dz <= range; dz++) {
-                        Chunk chunk = world.getChunkAt(center.getX() + dx,
-                                center.getZ() + dz);
-                        world.loadChunk(chunk);
+    private void loadMetrics() {
+        try {
+            metrics = new Metrics(this);
+
+            // Channel metrics
+            Metrics.Graph channelGraph = metrics.createGraph("Channel metrics");
+            channelGraph.addPlotter(new Metrics.Plotter("Total channels") {
+                @Override
+                public int getValue() {
+                    return WirelessRedstone.getStorage().getAllChannels().size();
+                }
+            });
+            channelGraph.addPlotter(new Metrics.Plotter("Total signs") {
+                @Override
+                public int getValue() {
+                    return WirelessRedstone.getGlobalCache().getAllSigns().size();
+                }
+            });
+
+            // Sign Metrics
+            Metrics.Graph signGraph = metrics.createGraph("Sign metrics");
+            signGraph.addPlotter(new Metrics.Plotter("Transmitters") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getTransmitters().size();
+                    }
+                    return total;
+                }
+            });
+            signGraph.addPlotter(new Metrics.Plotter("Receivers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getReceivers().size();
+                    }
+                    return total;
+                }
+            });
+            signGraph.addPlotter(new Metrics.Plotter("Screens") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getScreens().size();
+                    }
+                    return total;
+                }
+            });
+
+            Metrics.Graph receiverTypesProportion = metrics.createGraph("Different types of receivers");
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Default") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.DEFAULT).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Inverters") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.INVERTER).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Delayers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.DELAYER).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Clocks") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.CLOCK).size();
+                    }
+                    return total;
+                }
+            });
+            receiverTypesProportion.addPlotter(new Metrics.Plotter("Switchers") {
+                @Override
+                public int getValue() {
+                    int total = 0;
+                    for (WirelessChannel channel : WirelessRedstone.getStorage().getAllChannels()) {
+                        total += channel.getReceiversOfType(WirelessReceiver.Type.SWITCH).size();
+                    }
+                    return total;
+                }
+            });
+
+            //Storage metrics
+            Metrics.Graph storageGraph = metrics.createGraph("Storage used");
+            storageGraph.addPlotter(new Metrics.Plotter("SQLite") {
+                @Override
+                public int getValue() {
+                    if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE) {
+                        return 1;
+                    } else {
+                        return 0;
                     }
                 }
-            }
+            });
+
+            storageGraph.addPlotter(new Metrics.Plotter("MySQL") {
+                @Override
+                public int getValue() {
+                    if (ConfigManager.getConfig().getStorageType() == StorageType.MYSQL) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            storageGraph.addPlotter(new Metrics.Plotter("Yaml") {
+                @Override
+                public int getValue() {
+                    if (ConfigManager.getConfig().getStorageType() == StorageType.YAML) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            Metrics.Graph permissionsGraph = metrics.createGraph("Plugin used for Permissions");
+            permissionsGraph.addPlotter(new Metrics.Plotter("Bukkit permissions") {
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+
+            metrics.start();
+        } catch (Exception e) {
+            WRLogger.warning("Failed to load metrics. Turn on debug mode to see the stack trace.");
+            if (ConfigManager.getConfig().getDebugMode())
+                e.printStackTrace();
         }
-    }
-
-    public static String getBukkitVersion() {
-        final String packageName = Bukkit.getServer().getClass().getPackage().getName();
-        return packageName.substring(packageName.lastIndexOf('.') + 1);
-    }
-
-    public static boolean sameLocation(Location loc1, Location loc2){
-        return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY()
-                && loc1.getBlockZ() == loc2.getBlockZ() && loc1.getWorld() == loc2.getWorld();
-    }
-
-    /**
-     * Returns this object
-     *
-     * @return plugin
-     */
-    public WirelessRedstone getPlugin() {
-        return this;
-    }
-
-    /**
-     * Returns this object
-     *
-     * @return plugin
-     */
-    public static WirelessRedstone getInstance() {
-        return instance;
     }
 }

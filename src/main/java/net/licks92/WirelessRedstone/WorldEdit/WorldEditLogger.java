@@ -26,16 +26,24 @@ public class WorldEditLogger extends AbstractLoggingExtent {
             return;
         }
 
-        org.bukkit.World world = ((BukkitWorld)this.eventWorld).getWorld();
+        org.bukkit.World world = ((BukkitWorld) this.eventWorld).getWorld();
+
+        if (world == null || position == null)
+            return;
+
         Block block = world.getBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ());
-        for(Location loc : WirelessRedstone.cache.getAllSignLocations()){
-            if(WirelessRedstone.sameLocation(loc, block.getLocation())){
-                String channelName = WirelessRedstone.config.getWirelessChannelName(loc);
-                if(WirelessRedstone.config.removeIWirelessPoint(channelName, loc)){
-                    WirelessRedstone.config.checkChannel(channelName);
-                    WirelessRedstone.getWRLogger().debug("Removed sign because of WE");
+
+        if (WirelessRedstone.getGlobalCache() == null)
+            return;
+
+        for (Location loc : WirelessRedstone.getGlobalCache().getAllSignLocations()) {
+            if (WirelessRedstone.getUtils().sameLocation(loc, block.getLocation())) {
+                String channelName = WirelessRedstone.getStorage().getWirelessChannelName(loc);
+                if (WirelessRedstone.getStorage().removeIWirelessPoint(channelName, loc)) {
+                    WirelessRedstone.getStorage().checkChannel(channelName);
+                    WirelessRedstone.getWRLogger().debug("Removed sign because of WorldEdit");
                 } else {
-                    WirelessRedstone.getWRLogger().debug("Couldn't remove sign. WE was the remover");
+                    WirelessRedstone.getWRLogger().debug("Couldn't remove sign. WorldEdit was the remover");
                 }
             }
         }

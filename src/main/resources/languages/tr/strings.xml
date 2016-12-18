@@ -9,7 +9,7 @@
 		<backupFailed>Yedekleme başarısız!</backupFailed>
 		<channelDoesNotExist>Bu kanal bulunamadı!</channelDoesNotExist>
 		<channelLocked>Kanal kilitlendi!</channelLocked>
-		<channelNameContainsInvalidCaracters>Kanal ismi yanlış karakter içeriyor!</channelNameContainsInvalidCaracters>
+		<channelNameContainsInvalidCharacters>Kanal ismi yanlış karakter içeriyor!</channelNameContainsInvalidCharacters>
 		<channelRemoved>Bu kanal silindi!</channelRemoved>
 		<channelRemovedCauseNoSign>Kanal silindi , bu dünyada başka tabela yok</channelRemovedCauseNoSign>
 		<channelUnlocked>Kanalın kilidi açıldı!</channelUnlocked>

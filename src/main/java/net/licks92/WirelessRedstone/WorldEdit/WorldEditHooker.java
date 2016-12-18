@@ -26,15 +26,31 @@ public class WorldEditHooker {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(WirelessRedstone.getInstance(), new Runnable() {
                 public void run() {
                     try {
-                        WorldEdit.getInstance().getEventBus().register(new WorldEditHooker());
-                    }
-                    catch (Exception e) {
+                        WorldEditHooker worldEditHooker = new WorldEditHooker();
+                        WirelessRedstone.setWorldEditHooker(worldEditHooker);
+                        WorldEdit.getInstance().getEventBus().register(worldEditHooker);
+                    } catch (Exception e) {
                         WirelessRedstone.getWRLogger().severe("Error while hooking worldedit");
                     }
                 }
             }, 0L);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e) {
+    }
+
+    public static void unRegister(){
+        try {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(WirelessRedstone.getInstance(), new Runnable() {
+                public void run() {
+                    try {
+                        WorldEdit.getInstance().getEventBus().unregister(WirelessRedstone.getWorldEditHooker());
+                    } catch (Exception e) {
+                        WirelessRedstone.getWRLogger().severe("Error while unhooking worldedit");
+                    }
+                }
+            }, 0L);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
