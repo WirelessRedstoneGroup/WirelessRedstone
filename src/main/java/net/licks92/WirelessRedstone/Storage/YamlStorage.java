@@ -425,6 +425,8 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                 WirelessChannel channel = null;
 
                 for (WirelessChannel cacheChannel : WirelessRedstone.getGlobalCache().getAllChannels()) {
+                    if (cacheChannel == null)
+                        break;
                     if (cacheChannel.getName().equalsIgnoreCase(channelName)) {
                         channel = cacheChannel;
                         break;
@@ -432,7 +434,10 @@ public class YamlStorage implements IWirelessStorageConfiguration {
                 }
 
 //                WirelessRedstone.getWRLogger().debug("Accessed WirelessChannel from cache");
-                return channel;
+                if (channel != null)
+                    return channel;
+                else
+                    WirelessRedstone.getGlobalCache().update();
             }
         }
 
