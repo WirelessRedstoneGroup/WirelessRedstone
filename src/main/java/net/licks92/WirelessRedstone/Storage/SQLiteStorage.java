@@ -43,16 +43,18 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     private String sqlSignZ = SQLiteMap.sqlSignZ;
     private String sqlSignType = SQLiteMap.sqlSignType;
 
-
     public SQLiteStorage(String channelFolder) {
         this.channelFolder = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
         this.channelFolderStr = channelFolder;
-        this.sqLite = new SQLite(WirelessRedstone.getInstance(), channelFolder + File.separator + "WirelessRedstoneDatabase.db", useGlobalCache);
+        try {
+            this.sqLite = new SQLite(WirelessRedstone.getInstance(), channelFolder + File.separator + "WirelessRedstoneDatabase.db", useGlobalCache);
+        } catch (SQLException | ClassNotFoundException ignored) {
+        }
     }
 
     @Override
     public boolean initStorage() {
-        return initiate(true);
+        return sqLite != null && initiate(true);
     }
 
     @Override
@@ -78,32 +80,43 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 return false;
             }
 
+            String sql = new CreateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channel.getName()))
+                    .addColumn(sqlChannelId, "int").addColumn(sqlChannelName, "char(64)")
+                    .addColumn(sqlChannelLocked, "int(1)").addColumn(sqlChannelOwners, "char(255)")
+                    .addColumn(sqlDirection, "char(255)").addColumn(sqlIsWallSign, "int(1)")
+                    .addColumn(sqlSignType, "char(255)").addColumn(sqlSignX, "int")
+                    .addColumn(sqlSignY, "int").addColumn(sqlSignZ, "int")
+                    .addColumn(sqlSignWorld, "char(255)").addColumn(sqlSignOwner, "char(255)")
+                    .setIfNotExist(false).toString();
+
             try {
                 // Create the table
-                PreparedStatement create = sqLite.getConnection().prepareStatement(new CreateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channel.getName()))
-                        .addColumn(sqlChannelId, "int").addColumn(sqlChannelName, "char(64)")
-                        .addColumn(sqlChannelLocked, "int(1)").addColumn(sqlChannelOwners, "char(255)")
-                        .addColumn(sqlDirection, "char(255)").addColumn(sqlIsWallSign, "int(1)")
-                        .addColumn(sqlSignType, "char(255)").addColumn(sqlSignX, "int")
-                        .addColumn(sqlSignY, "int").addColumn(sqlSignZ, "int")
-                        .addColumn(sqlSignWorld, "char(255)").addColumn(sqlSignOwner, "char(255)")
-                        .setIfNotExist(false).toString());
+                WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                PreparedStatement create = sqLite.getConnection().prepareStatement(sql);
 
                 //We can't async this statement because it is to important and it can cause nullpointer exceptions while inserting data
 //                sqLite.execute(create);
                 create.execute();
                 create.close();
 
-                PreparedStatement insert = sqLite.getConnection().prepareStatement(new InsertBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channel.getName()))
+                sql = new InsertBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channel.getName()))
                         .addColumnWithValue(sqlChannelId, channel.getId())
                         .addColumnWithValue(sqlChannelName, channel.getName())
                         .addColumnWithValue(sqlChannelLocked, 0)
                         .addColumnWithValue(sqlChannelOwners, channel.getOwners().get(0))
-                        .toString());
+                        .toString();
+                WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                PreparedStatement insert = sqLite.getConnection().prepareStatement(sql);
 
 //                sqLite.execute(insert);
-                insert.execute();
+                int changes = insert.executeUpdate();
                 insert.close();
+
+                if (changes > 0){
+                    WirelessRedstone.getWRLogger().debug("Excuting insert sql was successful.");
+                } else {
+                    WirelessRedstone.getWRLogger().debug("Excuting insert sql failed! No changes were made.");
+                }
 
                 // Create the wireless points
                 ArrayList<IWirelessPoint> points = new ArrayList<IWirelessPoint>();
@@ -119,6 +132,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 for (IWirelessPoint ipoint : points) {
                     createWirelessPoint(channel.getName(), ipoint);
                 }
+                WirelessRedstone.getWRLogger().debug("Created channel " + channel.getName() + " with " + points.size() + " wirelesspoints");
                 return true;
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -163,17 +177,20 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         else
             isWallSign = 0;
 
+        String sql = new InsertBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
+                .addColumnWithValue(sqlSignType, signType)
+                .addColumnWithValue(sqlSignX, point.getX())
+                .addColumnWithValue(sqlSignY, point.getY())
+                .addColumnWithValue(sqlSignZ, point.getZ())
+                .addColumnWithValue(sqlSignWorld, point.getWorld())
+                .addColumnWithValue(sqlDirection, point.getDirection().toString().toUpperCase())
+                .addColumnWithValue(sqlSignOwner, point.getOwner())
+                .addColumnWithValue(sqlIsWallSign, isWallSign)
+                .toString();
+        WirelessRedstone.getWRLogger().debug("Adding sql: " + sql);
+
         try {
-            PreparedStatement insert = sqLite.getConnection().prepareStatement(new InsertBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
-                    .addColumnWithValue(sqlSignType, signType)
-                    .addColumnWithValue(sqlSignX, point.getX())
-                    .addColumnWithValue(sqlSignY, point.getY())
-                    .addColumnWithValue(sqlSignZ, point.getZ())
-                    .addColumnWithValue(sqlSignWorld, point.getWorld())
-                    .addColumnWithValue(sqlDirection, point.getDirection().toString().toUpperCase())
-                    .addColumnWithValue(sqlSignOwner, point.getOwner())
-                    .addColumnWithValue(sqlIsWallSign, isWallSign)
-                    .toString());
+            PreparedStatement insert = sqLite.getConnection().prepareStatement(sql);
             sqLite.execute(insert);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -188,13 +205,16 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         if (channel == null) return false;
 
         for (WirelessReceiver receiver : channel.getReceivers()) {
-            if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc)) return removeWirelessReceiver(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc))
+                return removeWirelessReceiver(channelName, loc);
         }
         for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-            if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc)) return removeWirelessTransmitter(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc))
+                return removeWirelessTransmitter(channelName, loc);
         }
         for (WirelessScreen screen : channel.getScreens()) {
-            if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc)) return removeWirelessScreen(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc))
+                return removeWirelessScreen(channelName, loc);
         }
         return false;
     }
@@ -242,13 +262,19 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             signBlock.setLine(1, newChannelName);
         }
 
+        String sql = new UpdateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
+                .set(sqlChannelName + "='" + newChannelName + "'")
+                .where(sqlChannelName + "='" + channelName + "'")
+                .toString();
+        WirelessRedstone.getWRLogger().debug("Adding sql: " + sql);
+
         try {
-            PreparedStatement update = sqLite.getConnection().prepareStatement(new UpdateBuilder(WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName))
-                    .set(sqlChannelName + "='" + newChannelName + "'")
-                    .where(sqlChannelName + "='" + channelName + "'")
-                    .toString());
+            PreparedStatement update = sqLite.getConnection().prepareStatement(sql);
+
             sqLite.execute(update);
-            PreparedStatement rename = sqLite.getConnection().prepareStatement("RENAME TABLE '" + channelName + "' TO '" + newChannelName + "'");
+            sql = "RENAME TABLE '" + channelName + "' TO '" + newChannelName + "'";
+            WirelessRedstone.getWRLogger().debug("Adding sql: " + sql);
+            PreparedStatement rename = sqLite.getConnection().prepareStatement(sql);
             sqLite.execute(rename);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -413,7 +439,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             if (type == StorageType.YAML) {
                 YamlStorage yaml = new YamlStorage(channelFolderStr);
                 yaml.initiate(false);
-                for (WirelessChannel channel : yaml.getAllChannels()) {
+                for (WirelessChannel channel : yaml.getAllChannels(true)) {
                     createWirelessChannel(channel);
                 }
                 yaml.close();
@@ -500,8 +526,11 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             }
         }
 
+        String sql = "SELECT `name` FROM sqlite_master WHERE type = \"table\"";
+        WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+
         try {
-            PreparedStatement master = sqLite.getConnection().prepareStatement("SELECT `name` FROM sqlite_master WHERE type = \"table\"");
+            PreparedStatement master = sqLite.getConnection().prepareStatement(sql);
             ResultSet rs = sqLite.query(master);
             ArrayList<String> channels = new ArrayList<String>();
 
@@ -513,12 +542,16 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             for (String channelName : channels) {
                 if (channelName.equals(r_channelName)) {
                     // Get the ResultSet from the table we want
-                    master = sqLite.getConnection().prepareStatement("SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName));
+                    sql = "SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName);
+                    WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                    master = sqLite.getConnection().prepareStatement(sql);
                     ResultSet rsChannelInfo = sqLite.query(master);
                     try {
                         rsChannelInfo.getString("name");
                     } catch (SQLException ex) {
-                        PreparedStatement drop = sqLite.getConnection().prepareStatement("DROP TABLE " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName));
+                        sql = "DROP TABLE " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName);
+                        WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                        PreparedStatement drop = sqLite.getConnection().prepareStatement(sql);
                         sqLite.execute(drop);
                         rsChannelInfo.close();
                         return null;
@@ -544,7 +577,9 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
                     // Because a SQLite ResultSet is TYPE_FORWARD only, we have
                     // to create a third ResultSet and close the second
-                    master = sqLite.getConnection().prepareStatement("SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName));
+                    sql = "SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName);
+                    WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                    master = sqLite.getConnection().prepareStatement(sql);
                     ResultSet rsSigns = sqLite.query(master);
 
                     // Set the wireless signs

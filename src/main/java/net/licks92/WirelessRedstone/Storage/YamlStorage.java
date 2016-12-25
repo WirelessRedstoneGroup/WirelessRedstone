@@ -347,7 +347,7 @@ public class YamlStorage implements IWirelessStorageConfiguration {
             if (type == StorageType.SQLITE) {
                 SQLiteStorage sql = new SQLiteStorage(channelFolderStr);
                 sql.initiate(false);
-                for (WirelessChannel channel : sql.getAllChannels()) {
+                for (WirelessChannel channel : sql.getAllChannels(true)) {
                     createWirelessChannel(channel);
                 }
                 sql.close();

@@ -24,11 +24,13 @@ public class SQLite {
     private ArrayList<PreparedStatement> preparedStatements;
     private boolean isProcessing = false;
 
-    public SQLite(Plugin plugin, String path, final Boolean updateGlobalCache) {
+    public SQLite(Plugin plugin, String path, final Boolean updateGlobalCache) throws SQLException, ClassNotFoundException {
         this.plugin = plugin;
         this.path = path;
         this.updateGlobalCache = updateGlobalCache;
         this.preparedStatements = new ArrayList<>();
+
+        openConnection();
 
         final Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -53,6 +55,8 @@ public class SQLite {
                                 return;
                             }
 
+                            WirelessRedstone.getWRLogger().debug("Excuting next preparedstatement.");
+
                             preparedStatement.execute();
                             preparedStatement.close();
 
@@ -74,7 +78,7 @@ public class SQLite {
                     }
                 }
             }
-        }, 100, 100);
+        }, 0, 50);
     }
 
     public Connection openConnection() throws SQLException, ClassNotFoundException {
