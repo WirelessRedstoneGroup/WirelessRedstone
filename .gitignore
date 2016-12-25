@@ -11,6 +11,7 @@ target/*
 *.name
 .idea/*
 .out/*
-WirelessRedstone.iml
 *.jar
 *.classpath
+WirelessRedstone.iml
+dependency-reduced-pom.xml
