@@ -542,7 +542,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             for (String channelName : channels) {
                 if (channelName.equals(r_channelName)) {
                     // Get the ResultSet from the table we want
-                    sql = "SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName);
+                    sql = "SELECT * FROM '" + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName) + "'";
                     WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
                     master = sqLite.getConnection().prepareStatement(sql);
                     ResultSet rsChannelInfo = sqLite.query(master);
@@ -577,7 +577,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 
                     // Because a SQLite ResultSet is TYPE_FORWARD only, we have
                     // to create a third ResultSet and close the second
-                    sql = "SELECT * FROM " + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName);
+                    sql = "SELECT * FROM '" + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName) + "'";
                     WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
                     master = sqLite.getConnection().prepareStatement(sql);
                     ResultSet rsSigns = sqLite.query(master);
