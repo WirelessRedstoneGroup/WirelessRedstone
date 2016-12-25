@@ -188,16 +188,13 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         if (channel == null) return false;
 
         for (WirelessReceiver receiver : channel.getReceivers()) {
-            if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc))
-                return removeWirelessReceiver(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(receiver.getLocation(), loc)) return removeWirelessReceiver(channelName, loc);
         }
         for (WirelessTransmitter transmitter : channel.getTransmitters()) {
-            if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc))
-                return removeWirelessTransmitter(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(transmitter.getLocation(), loc)) return removeWirelessTransmitter(channelName, loc);
         }
         for (WirelessScreen screen : channel.getScreens()) {
-            if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc))
-                return removeWirelessScreen(channelName, loc);
+            if (WirelessRedstone.getUtils().sameLocation(screen.getLocation(), loc)) return removeWirelessScreen(channelName, loc);
         }
         return false;
     }
@@ -492,9 +489,6 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 WirelessChannel channel = null;
 
                 for (WirelessChannel cacheChannel : WirelessRedstone.getGlobalCache().getAllChannels()) {
-                    if (cacheChannel == null) {
-                        break;
-                    }
                     if (cacheChannel.getName().equalsIgnoreCase(r_channelName)) {
                         channel = cacheChannel;
                         break;
@@ -502,10 +496,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 }
 
 //                WirelessRedstone.getWRLogger().debug("Accessed WirelessChannel from cache");
-                if (channel != null)
-                    return channel;
-                else
-                    WirelessRedstone.getGlobalCache().update();
+                return channel;
             }
         }
 
