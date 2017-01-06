@@ -191,6 +191,10 @@ public class WirelessRedstone extends JavaPlugin {
         getCommand("wredstone").setExecutor(commandManager);
         getCommand("wifi").setExecutor(commandManager);
 
+        getCommand("wrt").setExecutor(commandManager);
+        getCommand("wrr").setExecutor(commandManager);
+        getCommand("wrs").setExecutor(commandManager);
+
         getCommand("wradmin").setExecutor(adminCommandManager);
         getCommand("wra").setExecutor(adminCommandManager);
 

@@ -2,7 +2,7 @@ name: WirelessRedstone
 main: net.licks92.WirelessRedstone.WirelessRedstone
 website: http://dev.bukkit.org/server-mods/wireless-redstone/
 authors: [licks92, Bart0110]
-version: 3.0.0
+version: 3.0.1
 description: The reference in long-distance redstone connections! Create your own wifi-redstone network with WirelessRedstone!
 softdepend: [Vault, WorldEdit, Multiverse-Core, MultiWorld]
 commands:
@@ -11,6 +11,18 @@ commands:
       description: WirelessRedstone menu
       usage: |
              Example: /<command> help
+   wrt:
+      description: Creates a transmitter sign with given channel
+      usage: |
+             Example: /<command> channel
+   wrr:
+      description: Creates a receiver sign with given channel
+      usage: |
+             Example: /<command> channel
+   wrs:
+      description: Creates a screen sign with given channel
+      usage: |
+             Example: /<command> channel
    wradmin:
       aliases: [wra]
       description: WirelessRedstone admin command
