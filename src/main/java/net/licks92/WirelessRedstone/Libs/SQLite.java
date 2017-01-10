@@ -4,6 +4,7 @@ import com.sun.rowset.CachedRowSetImpl;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.sqlite.SQLiteConfig;
 
 import javax.sql.rowset.CachedRowSet;
 import java.io.File;
@@ -20,6 +21,7 @@ public class SQLite {
     private String path;
     private Connection connection;
     private Boolean updateGlobalCache;
+    private Boolean lockTimer;
 
     private ArrayList<PreparedStatement> preparedStatements;
     private boolean isProcessing = false;
@@ -29,14 +31,33 @@ public class SQLite {
         this.path = path;
         this.updateGlobalCache = updateGlobalCache;
         this.preparedStatements = new ArrayList<>();
+        this.lockTimer = false;
 
-        openConnection();
+        if (connection == null) {
+            if (!plugin.getDataFolder().exists()) {
+                plugin.getDataFolder().mkdirs();
+            }
+            File file = new File(plugin.getDataFolder(), path);
+            if (!(file.exists())) {
+                try {
+                    file.createNewFile();
+                    WirelessRedstone.getWRLogger().debug("Created new DB file.");
+                } catch (IOException e) {
+                    WirelessRedstone.getWRLogger().debug("Unable to create database!");
+                }
+            }
+
+            SQLiteConfig config = new SQLiteConfig();
+            config.setSharedCache(true);
+            connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder().toPath().toString() + File.separator
+                    + path, config.toProperties());
+        }
 
         final Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (WirelessRedstone.getInstance() == null){
+                if (WirelessRedstone.getInstance() == null) {
                     timer.cancel();
                     return;
                 }
@@ -46,12 +67,20 @@ public class SQLite {
                     return;
                 }
 
+                if (lockTimer)
+                    return;
+
+                boolean canContinue = false;
+                boolean error = false;
+
                 if (getConnection() != null) {
                     try {
                         if (preparedStatements.size() > 0) {
+                            canContinue = true;
                             PreparedStatement preparedStatement = preparedStatements.get(0);
 
                             if (preparedStatement == null) {
+                                preparedStatements.remove(0);
                                 return;
                             }
 
@@ -70,15 +99,25 @@ public class SQLite {
                                     }, 1L);
                                 else WirelessRedstone.getGlobalCache().update(false);
                             }
-
-                            preparedStatements.remove(0);
                         }
                     } catch (SQLException e) {
                         e.printStackTrace();
+                        error = true;
+                    } finally {
+                        if (canContinue) {
+                            preparedStatements.remove(0);
+                            if (!error) {
+                                if (preparedStatements.size() == 0) {
+                                    WirelessRedstone.getWRLogger().debug("No more preparedstatements left.");
+                                }
+                            } else {
+                                WirelessRedstone.getWRLogger().warning("An error occured. Please notify the developer.");
+                            }
+                        }
                     }
                 }
             }
-        }, 0, 50);
+        }, 0, 25);
     }
 
     public Connection openConnection() throws SQLException, ClassNotFoundException {
@@ -171,7 +210,14 @@ public class SQLite {
      * @param preparedStatement query to be executed.
      */
     public void execute(final PreparedStatement preparedStatement) {
-        execute(preparedStatement, updateGlobalCache);
+        try {
+            preparedStatement.execute();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            WirelessRedstone.getWRLogger().warning("An error occured. Please notify the developer.");
+        }
+//        execute(preparedStatement, updateGlobalCache);
     }
 
     /*
@@ -182,5 +228,13 @@ public class SQLite {
     */
     public void execute(final PreparedStatement preparedStatement, final Boolean updateGlobalCache) {
         preparedStatements.add(preparedStatement);
+    }
+
+    public void lockTimer(){
+        this.lockTimer = true;
+    }
+
+    public void unlockTime(){
+        this.lockTimer = false;
     }
 }

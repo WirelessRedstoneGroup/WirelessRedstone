@@ -113,6 +113,14 @@ public class Updater {
             showUpdate(latestVersion, downloadUrl, changelog, players);
     }
 
+    public void showUpdate(Player player) {
+        if (latestVersion != null && downloadUrl != null && changelog != null) {
+            ArrayList<Player> players = new ArrayList<Player>();
+            players.add(player);
+            showUpdate(latestVersion, downloadUrl, changelog, players);
+        }
+    }
+
     private void showUpdate(final String latestVersion, final String downloadUrl, final String changelog, final Collection<? extends Player> checkPlayers) {
         Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
             @Override

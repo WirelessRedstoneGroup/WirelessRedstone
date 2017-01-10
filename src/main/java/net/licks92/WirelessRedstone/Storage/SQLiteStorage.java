@@ -92,6 +92,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
             try {
                 // Create the table
                 WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                sqLite.lockTimer();
                 PreparedStatement create = sqLite.getConnection().prepareStatement(sql);
 
                 //We can't async this statement because it is to important and it can cause nullpointer exceptions while inserting data
@@ -111,6 +112,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
 //                sqLite.execute(insert);
                 int changes = insert.executeUpdate();
                 insert.close();
+                sqLite.unlockTime();
 
                 if (changes > 0){
                     WirelessRedstone.getWRLogger().debug("Excuting insert sql was successful.");
@@ -527,7 +529,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
         }
 
         String sql = "SELECT `name` FROM sqlite_master WHERE type = \"table\"";
-        WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+        WirelessRedstone.getWRLogger().debug("Executing sql (sync): " + sql);
 
         try {
             PreparedStatement master = sqLite.getConnection().prepareStatement(sql);
@@ -543,7 +545,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                 if (channelName.equals(r_channelName)) {
                     // Get the ResultSet from the table we want
                     sql = "SELECT * FROM '" + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName) + "'";
-                    WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                    WirelessRedstone.getWRLogger().debug("Executing sql (sync): " + sql);
                     master = sqLite.getConnection().prepareStatement(sql);
                     ResultSet rsChannelInfo = sqLite.query(master);
                     try {
@@ -578,7 +580,7 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
                     // Because a SQLite ResultSet is TYPE_FORWARD only, we have
                     // to create a third ResultSet and close the second
                     sql = "SELECT * FROM '" + WirelessRedstone.getUtils().getDatabaseFriendlyName(channelName) + "'";
-                    WirelessRedstone.getWRLogger().debug("Executing sql: " + sql);
+                    WirelessRedstone.getWRLogger().debug("Executing sql (sync): " + sql);
                     master = sqLite.getConnection().prepareStatement(sql);
                     ResultSet rsSigns = sqLite.query(master);
 
@@ -925,23 +927,23 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     }
 
     public boolean initiate(boolean allowConvert) {
-        WirelessRedstone.getWRLogger().debug("Establishing sqLite.getConnection() to database...");
-
-        try {
-            sqLite.openConnection();
-        } catch (SQLException | ClassNotFoundException ex) {
-            WirelessRedstone.getWRLogger().severe("Error while starting plugin. Message: " + ex.getLocalizedMessage() + ". Enable debug mode to see the full stack trace.");
-
-            if (ConfigManager.getConfig().getDebugMode())
-                ex.printStackTrace();
-
-            WirelessRedstone.getWRLogger().severe("**********");
-            WirelessRedstone.getWRLogger().severe("Plugin can't connect to the SQLite database. Shutting down plugin...");
-            WirelessRedstone.getWRLogger().severe("**********");
-            return false;
-        }
-
-        WirelessRedstone.getWRLogger().debug("sqLite.getConnection() established.");
+//        WirelessRedstone.getWRLogger().debug("Establishing sqLite.getConnection() to database...");
+//
+//        try {
+//            sqLite.openConnection();
+//        } catch (SQLException | ClassNotFoundException ex) {
+//            WirelessRedstone.getWRLogger().severe("Error while starting plugin. Message: " + ex.getLocalizedMessage() + ". Enable debug mode to see the full stack trace.");
+//
+//            if (ConfigManager.getConfig().getDebugMode())
+//                ex.printStackTrace();
+//
+//            WirelessRedstone.getWRLogger().severe("**********");
+//            WirelessRedstone.getWRLogger().severe("Plugin can't connect to the SQLite database. Shutting down plugin...");
+//            WirelessRedstone.getWRLogger().severe("**********");
+//            return false;
+//        }
+//
+//        WirelessRedstone.getWRLogger().debug("sqLite.getConnection() established.");
 
         if (canConvert() != null && allowConvert) {
             WirelessRedstone.getWRLogger().info("WirelessRedstone found a channel in a different storage format.");

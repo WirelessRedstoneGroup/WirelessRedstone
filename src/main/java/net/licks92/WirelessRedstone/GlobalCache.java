@@ -80,7 +80,7 @@ public class GlobalCache {
     }
 
     public void update() {
-        update(true);
+        update(false); //Changed to sync as temp solution to avoid database locked exceptions
     }
 
     public void update(boolean async) {
