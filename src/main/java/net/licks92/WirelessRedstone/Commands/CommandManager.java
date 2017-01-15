@@ -103,8 +103,29 @@ public class CommandManager implements CommandExecutor {
         }
 
         if (cmd.getName().equalsIgnoreCase("wrt") || cmd.getName().equalsIgnoreCase("wrr") || cmd.getName().equalsIgnoreCase("wrs")) {
+            String permission = "";
+            switch (cmd.getName().toLowerCase()) {
+                case "wrt":
+                    permission = "wirelessredstone.create.transmitter";
+                    break;
+                case "wrr":
+                    permission = "wirelessredstone.create.receiver";
+                    break;
+                case "wrs":
+                    permission = "wirelessredstone.create.screen";
+                    break;
+                default:
+                    WirelessRedstone.getUtils().sendFeedback("Something went wrong.", sender, true);
+                    return true;
+            }
+
+            if (!sender.hasPermission(permission)) {
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                return true;
+            }
+
             if (args.length == 0) {
-                WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
                 return true;
             }
 
