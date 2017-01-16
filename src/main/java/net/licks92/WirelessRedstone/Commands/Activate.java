@@ -5,7 +5,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.command.CommandSender;
 
-@CommandInfo(description = "Activate a channel (for a certain amount of ms)", usage = "<channel> [time] [--nofeedback]", aliases = {"activate", "a"},
+@CommandInfo(description = "Activate a channel (for a certain amount of ms)", usage = "<channel> [time]", aliases = {"activate", "a"},
         permission = "activate", canUseInConsole = true, canUseInCommandBlock = true)
 public class Activate extends WirelessCommand {
 
@@ -28,23 +28,13 @@ public class Activate extends WirelessCommand {
         }
 
         Integer time = ConfigManager.getConfig().getInteractTransmitterTime();
-        Boolean feedback = true;
 
         if (args.length >= 2) {
             try {
                 time = Integer.parseInt(args[1]);
             } catch (NumberFormatException ex) {
-                if (!args[1].equalsIgnoreCase("--nofeedback")) {
-                    WirelessRedstone.getUtils().sendFeedback("That is not a number.", sender, true); //TODO: Add this string to the stringloader
-                    return;
-                }
-            }
-
-            for (String arg : args) {
-                if (arg.equalsIgnoreCase("--nofeedback")) {
-                    feedback = false;
-                    break;
-                }
+                WirelessRedstone.getUtils().sendFeedback("That is not a number.", sender, true); //TODO: Add this string to the stringloader
+                return;
             }
         }
 
@@ -54,8 +44,6 @@ public class Activate extends WirelessCommand {
         }
 
         channel.turnOn(time);
-
-        if (feedback)
-            WirelessRedstone.getUtils().sendFeedback("Successfully activated WirelessChannel.", sender, false); //TODO: Add this string to the stringloader
+        WirelessRedstone.getUtils().sendFeedback("Successfully activated WirelessChannel.", sender, false, true); //TODO: Add this string to the stringloader
     }
 }
