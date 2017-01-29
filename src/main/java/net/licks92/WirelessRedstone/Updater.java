@@ -164,6 +164,6 @@ public class Updater {
     private void showError(Exception e, String text) {
         if (debug)
             e.printStackTrace();
-        WirelessRedstone.getWRLogger().warning(text);
+        WirelessRedstone.getWRLogger().debug(text);
     }
 }
