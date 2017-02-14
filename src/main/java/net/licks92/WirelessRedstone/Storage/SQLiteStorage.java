@@ -46,9 +46,21 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public SQLiteStorage(String channelFolder) {
         this.channelFolder = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
         this.channelFolderStr = channelFolder;
+
+        if (!(new File(channelFolder + File.separator + "WirelessRedstoneDatabase.db")).exists()) {
+            try {
+                new File(channelFolder + File.separator + "WirelessRedstoneDatabase.db").createNewFile();
+            } catch (IOException e) {
+                WirelessRedstone.getWRLogger().severe("There's a SQLite problem please send the full stacktrace to the developer on Github");
+                e.printStackTrace();
+            }
+        }
+
         try {
             this.sqLite = new SQLite(WirelessRedstone.getInstance(), channelFolder + File.separator + "WirelessRedstoneDatabase.db", useGlobalCache);
-        } catch (SQLException | ClassNotFoundException ignored) {
+        } catch (SQLException | ClassNotFoundException e) {
+            WirelessRedstone.getWRLogger().severe("There's a SQLite problem please send the full stacktrace to the developer on Github");
+            e.printStackTrace();
         }
     }
 

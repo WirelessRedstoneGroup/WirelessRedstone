@@ -194,7 +194,7 @@ public class WirelessChannel implements ConfigurationSerializable {
                 on = true;
             }
         }
-        return ConfigManager.getConfig().useORLogic() ? on : false;
+        return ConfigManager.getConfig().useORLogic() && on;
     }
 
     public void addTransmitter(WirelessTransmitter transmitter) {
