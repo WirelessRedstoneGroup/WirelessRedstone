@@ -1,8 +1,20 @@
 package net.licks92.WirelessRedstone.Storage;
 
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Libs.*;
-import net.licks92.WirelessRedstone.Signs.*;
+import net.licks92.WirelessRedstone.Libs.CreateBuilder;
+import net.licks92.WirelessRedstone.Libs.DeleteBuilder;
+import net.licks92.WirelessRedstone.Libs.InsertBuilder;
+import net.licks92.WirelessRedstone.Libs.SQLite;
+import net.licks92.WirelessRedstone.Libs.UpdateBuilder;
+import net.licks92.WirelessRedstone.Signs.IWirelessPoint;
+import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverClock;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverDelayer;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverInverter;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverSwitch;
+import net.licks92.WirelessRedstone.Signs.WirelessScreen;
+import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,7 +29,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -46,6 +63,10 @@ public class SQLiteStorage implements IWirelessStorageConfiguration {
     public SQLiteStorage(String channelFolder) {
         this.channelFolder = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
         this.channelFolderStr = channelFolder;
+
+        if (!(new File(channelFolder)).exists()) {
+            new File(channelFolder).mkdir();
+        }
 
         if (!(new File(channelFolder + File.separator + "WirelessRedstoneDatabase.db")).exists()) {
             try {
