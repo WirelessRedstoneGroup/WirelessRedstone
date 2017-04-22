@@ -2,7 +2,12 @@ package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Signs.IWirelessPoint;
 import net.licks92.WirelessRedstone.Signs.SignType;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -250,16 +255,20 @@ public class Utils {
     }
 
     public void signWarning(Block block, Integer code) {
-        Sign sign = (Sign) block.getState();
-        switch (code) {
-            case 1:
-                sign.setLine(2, "Bad block");
-                sign.setLine(3, "Behind sign");
-                sign.update();
-                break;
+        try {
+            Sign sign = (Sign) block.getState();
+            switch (code) {
+                case 1:
+                    sign.setLine(2, "Bad block");
+                    sign.setLine(3, "Behind sign");
+                    sign.update();
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
+        } catch (ClassCastException e) {
+            WirelessRedstone.getWRLogger().warning("Expected a sign but there is another block instead.");
         }
     }
 
