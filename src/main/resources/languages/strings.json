@@ -1,0 +1,64 @@
+{
+  "tags": {
+    "chatTag": "WirelessRedstone"
+  },
+  "messages": {
+    "channel": {
+      "notFound": "Channel does not exist.",
+      "locked": "Channel locked.",
+      "unlocked": "Channel unlocked.",
+      "owner": "The channel owner is: %%CHANNELOWNER",
+      "owners": "The channel owners are: %%CHANNELOWNERS",
+      "alreadyOwner": "The player is already an owner of this channel.",
+      "noOwner": "The player is not an owner of this channel.",
+      "ownerAdded": "The player %%PLAYERNAME is now an owner of this channel."
+    },
+    "database": {
+      "backupDone": "A backup has been created into the plugin folder.",
+      "backupFailed": "An error has occurred while backing up.",
+      "deleteConfirm": "You are about to delete the entire database. A backup will be created if you continue. You need to run this command again if you are sure that you want to delete the database.",
+      "deleteDone": "Database has been successfully removed.",
+      "purgeDone": "Database has been successfully purged.",
+      "purgeFailed": "An error has occurred while purging the database.",
+      "restoreDone": "The latest backup is successfully restored.",
+      "restoreFailed": "An error has occurred while restoring latest backup.",
+      "convertConfirm": "Are you sure you want change the database type to %%STORAGETYPE? A backup will be created if you continue. You need to run this command again if you want to continue.",
+      "convertDone": "Converting files was successful.",
+      "convertFailed": "Converting files failed. Available types: %%TYPES",
+      "convertSameType": "Converting files failed. You are already on that storage type."
+    },
+    "command": {
+      "notFound": "Subcommand does not exist.",
+      "tooFewArguments": "You did not give enough arguments.",
+      "noData": "No data found!",
+      "onlyInGame": "Only in-game users can use this command.",
+      "inferiorZero": "Number can not be less than 0.",
+      "noNumber": "That is not a number.",
+      "signNotFound": "Sign not found.",
+      "invalidSignLocation": "Cannot create sign on your location.",
+      "activated": "Channel is successfully activated.",
+      "incorrectSignType": "Incorrect sign type.",
+      "activationMin": "The activation time must be at least 50 ms."
+    },
+    "interaction": {
+      "cannotCreateSign": "You cannot create a WirelessRedstone sign on this block.",
+      "destroyReceiverTorch": "You cannot break my magic torches my friend!",
+      "channelCreated": "You just created a new channel.",
+      "channelExtended": "You just extended: %%CHANNELNAME",
+      "signDestroyed": "Successfully deleted this sign.",
+      "noTransmitters": "No other transmitters found, switching off.",
+      "attachedToSign": "You cannot destroy a block that is attached to a WirelessRedstone sign.",
+      "autoAssigned": "Automatically changed the name to: %%CHANNELNAME",
+      "delayNumberOnly": "The delay must be a number.",
+      "noChannelName": "No channel name has been given."
+    },
+    "permission": {
+      "general": "You do not have the permissions to do this.",
+      "channelAccess": "You do not have access to this channel.",
+      "createChannel": "You are not allowed to create a channel.",
+      "createSign": "You are not allowed to create this sign.",
+      "destroySign": "You are not allowed to destroy this sign."
+    },
+    "newUpdate": "A newer version has been released! I highly recommand you download it now on %%URL"
+  }
+}

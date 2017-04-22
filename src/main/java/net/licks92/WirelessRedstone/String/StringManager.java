@@ -53,8 +53,6 @@ public class StringManager {
     public String restoreDataDone;
     public String restoreDataFailed;
 
-    public String tellRawString;
-
     public List<String> tagsTransmitter;
     public List<String> tagsReceiver;
     public List<String> tagsScreen;
@@ -75,8 +73,6 @@ public class StringManager {
         tagsReceiverSwitchType = new ArrayList<String>();
 
         WirelessRedstone.getWRLogger().debug("Loading the tags...");
-
-        tellRawString = "tellraw %%PLAYER [\"\",{\"text\":\"[\",\"color\":\"dark_blue\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"\\u27A4\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"] \",\"color\":\"dark_blue\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%TEXT\",\"color\":\"gray\"}]}}}]";
 
         tagsTransmitter.add("[wrt]");
         tagsTransmitter.add("[transmitter]");
