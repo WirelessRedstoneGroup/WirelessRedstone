@@ -72,6 +72,7 @@ permissions:
             wirelessredstone.admin.purgedata: true
             wirelessredstone.admin.restoredata: true
             wirelessredstone.admin.updatecache: true
+            wirelessredstone.admin.changelanguage: true
     wirelessredstone.create.transmitter:
         description: Allows you to create a transmitter
         default: op
@@ -140,4 +141,7 @@ permissions:
         default: op
     wirelessredstone.admin.updatecache:
         description: Allows you to update the global cache.
+        default: op
+    wirelessredstone.admin.changelanguage:
+        description: Allows you to change the language in-game.
         default: op

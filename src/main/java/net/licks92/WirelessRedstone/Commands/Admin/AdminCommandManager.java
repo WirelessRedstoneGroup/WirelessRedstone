@@ -26,6 +26,7 @@ public class AdminCommandManager implements CommandExecutor {
         cmds.add(new AdminList());
         cmds.add(new AdminAddOwner());
         cmds.add(new AdminRemoveOwner());
+        cmds.add(new AdminChangeLanguage());
         cmds.add(new AdminConvert());
         cmds.add(new AdminBackup());
         cmds.add(new AdminRestore());

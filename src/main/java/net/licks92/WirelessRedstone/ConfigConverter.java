@@ -24,8 +24,8 @@ public class ConfigConverter {
 
                 ConfigManager.getConfig().copyDefaults();
 
-                ConfigManager.getConfig().setValue(ConfigPaths.CONFIGVERSION, 2);
-                ConfigManager.getConfig().setValue(ConfigPaths.UPDATECHECK, true);
+                ConfigManager.getConfig().setValue(ConfigManager.ConfigPaths.CONFIGVERSION, 2);
+                ConfigManager.getConfig().setValue(ConfigManager.ConfigPaths.UPDATECHECK, true);
 
                 break;
             }

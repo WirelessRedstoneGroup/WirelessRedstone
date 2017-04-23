@@ -3,7 +3,11 @@ package net.licks92.WirelessRedstone;
 import net.licks92.WirelessRedstone.Storage.StorageType;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class ConfigManager {
 
@@ -148,23 +152,23 @@ public class ConfigManager {
                 return StorageType.SQLITE;
         }
     }
-}
 
-enum ConfigPaths {
-    CONFIGVERSION("ConfigVersion"), DEBUGMODE("DebugMode"), LANGUAGE("Language"), COLORLOGGING("ColourfulLogging"),
-    UPDATECHECK("CheckForUpdates"), CANCELCHUNKUNLOAD("cancelChunkUnloads"),
-    CANCELCHUNKUNLOADRANGE("cancelChunkUnloadRange"), USEVAULT("UseVault"), SILENTMODE("SilentMode"),
-    INTERACTTRANSMITTERTIME("InteractTransmitterTime"), CACHEREFRESHRATE("CacheRefreshFrequency"),
-    GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken"),
-    METRICS("Metrics");
+    public enum ConfigPaths {
+        CONFIGVERSION("ConfigVersion"), DEBUGMODE("DebugMode"), LANGUAGE("Language"), COLORLOGGING("ColourfulLogging"),
+        UPDATECHECK("CheckForUpdates"), CANCELCHUNKUNLOAD("cancelChunkUnloads"),
+        CANCELCHUNKUNLOADRANGE("cancelChunkUnloadRange"), USEVAULT("UseVault"), SILENTMODE("SilentMode"),
+        INTERACTTRANSMITTERTIME("InteractTransmitterTime"), CACHEREFRESHRATE("CacheRefreshFrequency"),
+        GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken"),
+        METRICS("Metrics");
 
-    private String name;
+        private String name;
 
-    private ConfigPaths(String name) {
-        this.name = name;
-    }
+        private ConfigPaths(String name) {
+            this.name = name;
+        }
 
-    public String getValue() {
-        return name;
+        public String getValue() {
+            return name;
+        }
     }
 }

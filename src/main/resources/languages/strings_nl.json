@@ -40,6 +40,7 @@
   "commandActivationMin": "De activatietijd moet minimaal 50 ms zijn.",
   "commandDelayMin": "De vertraging moet minimaal 50 ms zijn.",
   "commandIntervalMin": "De interval moet minimaal 50 ms zijn.",
+  "commandLanguageChanged": "Succesvol de taal verandert naar het Nederlands.",
   "commandVersion": "Je zit momenteel op versie: %%VERSION",
 
   "cannotCreateSign": "Je kan geen WirelessRedstone bord maken op dit blok.",

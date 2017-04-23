@@ -43,6 +43,7 @@ public class Strings {
     public String commandActivationMin;
     public String commandDelayMin;
     public String commandIntervalMin;
+    public String commandLanguageChanged;
     public String commandVersion;
 
     public String cannotCreateSign;

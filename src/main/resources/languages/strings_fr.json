@@ -40,6 +40,7 @@
   "commandActivationMin": "The activation time must be at least 50 ms.",
   "commandDelayMin": "The delay must be at least 50 ms.",
   "commandIntervalMin": "The interval must be at least 50 ms.",
+  "commandLanguageChanged": "Successfully changed the language to English.",
   "commandVersion": "You are currently using version: %%VERSION",
 
   "cannotCreateSign": "You cannot create a WirelessRedstone sign on this block.",

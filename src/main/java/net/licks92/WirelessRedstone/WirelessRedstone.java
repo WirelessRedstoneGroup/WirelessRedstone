@@ -215,6 +215,10 @@ public class WirelessRedstone extends JavaPlugin {
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
     }
 
+    public void resetStrings() {
+        stringManager = new StringManager(config.getLanguage());
+    }
+
     private void loadMetrics() {
         try {
             metrics = new Metrics(this);
