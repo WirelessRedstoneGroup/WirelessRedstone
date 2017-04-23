@@ -20,12 +20,13 @@ public class AdminConvert extends WirelessCommand {
     @Override
     public void onCommand(final CommandSender sender, String[] args) {
         if (args.length == 0) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
             return;
         }
 
         if (!confirmation.contains(sender.getName())) {
-            WirelessRedstone.getUtils().sendFeedback(ChatColor.BOLD + WirelessRedstone.getStrings().convertContinue.replaceAll("%%STORAGETYPE", args[0]), sender, true);
+            WirelessRedstone.getUtils().sendFeedback(ChatColor.BOLD + WirelessRedstone.getStrings()
+                    .dbConvertConfirm.replaceAll("%%STORAGETYPE", args[0]), sender, true);
 
             confirmation.add(sender.getName());
 
@@ -45,7 +46,7 @@ public class AdminConvert extends WirelessCommand {
             case "YML":
             case "YAML": {
                 if (ConfigManager.getConfig().getStorageType() == StorageType.YAML) {
-                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().convertSameType, sender, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbConvertSameType, sender, true);
                     return;
                 }
 
@@ -63,7 +64,7 @@ public class AdminConvert extends WirelessCommand {
             case "SQL":
             case "SQLITE": {
                 if (ConfigManager.getConfig().getStorageType() == StorageType.SQLITE) {
-                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().convertSameType, sender, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbConvertSameType, sender, true);
                     return;
                 }
 
@@ -79,7 +80,7 @@ public class AdminConvert extends WirelessCommand {
             }
 
             default:
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().convertFailed, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbConvertFailed, sender, true);
                 return;
         }
 
@@ -90,6 +91,6 @@ public class AdminConvert extends WirelessCommand {
             }
         }, 1L);
 
-        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().convertDone, sender, false);
+        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbConvertDone, sender, false);
     }
 }

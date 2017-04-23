@@ -1,7 +1,11 @@
 package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.ConfigManager;
-import net.licks92.WirelessRedstone.Signs.*;
+import net.licks92.WirelessRedstone.Signs.SignType;
+import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
+import net.licks92.WirelessRedstone.Signs.WirelessScreen;
+import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -66,7 +70,7 @@ public class PlayerListener implements Listener {
 
             if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), cname)) {
                 event.getClickedBlock().breakNaturally();
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerCannotCreateSign, event.getPlayer(), false);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionCreateSign, event.getPlayer(), false);
                 return;
             }
 
@@ -133,7 +137,7 @@ public class PlayerListener implements Listener {
             else if (type == SignType.SCREEN)
                 event.getPlayer().performCommand("wr i " + channel.getName());
         } else {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, event.getPlayer(), true, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionGeneral, event.getPlayer(), true, true);
         }
     }
 

@@ -13,7 +13,7 @@ public class AdminRemoveOwner extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
             return;
         }
 
@@ -21,18 +21,18 @@ public class AdminRemoveOwner extends WirelessCommand {
         String playerName = args[1];
 
         if (!hasAccessToChannel(sender, channelName)) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionChannelAccess, sender, true);
             return;
         }
 
         WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(channelName);
         if (channel == null) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelDoesNotExist, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNotFound, sender, true);
             return;
         }
 
         if(!channel.getOwners().contains(playerName)){
-            WirelessRedstone.getUtils().sendFeedback("Player is not an owner.", sender, true); //TODO: Add string to stringloader
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelAlreadyOwner, sender, true);
             return;
         }
 
@@ -40,6 +40,7 @@ public class AdminRemoveOwner extends WirelessCommand {
         WirelessRedstone.getStorage().updateChannel(channelName, channel);
 
         WirelessRedstone.getWRLogger().info("Channel " + channelName + " has been updated. Player " + playerName + " has been removed to the owner list.");
-        WirelessRedstone.getUtils().sendFeedback("User " + playerName + " is remove from channel " + channelName, sender, false);  //TODO: Add string to stringloader
+        WirelessRedstone.getUtils()
+                .sendFeedback(WirelessRedstone.getStrings().channelOwnerRemoved.replaceAll("%%PLAYERNAME", playerName), sender, false);
     }
 }

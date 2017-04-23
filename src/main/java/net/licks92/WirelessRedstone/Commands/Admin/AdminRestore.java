@@ -30,7 +30,7 @@ public class AdminRestore extends WirelessCommand {
                     }, 1L);
                 }
 
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().restoreDataDone, sender, false);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbRestoreDone, sender, false);
                 break;
             }
 
@@ -49,11 +49,12 @@ public class AdminRestore extends WirelessCommand {
                     }, 1L);
                 }
 
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbRestoreDone, sender, false);
                 break;
             }
 
             default:
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().restoreDataFailed, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbRestoreFailed, sender, true);
                 break;
         }
     }

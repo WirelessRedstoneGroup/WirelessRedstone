@@ -12,9 +12,9 @@ public class AdminPurge extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (WirelessRedstone.getStorage().purgeData()) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().purgeDataDone, sender, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbPurgeDone, sender, false);
         } else {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().purgeDataFailed, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbPurgeFailed, sender, true);
         }
     }
 }

@@ -59,9 +59,9 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName){
         Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+        sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverDelayerType.get(0));
+        sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDelayerType.get(0));
         sign.setLine(3, Integer.toString(delay));
         sign.update();
     }

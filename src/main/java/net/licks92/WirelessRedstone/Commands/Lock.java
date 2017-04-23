@@ -11,14 +11,14 @@ public class Lock extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
             return;
         }
 
         String cname = args[0];
         WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(cname);
         if (channel == null) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelDoesNotExist, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNotFound, sender, true);
             return;
         }
 
@@ -30,6 +30,7 @@ public class Lock extends WirelessCommand {
 
         channel.setLocked(newState);
         WirelessRedstone.getStorage().updateChannel(args[0], channel);
-        WirelessRedstone.getUtils().sendFeedback("Successfully changed locked state to " + newState + ".", sender, false); //TODO: Add this string to the stringloader
+        WirelessRedstone.getUtils()
+                .sendFeedback(newState ? WirelessRedstone.getStrings().channelLocked : WirelessRedstone.getStrings().channelUnlocked, sender, false);
     }
 }

@@ -18,7 +18,7 @@ public class AdminWipeData extends WirelessCommand {
     @Override
     public void onCommand(final CommandSender sender, String[] args) {
         if (!confirmation.contains(sender.getName())) {
-            WirelessRedstone.getUtils().sendFeedback(ChatColor.BOLD + WirelessRedstone.getStrings().DBAboutToBeDeleted, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(ChatColor.BOLD + WirelessRedstone.getStrings().dbDeleteConfirm, sender, true);
 
             confirmation.add(sender.getName());
 
@@ -35,9 +35,9 @@ public class AdminWipeData extends WirelessCommand {
         confirmation.remove(sender.getName());
 
         if (WirelessRedstone.getStorage().wipeData()) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().DBDeleted, sender, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbDeleteDone, sender, false);
         } else {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().DBNotDeleted, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbDeleteFailed, sender, true);
         }
     }
 }

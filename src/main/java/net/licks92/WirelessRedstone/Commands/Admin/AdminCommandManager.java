@@ -56,7 +56,7 @@ public class AdminCommandManager implements CommandExecutor {
                     }
                 }
                 if (timer == 0) {
-                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionGeneral, sender, true, true);
                 }
 
                 return true;
@@ -75,22 +75,23 @@ public class AdminCommandManager implements CommandExecutor {
             }
 
             if (wanted == null) {
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().subCommandDoesNotExist, sender, true, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandNotFound, sender, true, true);
                 return true;
             }
 
             if (!sender.hasPermission("wirelessredstone.admin." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionGeneral, sender, true, true);
                 return true;
             }
 
-            if (!(sender instanceof Player || sender instanceof ConsoleCommandSender) && !wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock()) {
+            if (!(sender instanceof Player || sender instanceof ConsoleCommandSender)
+                    && !wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock()) {
                 WirelessRedstone.getWRLogger().info("Commandblocks are not allowed to run command: /wradmin " + args[0]);
                 return true;
             }
 
             if (!wanted.getClass().getAnnotation(CommandInfo.class).canUseInConsole() && sender instanceof ConsoleCommandSender) {
-                WirelessRedstone.getUtils().sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandOnlyInGame, sender, true);
                 return true;
             }
 

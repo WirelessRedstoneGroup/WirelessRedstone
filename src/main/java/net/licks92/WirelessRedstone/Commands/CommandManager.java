@@ -57,7 +57,7 @@ public class CommandManager implements CommandExecutor {
                     }
                 }
                 if (timer == 0) {
-                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionGeneral, sender, true, true);
                 }
 
                 return true;
@@ -76,12 +76,12 @@ public class CommandManager implements CommandExecutor {
             }
 
             if (wanted == null) {
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().subCommandDoesNotExist, sender, true, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandNotFound, sender, true, true);
                 return true;
             }
 
             if (!sender.hasPermission("wirelessredstone.commands." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionGeneral, sender, true, true);
                 return true;
             }
 
@@ -91,7 +91,7 @@ public class CommandManager implements CommandExecutor {
             }
 
             if (!wanted.getClass().getAnnotation(CommandInfo.class).canUseInConsole() && sender instanceof ConsoleCommandSender) {
-                WirelessRedstone.getUtils().sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandOnlyInGame, sender, true);
                 return true;
             }
 
@@ -120,17 +120,17 @@ public class CommandManager implements CommandExecutor {
             }
 
             if (!sender.hasPermission(permission)) {
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHavePermission, sender, true, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionGeneral, sender, true, true);
                 return true;
             }
 
             if (args.length == 0) {
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
                 return true;
             }
 
             if (!(sender instanceof Player)) {
-                WirelessRedstone.getUtils().sendFeedback("Only in-game players can use this command.", sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandOnlyInGame, sender, true);
                 return true;
             }
 
@@ -145,15 +145,15 @@ public class CommandManager implements CommandExecutor {
                 sign.setLine(1, channelName);
 
                 if (cmd.getName().equalsIgnoreCase("wrt"))
-                    sign.setLine(0, WirelessRedstone.getStrings().tagsTransmitter.get(0));
+                    sign.setLine(0, WirelessRedstone.getStringManager().tagsTransmitter.get(0));
                 else if (cmd.getName().equalsIgnoreCase("wrr")) {
-                    sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+                    sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
                     if (args.length > 1) {
                         String type = args[1];
                         switch (type) {
                             case "inverter":
                             case "inv": {
-                                sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverInverterType.get(0));
+                                sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverInverterType.get(0));
                                 sign.update();
 
                                 if (!WirelessRedstone.getSignManager().addWirelessReceiver(
@@ -172,12 +172,12 @@ public class CommandManager implements CommandExecutor {
                                     try {
                                         delay = Integer.parseInt(args[2]);
                                     } catch (NumberFormatException ex) {
-                                        WirelessRedstone.getUtils().sendCommandFeedback("The delay must be a number!", sender, true);
+                                        WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().delayNumberOnly, sender, true);
                                         sign.getBlock().setType(Material.AIR);
                                         return true;
                                     }
 
-                                    sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverDelayerType.get(0));
+                                    sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDelayerType.get(0));
                                     sign.setLine(3, Integer.toString(delay));
                                     sign.update();
 
@@ -189,7 +189,7 @@ public class CommandManager implements CommandExecutor {
                                     }
                                 }
                                 if (args.length < 3) {
-                                    WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+                                    WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
                                 }
                                 break;
                             }
@@ -199,12 +199,12 @@ public class CommandManager implements CommandExecutor {
                                     try {
                                         delay = Integer.parseInt(args[2]);
                                     } catch (NumberFormatException ex) {
-                                        WirelessRedstone.getUtils().sendCommandFeedback("The interval must be a number!", sender, true);
+                                        WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().intervalNumberOnly, sender, true);
                                         sign.getBlock().setType(Material.AIR);
                                         return true;
                                     }
 
-                                    sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverClockType.get(0));
+                                    sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverClockType.get(0));
                                     sign.setLine(3, Integer.toString(delay));
                                     sign.update();
 
@@ -215,7 +215,7 @@ public class CommandManager implements CommandExecutor {
                                     }
                                 }
                                 if (args.length < 3) {
-                                    WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+                                    WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
                                 }
                                 break;
                             default:
@@ -234,7 +234,7 @@ public class CommandManager implements CommandExecutor {
                         }
                     }
                 } else if (cmd.getName().equalsIgnoreCase("wrs"))
-                    sign.setLine(0, WirelessRedstone.getStrings().tagsScreen.get(0));
+                    sign.setLine(0, WirelessRedstone.getStringManager().tagsScreen.get(0));
 
                 org.bukkit.material.Sign dataSign = new org.bukkit.material.Sign();
                 dataSign.setFacingDirection(BlockFace.SOUTH);
@@ -246,7 +246,7 @@ public class CommandManager implements CommandExecutor {
                 else if (cmd.getName().equalsIgnoreCase("wrs"))
                     WirelessRedstone.getSignManager().addWirelessScreen(channelName, player.getLocation().getBlock(), player);
             } else {
-                WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
+                WirelessRedstone.getUtils().sendCommandFeedback(WirelessRedstone.getStrings().permissionChannelAccess, sender, true);
             }
         }
 

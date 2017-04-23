@@ -13,18 +13,18 @@ public class Teleport extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
             return;
         }
 
         WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(args[0]);
         if (channel == null) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelDoesNotExist, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNotFound, sender, true);
             return;
         }
 
         if (!hasAccessToChannel(sender, args[0])) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().playerDoesntHaveAccessToChannel, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().permissionChannelAccess, sender, true);
             return;
         }
 
@@ -33,7 +33,7 @@ public class Teleport extends WirelessCommand {
         try {
             index = Integer.parseInt(args[2]);
         } catch (NumberFormatException ex) {
-            WirelessRedstone.getUtils().sendFeedback("That is not a number.", sender, true); //TODO: Add this string to the stringloader (-> Activate)
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandNoNumber, sender, true);
             return;
         }
 
@@ -49,7 +49,7 @@ public class Teleport extends WirelessCommand {
                     locTransmitter.setPitch(player.getLocation().getPitch());
                     player.teleport(locTransmitter);
                 } catch (IndexOutOfBoundsException ex) {
-                    WirelessRedstone.getUtils().sendFeedback("Sign not found!", player, true); //TODO: Add this string to the stringloader
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, player, true);
                 }
                 break;
             case "RECEIVER":
@@ -61,7 +61,7 @@ public class Teleport extends WirelessCommand {
                     locReceiver.setPitch(player.getLocation().getPitch());
                     player.teleport(locReceiver);
                 } catch (IndexOutOfBoundsException ex) {
-                    WirelessRedstone.getUtils().sendFeedback("Sign not found!", player, true); //TODO: Add this string to the stringloader
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, player, true);
                 }
                 break;
             case "SCREEN":
@@ -73,7 +73,7 @@ public class Teleport extends WirelessCommand {
                     locScreen.setPitch(player.getLocation().getPitch());
                     player.teleport(locScreen);
                 } catch (IndexOutOfBoundsException ex) {
-                    WirelessRedstone.getUtils().sendFeedback("Sign not found!", player, true); //TODO: Add this string to the stringloader
+                    WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, player, true);
                 }
                 break;
         }

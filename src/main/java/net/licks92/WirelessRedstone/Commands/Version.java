@@ -9,6 +9,8 @@ public class Version extends WirelessCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        WirelessRedstone.getUtils().sendFeedback("You are currently using version " + WirelessRedstone.getInstance().getDescription().getVersion(), sender, false);
+        WirelessRedstone.getUtils().sendFeedback(
+                WirelessRedstone.getStrings().commandVersion.replaceAll("%%VERSION", WirelessRedstone.getInstance().getDescription().getVersion()),
+                sender, false);
     }
 }

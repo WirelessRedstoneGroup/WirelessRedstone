@@ -22,14 +22,14 @@ public class AdminBackup extends WirelessCommand {
                 extension = "db";
                 break;
             default:
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbBackupFailed, sender, true);
                 return;
         }
 
         if (WirelessRedstone.getStorage().backupData(extension)) {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().backupDone, sender, false);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbBackupDone, sender, false);
         } else {
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().backupFailed, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().dbBackupFailed, sender, true);
         }
     }
 }

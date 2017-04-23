@@ -18,7 +18,7 @@ public class Help extends WirelessCommand {
             try {
                 page = Integer.parseInt(args[0]);
             } catch (NumberFormatException ex) {
-                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().pageNumberInferiorToZero, sender, true);
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandInferiorZero, sender, true);
                 return;
             }
         }
@@ -57,7 +57,7 @@ public class Help extends WirelessCommand {
         WirelessRedstone.getUtils().sendFeedback(ChatColor.WHITE + "Page " + page + " of " + totalPages, sender, false);
 
         if (totalPages == 0)
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().listEmpty, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandNoData, sender, true);
         else {
             for (Integer i = currentItem; i < (currentItem + maxItemsPerPage); i++) {
                 if (!(i >= commandListLength))

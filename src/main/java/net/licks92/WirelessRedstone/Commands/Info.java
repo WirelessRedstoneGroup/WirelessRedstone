@@ -1,6 +1,10 @@
 package net.licks92.WirelessRedstone.Commands;
 
-import net.licks92.WirelessRedstone.Signs.*;
+import net.licks92.WirelessRedstone.Signs.SignType;
+import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
+import net.licks92.WirelessRedstone.Signs.WirelessScreen;
+import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,13 +18,13 @@ public class Info extends WirelessCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if(args.length == 0){
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().tooFewArguments, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
             return;
         }
 
         WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(args[0]);
         if(channel == null){
-            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelDoesNotExist, sender, true);
+            WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNotFound, sender, true);
             return;
         }
 
@@ -40,7 +44,7 @@ public class Info extends WirelessCommand {
                     + ChatColor.GRAY + channel.getScreens().size() + ChatColor.GREEN + " screens", sender, false);
         } else {
             if(!(sender instanceof Player)){
-                WirelessRedstone.getUtils().sendFeedback("Only in-game players can use this command.", sender, true); //TODO: Add this string to the stringloader (-> CommandManager)
+                WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandOnlyInGame, sender, true);
                 return;
             }
 
@@ -48,7 +52,7 @@ public class Info extends WirelessCommand {
             switch (signType) {
                 case TRANSMITTER:
                     if(channel.getTransmitters().size() == 0){
-                        WirelessRedstone.getUtils().sendFeedback("No signs found.", sender, true); //TODO: Add this string to the stringloader
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, sender, true);
                         return;
                     }
 
@@ -65,7 +69,7 @@ public class Info extends WirelessCommand {
                     break;
                 case RECEIVER_NORMAL:
                     if(channel.getReceivers().size() == 0){
-                        WirelessRedstone.getUtils().sendFeedback("No signs found.", sender, true); //TODO: Add this string to the stringloader
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, sender, true);
                         return;
                     }
 
@@ -82,7 +86,7 @@ public class Info extends WirelessCommand {
                     break;
                 case SCREEN:
                     if(channel.getScreens().size() == 0){
-                        WirelessRedstone.getUtils().sendFeedback("No signs found.", sender, true); //TODO: Add this string to the stringloader
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, sender, true);
                         return;
                     }
 

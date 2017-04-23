@@ -18,6 +18,8 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>config.yml</include>
+                    <include>languages/*</include>
                 </includes>
             </resource>
         </resources>

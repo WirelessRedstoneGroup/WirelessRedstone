@@ -31,9 +31,9 @@ public class WirelessReceiverInverter extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName){
         Sign sign = (Sign) getLocation().getBlock().getState();
-        sign.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+        sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, WirelessRedstone.getStrings().tagsReceiverInverterType.get(0));
+        sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverInverterType.get(0));
         sign.update();
     }
 }

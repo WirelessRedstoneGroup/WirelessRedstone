@@ -10,8 +10,8 @@ import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
 import net.licks92.WirelessRedstone.Storage.IWirelessStorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.Storage.StorageType;
-import net.licks92.WirelessRedstone.String.StringLoader;
 import net.licks92.WirelessRedstone.String.StringManager;
+import net.licks92.WirelessRedstone.String.Strings;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import org.bukkit.plugin.PluginManager;
@@ -57,7 +57,11 @@ public class WirelessRedstone extends JavaPlugin {
         return WRLogger;
     }
 
-    public static StringManager getStrings() {
+    public static Strings getStrings() {
+        return stringManager.getStrings();
+    }
+
+    public static StringManager getStringManager() {
         return stringManager;
     }
 
@@ -143,7 +147,7 @@ public class WirelessRedstone extends JavaPlugin {
             }
         }
 
-        stringManager = new StringLoader(config.getLanguage());
+        stringManager = new StringManager(config.getLanguage());
         signManager = new SignManager();
         storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
 

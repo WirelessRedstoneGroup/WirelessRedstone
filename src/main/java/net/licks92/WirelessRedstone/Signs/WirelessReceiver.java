@@ -204,9 +204,9 @@ public class WirelessReceiver implements ConfigurationSerializable, IWirelessPoi
 
     public void changeSignContent(Block block, String channelName) {
         Sign signtemp = (Sign) block.getState();
-        signtemp.setLine(0, WirelessRedstone.getStrings().tagsReceiver.get(0));
+        signtemp.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         signtemp.setLine(1, channelName);
-        signtemp.setLine(2, WirelessRedstone.getStrings().tagsReceiverDefaultType.get(0));
+        signtemp.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDefaultType.get(0));
         signtemp.update(true);
     }
 }

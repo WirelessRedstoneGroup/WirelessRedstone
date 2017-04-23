@@ -1,57 +1,19 @@
 package net.licks92.WirelessRedstone.String;
 
+import com.google.gson.Gson;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StringManager {
 
-    public String chatTag;
-    public String backupDone;
-    public String backupFailed;
-    public String channelDoesNotExist;
-    public String channelLocked;
-    public String channelNameContainsInvalidCharacters;
-    public String channelRemoved;
-    public String channelRemovedCauseNoSign;
-    public String channelUnlocked;
-    public String commandDoesNotExist;
-    public String commandForNextPage;
-    public String customizedLanguageSuccessfullyLoaded;
-    public String DBAboutToBeDeleted;
-    public String DBDeleted;
-    public String DBNotDeleted;
-    public String forMoreInfosPerformWRInfo;
-    public String listEmpty;
-    public String newUpdateAvailable;
-    public String ownersOfTheChannelAre;
-    public String pageEmpty;
-    public String pageNumberInferiorToZero;
-    public String playerCannotCreateChannel;
-    public String playerCannotCreateReceiverOnBlock;
-    public String playerCannotCreateSign;
-    public String playerCannotDestroyReceiverTorch;
-    public String playerCannotDestroySign;
-    public String playerCreatedChannel;
-    public String playerDoesntHaveAccessToChannel;
-    public String playerDoesntHavePermission;
-    public String playerExtendedChannel;
-    public String purgeDataDone;
-    public String purgeDataFailed;
-    public String signDestroyed;
-    public String subCommandDoesNotExist;
-    public String thisChannelContains;
-    public String tooFewArguments;
-    public String allTransmittersGone;
-    public String playerCannotDestroyBlockAttachedToSign;
-    public String convertDone;
-    public String convertFailed;
-    public String convertSameType;
-    public String convertContinue;
-    public String automaticAssigned;
-    public String restoreDataDone;
-    public String restoreDataFailed;
+    private final String stringFolder = "languages/";
+    private Strings strings;
 
     public List<String> tagsTransmitter;
     public List<String> tagsReceiver;
@@ -62,7 +24,7 @@ public class StringManager {
     public List<String> tagsReceiverClockType;
     public List<String> tagsReceiverSwitchType;
 
-    public StringManager() {
+    public StringManager(String language) {
         tagsTransmitter = new ArrayList<String>();
         tagsReceiver = new ArrayList<String>();
         tagsScreen = new ArrayList<String>();
@@ -96,6 +58,29 @@ public class StringManager {
 
         tagsReceiverSwitchType.add("[switch]");
         tagsReceiverSwitchType.add("[switcher]");
+
+        WirelessRedstone plugin = WirelessRedstone.getInstance();
+
+        InputStream stream = plugin.getResource(stringFolder + "strings_" + language + ".json");
+
+        if (stream == null)
+            stream = plugin.getResource(stringFolder + "strings_en.json");
+
+        Reader reader = null;
+        try {
+            reader = new InputStreamReader(stream, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            WirelessRedstone.getWRLogger().severe("There is a problem while loading the strings.");
+            e.printStackTrace();
+            return;
+        }
+
+        strings = new Gson().fromJson(reader, Strings.class);
+        return;
+    }
+
+    public Strings getStrings() {
+        return strings;
     }
 
 }

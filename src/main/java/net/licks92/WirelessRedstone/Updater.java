@@ -8,7 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -85,7 +89,8 @@ public class Updater {
             String downloadUrl = version.getAsJsonObject(WirelessRedstone.getUtils().isSpigot() ? "spigot" : "bukkit").get("downloadUrl").getAsString();
             String changelog = version.get("changelog").getAsString();
 
-            WirelessRedstone.getWRLogger().debug("Comparing " + WirelessRedstone.getInstance().getDescription().getVersion() + " vs " + latestVersion + (WirelessRedstone.getUtils().isSpigot() ? "-spigot" : "-bukkit"));
+            WirelessRedstone.getWRLogger().debug("Comparing " + WirelessRedstone.getInstance().getDescription().getVersion() + " vs "
+                                                         + latestVersion + (WirelessRedstone.getUtils().isSpigot() ? "-spigot" : "-bukkit"));
 
             Semver sem = new Semver(latestVersion);
             if (sem.isGreaterThan(WirelessRedstone.getInstance().getDescription().getVersion())) {
@@ -125,14 +130,16 @@ public class Updater {
         Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
-                WirelessRedstone.getWRLogger().info("Version " + latestVersion + " is availible! Download it here: " + downloadUrl);
-                WirelessRedstone.getWRLogger().info("Changelog: ");
+                WirelessRedstone.getWRLogger().info(WirelessRedstone.getStrings().newUpdate.replaceAll("%%NEWVERSION", latestVersion)
+                                                            .replaceAll("%%URL", downloadUrl));
+                WirelessRedstone.getWRLogger().info(WirelessRedstone.getStrings().changelog + ": ");
 
                 ArrayList<Player> adminPlayers = new ArrayList<>();
                 for (Player player : checkPlayers) {
                     if (WirelessRedstone.getPermissionsManager().isWirelessAdmin(player)) {
                         adminPlayers.add(player);
-                        WirelessRedstone.getUtils().sendFeedback("Version " + latestVersion + " is availible! Download it here: ", player, false);
+                        WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().newUpdate.replaceAll("%%NEWVERSION", latestVersion)
+                                                                         .replaceAll("%%URL", downloadUrl), player, false);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), WirelessRedstone.getUtils().getDownloadUrl(player.getName())
                                 .replaceAll("%%TEXT", (WirelessRedstone.getUtils().isSpigot() ? "Spigot" : "Bukkit") + " download page")
                                 .replaceAll("%%HOVERTEXT", "Click to go to website")
