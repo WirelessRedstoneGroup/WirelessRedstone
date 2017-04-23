@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone.WorldEdit;
 
-
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.event.extent.EditSessionEvent;
