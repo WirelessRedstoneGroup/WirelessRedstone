@@ -155,7 +155,13 @@ public class WirelessTransmitter implements ConfigurationSerializable, IWireless
 
     public boolean isActive() {
         Location loc = new Location(Bukkit.getWorld(getWorld()), getX(), getY(), getZ());
+        if (loc == null)
+            return false;
+
         Block block = loc.getBlock();
+        if (block == null)
+            return false;
+
         return block.isBlockIndirectlyPowered() || block.isBlockPowered();
     }
 }
