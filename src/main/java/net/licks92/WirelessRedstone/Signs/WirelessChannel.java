@@ -14,7 +14,11 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.persistence.Id;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @SerializableAs("WirelessChannel")
 public class WirelessChannel implements ConfigurationSerializable {
@@ -59,13 +63,13 @@ public class WirelessChannel implements ConfigurationSerializable {
         turnOn();
 
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WirelessRedstone"),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        turnOff();
-                    }
+                                           new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   turnOff();
+                                               }
 
-                }, timeInTicks);
+                                           }, timeInTicks);
     }
 
     public void turnOn() {
@@ -86,7 +90,7 @@ public class WirelessChannel implements ConfigurationSerializable {
             }
         } catch (RuntimeException e) {
             WirelessRedstone.getWRLogger().severe("Error while turning on the receivers of channel " + name
-                    + ". Please turn the debug mode on to get more informations.");
+                                                          + ". Please turn the debug mode on to get more informations.");
 
             if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
@@ -103,9 +107,12 @@ public class WirelessChannel implements ConfigurationSerializable {
                 receiver.turnOff(getName());
 
                 for (BlockFace blockFace : WirelessRedstone.getUtils().getEveryBlockFace(true)) {
-                    Bukkit.getServer().getPluginManager().callEvent(
-                            new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
-                                    receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
+                    if (receiver.getLocation() != null) {
+                        if (receiver.getLocation().getBlock() != null)
+                            Bukkit.getServer().getPluginManager().callEvent(
+                                    new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
+                                                           receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
+                    }
                 }
             }
 
@@ -127,7 +134,7 @@ public class WirelessChannel implements ConfigurationSerializable {
 
     public void startClock(BukkitTask task) {
         WirelessRedstone.getSignManager().clockTasks.put(task.getTaskId(),
-                getName());
+                                                         getName());
         WirelessRedstone.getWRLogger().debug(
                 "Added clock task " + task.getTaskId()
                         + " to te list for circuit " + getName());
@@ -167,7 +174,7 @@ public class WirelessChannel implements ConfigurationSerializable {
     public boolean isActive() {
         for (WirelessTransmitter t : getTransmitters()) {
             Location loc = new Location(Bukkit.getWorld(t.getWorld()),
-                    t.getX(), t.getY(), t.getZ());
+                                        t.getX(), t.getY(), t.getZ());
             Block block = loc.getBlock();
             if (block.getState() instanceof Sign) {
                 if (block.isBlockIndirectlyPowered()
