@@ -9,11 +9,19 @@ import org.sqlite.SQLiteConfig;
 import javax.sql.rowset.CachedRowSet;
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class SQLite {
 
@@ -46,6 +54,8 @@ public class SQLite {
                     WirelessRedstone.getWRLogger().debug("Unable to create database!");
                 }
             }
+
+            Class.forName("org.sqlite.JDBC");
 
             SQLiteConfig config = new SQLiteConfig();
             config.setSharedCache(true);
