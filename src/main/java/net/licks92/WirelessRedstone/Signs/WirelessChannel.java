@@ -107,11 +107,14 @@ public class WirelessChannel implements ConfigurationSerializable {
                 receiver.turnOff(getName());
 
                 for (BlockFace blockFace : WirelessRedstone.getUtils().getEveryBlockFace(true)) {
-                    if (receiver.getLocation() != null) {
-                        if (receiver.getLocation().getBlock() != null)
-                            Bukkit.getServer().getPluginManager().callEvent(
-                                    new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
-                                                           receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
+                    try {
+                        if (receiver.getLocation() != null) {
+                            if (receiver.getLocation().getBlock() != null)
+                                Bukkit.getServer().getPluginManager().callEvent(
+                                        new BlockRedstoneEvent(receiver.getLocation().getBlock().getRelative(blockFace),
+                                                               receiver.getLocation().getBlock().getRelative(blockFace).getBlockPower(), 0));
+                        }
+                    } catch (NullPointerException ignored) {
                     }
                 }
             }
@@ -122,7 +125,7 @@ public class WirelessChannel implements ConfigurationSerializable {
             }
         } catch (RuntimeException e) {
             WirelessRedstone.getWRLogger()
-                    .severe("Error while updating redstone onBlockRedstoneChange for Screens, turn on the Debug Mode to get more informations.");
+                    .severe("Error while updating redstone onBlockRedstoneChange for receivers/screens, turn on the Debug Mode to get more informations.");
 
             if (ConfigManager.getConfig().getDebugMode())
                 e.printStackTrace();
