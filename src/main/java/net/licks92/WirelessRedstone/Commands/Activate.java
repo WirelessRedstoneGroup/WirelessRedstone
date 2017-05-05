@@ -3,7 +3,6 @@ package net.licks92.WirelessRedstone.Commands;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(description = "Activate a channel (for a certain amount of ms)", usage = "<channel> [time]", aliases = {"activate", "a"},
@@ -17,7 +16,7 @@ public class Activate extends WirelessCommand {
             return;
         }
 
-        final WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(args[0]);
+        WirelessChannel channel = WirelessRedstone.getStorage().getWirelessChannel(args[0]);
         if (channel == null) {
             WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().channelNotFound, sender, true);
             return;
@@ -44,13 +43,7 @@ public class Activate extends WirelessCommand {
             return;
         }
 
-        final Integer finalTime = time;
-        Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                channel.turnOn(finalTime);
-            }
-        });
+        channel.turnOn(time);
         WirelessRedstone.getUtils().sendFeedback(WirelessRedstone.getStrings().commandActivated, sender, false, true);
     }
 }
