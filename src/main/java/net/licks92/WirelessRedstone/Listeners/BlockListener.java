@@ -12,13 +12,10 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Directional;
 
 public class BlockListener implements Listener {
 
@@ -234,12 +231,18 @@ public class BlockListener implements Listener {
 
         BlockRedstoneEvent e = null;
         switch (event.getBlock().getType()) {
+            case DIODE:
+            case DIODE_BLOCK_OFF:
+            case DIODE_BLOCK_ON:
+                Directional directional = (Directional) event.getBlock().getState().getData();
+                e = new BlockRedstoneEvent(event.getBlock().getRelative(directional.getFacing()), event.getOldCurrent(), event.getNewCurrent());
+                callLater(e);
+                break;
             case LEVER:
             case STONE_BUTTON:
             case WOOD_BUTTON:
                 Attachable attachable = (Attachable) event.getBlock().getState().getData();
-                e = new BlockRedstoneEvent(event.getBlock().getRelative(attachable.getAttachedFace()),
-                        event.getOldCurrent(), event.getNewCurrent());
+                e = new BlockRedstoneEvent(event.getBlock().getRelative(attachable.getAttachedFace()), event.getOldCurrent(), event.getNewCurrent());
                 callLater(e);
                 break;
             case DETECTOR_RAIL:
@@ -249,8 +252,7 @@ public class BlockListener implements Listener {
             case IRON_PLATE:
             case DAYLIGHT_DETECTOR:
             case DAYLIGHT_DETECTOR_INVERTED:
-                e = new BlockRedstoneEvent(event.getBlock().getRelative(BlockFace.DOWN),
-                        event.getOldCurrent(), event.getNewCurrent());
+                e = new BlockRedstoneEvent(event.getBlock().getRelative(BlockFace.DOWN), event.getOldCurrent(), event.getNewCurrent());
                 callLater(e);
                 break;
             default:
@@ -279,8 +281,7 @@ public class BlockListener implements Listener {
                     return true;
                 }
 
-                if (!WirelessRedstone.getSignManager().addWirelessTransmitter(autoAssign(player, event.getBlock(), channelName),
-                        event.getBlock(), player)) {
+                if (!WirelessRedstone.getSignManager().addWirelessTransmitter(autoAssign(player, event.getBlock(), channelName), event.getBlock(), player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                     return true;
@@ -294,8 +295,7 @@ public class BlockListener implements Listener {
                     return true;
                 }
 
-                if (!WirelessRedstone.getSignManager().addWirelessScreen(autoAssign(player, event.getBlock(), channelName),
-                        event.getBlock(), player)) {
+                if (!WirelessRedstone.getSignManager().addWirelessScreen(autoAssign(player, event.getBlock(), channelName), event.getBlock(), player)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                     return true;
@@ -309,8 +309,8 @@ public class BlockListener implements Listener {
                     return true;
                 }
 
-                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(),
-                        channelName), event.getBlock(), player, WirelessReceiver.Type.DEFAULT)) {
+                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(), channelName),
+                        event.getBlock(), player, WirelessReceiver.Type.DEFAULT)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                     return true;
@@ -324,8 +324,8 @@ public class BlockListener implements Listener {
                     return true;
                 }
 
-                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(),
-                        channelName), event.getBlock(), player, WirelessReceiver.Type.INVERTER)) {
+                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(), channelName),
+                        event.getBlock(), player, WirelessReceiver.Type.INVERTER)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                     return true;
@@ -339,8 +339,8 @@ public class BlockListener implements Listener {
                     return true;
                 }
 
-                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(),
-                        channelName), event.getBlock(), player, WirelessReceiver.Type.DELAYER)) {
+                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(), channelName),
+                        event.getBlock(), player, WirelessReceiver.Type.DELAYER)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                     return true;
@@ -354,8 +354,8 @@ public class BlockListener implements Listener {
                     return true;
                 }
 
-                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(),
-                        channelName), event.getBlock(), player, WirelessReceiver.Type.CLOCK)) {
+                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(), channelName),
+                        event.getBlock(), player, WirelessReceiver.Type.CLOCK)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                     return true;
@@ -369,8 +369,8 @@ public class BlockListener implements Listener {
                     return true;
                 }
 
-                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(),
-                        channelName), event.getBlock(), player, WirelessReceiver.Type.SWITCH)) {
+                if (!WirelessRedstone.getSignManager().addWirelessReceiver(autoAssign(player, event.getBlock(), channelName),
+                        event.getBlock(), player, WirelessReceiver.Type.SWITCH)) {
                     event.getBlock().setType(Material.AIR);
                     event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.SIGN));
                     return true;
