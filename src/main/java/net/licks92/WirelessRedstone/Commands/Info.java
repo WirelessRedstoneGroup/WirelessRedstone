@@ -1,10 +1,6 @@
 package net.licks92.WirelessRedstone.Commands;
 
-import net.licks92.WirelessRedstone.Signs.SignType;
-import net.licks92.WirelessRedstone.Signs.WirelessChannel;
-import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
-import net.licks92.WirelessRedstone.Signs.WirelessScreen;
-import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
+import net.licks92.WirelessRedstone.Signs.*;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,8 +32,10 @@ public class Info extends WirelessCommand {
         if(signType == null){
             WirelessRedstone.getUtils().sendFeedback(ChatColor.GRAY + "---- " + ChatColor.GREEN + "WirelessChannel " + channel.getName() + ChatColor.GRAY + " ----",
                     sender, false);
-            WirelessRedstone.getUtils().sendFeedback(ChatColor.GRAY + "Is active: " + ((channel.isActive()) ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"), sender, false);
-            WirelessRedstone.getUtils().sendFeedback(ChatColor.GRAY + "Is locked: " + ((channel.isLocked()) ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"), sender, false);
+            WirelessRedstone.getUtils().sendFeedback(ChatColor.GRAY + "Is active: " +
+                    ((channel.isActive()) ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"), sender, false);
+            WirelessRedstone.getUtils().sendFeedback(ChatColor.GRAY + "Is locked: " +
+                    ((channel.isLocked()) ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"), sender, false);
             WirelessRedstone.getUtils().sendFeedback(ChatColor.GRAY + "Sign Types:", sender, false);
             WirelessRedstone.getUtils().sendFeedback(ChatColor.GRAY.toString() + channel.getTransmitters().size() + ChatColor.GREEN + " transmitters, "
                     + ChatColor.GRAY + channel.getReceivers().size() + ChatColor.GREEN + " receivers, "

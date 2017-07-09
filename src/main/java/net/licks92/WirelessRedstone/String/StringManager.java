@@ -76,7 +76,6 @@ public class StringManager {
         }
 
         strings = new Gson().fromJson(reader, Strings.class);
-        return;
     }
 
     public Strings getStrings() {

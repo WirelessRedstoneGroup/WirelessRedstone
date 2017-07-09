@@ -14,11 +14,7 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SerializableAs("WirelessChannel")
 public class WirelessChannel implements ConfigurationSerializable {
@@ -176,8 +172,7 @@ public class WirelessChannel implements ConfigurationSerializable {
 
     public boolean isActive() {
         for (WirelessTransmitter t : getTransmitters()) {
-            Location loc = new Location(Bukkit.getWorld(t.getWorld()),
-                                        t.getX(), t.getY(), t.getZ());
+            Location loc = new Location(Bukkit.getWorld(t.getWorld()), t.getX(), t.getY(), t.getZ());
             Block block = loc.getBlock();
             if (block.getState() instanceof Sign) {
                 if (block.isBlockIndirectlyPowered()

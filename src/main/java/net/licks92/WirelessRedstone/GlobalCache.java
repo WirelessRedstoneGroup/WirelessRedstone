@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Signs.IWirelessPoint;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Storage.StorageType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
@@ -48,8 +49,7 @@ public class GlobalCache {
         ArrayList<IWirelessPoint> returnlist = new ArrayList<IWirelessPoint>();
         ArrayList<Location> returnlistLocations = new ArrayList<Location>();
         ArrayList<Location> returnReceiverLocations = new ArrayList<Location>();
-        Collection<WirelessChannel> returnChannelList = new ArrayList<WirelessChannel>();
-        returnChannelList = WirelessRedstone.getStorage().getAllChannels(true);
+        Collection<WirelessChannel> returnChannelList = WirelessRedstone.getStorage().getAllChannels(true);
 
         for (WirelessChannel channel : returnChannelList) {
             try {
@@ -80,7 +80,7 @@ public class GlobalCache {
     }
 
     public void update() {
-        update(false); //Changed to sync as temp solution to avoid database locked exceptions
+        update(ConfigManager.getConfig().getStorageType() == StorageType.YAML); //Changed to sync as temp solution to avoid database locked exceptions
     }
 
     public void update(boolean async) {
