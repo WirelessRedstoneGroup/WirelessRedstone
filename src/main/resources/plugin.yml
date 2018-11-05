@@ -1,0 +1,8 @@
+name: WirelessRedstone
+main: net.licks92.WirelessRedstone.WirelessRedstone
+api-version: 1.13
+website: http://dev.bukkit.org/server-mods/wireless-redstone/
+authors: [licks92, Bart_0110]
+version: ${project.version}
+description: The reference in long-distance redstone connections! Create your own wifi-redstone network with WirelessRedstone!
+softdepend: [Vault, WorldEdit, Multiverse-Core, MultiWorld]
