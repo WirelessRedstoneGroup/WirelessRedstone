@@ -174,11 +174,11 @@ public class WirelessRedstone extends JavaPlugin {
         WRLogger.debug("Loading Chunks...");
         WirelessRedstone.getUtils().loadChunks();
 
-        if (pm.isPluginEnabled("WorldEdit")) {
-            WRLogger.debug("Loading WorldEdit support...");
-            new WorldEditLoader();
-        } else
-            WRLogger.debug("WorldEdit not enabled. Skipping WorldEdit support.");
+        //if (pm.isPluginEnabled("WorldEdit")) {
+        //    WRLogger.debug("Loading WorldEdit support...");
+        //    new WorldEditLoader();
+        //} else
+        //    WRLogger.debug("WorldEdit not enabled. Skipping WorldEdit support.");
 
         if (config.getUpdateCheck())
             updater = new Updater();
@@ -202,10 +202,10 @@ public class WirelessRedstone extends JavaPlugin {
         getCommand("wradmin").setExecutor(adminCommandManager);
         getCommand("wra").setExecutor(adminCommandManager);
 
-        if (config.getMetrics()) {
-            WRLogger.debug("Loading metrics...");
-            loadMetrics();
-        }
+        //if (config.getMetrics()) {
+        //    WRLogger.debug("Loading metrics...");
+        //    loadMetrics();
+        //}
 
         fullyStarted = true;
         WRLogger.info("Plugin is now loaded");
