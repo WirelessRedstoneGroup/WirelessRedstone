@@ -15,6 +15,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -76,7 +77,8 @@ public class BlockListener implements Listener {
         int delay = 0;
         try {
             delay = Integer.parseInt(event.getLine(3));
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) {
+        }
 
         //TODO: #registerSign Implement error message if failed
         int finalDelay = delay;
@@ -102,6 +104,49 @@ public class BlockListener implements Listener {
                 }
             }
         });
+    }
+
+    @EventHandler
+    public void on(BlockBreakEvent event) {
+        if (event.getBlock().getState() instanceof Sign) {
+            Sign sign = (Sign) event.getBlock().getState();
+
+            SignType signType = Utils.getSignType(sign.getLine(0));
+            if (signType == null) {
+                return;
+            }
+
+            if (signType == SignType.TRANSMITTER) {
+                if (!WirelessRedstone.getSignManager().canPlaceSign(event.getPlayer(), signType)) {
+                    Utils.sendFeedback(WirelessRedstone.getStrings().permissionDestroySign, event.getPlayer(), true, true);
+                    event.setCancelled(true);
+                    return;
+                }
+            } else if (signType == SignType.RECEIVER) {
+                if (!WirelessRedstone.getSignManager().canPlaceSign(event.getPlayer(), signType)) {
+                    Utils.sendFeedback(WirelessRedstone.getStrings().permissionDestroySign, event.getPlayer(), true, true);
+                    event.setCancelled(true);
+                    return;
+                }
+            } else if (signType == SignType.SCREEN) {
+                if (!WirelessRedstone.getSignManager().canPlaceSign(event.getPlayer(), signType)) {
+                    Utils.sendFeedback(WirelessRedstone.getStrings().permissionDestroySign, event.getPlayer(), true, true);
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
+            String channelName = sign.getLine(1);
+
+            if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), channelName)) {
+                Utils.sendFeedback(WirelessRedstone.getStrings().permissionDestroySign, event.getPlayer(), true, true);
+                event.setCancelled(true);
+                return;
+            }
+
+            WirelessRedstone.getSignManager().removeSign(channelName, event.getBlock().getLocation());
+            Utils.sendFeedback(WirelessRedstone.getStrings().signDestroyed, event.getPlayer(), false);
+        }
     }
 
     private void handleRedstoneEvent(Block block) {

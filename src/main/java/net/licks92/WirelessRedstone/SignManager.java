@@ -212,4 +212,27 @@ public class SignManager {
         return result;
     }
 
+    public boolean removeSign(String channelName, Location location) {
+        if (WirelessRedstone.getStorageManager().getChannel(channelName) == null) {
+            return false;
+        }
+
+        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
+        WirelessPoint point = null;
+
+        for (WirelessPoint pointList : channel.getSigns()) {
+            if (Utils.sameLocation(pointList.getLocation(), location)) {
+                point = pointList;
+                break;
+            }
+        }
+
+        if (point == null) {
+            return false;
+        }
+
+        WirelessRedstone.getStorage().removeWirelessPoint(channelName, point);
+        return true;
+    }
+
 }

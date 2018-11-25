@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 
@@ -229,6 +230,11 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static boolean sameLocation(Location loc1, Location loc2) {
+        return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ() &&
+                loc1.getWorld().getName().equalsIgnoreCase(loc2.getWorld().getName());
     }
 
     public static String getTeleportString(String playerName) {
