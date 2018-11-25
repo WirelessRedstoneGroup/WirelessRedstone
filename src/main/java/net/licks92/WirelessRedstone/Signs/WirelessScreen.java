@@ -57,6 +57,8 @@ public class WirelessScreen extends WirelessPoint implements ConfigurationSerial
         if (getLocation().getBlock() == null)
             return;
 
+        getLocation().getWorld().loadChunk(getLocation().getChunk());
+
         String str;
         if (isChannelOn)
             str = ChatColor.GREEN + "ACTIVE";
