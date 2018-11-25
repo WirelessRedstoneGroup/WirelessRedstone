@@ -53,7 +53,8 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
         Sign sign = (Sign) block.getState();
         sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverSwitchType.get(0));
+        sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDelayerType.get(0));
+        sign.setLine(3, Integer.toString(delay));
         sign.update(true);
     }
 

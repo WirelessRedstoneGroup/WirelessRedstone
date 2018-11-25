@@ -84,7 +84,7 @@ public class Create extends WirelessCommand {
             return;
         }
 
-        //TODO: Implement error message if failed
+        //TODO: #registerSign Implement error message if failed
         int result = WirelessRedstone.getSignManager().registerSign(
                 cname, location.getBlock(), type, Utils.yawToFace(location.getYaw(), false),
                 Collections.singletonList(player.getUniqueId().toString()), extraData

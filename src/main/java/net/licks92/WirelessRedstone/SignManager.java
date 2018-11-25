@@ -27,6 +27,20 @@ public class SignManager {
         return channel.getOwners().contains(player.getName()) || player.hasPermission(Permissions.isWirelessAdmin);
     }
 
+    public boolean canPlaceSign(Player player, SignType signType) {
+        if (player.isOp()) {
+            return true;
+        }
+
+        if (signType == SignType.TRANSMITTER) {
+            return player.hasPermission(Permissions.canCreateTransmitter);
+        } else if (signType == SignType.SCREEN) {
+            return player.hasPermission(Permissions.canCreateScreen);
+        } else {
+            return player.hasPermission(Permissions.canCreateReceiver);
+        }
+    }
+
     public boolean placeSign(String channelName, Location location, SignType type) {
         return placeSign(channelName, location, type, 0);
     }
@@ -37,8 +51,9 @@ public class SignManager {
         }
 
         if (!(location.getBlock().getType() == CompatMaterial.SIGN.getMaterial()
-                || location.getBlock().getType() == CompatMaterial.WALL_SIGN.getMaterial()))
+                || location.getBlock().getType() == CompatMaterial.WALL_SIGN.getMaterial())) {
             location.getBlock().setType(CompatMaterial.SIGN.getMaterial());
+        }
 
         Sign sign = (Sign) location.getBlock().getState();
         org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.SIGN);

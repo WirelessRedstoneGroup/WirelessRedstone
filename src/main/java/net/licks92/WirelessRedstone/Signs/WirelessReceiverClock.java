@@ -15,7 +15,6 @@ public class WirelessReceiverClock extends WirelessReceiver {
 
     private int delay;
     private BukkitTask bukkitTask;
-    private boolean state = false;
 
     public WirelessReceiverClock(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner, int delay) {
         super(x, y, z, world, isWallSign, direction, owner);
@@ -31,8 +30,9 @@ public class WirelessReceiverClock extends WirelessReceiver {
     public void turnOn(String channelName) {
         int delayInTicks = delay / 50;
 
-        //TODO: Start clock
         bukkitTask = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
+            boolean state = false;
+
             @Override
             public void run() {
                 state = !state;
@@ -43,8 +43,10 @@ public class WirelessReceiverClock extends WirelessReceiver {
 
     @Override
     public void turnOff(String channelName) {
-        //TODO: Stop clock
-        Bukkit.getScheduler().cancelTask(bukkitTask.getTaskId());
+        if (bukkitTask != null) {
+            Bukkit.getScheduler().cancelTask(bukkitTask.getTaskId());
+        }
+        changeState(false, channelName);
     }
 
     @Override
@@ -53,6 +55,7 @@ public class WirelessReceiverClock extends WirelessReceiver {
         sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
         sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverClockType.get(0));
+        sign.setLine(3, Integer.toString(delay));
         sign.update(true);
     }
 

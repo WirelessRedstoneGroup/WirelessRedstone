@@ -216,7 +216,7 @@ public class Utils {
             return SignType.SCREEN;
         } else if (WirelessRedstone.getStringManager().tagsReceiver.contains(firstLine)) {
             if (WirelessRedstone.getStringManager().tagsReceiverInverterType.contains(secondLine)) {
-                return SignType.RECEIVER_DELAYER;
+                return SignType.RECEIVER_INVERTER;
             } else if (WirelessRedstone.getStringManager().tagsReceiverSwitchType.contains(secondLine)) {
                 return SignType.RECEIVER_SWITCH;
             } else if (WirelessRedstone.getStringManager().tagsReceiverClockType.contains(secondLine)) {
