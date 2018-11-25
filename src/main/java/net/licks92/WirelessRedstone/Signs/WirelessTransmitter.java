@@ -24,7 +24,6 @@ public class WirelessTransmitter extends WirelessPoint implements ConfigurationS
     }
 
     public WirelessTransmitter(Map<String, Object> map) {
-        signType = SignType.TRANSMITTER;
         owner = (String) map.get("owner");
         world = (String) map.get("world");
         isWallSign = (Boolean) map.get("isWallSign");

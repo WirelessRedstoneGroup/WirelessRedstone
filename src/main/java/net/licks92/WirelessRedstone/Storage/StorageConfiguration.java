@@ -25,14 +25,14 @@ public abstract class StorageConfiguration {
 
     public boolean createWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
-        channel.addWirelessPoint(wirelessPoint);
+//        channel.addWirelessPoint(wirelessPoint);
         WirelessRedstone.getStorageManager().updateList(channelName, channel);
         return true;
     }
 
     public boolean removeWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
-        channel.removeWirelessPoint(wirelessPoint);
+//        channel.removeWirelessPoint(wirelessPoint);
         WirelessRedstone.getStorageManager().updateList(channelName, channel);
         return true;
     }

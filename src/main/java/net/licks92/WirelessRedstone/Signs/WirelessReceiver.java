@@ -28,7 +28,6 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
     }
 
     public WirelessReceiver(Map<String, Object> map) {
-        signType = SignType.RECEIVER;
         owner = (String) map.get("owner");
         world = (String) map.get("world");
         isWallSign = (Boolean) map.get("isWallSign");

@@ -24,7 +24,6 @@ public class WirelessScreen extends WirelessPoint implements ConfigurationSerial
     }
 
     public WirelessScreen(Map<String, Object> map) {
-        signType = SignType.SCREEN;
         owner = (String) map.get("owner");
         world = (String) map.get("world");
         isWallSign = (Boolean) map.get("isWallSign");

@@ -8,7 +8,6 @@ import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +19,10 @@ public class WirelessChannel implements ConfigurationSerializable {
     private boolean active;
     private boolean locked;
 
-    private List<String> owners = new LinkedList<String>();
-    private List<WirelessTransmitter> transmitters = new LinkedList<>();
-    private List<WirelessReceiver> receivers = new LinkedList<WirelessReceiver>();
-    private List<WirelessScreen> screens = new LinkedList<>();
+    private List<String> owners = new ArrayList<>();
+    private List<WirelessTransmitter> transmitters = new ArrayList<>();
+    private List<WirelessReceiver> receivers = new ArrayList<>();
+    private List<WirelessScreen> screens = new ArrayList<>();
 
     public WirelessChannel(String name) {
         this.name = name;

@@ -33,6 +33,7 @@ public class BlockListener implements Listener {
         handleRedstoneEvent(event.getBlock());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @EventHandler
     public void on(SignChangeEvent event) {
         SignType signType = Utils.getSignType(event.getLine(0));

@@ -10,7 +10,6 @@ public abstract class WirelessPoint {
     String owner, world;
     BlockFace direction;
     boolean isWallSign = false;
-    SignType signType;
 
     public int getX() {
         return x;
@@ -42,10 +41,6 @@ public abstract class WirelessPoint {
 
     public boolean isWallSign() {
         return isWallSign;
-    }
-
-    public SignType getSignType() {
-        return signType;
     }
 
     public void setX(int x) {
