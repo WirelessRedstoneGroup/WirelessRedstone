@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone.Signs;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -12,8 +13,8 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
 
     private boolean isActive = false;
 
-    public WirelessReceiverSwitch() {
-        super();
+    public WirelessReceiverSwitch(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner) {
+        super(x, y, z, world, isWallSign, direction, owner);
     }
 
     public WirelessReceiverSwitch(Map<String, Object> map) {

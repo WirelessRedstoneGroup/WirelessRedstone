@@ -43,7 +43,7 @@ public class BlockListener implements Listener {
 
             blockFaces.add(directional.getFacing());
         } else {
-            blockFaces = Utils.getRadialBlockFaces();
+            blockFaces = Utils.getAxisBlockFaces();
         }
 
         if (nextTickBlock != null) {

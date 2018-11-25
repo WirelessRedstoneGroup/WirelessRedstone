@@ -6,20 +6,23 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
 
-@SerializableAs("WirelessReceiverDelayer")
-public class WirelessReceiverDelayer extends WirelessReceiver {
+@SerializableAs("WirelessReceiverClock")
+public class WirelessReceiverClock extends WirelessReceiver {
 
     private int delay;
+    private BukkitTask bukkitTask;
+    private boolean state = false;
 
-    public WirelessReceiverDelayer(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner, int delay) {
+    public WirelessReceiverClock(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner, int delay) {
         super(x, y, z, world, isWallSign, direction, owner);
         this.delay = delay;
     }
 
-    public WirelessReceiverDelayer(Map<String, Object> map) {
+    public WirelessReceiverClock(Map<String, Object> map) {
         super(map);
         delay = (Integer) map.get("delay");
     }
@@ -28,24 +31,20 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
     public void turnOn(String channelName) {
         int delayInTicks = delay / 50;
 
-        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
+        //TODO: Start clock
+        bukkitTask = Bukkit.getScheduler().runTaskTimer(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
-                changeState(true, channelName);
+                state = !state;
+                changeState(state, channelName);
             }
-        }, delayInTicks);
+        }, 0, delayInTicks);
     }
 
     @Override
     public void turnOff(String channelName) {
-        int delayInTicks = delay / 50;
-
-        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                changeState(false, channelName);
-            }
-        }, delayInTicks);
+        //TODO: Stop clock
+        Bukkit.getScheduler().cancelTask(bukkitTask.getTaskId());
     }
 
     @Override
@@ -53,7 +52,7 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
         Sign sign = (Sign) block.getState();
         sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
-        sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverSwitchType.get(0));
+        sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverClockType.get(0));
         sign.update(true);
     }
 

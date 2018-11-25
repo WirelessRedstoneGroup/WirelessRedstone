@@ -13,7 +13,14 @@ import java.util.Map;
 @SerializableAs("WirelessScreen")
 public class WirelessScreen extends WirelessPoint implements ConfigurationSerializable {
 
-    public WirelessScreen() {
+    public WirelessScreen(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
+        this.isWallSign = isWallSign;
+        this.direction = direction;
+        this.owner = owner;
     }
 
     public WirelessScreen(Map<String, Object> map) {

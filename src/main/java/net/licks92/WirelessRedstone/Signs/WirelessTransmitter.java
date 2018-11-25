@@ -13,7 +13,14 @@ import java.util.Map;
 @SerializableAs("WirelessTransmitter")
 public class WirelessTransmitter extends WirelessPoint implements ConfigurationSerializable {
 
-    public WirelessTransmitter() {
+    public WirelessTransmitter(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
+        this.isWallSign = isWallSign;
+        this.direction = direction;
+        this.owner = owner;
     }
 
     public WirelessTransmitter(Map<String, Object> map) {

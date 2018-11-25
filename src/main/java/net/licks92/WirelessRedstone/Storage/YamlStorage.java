@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone.Storage;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessPoint;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverClock;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverDelayer;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverSwitch;
@@ -36,8 +37,7 @@ public class YamlStorage extends StorageConfiguration {
         ConfigurationSerialization.registerClass(WirelessReceiver.class, "WirelessReceiver");
         ConfigurationSerialization.registerClass(WirelessReceiverInverter.class, "WirelessReceiverInverter");
         ConfigurationSerialization.registerClass(WirelessReceiverDelayer.class, "WirelessReceiverDelayer");
-        //TODO: Implement clock
-//        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
+        ConfigurationSerialization.registerClass(WirelessReceiverClock.class, "WirelessReceiverClock");
         ConfigurationSerialization.registerClass(WirelessReceiverSwitch.class, "WirelessReceiverSwitch");
     }
 

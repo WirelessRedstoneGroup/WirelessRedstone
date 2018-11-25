@@ -26,7 +26,16 @@ public class WirelessChannel implements ConfigurationSerializable {
     private List<WirelessScreen> screens = new LinkedList<>();
 
     public WirelessChannel(String name) {
-        this.setName(name);
+        this.name = name;
+        this.active = false;
+        this.locked = false;
+    }
+
+    public WirelessChannel(String name, List<String> owners) {
+        this.name = name;
+        this.owners = owners;
+        this.active = false;
+        this.locked = false;
     }
 
     public WirelessChannel(Map<String, Object> map) {
