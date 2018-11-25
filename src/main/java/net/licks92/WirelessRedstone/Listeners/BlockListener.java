@@ -78,6 +78,25 @@ public class BlockListener implements Listener {
         try {
             delay = Integer.parseInt(event.getLine(3));
         } catch (NumberFormatException ignored) {
+            if (signType == SignType.RECEIVER_DELAYER) {
+                handlePlaceCancelled(event.getBlock());
+                Utils.sendFeedback(WirelessRedstone.getStrings().delayNumberOnly, event.getPlayer(), true);
+                return;
+            } else if (signType == SignType.RECEIVER_CLOCK) {
+                handlePlaceCancelled(event.getBlock());
+                Utils.sendFeedback(WirelessRedstone.getStrings().intervalNumberOnly, event.getPlayer(), true);
+                return;
+            }
+        }
+
+        if (delay < 50 && signType == SignType.RECEIVER_DELAYER) {
+            handlePlaceCancelled(event.getBlock());
+            Utils.sendFeedback(WirelessRedstone.getStrings().commandDelayMin, event.getPlayer(), true);
+            return;
+        } else if (delay < 50 && signType == SignType.RECEIVER_CLOCK) {
+            handlePlaceCancelled(event.getBlock());
+            Utils.sendFeedback(WirelessRedstone.getStrings().commandIntervalMin, event.getPlayer(), true);
+            return;
         }
 
         //TODO: #registerSign Implement error message if failed
