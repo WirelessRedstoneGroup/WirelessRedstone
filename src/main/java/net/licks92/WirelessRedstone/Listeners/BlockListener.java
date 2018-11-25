@@ -58,6 +58,8 @@ public class BlockListener implements Listener {
                 Utils.sendFeedback(WirelessRedstone.getStrings().permissionCreateSign, event.getPlayer(), true, true);
                 return;
             }
+        } else {
+            return;
         }
 
         if (event.getLine(1).equalsIgnoreCase("")) {
@@ -153,6 +155,8 @@ public class BlockListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
+            } else {
+                return;
             }
 
             String channelName = sign.getLine(1);
