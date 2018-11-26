@@ -12,6 +12,7 @@ public @interface CommandInfo {
     String description();
     String usage();
     String[] aliases();
+    WirelessCommandTabCompletion[] tabCompletion() default {};
     String permission();
 
     boolean canUseInConsole();

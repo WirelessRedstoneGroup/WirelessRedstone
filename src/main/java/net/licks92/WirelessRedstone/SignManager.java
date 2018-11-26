@@ -57,7 +57,7 @@ public class SignManager {
 
         Sign sign = (Sign) location.getBlock().getState();
         org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.SIGN);
-        signData.setFacingDirection(Utils.yawToFace(location.getYaw(), false));
+        signData.setFacingDirection(Utils.yawToFace(location.getYaw()));
         sign.setData(signData);
         sign.update();
         sign.setLine(1, channelName);

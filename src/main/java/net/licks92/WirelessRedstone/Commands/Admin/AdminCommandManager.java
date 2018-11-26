@@ -1,5 +1,8 @@
-package net.licks92.WirelessRedstone.Commands;
+package net.licks92.WirelessRedstone.Commands.Admin;
 
+import net.licks92.WirelessRedstone.Commands.CommandInfo;
+import net.licks92.WirelessRedstone.Commands.WirelessCommand;
+import net.licks92.WirelessRedstone.Commands.WirelessCommandTabCompletion;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Storage.StorageType;
@@ -21,39 +24,41 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-public class CommandManager implements CommandExecutor, TabCompleter {
+public class AdminCommandManager implements CommandExecutor, TabCompleter {
 
     private ArrayList<WirelessCommand> cmds;
 
-    public CommandManager() {
+    public AdminCommandManager() {
         cmds = new ArrayList<>();
-        cmds.add(new Help());
-        cmds.add(new Version());
-        cmds.add(new Create());
-        cmds.add(new Remove());
-        cmds.add(new Info());
-        cmds.add(new Activate());
-        cmds.add(new Teleport());
-        cmds.add(new Lock());
+        cmds.add(new AdminHelp());
+        cmds.add(new AdminList());
+//        cmds.add(new AdminAddOwner());
+//        cmds.add(new AdminRemoveOwner());
+        cmds.add(new AdminChangeLanguage());
+//        cmds.add(new AdminConvert());
+//        cmds.add(new AdminBackup());
+//        cmds.add(new AdminRestore());
+//        cmds.add(new AdminPurge());
+//        cmds.add(new AdminWipeData());
+//        cmds.add(new AdminUpdateCache());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("wr") || cmd.getName().equalsIgnoreCase("wredstone")
-                || cmd.getName().equalsIgnoreCase("wifi") || cmd.getName().equalsIgnoreCase("wirelessredstone")) {
+        if (cmd.getName().equalsIgnoreCase("wra") || cmd.getName().equalsIgnoreCase("wradmin")) {
             if (args.length == 0) {
                 int timer = 0;
                 for (WirelessCommand gcmd : cmds) {
                     if (timer == 0)
-                        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false); //TODO: Add this string to the stringloader
+                        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone Admin help menu", sender, false);
                     if (timer >= 8) {
-                        Utils.sendFeedback("Use /wr help 2 for the next page.", sender, false); //TODO: Add this string to the stringloader
+                        Utils.sendFeedback("Use /wra help 2 for the next page.", sender, false); //TODO: Add this string to the stringloader
                         break;
                     }
 
                     CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
-                    if (sender.hasPermission("wirelessredstone.commands." + info.permission())) {
-                        Utils.sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
+                    if (sender.hasPermission("wirelessredstone.Admin." + info.permission())) {
+                        Utils.sendCommandFeedback(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wra "
                                 + StringUtils.join(info.aliases(), "|") + getCommandUsage(info) + ChatColor.WHITE + " - "
                                 + ChatColor.GRAY + info.description(), sender, false);
                         timer++;
@@ -83,13 +88,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            if (!sender.hasPermission("wirelessredstone.commands." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
+            if (!sender.hasPermission("wirelessredstone.Admin." + wanted.getClass().getAnnotation(CommandInfo.class).permission())) {
                 Utils.sendFeedback(WirelessRedstone.getStrings().permissionGeneral, sender, true, true);
                 return true;
             }
 
-            if (!wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock() && !(sender instanceof Player || sender instanceof ConsoleCommandSender)) {
-                WirelessRedstone.getWRLogger().info("Commandblocks are not allowed to run command: /wr " + args[0]);
+            if (!(sender instanceof Player || sender instanceof ConsoleCommandSender)
+                    && !wanted.getClass().getAnnotation(CommandInfo.class).canUseInCommandBlock()) {
+                WirelessRedstone.getWRLogger().info("Commandblocks are not allowed to run command: /wradmin " + args[0]);
                 return true;
             }
 
@@ -110,8 +116,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (sender.isOp() || sender.hasPermission("wirelessredstone.Admin.isAdmin") ||
-                sender.hasPermission("wirelessredstone.commands." + args[0])) {
+        if (sender.isOp() || sender.hasPermission("wirelessredstone.Admin." + args[0])) {
             List<String> completions = new ArrayList<>();
 
             if (args.length == 1) {
@@ -195,4 +200,5 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
         return availableCompletions;
     }
+
 }

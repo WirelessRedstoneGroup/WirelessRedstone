@@ -19,7 +19,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Attachable;
 import org.bukkit.material.Directional;
+import org.bukkit.material.Redstone;
+import org.bukkit.material.TripwireHook;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -175,10 +178,11 @@ public class BlockListener implements Listener {
 
     private void handleRedstoneEvent(Block block) {
         Block nextTickBlock = null;
-        Collection<BlockFace> blockFaces = new ArrayList<>();
+        Collection<BlockFace> blockFaces = Utils.getAxisBlockFaces();
         Material type = block.getType();
 
-        if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() || type == CompatMaterial.REPEATER_OFF.getMaterial()) {
+        if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() || type == CompatMaterial.REPEATER_OFF.getMaterial() ||
+                type == CompatMaterial.COMPARATOR.getMaterial() || type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
             Directional directional = (Directional) block.getState().getData();
 
             if (block.getRelative(directional.getFacing()).getType().isSolid() &&
@@ -186,9 +190,17 @@ public class BlockListener implements Listener {
                 nextTickBlock = block.getRelative(directional.getFacing());
             }
 
+            blockFaces.clear();
             blockFaces.add(directional.getFacing());
-        } else {
-            blockFaces = Utils.getAxisBlockFaces();
+        } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
+            nextTickBlock = block.getRelative(BlockFace.DOWN);
+        } else if (block.getState() != null) {
+            if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
+                    !(block.getState().getData() instanceof TripwireHook)) {
+                Attachable attachable = (Attachable) block.getState().getData();
+                nextTickBlock = block.getRelative(attachable.getFacing());
+                Bukkit.broadcastMessage(nextTickBlock.getLocation().toString());
+            }
         }
 
         if (nextTickBlock != null) {

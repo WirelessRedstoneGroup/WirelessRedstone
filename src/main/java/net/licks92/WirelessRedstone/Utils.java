@@ -12,8 +12,7 @@ import java.util.Collection;
 
 public class Utils {
 
-    private static final BlockFace[] axis = { BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.SELF };
-    private static final BlockFace[] radial = { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
+    private static final BlockFace[] axis = { BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN, BlockFace.SELF };
 
     public static boolean isCompatible() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();
@@ -145,27 +144,12 @@ public class Utils {
 
     /**
      * Gets the horizontal Block Face from a given yaw angle<br>
-     * This includes the NORTH_WEST faces
      *
      * @param yaw angle
      * @return The Block Face of the angle
      */
     public static BlockFace yawToFace(float yaw) {
-        return yawToFace(yaw, true);
-    }
-    /**
-     * Gets the horizontal Block Face from a given yaw angle
-     *
-     * @param yaw angle
-     * @param useSubCardinalDirections setting, True to allow NORTH_WEST to be returned
-     * @return The Block Face of the angle
-     */
-    public static BlockFace yawToFace(float yaw, boolean useSubCardinalDirections) {
-        if (useSubCardinalDirections) {
-            return radial[Math.round(yaw / 45f) & 0x7];
-        } else {
-            return axis[Math.round(yaw / 90f) & 0x3];
-        }
+        return axis[Math.round(yaw / 90f) & 0x3];
     }
 
     public static SignType getType(String text) {

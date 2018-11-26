@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone;
 
+import net.licks92.WirelessRedstone.Commands.Admin.AdminCommandManager;
 import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
@@ -20,6 +21,7 @@ public class WirelessRedstone extends JavaPlugin {
     private static StorageManager storageManager;
     private static SignManager signManager;
     private static CommandManager commandManager;
+    private static AdminCommandManager adminCommandManager;
 
     private ConfigManager config;
     private boolean fullyLoaded = false;
@@ -57,6 +59,10 @@ public class WirelessRedstone extends JavaPlugin {
         return commandManager;
     }
 
+    public static AdminCommandManager getAdminCommandManager() {
+        return adminCommandManager;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -80,6 +86,7 @@ public class WirelessRedstone extends JavaPlugin {
 
         signManager = new SignManager();
         commandManager = new CommandManager();
+        adminCommandManager = new AdminCommandManager();
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new WorldListener(), this);
@@ -95,6 +102,12 @@ public class WirelessRedstone extends JavaPlugin {
         getCommand("wredstone").setTabCompleter(commandManager);
         getCommand("wifi").setTabCompleter(commandManager);
 
+        getCommand("wradmin").setExecutor(adminCommandManager);
+        getCommand("wra").setExecutor(adminCommandManager);
+
+        getCommand("wradmin").setTabCompleter(adminCommandManager);
+        getCommand("wra").setTabCompleter(adminCommandManager);
+
         fullyLoaded = true;
     }
 
@@ -105,6 +118,7 @@ public class WirelessRedstone extends JavaPlugin {
         }
 
         fullyLoaded = false;
+        adminCommandManager = null;
         commandManager = null;
         signManager = null;
         storageManager = null;
@@ -112,5 +126,10 @@ public class WirelessRedstone extends JavaPlugin {
         config = null;
         WRLogger = null;
         instance = null;
+    }
+
+    public void resetStrings() {
+        stringManager = null;
+        stringManager = new StringManager(config.getLanguage());
     }
 }

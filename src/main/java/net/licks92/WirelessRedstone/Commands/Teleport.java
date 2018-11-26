@@ -8,13 +8,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(description = "Teleport to specific sign", usage = "<channel> <type> <signID>", aliases = {"teleport", "tp"},
+        tabCompletion = {WirelessCommandTabCompletion.CHANNEL, WirelessCommandTabCompletion.SIGNTYPE},
         permission = "teleport", canUseInConsole = false, canUseInCommandBlock = false)
 public class Teleport extends WirelessCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            Utils.sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
+            //TODO: Add this to stringloader
+            Utils.sendFeedback("This command is for advanced users only. Use /wr info <channel> <signtype> for more user-friendly version.", sender, true);
             return;
         }
 

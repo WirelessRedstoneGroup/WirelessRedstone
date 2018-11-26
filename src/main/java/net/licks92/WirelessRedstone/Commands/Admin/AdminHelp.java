@@ -1,5 +1,7 @@
-package net.licks92.WirelessRedstone.Commands;
+package net.licks92.WirelessRedstone.Commands.Admin;
 
+import net.licks92.WirelessRedstone.Commands.CommandInfo;
+import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.apache.commons.lang.StringUtils;
@@ -8,12 +10,12 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-@CommandInfo(aliases = {"help", "h"}, description = "Show all available commands",
-        permission = "help", usage = "[page]", canUseInConsole = true, canUseInCommandBlock = true)
-public class Help extends WirelessCommand {
+@CommandInfo(description = "Get admin help page", usage = "[page]", aliases = {"help", "h"},
+        permission = "isAdmin", canUseInConsole = true, canUseInCommandBlock = false)
+public class AdminHelp extends WirelessCommand {
 
     @Override
-    public void onCommand(CommandSender sender, String[] args) { //TODO: Add all these strings to the stringloader
+    public void onCommand(CommandSender sender, String[] args) {
         int page = 1;
         if (args.length > 0) {
             try {
@@ -25,15 +27,15 @@ public class Help extends WirelessCommand {
         }
 
         ArrayList<String> commandList = new ArrayList<>();
-        for (WirelessCommand gcmd : WirelessRedstone.getCommandManager().getCommands()) {
+        for (WirelessCommand gcmd : WirelessRedstone.getAdminCommandManager().getCommands()) {
             CommandInfo info = gcmd.getClass().getAnnotation(CommandInfo.class);
-            commandList.add(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wr "
+            commandList.add(ChatColor.GRAY + "- " + ChatColor.GREEN + "/wra "
                     + StringUtils.join(info.aliases(), ":") + " "
                     + info.usage() + ChatColor.WHITE + " - "
                     + ChatColor.GRAY + info.description());
         }
 
-        int commandListLength = WirelessRedstone.getCommandManager().getCommands().size();
+        int commandListLength = WirelessRedstone.getAdminCommandManager().getCommands().size();
         int maxItemsPerPage = 8;
         int totalPages = 1;
 
@@ -54,7 +56,7 @@ public class Help extends WirelessCommand {
         int currentItem = ((page * maxItemsPerPage) - maxItemsPerPage);
         // 2*3 = 6 ; 6 - 3 = 3
 
-        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone help menu", sender, false);
+        Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone admin help menu", sender, false);
         Utils.sendFeedback(ChatColor.WHITE + "Page " + page + " of " + totalPages, sender, false);
 
         if (totalPages == 0)

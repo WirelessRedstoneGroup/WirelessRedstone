@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 
 @CommandInfo(description = "Create a WirelessPoint", usage = "<channel> <signtype> [sign details]", aliases = {"create", "c"},
+        tabCompletion = {WirelessCommandTabCompletion.CHANNEL, WirelessCommandTabCompletion.SIGNTYPE},
         permission = "create", canUseInConsole = false, canUseInCommandBlock = false)
 public class Create extends WirelessCommand {
 
@@ -86,7 +87,7 @@ public class Create extends WirelessCommand {
 
         //TODO: #registerSign Implement error message if failed
         int result = WirelessRedstone.getSignManager().registerSign(
-                cname, location.getBlock(), type, Utils.yawToFace(location.getYaw(), false),
+                cname, location.getBlock(), type, Utils.yawToFace(location.getYaw()),
                 Collections.singletonList(player.getUniqueId().toString()), extraData
         );
 

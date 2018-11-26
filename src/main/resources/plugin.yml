@@ -12,6 +12,23 @@ commands:
     description: WirelessRedstone menu
     usage: |
       Example: /<command> help
+  wrt:
+    description: Creates a transmitter sign with given channel
+    usage: |
+      Example: /<command> channel
+  wrr:
+    description: Creates a receiver sign with given channel
+    usage: |
+      Example: /<command> channel
+  wrs:
+    description: Creates a screen sign with given channel
+    usage: |
+      Example: /<command> channel
+  wradmin:
+    aliases: [wra]
+    description: WirelessRedstone Admin command
+    usage: |
+      Example: /<command> help
 permissions:
   wirelessredstone.*:
     description: Gives access to all Wireless Redstone commands
@@ -44,7 +61,7 @@ permissions:
       wirelessredstone.commands.version: true
       wirelessredstone.commands.tp: true
   wirelessredstone.admin.*:
-    description: Gives you access to all admin commands
+    description: Gives you access to all Admin commands
     children:
       wirelessredstone.admin.isAdmin: true
       wirelessredstone.admin.addOwner: true

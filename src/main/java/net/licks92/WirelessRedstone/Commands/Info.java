@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(description = "Shows WirelessChannel information", usage = "<channel> [signtype]", aliases = {"info", "i"},
+        tabCompletion = {WirelessCommandTabCompletion.CHANNEL, WirelessCommandTabCompletion.SIGNTYPE},
         permission = "info", canUseInConsole = true, canUseInCommandBlock = true)
 public class Info extends WirelessCommand {
 

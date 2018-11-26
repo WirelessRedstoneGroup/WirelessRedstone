@@ -20,11 +20,11 @@ public class Permissions {
     public static final String canSeeVersion = "wirelessredstone.commands.version";
     public static final String canTeleportToSign = "wirelessredstone.commands.tp";
     //Admin
-    public static final String isWirelessAdmin = "wirelessredstone.admin.isAdmin";
-    public static final String canWipeData = "wirelessredstone.admin.wipedata";
-    public static final String canBackupData = "wirelessredstone.admin.backupdata";
-    public static final String canPurgeData = "wirelessredstone.admin.purgedata";
-    public static final String canConvertData = "wirelessredstone.admin.convertdata";
-    public static final String canRestoreData = "wirelessredstone.admin.restoredata";
+    public static final String isWirelessAdmin = "wirelessredstone.Admin.isAdmin";
+    public static final String canWipeData = "wirelessredstone.Admin.wipedata";
+    public static final String canBackupData = "wirelessredstone.Admin.backupdata";
+    public static final String canPurgeData = "wirelessredstone.Admin.purgedata";
+    public static final String canConvertData = "wirelessredstone.Admin.convertdata";
+    public static final String canRestoreData = "wirelessredstone.Admin.restoredata";
     
 }
