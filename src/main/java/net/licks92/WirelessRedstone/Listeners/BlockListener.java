@@ -191,24 +191,50 @@ public class BlockListener implements Listener {
 
         if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() || type == CompatMaterial.REPEATER_OFF.getMaterial() ||
                 type == CompatMaterial.COMPARATOR.getMaterial() || type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
-            Directional directional = (Directional) block.getState().getData();
+            if (Utils.newMaterialSystem()) {
+                org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
 
-            if (block.getRelative(directional.getFacing()).getType().isSolid() &&
-                    !block.getRelative(directional.getFacing()).getType().isInteractable()) {
-                nextTickBlock = block.getRelative(directional.getFacing());
+                if (block.getRelative(directional.getFacing().getOppositeFace()).getType().isSolid() &&
+                        !block.getRelative(directional.getFacing().getOppositeFace()).getType().isInteractable()) {
+                    nextTickBlock = block.getRelative(directional.getFacing().getOppositeFace());
+                }
+
+                blockFaces = Collections.singletonList(directional.getFacing().getOppositeFace());
+            } else {
+                Directional directional = (Directional) block.getState().getData();
+
+                if (block.getRelative(directional.getFacing()).getType().isSolid() &&
+                        !block.getRelative(directional.getFacing()).getType().isInteractable()) {
+                    nextTickBlock = block.getRelative(directional.getFacing());
+                }
+
+                blockFaces = Collections.singletonList(directional.getFacing());
             }
-
-            blockFaces = Collections.singletonList(directional.getFacing());
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
             nextTickBlock = block.getRelative(BlockFace.DOWN);
-        } else if (block.getState() != null) {
-            if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
-                    !(block.getState().getData() instanceof TripwireHook)) {
-                Attachable attachable = (Attachable) block.getState().getData();
+        } else {
+            if (Utils.newMaterialSystem()) {
+                if (block.getBlockData() != null) {
+                    if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
+                        org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();
+                        BlockFace blockFace = switchBlock.getFacing().getOppositeFace();
 
-                //TODO: Skip UP and DOWN due to a Spigot bug: https://hub.spigotmc.org/jira/browse/SPIGOT-4506
-                if (!(attachable.getAttachedFace() == BlockFace.UP || attachable.getAttachedFace() == BlockFace.DOWN)) {
-                    nextTickBlock = block.getRelative(attachable.getAttachedFace());
+                        if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.FLOOR) {
+                            blockFace = BlockFace.DOWN;
+                        } else if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.CEILING) {
+                            blockFace = BlockFace.UP;
+                        }
+
+                        nextTickBlock = block.getRelative(blockFace);
+                    }
+                }
+            } else {
+                if (block.getState() != null) {
+                    if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
+                            !(block.getState().getData() instanceof TripwireHook)) {
+                        Attachable attachable = (Attachable) block.getState().getData();
+                        nextTickBlock = block.getRelative(attachable.getAttachedFace());
+                    }
                 }
             }
         }
