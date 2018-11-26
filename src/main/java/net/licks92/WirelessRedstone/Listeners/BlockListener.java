@@ -128,6 +128,12 @@ public class BlockListener implements Listener {
                     Utils.sendFeedback(WirelessRedstone.getStrings().channelExtended, event.getPlayer(), false);
                 } else if (result == 1) {
                     Utils.sendFeedback(WirelessRedstone.getStrings().channelCreated, event.getPlayer(), false);
+                } else if (result == -1) {
+                    handlePlaceCancelled(event.getBlock());
+                    Utils.sendFeedback(WirelessRedstone.getStrings().commandDelayMin, event.getPlayer(), true);
+                } else if (result == -2) {
+                    handlePlaceCancelled(event.getBlock());
+                    Utils.sendFeedback(WirelessRedstone.getStrings().commandIntervalMin, event.getPlayer(), true);
                 }
             }
         });
@@ -196,11 +202,14 @@ public class BlockListener implements Listener {
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
             nextTickBlock = block.getRelative(BlockFace.DOWN);
         } else if (block.getState() != null) {
-            //TODO: Skip this due to a Spigot bug: https://hub.spigotmc.org/jira/browse/SPIGOT-4506
-            if (false && block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
+            if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
                     !(block.getState().getData() instanceof TripwireHook)) {
                 Attachable attachable = (Attachable) block.getState().getData();
-                nextTickBlock = block.getRelative(attachable.getAttachedFace());
+
+                //TODO: Skip UP and DOWN due to a Spigot bug: https://hub.spigotmc.org/jira/browse/SPIGOT-4506
+                if (!(attachable.getAttachedFace() == BlockFace.UP || attachable.getAttachedFace() == BlockFace.DOWN)) {
+                    nextTickBlock = block.getRelative(attachable.getAttachedFace());
+                }
             }
         }
 
