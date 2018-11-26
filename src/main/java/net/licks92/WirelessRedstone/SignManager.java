@@ -21,14 +21,29 @@ import java.util.List;
 
 public class SignManager {
 
+    /**
+     * Check if the player has access to a WirelessChannel.<br>
+     * Player passed if the player is OP, has isAdmin permission or is an owner of the channel.
+     *
+     * @param player Player
+     * @param channelName WirelessChannel name
+     * @return If the player has access
+     */
     public boolean hasAccessToChannel(Player player, String channelName) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
 
         return channel.getOwners().contains(player.getName()) || player.hasPermission(Permissions.isWirelessAdmin);
     }
 
+    /**
+     * Check if the player has the permissions to place a sign.
+     *
+     * @param player Player
+     * @param signType SignType
+     * @return Boolean
+     */
     public boolean canPlaceSign(Player player, SignType signType) {
-        if (player.isOp()) {
+        if (player.isOp() || player.hasPermission(Permissions.isWirelessAdmin)) {
             return true;
         }
 
@@ -41,10 +56,28 @@ public class SignManager {
         }
     }
 
+    /**
+     * Place a sign with the correct sign lines at a location.<br>
+     * Extra data for certain receivers is set at 0.
+     *
+     * @param channelName WirelessChannel name
+     * @param location Location of the sign
+     * @param type SignType
+     * @return Boolean; Success or failure
+     */
     public boolean placeSign(String channelName, Location location, SignType type) {
         return placeSign(channelName, location, type, 0);
     }
 
+    /**
+     * Place a sign with the correct sign lines at a location.
+     *
+     * @param channelName WirelessChannel name
+     * @param location Location of the sign
+     * @param type SignType
+     * @param extraData Extra data needed for certain receivers
+     * @return Boolean; Success or failure
+     */
     public boolean placeSign(String channelName, Location location, SignType type, int extraData) {
         if (location.getBlock().getType() != Material.AIR) {
             return false;
@@ -113,10 +146,10 @@ public class SignManager {
      * @param owners All the owners of the channel
      * @param delay Amount of delay for clock & delayer; this can be 0 if it is not one of these types
      * @return Return value<br>
-     *     -1 - Failure; Delayer delay must be >= 50
-     *     -2 - Failure; Clock delay must be >= 50
      *      0 - Success; extended a channel
      *      1 - Success; created a channel
+     *     -1 - Failure; Delayer delay must be >= 50
+     *     -2 - Failure; Clock delay must be >= 50
      */
     public int registerSign(String channelName, Block block, SignType type, BlockFace direction, List<String> owners, int delay) {
         int result = 0;
@@ -227,6 +260,13 @@ public class SignManager {
         return result;
     }
 
+    /**
+     * Remove a sign from the database based on a location.
+     *
+     * @param channelName WirelessChannel name
+     * @param location Location of the sign
+     * @return Boolean; Success or failure (channel/sign not found)
+     */
     public boolean removeSign(String channelName, Location location) {
         if (WirelessRedstone.getStorageManager().getChannel(channelName) == null) {
             return false;

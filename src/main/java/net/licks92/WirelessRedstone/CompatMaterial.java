@@ -44,6 +44,11 @@ public enum CompatMaterial {
         }
     }
 
+    /**
+     * Get a Material instance which is backwards compatible with MC <1.13
+     *
+     * @return Material
+     */
     public Material getMaterial() {
         if (material != null) {
             return material;
@@ -54,6 +59,12 @@ public enum CompatMaterial {
         }
     }
 
+    /**
+     * Check if a Material exists in a Material list.
+     *
+     * @param material Material to check if it exists in the list
+     * @return Boolean; exists or doesn't exists
+     */
     public boolean isMaterial(Material material) {
         if (materials == null) {
             return this.material == material;

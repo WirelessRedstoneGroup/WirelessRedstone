@@ -192,8 +192,7 @@ public class BlockListener implements Listener {
                 nextTickBlock = block.getRelative(directional.getFacing());
             }
 
-            blockFaces.clear();
-            blockFaces.add(directional.getFacing());
+            blockFaces = Collections.singletonList(directional.getFacing());
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
             nextTickBlock = block.getRelative(BlockFace.DOWN);
         } else if (block.getState() != null) {

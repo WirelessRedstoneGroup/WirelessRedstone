@@ -14,6 +14,11 @@ public class Utils {
 
     private static final BlockFace[] axis = { BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN, BlockFace.SELF };
 
+    /**
+     * This checks if the current Minecraft server version is compatible with WirelessRedstone.
+     *
+     * @return If the plugin is compatible
+     */
     public static boolean isCompatible() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();
         String bukkitVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
@@ -27,6 +32,11 @@ public class Utils {
         }
     }
 
+    /**
+     * This checks if the new material system is in place.
+     *
+     * @return If the new material system is needed
+     */
     public static boolean newMaterialSystem() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();
         String bukkitVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
@@ -40,10 +50,25 @@ public class Utils {
         }
     }
 
+    /**
+     * Display a message with prefix to a specific user. This ignores the silent mode.
+     *
+     * @param message Text message
+     * @param sender Where send the message to
+     * @param error Is the message an error
+     */
     public static void sendFeedback(String message, CommandSender sender, boolean error) {
         sendFeedback(message, sender, error, false);
     }
 
+    /**
+     * Display a message with prefix to a specific user.
+     *
+     * @param message Text message
+     * @param sender Where send the message to
+     * @param error Is the message an error
+     * @param checkSilent Don't display message if silent mode is on
+     */
     public static void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
         if (ConfigManager.getConfig().getSilentMode() && checkSilent)
             return;
@@ -51,16 +76,38 @@ public class Utils {
                 + (error ? ChatColor.RED : ChatColor.GREEN) + message);
     }
 
+    /**
+     * Display a message to a specific user. This ignores the silent mode.
+     *
+     * @param message Text message
+     * @param sender Where send the message to
+     * @param error Is the message an error
+     */
     public static void sendCommandFeedback(String message, CommandSender sender, boolean error) {
         sendCommandFeedback(message, sender, error, false);
     }
 
+    /**
+     * Display a message to a specific user.
+     *
+     * @param message Text message
+     * @param sender Where send the message to
+     * @param error Is the message an error
+     * @param checkSilent Don't display message if silent mode is on
+     */
     public static void sendCommandFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
         if (ConfigManager.getConfig().getSilentMode() && checkSilent)
             return;
         sender.sendMessage((error ? ChatColor.RED : ChatColor.GREEN) + message);
     }
 
+    /**
+     * Converts the old direction system to the new BlockFace system.
+     *
+     * @param isWallSign Is the sign against a wall
+     * @param direction Old sign facing id system
+     * @return BlockFace
+     */
     public static BlockFace getBlockFace(boolean isWallSign, int direction) {
         BlockFace blockFace = BlockFace.SELF;
 
@@ -138,6 +185,11 @@ public class Utils {
         return blockFace;
     }
 
+    /**
+     * Gives a collection of adjacent BlockFaces.
+     *
+     * @return All the possible adjacent BlockFaces
+     */
     public static Collection<BlockFace> getAxisBlockFaces() {
         return Arrays.asList(axis);
     }
@@ -190,10 +242,25 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Returns a SignType based on the first line of a sign.<br>
+     * All receiver types are returned as SignType.RECEIVER
+     *
+     * @param firstLine First line of a sign
+     * @return SignType
+     */
     public static SignType getSignType(String firstLine) {
         return getSignType(firstLine, "");
     }
 
+    /**
+     * Returns a SignType based on the first and third line of a sign.<br>
+     * This returns a specific receiver type.
+     *
+     * @param firstLine First line of a sign
+     * @param secondLine Third line of a sign
+     * @return SignType
+     */
     public static SignType getSignType(String firstLine, String secondLine) {
         if (WirelessRedstone.getStringManager().tagsTransmitter.contains(firstLine)) {
             return SignType.TRANSMITTER;
@@ -216,11 +283,24 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Check if two locations are in the same place.
+     *
+     * @param loc1 Location
+     * @param loc2 Location
+     * @return Boolean
+     */
     public static boolean sameLocation(Location loc1, Location loc2) {
         return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ() &&
                 loc1.getWorld().getName().equalsIgnoreCase(loc2.getWorld().getName());
     }
 
+    /**
+     * Mix teleport command together with a player name.
+     *
+     * @param playerName Player name
+     * @return Command
+     */
     public static String getTeleportString(String playerName) {
         return "tellraw " + playerName + " " + "[\"\",{\"text\":\"[\",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\"}]}}},{\"text\":\"\\u27A4\",\"color\":\"aqua\",\"bold\":true,\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\"}]}}},{\"text\":\"] \",\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\"}]}},\"bold\":false},{\"text\":\"Name %%NAME, type: %%TYPE, world: %%WORLD, x: %%XCOORD, y: %%YCOORD, z: %%ZCOORD\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"%%COMMAND\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"%%HOVERTEXT\"}]}}}]";
     }

@@ -130,6 +130,11 @@ public class WirelessRedstone extends JavaPlugin {
         instance = null;
     }
 
+    /**
+     * Re-initialize strings. This can be used to switch languages after a config change.
+     *
+     * Removes reference to stringManager and place a new reference.
+     */
     public void resetStrings() {
         stringManager = null;
         stringManager = new StringManager(config.getLanguage());
