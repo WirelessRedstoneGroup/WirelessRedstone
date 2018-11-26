@@ -254,6 +254,9 @@ public class BlockListener implements Listener {
             return;
 
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(sign.getLine(1));
+        if (channel == null) {
+            return;
+        }
 
         if (powered) {
             channel.turnOn();
