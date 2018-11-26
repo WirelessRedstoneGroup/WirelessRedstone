@@ -113,11 +113,26 @@ public class SignManager {
      * @param owners All the owners of the channel
      * @param delay Amount of delay for clock & delayer; this can be 0 if it is not one of these types
      * @return Return value<br>
-     *  0 - Success; extended a channel
-     *  1 - Success; created a channel
+     *     -1 - Failure; Delayer delay must be >= 50
+     *     -2 - Failure; Clock delay must be >= 50
+     *      0 - Success; extended a channel
+     *      1 - Success; created a channel
      */
     public int registerSign(String channelName, Block block, SignType type, BlockFace direction, List<String> owners, int delay) {
         int result = 0;
+
+        if (type == SignType.RECEIVER_DELAYER){
+            if (delay < 50) {
+                result = -1;
+                return result;
+            }
+        } else if (type == SignType.RECEIVER_CLOCK) {
+            if (delay < 50) {
+                result = -2;
+                return result;
+            }
+        }
+
         if (WirelessRedstone.getStorageManager().getChannel(channelName) == null) {
             result = 1;
             WirelessRedstone.getStorage().createChannel(new WirelessChannel(channelName, owners));

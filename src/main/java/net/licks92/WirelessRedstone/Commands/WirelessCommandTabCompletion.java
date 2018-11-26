@@ -1,5 +1,5 @@
 package net.licks92.WirelessRedstone.Commands;
 
 public enum WirelessCommandTabCompletion {
-    BOOL, CHANNEL, SIGNTYPE, STORAGETYPE
+    BOOL, PLAYER, CHANNEL, SIGNTYPE, STORAGETYPE
 }

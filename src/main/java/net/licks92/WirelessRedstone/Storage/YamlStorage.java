@@ -136,6 +136,15 @@ public class YamlStorage extends StorageConfiguration {
         return super.removeChannel(channelName, removeSigns);
     }
 
+    @Override
+    public boolean wipeData() {
+        for (File f : channelFolder.listFiles(new YamlFilter())) {
+            f.delete();
+        }
+
+        return super.wipeData();
+    }
+
     private boolean setChannel(String channelName, WirelessChannel channel) {
         FileConfiguration channelConfig = new YamlConfiguration();
         try {

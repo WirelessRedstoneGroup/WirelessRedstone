@@ -6,6 +6,7 @@ import net.licks92.WirelessRedstone.Storage.StorageType;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -178,6 +179,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             if (tabCompletion[index] == WirelessCommandTabCompletion.BOOL) {
                 availableCompletions.add(Boolean.TRUE.toString());
                 availableCompletions.add(Boolean.FALSE.toString());
+            } else if (tabCompletion[index] == WirelessCommandTabCompletion.PLAYER) {
+                List<String> players = new ArrayList<>();
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    players.add(player.getName());
+                }
+                availableCompletions.addAll(players);
             } else if (tabCompletion[index] == WirelessCommandTabCompletion.CHANNEL) {
                 for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
                     availableCompletions.add(channel.getName());

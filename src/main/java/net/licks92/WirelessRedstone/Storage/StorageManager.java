@@ -83,6 +83,10 @@ public class StorageManager {
         }
     }
 
+    protected void wipeList() {
+        allChannels.clear();
+    }
+
     public StorageConfiguration getStorage() {
         return storage;
     }

@@ -25,6 +25,7 @@ public abstract class StorageConfiguration {
 
     public boolean createWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
+        //TODO: Investigate if this duplicates the wirelesspoint into the channel
 //        channel.addWirelessPoint(wirelessPoint);
         WirelessRedstone.getStorageManager().updateList(channelName, channel);
         return true;
@@ -32,6 +33,7 @@ public abstract class StorageConfiguration {
 
     public boolean removeWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
+        //TODO: Investigate if this duplicates the wirelesspoint into the channel
 //        channel.removeWirelessPoint(wirelessPoint);
         WirelessRedstone.getStorageManager().updateList(channelName, channel);
         return true;
@@ -58,6 +60,11 @@ public abstract class StorageConfiguration {
         }
         WirelessRedstone.getStorageManager().updateList(channelName, null);
 
+        return true;
+    }
+
+    public boolean wipeData() {
+        WirelessRedstone.getStorageManager().wipeList();
         return true;
     }
 

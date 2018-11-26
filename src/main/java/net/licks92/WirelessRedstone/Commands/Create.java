@@ -95,6 +95,12 @@ public class Create extends WirelessCommand {
             Utils.sendFeedback(WirelessRedstone.getStrings().channelExtended, sender, false);
         } else if (result == 1) {
             Utils.sendFeedback(WirelessRedstone.getStrings().channelCreated, sender, false);
+        } else if (result == -1) {
+            location.getBlock().setType(Material.AIR);
+            Utils.sendFeedback(WirelessRedstone.getStrings().commandDelayMin, sender, true);
+        } else if (result == -2) {
+            location.getBlock().setType(Material.AIR);
+            Utils.sendFeedback(WirelessRedstone.getStrings().commandIntervalMin, sender, true);
         }
     }
 }

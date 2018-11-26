@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone;
 import net.licks92.WirelessRedstone.Commands.Admin.AdminCommandManager;
 import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
+import net.licks92.WirelessRedstone.Listeners.PlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
 import net.licks92.WirelessRedstone.Storage.StorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
@@ -91,6 +92,7 @@ public class WirelessRedstone extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new WorldListener(), this);
         pm.registerEvents(new BlockListener(), this);
+        pm.registerEvents(new PlayerListener(), this);
 
         getCommand("wirelessredstone").setExecutor(commandManager);
         getCommand("wr").setExecutor(commandManager);

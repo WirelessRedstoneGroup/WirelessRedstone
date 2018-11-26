@@ -9,6 +9,7 @@ import net.licks92.WirelessRedstone.Storage.StorageType;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,14 +33,14 @@ public class AdminCommandManager implements CommandExecutor, TabCompleter {
         cmds = new ArrayList<>();
         cmds.add(new AdminHelp());
         cmds.add(new AdminList());
-//        cmds.add(new AdminAddOwner());
-//        cmds.add(new AdminRemoveOwner());
+        cmds.add(new AdminAddOwner());
+        cmds.add(new AdminRemoveOwner());
         cmds.add(new AdminChangeLanguage());
 //        cmds.add(new AdminConvert());
 //        cmds.add(new AdminBackup());
 //        cmds.add(new AdminRestore());
 //        cmds.add(new AdminPurge());
-//        cmds.add(new AdminWipeData());
+        cmds.add(new AdminWipeData());
 //        cmds.add(new AdminUpdateCache());
     }
 
@@ -183,6 +184,12 @@ public class AdminCommandManager implements CommandExecutor, TabCompleter {
             if (tabCompletion[index] == WirelessCommandTabCompletion.BOOL) {
                 availableCompletions.add(Boolean.TRUE.toString());
                 availableCompletions.add(Boolean.FALSE.toString());
+            } else if (tabCompletion[index] == WirelessCommandTabCompletion.PLAYER) {
+                List<String> players = new ArrayList<>();
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    players.add(player.getName());
+                }
+                availableCompletions.addAll(players);
             } else if (tabCompletion[index] == WirelessCommandTabCompletion.CHANNEL) {
                 for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
                     availableCompletions.add(channel.getName());

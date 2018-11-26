@@ -8,6 +8,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,8 @@ public class WirelessChannel implements ConfigurationSerializable {
         } catch (NullPointerException ignored) {
             this.setLocked(false);
         }
+
+        convertOwnersToUuid();
     }
 
     public void turnOn() {
@@ -137,6 +140,33 @@ public class WirelessChannel implements ConfigurationSerializable {
         }
 
         //TODO: Maybe remove owner from wirelesspoint to list of owners
+    }
+
+    public void addOwner(String uuid) {
+        if (!owners.contains(uuid))
+            owners.add(uuid);
+    }
+
+    public void removeOwner(String uuid) {
+        owners.remove(uuid);
+    }
+
+    public void convertOwnersToUuid() {
+        Iterator<String> ownersIterator = owners.iterator();
+        while (ownersIterator.hasNext()) {
+            String owner = ownersIterator.next();
+            if (!owner.contains("-")) {
+                if (Bukkit.getPlayer(owner) == null) {
+                    if (Bukkit.getOfflinePlayer(owner).hasPlayedBefore()) {
+                        owners.add(Bukkit.getOfflinePlayer(owner).getUniqueId().toString());
+                        owners.remove(owner);
+                    }
+                } else {
+                    owners.add(Bukkit.getPlayer(owner).getUniqueId().toString());
+                    owners.remove(owner);
+                }
+            }
+        }
     }
 
     public int getId() {

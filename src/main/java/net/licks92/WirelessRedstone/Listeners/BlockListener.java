@@ -66,6 +66,8 @@ public class BlockListener implements Listener {
             return;
         }
 
+        signType = Utils.getSignType(event.getLine(0), event.getLine(2));
+
         if (event.getLine(1).equalsIgnoreCase("")) {
             handlePlaceCancelled(event.getBlock());
             Utils.sendFeedback(WirelessRedstone.getStrings().noChannelName, event.getPlayer(), true);
@@ -195,11 +197,11 @@ public class BlockListener implements Listener {
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
             nextTickBlock = block.getRelative(BlockFace.DOWN);
         } else if (block.getState() != null) {
-            if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
+            //TODO: Skip this due to a Spigot bug: https://hub.spigotmc.org/jira/browse/SPIGOT-4506
+            if (false && block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
                     !(block.getState().getData() instanceof TripwireHook)) {
                 Attachable attachable = (Attachable) block.getState().getData();
-                nextTickBlock = block.getRelative(attachable.getFacing());
-                Bukkit.broadcastMessage(nextTickBlock.getLocation().toString());
+                nextTickBlock = block.getRelative(attachable.getAttachedFace());
             }
         }
 
