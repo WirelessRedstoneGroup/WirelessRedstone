@@ -75,6 +75,10 @@ public class PlayerListener implements Listener {
             }
         }
 
+        if (WirelessRedstone.getSignManager().isSignRegistred(event.getClickedBlock().getLocation())) {
+            return;
+        }
+
         int delay = 0;
         try {
             delay = Integer.parseInt(sign.getLine(3));

@@ -28,7 +28,7 @@ public enum CompatMaterial {
             materialMap.put(material.toString(), material);
         }
 
-        if (Utils.newMaterialSystem()) {
+        if (Utils.isNewMaterialSystem()) {
             this.material = materialMap.get(newVersion);
         } else {
             this.material = materialMap.get(oldVersion);

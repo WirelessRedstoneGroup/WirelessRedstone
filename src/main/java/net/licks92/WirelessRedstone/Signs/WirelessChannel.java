@@ -97,12 +97,18 @@ public class WirelessChannel implements ConfigurationSerializable {
         boolean canTurnOff = true;
         if (ConfigManager.getConfig().useORLogic() && !force) {
             for (WirelessTransmitter transmitter : getTransmitters()) {
-                if (transmitter.isPowered())
+                if (transmitter.isPowered()) {
                     canTurnOff = false;
+                }
             }
         }
 
         if (!canTurnOff) {
+            active = true;
+            return;
+        }
+
+        if (!active) {
             return;
         }
 

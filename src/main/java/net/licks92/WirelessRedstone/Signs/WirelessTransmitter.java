@@ -36,7 +36,7 @@ public class WirelessTransmitter extends WirelessPoint implements ConfigurationS
         } catch (IllegalArgumentException e) {
             try {
                 int directionInt = Integer.parseInt(map.get("direction").toString());
-                direction = Utils.getBlockFace(isWallSign, directionInt);
+                direction = Utils.getBlockFace(false, directionInt); // In the past normal signs and wall signs where saved under one direction
             } catch (NumberFormatException ignored) {
             }
         }

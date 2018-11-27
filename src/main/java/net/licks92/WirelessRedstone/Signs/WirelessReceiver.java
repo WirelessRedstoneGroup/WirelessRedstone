@@ -1,16 +1,19 @@
 package net.licks92.WirelessRedstone.Signs;
 
 import net.licks92.WirelessRedstone.CompatMaterial;
+import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.material.RedstoneTorch;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +43,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
         } catch (IllegalArgumentException e) {
             try {
                 int directionInt = Integer.parseInt(map.get("direction").toString());
-                direction = Utils.getBlockFace(isWallSign, directionInt);
+                direction = Utils.getBlockFace(false, directionInt); // In the past normal signs and wall signs where saved under one direction
             } catch (NumberFormatException ignored) {
             }
         }
@@ -66,33 +69,81 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
         if (newState) {
             if (isWallSign()) {
-                block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial());
+                if (Utils.isNewMaterialSystem()) {
+                    block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial());
+                    BlockState torch = block.getState();
 
-                RedstoneTorch torch = new RedstoneTorch();
-                torch.setFacingDirection(direction);
+                    RedstoneTorch torchData = new RedstoneTorch();
+                    torchData.setFacingDirection(direction);
+                    torch.setData(torchData);
+                    torch.update();
+                } else {
+                    boolean reflectionWorked = false;
+                    try {
+                        Class<?> blockClass = Class.forName("org.bukkit.block.Block");
+                        Method setTypeIdAndData = blockClass.getMethod("setTypeIdAndData", Integer.TYPE, Byte.TYPE, Boolean.TYPE);
+                        setTypeIdAndData.invoke(block, 76, Utils.getRawData(true, direction), true);
+                        reflectionWorked = true;
+                    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        WirelessRedstone.getWRLogger().debug("Couldn't pass setTypeIdAndData");
 
-                block.getState().setData(torch);
+                        if (ConfigManager.getConfig().getDebugMode()) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (!reflectionWorked) {
+                        block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial(), false);
+                        BlockState sign = block.getState();
+
+                        sign.setRawData(Utils.getRawData(true, direction));
+                        sign.update();
+                    }
+                }
             } else {
                 block.setType(CompatMaterial.REDSTONE_TORCH.getMaterial());
             }
         } else {
             if (isWallSign()) {
-                block.setType(CompatMaterial.WALL_SIGN.getMaterial());
+                if (Utils.isNewMaterialSystem()) {
+                    block.setType(CompatMaterial.WALL_SIGN.getMaterial(), false);
+                    BlockState sign = block.getState();
 
-                Sign sign = (Sign) block.getState();
+                    org.bukkit.material.Sign signData = new org.bukkit.material.Sign();
+                    signData.setFacingDirection(direction);
+                    sign.setData(signData);
+                    sign.update();
+                } else {
+                    boolean reflectionWorked = false;
+                    try {
+                        Class<?> blockClass = Class.forName("org.bukkit.block.Block");
+                        Method setTypeIdAndData = blockClass.getMethod("setTypeIdAndData", Integer.TYPE, Byte.TYPE, Boolean.TYPE);
+                        setTypeIdAndData.invoke(block, 68, Utils.getRawData(false, direction), true);
+                        reflectionWorked = true;
+                    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        WirelessRedstone.getWRLogger().debug("Couldn't pass setTypeIdAndData");
 
-                org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.WALL_SIGN);
-                signData.setFacingDirection(direction);
-                sign.setData(signData);
-                sign.update();
+                        if (ConfigManager.getConfig().getDebugMode()) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (!reflectionWorked) {
+                        block.setType(CompatMaterial.WALL_SIGN.getMaterial(), false);
+                        BlockState sign = block.getState();
+
+                        sign.setRawData(Utils.getRawData(false, direction));
+                        sign.update();
+                    }
+                }
 
                 changeSignContent(block, channelName);
             } else {
                 block.setType(CompatMaterial.SIGN.getMaterial());
 
-                Sign sign = (Sign) block.getState();
+                BlockState sign = block.getState();
 
-                org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.SIGN);
+                org.bukkit.material.Sign signData = new org.bukkit.material.Sign();
                 signData.setFacingDirection(direction);
                 sign.setData(signData);
                 sign.update();
@@ -103,11 +154,15 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
     }
 
     public void changeSignContent(Block block, String channelName) {
+        if (!(block.getState() instanceof Sign)) {
+            return;
+        }
+
         Sign sign = (Sign) block.getState();
         sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
         sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDefaultType.get(0));
-        sign.update(true);
+        sign.update();
     }
 
     @Override

@@ -32,7 +32,11 @@ public class SignManager {
     public boolean hasAccessToChannel(Player player, String channelName) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
 
-        return channel.getOwners().contains(player.getName()) || player.hasPermission(Permissions.isWirelessAdmin);
+        if (channel == null) {
+            return true;
+        }
+
+        return channel.getOwners().contains(player.getUniqueId().toString()) || player.hasPermission(Permissions.isWirelessAdmin) || player.isOp();
     }
 
     /**
@@ -258,6 +262,22 @@ public class SignManager {
 
         WirelessRedstone.getStorage().createWirelessPoint(channelName, point);
         return result;
+    }
+
+    /**
+     * Check if a sign is registred at a location.
+     *
+     * @param location Location of the sign
+     * @return Boolean; Sign registred or not
+     */
+    public boolean isSignRegistred(Location location) {
+        for (WirelessPoint point : WirelessRedstone.getStorageManager().getAllSigns()) {
+            if (Utils.sameLocation(point.getLocation(), location)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

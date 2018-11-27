@@ -16,7 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
@@ -31,12 +31,40 @@ import java.util.List;
 
 public class BlockListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void on(BlockRedstoneEvent event) {
-        handleRedstoneEvent(event.getBlock());
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(BlockPhysicsEvent event) {
+        if (event.getBlock() == null) {
+            return;
+        }
+
+        if (event.getBlock().getState() == null) {
+            return;
+        }
+
+        if (event.getBlock().getState().getData() == null) {
+            return;
+        }
+
+        if (Utils.isNewMaterialSystem()) {
+            if (!(event.getBlock().getBlockData() instanceof org.bukkit.block.data.Powerable)) {
+                return;
+            }
+        } else {
+            if (!(event.getBlock().getState().getData() instanceof Redstone)) {
+                return;
+            }
+        }
+
+        boolean isPowered = false;
+        if (Utils.isNewMaterialSystem()) {
+            isPowered = ((org.bukkit.block.data.Powerable) event.getBlock().getBlockData()).isPowered();
+        } else {
+            isPowered = ((Redstone) event.getBlock().getState().getData()).isPowered();
+        }
+
+        handleRedstoneEvent(event.getBlock(), isPowered);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @EventHandler
     public void on(SignChangeEvent event) {
         SignType signType = Utils.getSignType(event.getLine(0));
@@ -184,19 +212,19 @@ public class BlockListener implements Listener {
         }
     }
 
-    private void handleRedstoneEvent(Block block) {
-        Block nextTickBlock = null;
+    private void handleRedstoneEvent(Block block, boolean isPowered) {
         Collection<BlockFace> blockFaces = Utils.getAxisBlockFaces();
+        List<Location> locations = new ArrayList<>();
         Material type = block.getType();
 
         if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() || type == CompatMaterial.REPEATER_OFF.getMaterial() ||
                 type == CompatMaterial.COMPARATOR.getMaterial() || type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
-            if (Utils.newMaterialSystem()) {
+            if (Utils.isNewMaterialSystem()) {
                 org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
 
                 if (block.getRelative(directional.getFacing().getOppositeFace()).getType().isSolid() &&
                         !block.getRelative(directional.getFacing().getOppositeFace()).getType().isInteractable()) {
-                    nextTickBlock = block.getRelative(directional.getFacing().getOppositeFace());
+                    locations.add(block.getRelative(directional.getFacing().getOppositeFace()).getRelative(directional.getFacing().getOppositeFace()).getLocation());
                 }
 
                 blockFaces = Collections.singletonList(directional.getFacing().getOppositeFace());
@@ -205,15 +233,15 @@ public class BlockListener implements Listener {
 
                 if (block.getRelative(directional.getFacing()).getType().isSolid() &&
                         !block.getRelative(directional.getFacing()).getType().isInteractable()) {
-                    nextTickBlock = block.getRelative(directional.getFacing());
+                    locations.add(block.getRelative(directional.getFacing()).getRelative(directional.getFacing()).getLocation());
                 }
 
                 blockFaces = Collections.singletonList(directional.getFacing());
             }
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
-            nextTickBlock = block.getRelative(BlockFace.DOWN);
+            locations.add(block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN).getLocation());
         } else {
-            if (Utils.newMaterialSystem()) {
+            if (Utils.isNewMaterialSystem()) {
                 if (block.getBlockData() != null) {
                     if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
                         org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();
@@ -225,7 +253,7 @@ public class BlockListener implements Listener {
                             blockFace = BlockFace.UP;
                         }
 
-                        nextTickBlock = block.getRelative(blockFace);
+                        locations.add(block.getRelative(blockFace).getRelative(blockFace).getLocation());
                     }
                 }
             } else {
@@ -233,23 +261,12 @@ public class BlockListener implements Listener {
                     if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
                             !(block.getState().getData() instanceof TripwireHook)) {
                         Attachable attachable = (Attachable) block.getState().getData();
-                        nextTickBlock = block.getRelative(attachable.getAttachedFace());
+                        locations.add(block.getRelative(attachable.getAttachedFace()).getRelative(attachable.getAttachedFace()).getLocation());
                     }
                 }
             }
         }
 
-        if (nextTickBlock != null) {
-            final Block finalNextTickBlock = nextTickBlock;
-            Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    handleRedstoneEvent(finalNextTickBlock);
-                }
-            });
-        }
-
-        List<Location> locations = new ArrayList<>();
         for (BlockFace blockFace : blockFaces) {
             if (block.getRelative(blockFace).getState() instanceof Sign) {
                 locations.add(block.getRelative(blockFace).getLocation());
@@ -257,16 +274,14 @@ public class BlockListener implements Listener {
         }
 
         if (!locations.isEmpty()) {
-            Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    for (Location location : locations) {
-                        Sign sign = (Sign) location.getBlock().getState();
-
-                        updateRedstonePower(sign, block.isBlockPowered() || block.isBlockIndirectlyPowered());
-                    }
+            for (Location location : locations) {
+                if (!(location.getBlock().getState() instanceof Sign)) {
+                    continue;
                 }
-            });
+
+                Sign sign = (Sign) location.getBlock().getState();
+                updateRedstonePower(sign, isPowered);
+            }
         }
     }
 

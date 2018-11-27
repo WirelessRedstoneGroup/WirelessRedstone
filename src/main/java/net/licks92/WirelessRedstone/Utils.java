@@ -12,7 +12,7 @@ import java.util.Collection;
 
 public class Utils {
 
-    private static final BlockFace[] axis = { BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN, BlockFace.SELF };
+    private static final BlockFace[] axis = {BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN, BlockFace.SELF};
 
     /**
      * This checks if the current Minecraft server version is compatible with WirelessRedstone.
@@ -37,7 +37,7 @@ public class Utils {
      *
      * @return If the new material system is needed
      */
-    public static boolean newMaterialSystem() {
+    public static boolean isNewMaterialSystem() {
         final String packageName = Bukkit.getServer().getClass().getPackage().getName();
         String bukkitVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
 
@@ -54,8 +54,8 @@ public class Utils {
      * Display a message with prefix to a specific user. This ignores the silent mode.
      *
      * @param message Text message
-     * @param sender Where send the message to
-     * @param error Is the message an error
+     * @param sender  Where send the message to
+     * @param error   Is the message an error
      */
     public static void sendFeedback(String message, CommandSender sender, boolean error) {
         sendFeedback(message, sender, error, false);
@@ -64,9 +64,9 @@ public class Utils {
     /**
      * Display a message with prefix to a specific user.
      *
-     * @param message Text message
-     * @param sender Where send the message to
-     * @param error Is the message an error
+     * @param message     Text message
+     * @param sender      Where send the message to
+     * @param error       Is the message an error
      * @param checkSilent Don't display message if silent mode is on
      */
     public static void sendFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
@@ -80,8 +80,8 @@ public class Utils {
      * Display a message to a specific user. This ignores the silent mode.
      *
      * @param message Text message
-     * @param sender Where send the message to
-     * @param error Is the message an error
+     * @param sender  Where send the message to
+     * @param error   Is the message an error
      */
     public static void sendCommandFeedback(String message, CommandSender sender, boolean error) {
         sendCommandFeedback(message, sender, error, false);
@@ -90,9 +90,9 @@ public class Utils {
     /**
      * Display a message to a specific user.
      *
-     * @param message Text message
-     * @param sender Where send the message to
-     * @param error Is the message an error
+     * @param message     Text message
+     * @param sender      Where send the message to
+     * @param error       Is the message an error
      * @param checkSilent Don't display message if silent mode is on
      */
     public static void sendCommandFeedback(String message, CommandSender sender, boolean error, boolean checkSilent) {
@@ -105,84 +105,94 @@ public class Utils {
      * Converts the old direction system to the new BlockFace system.
      *
      * @param isWallSign Is the sign against a wall
-     * @param direction Old sign facing id system
+     * @param direction  Old sign facing id system
      * @return BlockFace
      */
     public static BlockFace getBlockFace(boolean isWallSign, int direction) {
         BlockFace blockFace = BlockFace.SELF;
 
         if (isWallSign) {
-            switch (direction) {
-                case 2:
-                    blockFace = BlockFace.NORTH;
-                    break;
-                case 3:
-                    blockFace = BlockFace.SOUTH;
-                    break;
-                case 4:
-                    blockFace = BlockFace.WEST;
-                    break;
-                case 5:
-                    blockFace = BlockFace.EAST;
-                    break;
-                default:
-                    blockFace = BlockFace.NORTH;
-                    break;
+            if (direction == 2) {
+                blockFace = BlockFace.NORTH;
+            } else if (direction == 3) {
+                blockFace = BlockFace.SOUTH;
+            } else if (direction == 4) {
+                blockFace = BlockFace.WEST;
+            } else if (direction == 5) {
+                blockFace = BlockFace.EAST;
+            } else {
+                blockFace = BlockFace.NORTH;
             }
         } else {
-            switch (direction) {
-                case 0:
-                    blockFace = BlockFace.SOUTH;
-                    break;
-                case 1:
-                    blockFace = BlockFace.SOUTH_SOUTH_WEST;
-                    break;
-                case 2:
-                    blockFace = BlockFace.SOUTH_WEST;
-                    break;
-                case 3:
-                    blockFace = BlockFace.WEST_SOUTH_WEST;
-                    break;
-                case 4:
-                    blockFace = BlockFace.WEST;
-                    break;
-                case 5:
-                    blockFace = BlockFace.WEST_NORTH_WEST;
-                    break;
-                case 6:
-                    blockFace = BlockFace.NORTH_WEST;
-                    break;
-                case 7:
-                    blockFace = BlockFace.NORTH_NORTH_WEST;
-                    break;
-                case 8:
-                    blockFace = BlockFace.NORTH;
-                    break;
-                case 9:
-                    blockFace = BlockFace.NORTH_NORTH_EAST;
-                    break;
-                case 10:
-                    blockFace = BlockFace.NORTH_EAST;
-                    break;
-                case 11:
-                    blockFace = BlockFace.EAST_NORTH_EAST;
-                    break;
-                case 12:
-                    blockFace = BlockFace.EAST;
-                    break;
-                case 13:
-                    blockFace = BlockFace.EAST_SOUTH_EAST;
-                    break;
-                case 14:
-                    blockFace = BlockFace.SOUTH_EAST;
-                    break;
-                case 15:
-                    blockFace = BlockFace.SOUTH_SOUTH_EAST;
-                    break;
+            if (direction == 0) {
+                blockFace = BlockFace.SOUTH;
+            } else if (direction == 1) {
+                blockFace = BlockFace.SOUTH_SOUTH_WEST;
+            } else if (direction == 2) {
+                blockFace = BlockFace.SOUTH_WEST;
+            } else if (direction == 3) {
+                blockFace = BlockFace.WEST_SOUTH_WEST;
+            } else if (direction == 4) {
+                blockFace = BlockFace.WEST;
+            } else if (direction == 5) {
+                blockFace = BlockFace.WEST_NORTH_WEST;
+            } else if (direction == 6) {
+                blockFace = BlockFace.NORTH_WEST;
+            } else if (direction == 7) {
+                blockFace = BlockFace.NORTH_NORTH_WEST;
+            } else if (direction == 8) {
+                blockFace = BlockFace.NORTH;
+            } else if (direction == 9) {
+                blockFace = BlockFace.NORTH_NORTH_EAST;
+            } else if (direction == 10) {
+                blockFace = BlockFace.NORTH_EAST;
+            } else if (direction == 11) {
+                blockFace = BlockFace.EAST_NORTH_EAST;
+            } else if (direction == 12) {
+                blockFace = BlockFace.EAST;
+            } else if (direction == 13) {
+                blockFace = BlockFace.EAST_SOUTH_EAST;
+            } else if (direction == 14) {
+                blockFace = BlockFace.SOUTH_EAST;
+            } else if (direction == 15) {
+                blockFace = BlockFace.SOUTH_SOUTH_EAST;
             }
         }
 
         return blockFace;
+    }
+
+    /**
+     * Deprecated!<br>
+     * Converts BlockFace to a raw byte direction for wall signs/torches.
+     *
+     * @param isTorch   If the block is a torch
+     * @param blockFace The direction the wall sign/torch is facing
+     * @return raw byte code for direction
+     */
+    @Deprecated
+    public static byte getRawData(boolean isTorch, BlockFace blockFace) {
+        if (isTorch) {
+            if (blockFace == BlockFace.NORTH)
+                return (byte)4;
+            else if (blockFace == BlockFace.SOUTH)
+                return (byte)3;
+            else if (blockFace == BlockFace.WEST)
+                return (byte)2;
+            else if (blockFace == BlockFace.EAST)
+                return (byte)1;
+            return (byte)0;
+        } else {
+            if (blockFace == BlockFace.NORTH)
+                return (byte)2;
+            else if (blockFace == BlockFace.SOUTH)
+                return (byte)3;
+            else if (blockFace == BlockFace.WEST)
+                return (byte)4;
+            else if (blockFace == BlockFace.EAST)
+                return (byte)5;
+            return (byte)0;
+        }
     }
 
     /**
@@ -257,7 +267,7 @@ public class Utils {
      * Returns a SignType based on the first and third line of a sign.<br>
      * This returns a specific receiver type.
      *
-     * @param firstLine First line of a sign
+     * @param firstLine  First line of a sign
      * @param secondLine Third line of a sign
      * @return SignType
      */
