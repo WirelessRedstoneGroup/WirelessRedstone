@@ -10,6 +10,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverSwitch;
 import net.licks92.WirelessRedstone.Signs.WirelessScreen;
 import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,6 +18,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class SignManager {
@@ -308,6 +312,26 @@ public class SignManager {
 
         WirelessRedstone.getStorage().removeWirelessPoint(channelName, point);
         return true;
+    }
+
+    public HashMap<WirelessChannel, Collection<WirelessPoint>> getAllInvalidPoints() {
+        HashMap<WirelessChannel, Collection<WirelessPoint>> map = new HashMap<>();
+
+        for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
+            List<WirelessPoint> points = new ArrayList<>();
+
+            for (WirelessPoint point : channel.getSigns()) {
+                if (Bukkit.getWorld(point.getWorld()) == null) {
+                    points.add(point);
+                }
+            }
+
+            if (!points.isEmpty()) {
+                map.put(channel, points);
+            }
+        }
+
+        return map;
     }
 
 }

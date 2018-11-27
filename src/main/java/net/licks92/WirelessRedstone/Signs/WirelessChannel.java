@@ -243,6 +243,10 @@ public class WirelessChannel implements ConfigurationSerializable {
         return signs;
     }
 
+    public boolean isEmpty() {
+        return getSigns().isEmpty();
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<String, Object>();
