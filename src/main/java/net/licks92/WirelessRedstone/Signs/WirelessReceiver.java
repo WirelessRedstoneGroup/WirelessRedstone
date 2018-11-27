@@ -61,10 +61,12 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
         if (getLocation() == null)
             return;
 
-        if (getLocation().getBlock() == null)
-            return;
-
         getLocation().getWorld().loadChunk(getLocation().getChunk());
+
+        if (getLocation().getBlock() == null) {
+            return;
+        }
+
         Block block = getLocation().getBlock();
 
         if (newState) {

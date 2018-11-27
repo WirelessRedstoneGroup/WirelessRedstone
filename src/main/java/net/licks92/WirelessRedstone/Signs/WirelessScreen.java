@@ -54,10 +54,15 @@ public class WirelessScreen extends WirelessPoint implements ConfigurationSerial
         if (getLocation() == null)
             return;
 
-        if (getLocation().getBlock() == null)
-            return;
-
         getLocation().getWorld().loadChunk(getLocation().getChunk());
+
+        if (getLocation().getBlock() == null) {
+            return;
+        }
+
+        if (!(getLocation().getBlock().getState() instanceof Sign)) {
+            return;
+        }
 
         String str;
         if (isChannelOn)

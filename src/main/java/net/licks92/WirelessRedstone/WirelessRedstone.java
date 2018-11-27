@@ -9,6 +9,8 @@ import net.licks92.WirelessRedstone.Storage.StorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.String.StringManager;
 import net.licks92.WirelessRedstone.String.Strings;
+import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
+import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +27,7 @@ public class WirelessRedstone extends JavaPlugin {
     private static AdminCommandManager adminCommandManager;
 
     private ConfigManager config;
+    private WorldEditHooker worldEditHooker;
     private boolean fullyLoaded = false;
 
 
@@ -62,6 +65,14 @@ public class WirelessRedstone extends JavaPlugin {
 
     public static AdminCommandManager getAdminCommandManager() {
         return adminCommandManager;
+    }
+
+    public WorldEditHooker getWorldEditHooker() {
+        return worldEditHooker;
+    }
+
+    public void setWorldEditHooker(WorldEditHooker worldEditHooker) {
+        this.worldEditHooker = worldEditHooker;
     }
 
     @Override
@@ -109,6 +120,8 @@ public class WirelessRedstone extends JavaPlugin {
 
         getCommand("wradmin").setTabCompleter(adminCommandManager);
         getCommand("wra").setTabCompleter(adminCommandManager);
+
+        new WorldEditLoader();
 
         fullyLoaded = true;
     }

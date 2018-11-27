@@ -25,6 +25,7 @@ import org.bukkit.material.Redstone;
 import org.bukkit.material.TripwireHook;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -224,6 +225,10 @@ public class BlockListener implements Listener {
 
                 if (block.getRelative(directional.getFacing().getOppositeFace()).getType().isSolid() &&
                         !block.getRelative(directional.getFacing().getOppositeFace()).getType().isInteractable()) {
+                    Block relBlock = block.getRelative(directional.getFacing().getOppositeFace());
+                    for (BlockFace axisBlockFace : Utils.getAxisBlockFaces()) {
+                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+                    }
                     locations.add(block.getRelative(directional.getFacing().getOppositeFace()).getRelative(directional.getFacing().getOppositeFace()).getLocation());
                 }
 
@@ -233,6 +238,10 @@ public class BlockListener implements Listener {
 
                 if (block.getRelative(directional.getFacing()).getType().isSolid() &&
                         !block.getRelative(directional.getFacing()).getType().isInteractable()) {
+                    Block relBlock = block.getRelative(directional.getFacing());
+                    for (BlockFace axisBlockFace : Utils.getAxisBlockFaces()) {
+                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+                    }
                     locations.add(block.getRelative(directional.getFacing()).getRelative(directional.getFacing()).getLocation());
                 }
 
@@ -253,6 +262,10 @@ public class BlockListener implements Listener {
                             blockFace = BlockFace.UP;
                         }
 
+                        Block relBlock = block.getRelative(blockFace);
+                        for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+                            locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+                        }
                         locations.add(block.getRelative(blockFace).getRelative(blockFace).getLocation());
                     }
                 }
@@ -261,6 +274,11 @@ public class BlockListener implements Listener {
                     if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
                             !(block.getState().getData() instanceof TripwireHook)) {
                         Attachable attachable = (Attachable) block.getState().getData();
+
+                        Block relBlock = block.getRelative(attachable.getAttachedFace());
+                        for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+                            locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+                        }
                         locations.add(block.getRelative(attachable.getAttachedFace()).getRelative(attachable.getAttachedFace()).getLocation());
                     }
                 }
