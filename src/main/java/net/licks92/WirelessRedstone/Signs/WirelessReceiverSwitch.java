@@ -29,6 +29,8 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
         } else {
             super.turnOn(channelName);
         }
+
+        isActive = !isActive;
     }
 
     @Override

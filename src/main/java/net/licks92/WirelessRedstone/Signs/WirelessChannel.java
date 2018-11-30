@@ -1,8 +1,10 @@
 package net.licks92.WirelessRedstone.Signs;
 
 import net.licks92.WirelessRedstone.ConfigManager;
+import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -64,6 +66,10 @@ public class WirelessChannel implements ConfigurationSerializable {
             return;
         }
 
+        if (active) {
+            return;
+        }
+
         active = true;
 
         for (WirelessReceiver receiver : getReceivers()) {
@@ -78,17 +84,17 @@ public class WirelessChannel implements ConfigurationSerializable {
             Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    turnOff(true);
+                    turnOff(null, true);
                 }
             }, time / 50);
         }
     }
 
     public void turnOff() {
-        turnOff(false);
+        turnOff(null, false);
     }
 
-    public void turnOff(boolean force) {
+    public void turnOff(Location loc, boolean force) {
         if (isLocked()) {
             WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn off because locked.");
             return;
@@ -97,6 +103,12 @@ public class WirelessChannel implements ConfigurationSerializable {
         boolean canTurnOff = true;
         if (ConfigManager.getConfig().useORLogic() && !force) {
             for (WirelessTransmitter transmitter : getTransmitters()) {
+                if (loc != null) {
+                    if (Utils.sameLocation(loc, transmitter.getLocation())) {
+                        continue;
+                    }
+                }
+
                 if (transmitter.isPowered()) {
                     canTurnOff = false;
                 }

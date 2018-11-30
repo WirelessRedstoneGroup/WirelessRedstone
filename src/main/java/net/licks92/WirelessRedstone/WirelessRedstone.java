@@ -121,7 +121,9 @@ public class WirelessRedstone extends JavaPlugin {
         getCommand("wradmin").setTabCompleter(adminCommandManager);
         getCommand("wra").setTabCompleter(adminCommandManager);
 
-        new WorldEditLoader();
+        if (pm.isPluginEnabled("WorldEdit")) {
+            new WorldEditLoader();
+        }
 
         fullyLoaded = true;
     }

@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
@@ -31,6 +32,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class BlockListener implements Listener {
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(BlockRedstoneEvent event) {
+        if (event.getNewCurrent() < event.getOldCurrent() && event.getNewCurrent() != 0) {
+            return;
+        }
+
+        if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
+            handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, true);
+        }
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void on(BlockPhysicsEvent event) {
@@ -56,6 +68,10 @@ public class BlockListener implements Listener {
             }
         }
 
+        if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
+            return;
+        }
+
         boolean isPowered = false;
         if (Utils.isNewMaterialSystem()) {
             isPowered = ((org.bukkit.block.data.Powerable) event.getBlock().getBlockData()).isPowered();
@@ -63,7 +79,7 @@ public class BlockListener implements Listener {
             isPowered = ((Redstone) event.getBlock().getState().getData()).isPowered();
         }
 
-        handleRedstoneEvent(event.getBlock(), isPowered);
+        handleRedstoneEvent(event.getBlock(), isPowered, false);
     }
 
     @EventHandler
@@ -213,7 +229,7 @@ public class BlockListener implements Listener {
         }
     }
 
-    private void handleRedstoneEvent(Block block, boolean isPowered) {
+    private void handleRedstoneEvent(Block block, boolean powered, boolean skipLocation) {
         Collection<BlockFace> blockFaces = Utils.getAxisBlockFaces();
         List<Location> locations = new ArrayList<>();
         Material type = block.getType();
@@ -223,27 +239,31 @@ public class BlockListener implements Listener {
             if (Utils.isNewMaterialSystem()) {
                 org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
 
-                if (block.getRelative(directional.getFacing().getOppositeFace()).getType().isSolid() &&
+                if (block.getRelative(directional.getFacing().getOppositeFace()).getType().isOccluding() &&
                         !block.getRelative(directional.getFacing().getOppositeFace()).getType().isInteractable()) {
                     Block relBlock = block.getRelative(directional.getFacing().getOppositeFace());
                     for (BlockFace axisBlockFace : Utils.getAxisBlockFaces()) {
                         locations.add(relBlock.getRelative(axisBlockFace).getLocation());
                     }
-                    locations.add(block.getRelative(directional.getFacing().getOppositeFace()).getRelative(directional.getFacing().getOppositeFace()).getLocation());
+
                 }
+
+                locations.add(block.getRelative(directional.getFacing().getOppositeFace()).getRelative(directional.getFacing().getOppositeFace()).getLocation());
 
                 blockFaces = Collections.singletonList(directional.getFacing().getOppositeFace());
             } else {
                 Directional directional = (Directional) block.getState().getData();
 
-                if (block.getRelative(directional.getFacing()).getType().isSolid() &&
+                if (block.getRelative(directional.getFacing()).getType().isOccluding() &&
                         !block.getRelative(directional.getFacing()).getType().isInteractable()) {
                     Block relBlock = block.getRelative(directional.getFacing());
                     for (BlockFace axisBlockFace : Utils.getAxisBlockFaces()) {
                         locations.add(relBlock.getRelative(axisBlockFace).getLocation());
                     }
-                    locations.add(block.getRelative(directional.getFacing()).getRelative(directional.getFacing()).getLocation());
+
                 }
+
+                locations.add(block.getRelative(directional.getFacing()).getRelative(directional.getFacing()).getLocation());
 
                 blockFaces = Collections.singletonList(directional.getFacing());
             }
@@ -298,7 +318,7 @@ public class BlockListener implements Listener {
                 }
 
                 Sign sign = (Sign) location.getBlock().getState();
-                updateRedstonePower(sign, isPowered);
+                updateRedstonePower(sign, powered, skipLocation);
             }
         }
     }
@@ -311,7 +331,7 @@ public class BlockListener implements Listener {
         }
     }
 
-    private void updateRedstonePower(Sign sign, boolean powered) {
+    private void updateRedstonePower(Sign sign, boolean powered, boolean skipLocation) {
         if (Utils.getSignType(sign.getLine(0)) != SignType.TRANSMITTER)
             return;
 
@@ -329,7 +349,7 @@ public class BlockListener implements Listener {
         if (powered) {
             channel.turnOn();
         } else {
-            channel.turnOff();
+            channel.turnOff(skipLocation ? sign.getLocation() : null, false);
         }
     }
 
