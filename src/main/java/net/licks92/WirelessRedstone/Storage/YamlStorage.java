@@ -52,6 +52,10 @@ public class YamlStorage extends StorageConfiguration {
 
     @Override
     public boolean close() {
+        for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
+            setChannel(channel.getName(), channel);
+        }
+
         return true;
     }
 
