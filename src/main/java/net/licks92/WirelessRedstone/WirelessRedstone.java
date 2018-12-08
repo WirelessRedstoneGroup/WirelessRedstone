@@ -16,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class WirelessRedstone extends JavaPlugin {
 
-    private static final String CHANNEL_FOLDER = "channels";
+    public static final String CHANNEL_FOLDER = "channels";
 
     private static WirelessRedstone instance;
     private static WRLogger WRLogger;

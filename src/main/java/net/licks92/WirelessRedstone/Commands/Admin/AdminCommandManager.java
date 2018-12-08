@@ -37,7 +37,7 @@ public class AdminCommandManager implements CommandExecutor, TabCompleter {
         cmds.add(new AdminRemoveOwner());
         cmds.add(new AdminChangeLanguage());
 //        cmds.add(new AdminConvert());
-//        cmds.add(new AdminBackup());
+        cmds.add(new AdminBackup());
 //        cmds.add(new AdminRestore());
         cmds.add(new AdminPurge());
         cmds.add(new AdminWipeData());

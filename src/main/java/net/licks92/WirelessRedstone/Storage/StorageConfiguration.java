@@ -8,10 +8,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public abstract class StorageConfiguration {
 
@@ -100,6 +107,49 @@ public abstract class StorageConfiguration {
         }
 
         return response;
+    }
+
+    public boolean backupData() {
+        byte[] buffer = new byte[1024];
+
+        if (!(new File(WirelessRedstone.getInstance().getDataFolder(), WirelessRedstone.CHANNEL_FOLDER).exists())) {
+            return false;
+        }
+
+        try {
+            String zipName = "WRBackup "
+                    + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-"
+                    + Calendar.getInstance().get(Calendar.MONTH) + "-"
+                    + Calendar.getInstance().get(Calendar.YEAR) + "_"
+                    + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "."
+                    + Calendar.getInstance().get(Calendar.MINUTE) + "."
+                    + Calendar.getInstance().get(Calendar.SECOND);
+            FileOutputStream fos = new FileOutputStream(WirelessRedstone.getInstance().getDataFolder() + File.separator + zipName + ".zip");
+            ZipOutputStream zos = new ZipOutputStream(fos);
+
+            for (File file : (new File(WirelessRedstone.getInstance().getDataFolder(), WirelessRedstone.CHANNEL_FOLDER)).listFiles()) {
+
+                ZipEntry ze = new ZipEntry(file.getName());
+                zos.putNextEntry(ze);
+
+                FileInputStream in = new FileInputStream(file);
+
+                int len;
+                while ((len = in.read(buffer)) > 0) {
+                    zos.write(buffer, 0, len);
+                }
+
+                in.close();
+            }
+
+            zos.closeEntry();
+            zos.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     public boolean wipeData() {
