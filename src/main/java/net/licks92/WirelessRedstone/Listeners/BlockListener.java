@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -185,7 +186,18 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler
+    public void on(BlockPlaceEvent event) {
+        if (event.getBlock().getType() == Material.REDSTONE_BLOCK || event.getBlock().getType() == CompatMaterial.REDSTONE_TORCH.getMaterial()) {
+            handleRedstoneEvent(event.getBlock(), true, false);
+        }
+    }
+
+    @EventHandler
     public void on(BlockBreakEvent event) {
+        if (event.getBlock().getType() == Material.REDSTONE_BLOCK || event.getBlock().getType() == CompatMaterial.REDSTONE_TORCH.getMaterial()) {
+            handleRedstoneEvent(event.getBlock(), false, true);
+        }
+
         if (event.getBlock().getState() instanceof Sign) {
             Sign sign = (Sign) event.getBlock().getState();
 
