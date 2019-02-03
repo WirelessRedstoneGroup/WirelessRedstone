@@ -73,12 +73,11 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
         if (isWallSign()) {
             BlockFace blockFace = null;
-            BlockFace availableBlockFace = getAvailableWallFace(getLocation());
 
             if (block.getRelative(direction.getOppositeFace()).getType() != Material.AIR) {
                 blockFace = direction;
-            } else if (availableBlockFace != null) {
-                blockFace = availableBlockFace;
+            } else if (getAvailableWallFace(getLocation()) != null) {
+                blockFace = getAvailableWallFace(getLocation());
             }
 //            WirelessRedstone.getWRLogger().debug("Is solid " + (block.getRelative(direction.getOppositeFace()).getType() != Material.AIR));
 //            WirelessRedstone.getWRLogger().debug("Location " + block.getRelative(direction.getOppositeFace()).getLocation());
