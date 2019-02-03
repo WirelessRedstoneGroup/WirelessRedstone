@@ -67,5 +67,16 @@ public class WirelessTransmitter extends WirelessPoint implements ConfigurationS
         return map;
     }
 
-
+    @Override
+    public String toString() {
+        return "WirelessTransmitter{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", owner='" + owner + '\'' +
+                ", world='" + world + '\'' +
+                ", direction=" + direction +
+                ", isWallSign=" + isWallSign +
+                '}';
+    }
 }

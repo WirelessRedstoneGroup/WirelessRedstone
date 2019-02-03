@@ -22,10 +22,10 @@ public class StorageManager {
     public StorageManager(StorageType type, String channelFolder) {
         File channelFolderFile = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
         channelFolderFile.mkdir();
-        switch (type) { //TODO: Add SQL support
+        switch (type) {
             case SQLITE:
-//                storage = new SQLiteStorage(channelFolder);
-//                break;
+                storage = new SQLiteStorage(channelFolder);
+                break;
             case YAML:
                 storage = new YamlStorage(channelFolder);
                 break;

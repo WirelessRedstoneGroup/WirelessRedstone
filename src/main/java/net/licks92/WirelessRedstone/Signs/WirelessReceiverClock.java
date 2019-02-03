@@ -77,4 +77,17 @@ public class WirelessReceiverClock extends WirelessReceiver {
         return map;
     }
 
+    @Override
+    public String toString() {
+        return "WirelessReceiverClock{" +
+                "delay=" + delay +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", owner='" + owner + '\'' +
+                ", world='" + world + '\'' +
+                ", direction=" + direction +
+                ", isWallSign=" + isWallSign +
+                '}';
+    }
 }

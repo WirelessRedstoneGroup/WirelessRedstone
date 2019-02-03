@@ -88,5 +88,16 @@ public class WirelessScreen extends WirelessPoint implements ConfigurationSerial
         return map;
     }
 
-
+    @Override
+    public String toString() {
+        return "WirelessScreen{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", owner='" + owner + '\'' +
+                ", world='" + world + '\'' +
+                ", direction=" + direction +
+                ", isWallSign=" + isWallSign +
+                '}';
+    }
 }

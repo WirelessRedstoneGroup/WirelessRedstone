@@ -71,4 +71,16 @@ public abstract class WirelessPoint {
         isWallSign = wallSign;
     }
 
+    @Override
+    public String toString() {
+        return "WirelessPoint{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", owner='" + owner + '\'' +
+                ", world='" + world + '\'' +
+                ", direction=" + direction +
+                ", isWallSign=" + isWallSign +
+                '}';
+    }
 }

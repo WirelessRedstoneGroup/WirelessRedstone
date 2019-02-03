@@ -236,4 +236,16 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
     }
 
 
+    @Override
+    public String toString() {
+        return "WirelessReceiver{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", owner='" + owner + '\'' +
+                ", world='" + world + '\'' +
+                ", direction=" + direction +
+                ", isWallSign=" + isWallSign +
+                '}';
+    }
 }

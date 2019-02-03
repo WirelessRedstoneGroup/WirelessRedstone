@@ -17,6 +17,11 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
         super(x, y, z, world, isWallSign, direction, owner);
     }
 
+    public WirelessReceiverSwitch(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner, boolean state) {
+        super(x, y, z, world, isWallSign, direction, owner);
+        isActive = state;
+    }
+
     public WirelessReceiverSwitch(Map<String, Object> map) {
         super(map);
         isActive = (Boolean) map.get("state");

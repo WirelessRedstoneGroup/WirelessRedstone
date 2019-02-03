@@ -38,4 +38,16 @@ public class WirelessReceiverInverter extends WirelessReceiver {
         sign.update(true);
     }
 
+    @Override
+    public String toString() {
+        return "WirelessReceiverInverter{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", owner='" + owner + '\'' +
+                ", world='" + world + '\'' +
+                ", direction=" + direction +
+                ", isWallSign=" + isWallSign +
+                '}';
+    }
 }

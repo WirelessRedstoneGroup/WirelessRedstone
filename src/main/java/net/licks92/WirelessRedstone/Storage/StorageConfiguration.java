@@ -88,7 +88,7 @@ public abstract class StorageConfiguration {
                     break;
                 }
 
-                WirelessRedstone.getWRLogger().debug("Purged WirelessPoint because the location is invalid.");
+                WirelessRedstone.getWRLogger().debug("Purged WirelessPoint " + point.getLocation().toString() + " because the location is invalid.");
 
                 response++;
             }

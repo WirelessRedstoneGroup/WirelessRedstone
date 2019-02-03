@@ -40,6 +40,13 @@ public class WirelessChannel implements ConfigurationSerializable {
         this.locked = false;
     }
 
+    public WirelessChannel(String name, List<String> owners, boolean locked) {
+        this.name = name;
+        this.owners = owners;
+        this.active = false;
+        this.locked = locked;
+    }
+
     public WirelessChannel(Map<String, Object> map) {
         this.setId((Integer) map.get("id"));
         this.setName((String) map.get("name"));
@@ -272,4 +279,17 @@ public class WirelessChannel implements ConfigurationSerializable {
         return map;
     }
 
+    @Override
+    public String toString() {
+        return "WirelessChannel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", active=" + active +
+                ", locked=" + locked +
+                ", owners=" + owners +
+                ", transmitters=" + transmitters +
+                ", receivers=" + receivers +
+                ", screens=" + screens +
+                '}';
+    }
 }
