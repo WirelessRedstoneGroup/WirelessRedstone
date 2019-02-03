@@ -10,9 +10,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.RedstoneWallTorch;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
-import org.bukkit.material.RedstoneTorch;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -89,10 +89,10 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                     if (blockFace != null) {
                         block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial());
                         BlockState torch = block.getState();
-                        RedstoneTorch torchData = new RedstoneTorch();
+                        RedstoneWallTorch torchData = (RedstoneWallTorch) block.getBlockData();
 
-                        torchData.setFacingDirection(blockFace);
-                        torch.setData(torchData);
+                        torchData.setFacing(blockFace);
+                        torch.setBlockData(torchData);
                         torch.update();
                     } else {
                         block.setType(Material.AIR);
