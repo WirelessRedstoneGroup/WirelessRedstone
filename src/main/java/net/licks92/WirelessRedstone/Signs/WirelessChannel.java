@@ -33,6 +33,12 @@ public class WirelessChannel implements ConfigurationSerializable {
         this.locked = false;
     }
 
+    public WirelessChannel(String name, boolean locked) {
+        this.name = name;
+        this.active = false;
+        this.locked = locked;
+    }
+
     public WirelessChannel(String name, List<String> owners) {
         this.name = name;
         this.owners = owners;

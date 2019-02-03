@@ -5,6 +5,7 @@ import com.tylersuehr.sql.SQLiteDatabase;
 import com.tylersuehr.sql.SQLiteOpenHelper;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.Signs.WirelessPoint;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverClock;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverDelayer;
@@ -24,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class DatabaseClient extends SQLiteOpenHelper {
     private static final String DB_NAME = "WirelessRedstoneDatabase";
@@ -54,6 +56,14 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
     @Override
     protected void onCreate(SQLiteDatabase db) {
+        try {
+            String sql = IOUtils.toString(WirelessRedstone.getInstance().getResource("Database_1.sql"), StandardCharsets.UTF_8);
+            db.execSql(sql);
+        } catch (IOException e) {
+            WirelessRedstone.getWRLogger().info("There was an error while initializing the database.");
+
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -79,6 +89,162 @@ public class DatabaseClient extends SQLiteOpenHelper {
      */
     protected SQLiteDatabase getDatabase() {
         return db;
+    }
+
+    protected Collection<WirelessChannel> getAllChannels() {
+        Collection<WirelessChannel> channels = new ArrayList<>();
+
+        try {
+            ResultSet resultSet = getDatabase().query("channel",null, null, null);
+            while (resultSet.next()) {
+                channels.add(new WirelessChannel(resultSet.getString("name"), resultSet.getBoolean("locked")));
+            }
+
+            resultSet.close();
+
+            Iterator<WirelessChannel> iterator = channels.iterator();
+            while (iterator.hasNext()) {
+                WirelessChannel channel = iterator.next();
+
+                resultSet = getDatabase().query("owner", new String[]{"user"}, "[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    channel.addOwner(resultSet.getString("user"));
+                }
+
+                resultSet.close();
+
+                resultSet = getDatabase().query("transmitter","[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    WirelessPoint point = new WirelessTransmitter(
+                            resultSet.getInt("x"),
+                            resultSet.getInt("y"),
+                            resultSet.getInt("z"),
+                            resultSet.getString("world"),
+                            resultSet.getInt("is_wallsign") != 0,
+                            BlockFace.valueOf(resultSet.getString("direction")),
+                            resultSet.getString("owner")
+                    );
+                    channel.addWirelessPoint(point);
+                    WirelessRedstone.getWRLogger().debug("Transmitter found: " + point);
+                }
+
+                resultSet.close();
+
+                resultSet = getDatabase().query("receiver","[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    WirelessPoint point = new WirelessReceiver(
+                            resultSet.getInt("x"),
+                            resultSet.getInt("y"),
+                            resultSet.getInt("z"),
+                            resultSet.getString("world"),
+                            resultSet.getInt("is_wallsign") != 0,
+                            BlockFace.valueOf(resultSet.getString("direction")),
+                            resultSet.getString("owner")
+                    );
+                    channel.addWirelessPoint(point);
+                    WirelessRedstone.getWRLogger().debug("Receiver found: " + point);
+                }
+
+                resultSet.close();
+
+                resultSet = getDatabase().query("screen","[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    WirelessPoint point = new WirelessScreen(
+                            resultSet.getInt("x"),
+                            resultSet.getInt("y"),
+                            resultSet.getInt("z"),
+                            resultSet.getString("world"),
+                            resultSet.getInt("is_wallsign") != 0,
+                            BlockFace.valueOf(resultSet.getString("direction")),
+                            resultSet.getString("owner")
+                    );
+                    channel.addWirelessPoint(point);
+                    WirelessRedstone.getWRLogger().debug("Screen found: " + point);
+                }
+
+                resultSet.close();
+
+                resultSet = getDatabase().query("inverter","[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    WirelessPoint point = new WirelessReceiverInverter(
+                            resultSet.getInt("x"),
+                            resultSet.getInt("y"),
+                            resultSet.getInt("z"),
+                            resultSet.getString("world"),
+                            resultSet.getInt("is_wallsign") != 0,
+                            BlockFace.valueOf(resultSet.getString("direction")),
+                            resultSet.getString("owner")
+                    );
+                    channel.addWirelessPoint(point);
+                    WirelessRedstone.getWRLogger().debug("Inverter found: " + point);
+                }
+
+                resultSet.close();
+
+                resultSet = getDatabase().query("delayer","[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    WirelessPoint point = new WirelessReceiverDelayer(
+                            resultSet.getInt("x"),
+                            resultSet.getInt("y"),
+                            resultSet.getInt("z"),
+                            resultSet.getString("world"),
+                            resultSet.getInt("is_wallsign") != 0,
+                            BlockFace.valueOf(resultSet.getString("direction")),
+                            resultSet.getString("owner"),
+                            resultSet.getInt("delay")
+                    );
+                    channel.addWirelessPoint(point);
+                    WirelessRedstone.getWRLogger().debug("Delayer found: " + point);
+                }
+
+                resultSet.close();
+
+                resultSet = getDatabase().query("switch","[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    WirelessPoint point = new WirelessReceiverSwitch(
+                            resultSet.getInt("x"),
+                            resultSet.getInt("y"),
+                            resultSet.getInt("z"),
+                            resultSet.getString("world"),
+                            resultSet.getInt("is_wallsign") != 0,
+                            BlockFace.valueOf(resultSet.getString("direction")),
+                            resultSet.getString("owner"),
+                            resultSet.getBoolean("state")
+                    );
+                    channel.addWirelessPoint(point);
+                    WirelessRedstone.getWRLogger().debug("Switch found: " + point);
+                }
+
+                resultSet.close();
+
+                resultSet = getDatabase().query("clock","[channel_name]='" + channel.getName() + "'", null, null);
+                while (resultSet.next()) {
+                    WirelessPoint point = new WirelessReceiverClock(
+                            resultSet.getInt("x"),
+                            resultSet.getInt("y"),
+                            resultSet.getInt("z"),
+                            resultSet.getString("world"),
+                            resultSet.getInt("is_wallsign") != 0,
+                            BlockFace.valueOf(resultSet.getString("direction")),
+                            resultSet.getString("owner"),
+                            resultSet.getInt("delay")
+                    );
+                    channel.addWirelessPoint(point);
+                    WirelessRedstone.getWRLogger().debug("Clock found: " + point);
+                }
+
+                resultSet.close();
+            }
+        } catch (SQLException e) {
+            WirelessRedstone.getWRLogger().severe("Couldn't retrieve channels from the database!");
+
+            e.printStackTrace();
+        }
+        return channels;
+    }
+
+    protected void recreateDatabase() {
+        onCreate(getDatabase());
     }
 
     private void performUpdate1(SQLiteDatabase db) throws SQLException, IOException {
@@ -142,7 +308,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                         switch (signType) {
                             case TRANSMITTER:
-                                WirelessTransmitter transmitter = new WirelessTransmitter(
+                                WirelessPoint point = new WirelessTransmitter(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),
@@ -151,12 +317,12 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         BlockFace.valueOf(resultSet.getString("direction")),
                                         resultSet.getString("signOwner")
                                 );
-                                channel.addWirelessPoint(transmitter);
+                                channel.addWirelessPoint(point);
 
-                                WirelessRedstone.getWRLogger().debug(transmitter.toString());
+                                WirelessRedstone.getWRLogger().debug(point.toString());
                                 break;
                             case RECEIVER:
-                                WirelessReceiver receiver = new WirelessReceiver(
+                                point = new WirelessReceiver(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),
@@ -165,12 +331,12 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         BlockFace.valueOf(resultSet.getString("direction")),
                                         resultSet.getString("signOwner")
                                 );
-                                channel.addWirelessPoint(receiver);
+                                channel.addWirelessPoint(point);
 
-                                WirelessRedstone.getWRLogger().debug(receiver.toString());
+                                WirelessRedstone.getWRLogger().debug(point.toString());
                                 break;
                             case SCREEN:
-                                WirelessScreen screen = new WirelessScreen(
+                                point = new WirelessScreen(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),
@@ -179,12 +345,12 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         BlockFace.valueOf(resultSet.getString("direction")),
                                         resultSet.getString("signOwner")
                                 );
-                                channel.addWirelessPoint(screen);
+                                channel.addWirelessPoint(point);
 
-                                WirelessRedstone.getWRLogger().debug(screen.toString());
+                                WirelessRedstone.getWRLogger().debug(point.toString());
                                 break;
                             case RECEIVER_INVERTER:
-                                receiver = new WirelessReceiverInverter(
+                                point = new WirelessReceiverInverter(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),
@@ -193,9 +359,9 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         BlockFace.valueOf(resultSet.getString("direction")),
                                         resultSet.getString("signOwner")
                                 );
-                                channel.addWirelessPoint(receiver);
+                                channel.addWirelessPoint(point);
 
-                                WirelessRedstone.getWRLogger().debug(receiver.toString());
+                                WirelessRedstone.getWRLogger().debug(point.toString());
                                 break;
                             case RECEIVER_DELAYER:
                                 int delay;
@@ -206,7 +372,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                     continue;
                                 }
 
-                                receiver = new WirelessReceiverDelayer(
+                                point = new WirelessReceiverDelayer(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),
@@ -216,16 +382,16 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getString("signOwner"),
                                         delay
                                 );
-                                channel.addWirelessPoint(receiver);
+                                channel.addWirelessPoint(point);
 
-                                WirelessRedstone.getWRLogger().debug(receiver.toString());
+                                WirelessRedstone.getWRLogger().debug(point.toString());
                                 break;
                             case RECEIVER_SWITCH:
                                 boolean state;
 
                                 state = Boolean.parseBoolean(signTypeSerialized.split("_")[2]);
 
-                                receiver = new WirelessReceiverSwitch(
+                                point = new WirelessReceiverSwitch(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),
@@ -235,9 +401,9 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getString("signOwner"),
                                         state
                                 );
-                                channel.addWirelessPoint(receiver);
+                                channel.addWirelessPoint(point);
 
-                                WirelessRedstone.getWRLogger().debug(receiver.toString());
+                                WirelessRedstone.getWRLogger().debug(point.toString());
                                 break;
                             case RECEIVER_CLOCK:
                                 try {
@@ -246,7 +412,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                     continue;
                                 }
 
-                                receiver = new WirelessReceiverDelayer(
+                                point = new WirelessReceiverDelayer(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),
@@ -256,9 +422,9 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getString("signOwner"),
                                         delay
                                 );
-                                channel.addWirelessPoint(receiver);
+                                channel.addWirelessPoint(point);
 
-                                WirelessRedstone.getWRLogger().debug(receiver.toString());
+                                WirelessRedstone.getWRLogger().debug(point.toString());
                                 break;
                         }
                     }
@@ -394,14 +560,6 @@ public class DatabaseClient extends SQLiteOpenHelper {
                 }
             }
         }
-    }
-
-    protected ResultSet getAllChannels() {
-        return getDatabase().rawQuery("SELECT [name] FROM [sqlite_master] WHERE [type] = 'table'");
-    }
-
-    protected ResultSet getChannelInfo(String channelName) {
-        return getDatabase().query(channelName, null, null, null);
     }
 
     private SignType getSignType(String signTypeSerialized) {

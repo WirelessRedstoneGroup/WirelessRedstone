@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS [transmiter];
+DROP TABLE IF EXISTS [transmitter];
 DROP TABLE IF EXISTS [receiver];
 DROP TABLE IF EXISTS [screen];
 DROP TABLE IF EXISTS [inverter];

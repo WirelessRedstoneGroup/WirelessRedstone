@@ -1,12 +1,10 @@
 package net.licks92.WirelessRedstone.Storage;
 
-import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessPoint;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class SQLiteStorage extends StorageConfiguration {
@@ -38,33 +36,7 @@ public class SQLiteStorage extends StorageConfiguration {
 
     @Override
     protected Collection<WirelessChannel> getAllChannels() {
-        Collection<WirelessChannel> channels = new ArrayList<>();
-
-        return channels;
-    }
-
-    private SignType getSignType(String signTypeSerialized) {
-        if (signTypeSerialized.equalsIgnoreCase("transmitter")) {
-            return SignType.TRANSMITTER;
-        } else if (signTypeSerialized.equalsIgnoreCase("receiver")) {
-            return SignType.RECEIVER;
-        } else if (signTypeSerialized.equalsIgnoreCase("screen")) {
-            return SignType.SCREEN;
-        } else if (signTypeSerialized.contains("receiver")) {
-            String[] receiver = signTypeSerialized.split("_");
-
-            if (receiver[1].equalsIgnoreCase("inverter")) {
-                return SignType.RECEIVER_INVERTER;
-            } else if (receiver[1].equalsIgnoreCase("delayer")) {
-                return SignType.RECEIVER_DELAYER;
-            } else if (receiver[1].equalsIgnoreCase("switch")) {
-                return SignType.RECEIVER_SWITCH;
-            } else if (receiver[1].equalsIgnoreCase("clock")) {
-                return SignType.RECEIVER_CLOCK;
-            }
-        }
-
-        return null;
+        return DatabaseClient.getInstance().getAllChannels();
     }
 
     @Override
@@ -94,6 +66,8 @@ public class SQLiteStorage extends StorageConfiguration {
 
     @Override
     public boolean wipeData() {
+        DatabaseClient.getInstance().recreateDatabase();
+
         return super.wipeData();
     }
 }
