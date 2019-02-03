@@ -12,7 +12,9 @@ import java.util.Collection;
 
 public class Utils {
 
-    private static final BlockFace[] axis = {BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN, BlockFace.SELF};
+    private static final BlockFace[] axis = {BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.SELF};
+    private static final BlockFace[] fullAxis = {BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN, BlockFace.SELF};
+
 
     /**
      * This checks if the current Minecraft server version is compatible with WirelessRedstone.
@@ -201,7 +203,17 @@ public class Utils {
      * @return All the possible adjacent BlockFaces
      */
     public static Collection<BlockFace> getAxisBlockFaces() {
-        return Arrays.asList(axis);
+        return getAxisBlockFaces(true);
+    }
+
+    /**
+     * Gives a collection of adjacent BlockFaces.
+     *
+     * @param upAndDown Include directions up and down
+     * @return All the possible adjacent BlockFaces
+     */
+    public static Collection<BlockFace> getAxisBlockFaces(boolean upAndDown) {
+        return Arrays.asList(upAndDown ? fullAxis : axis);
     }
 
     /**

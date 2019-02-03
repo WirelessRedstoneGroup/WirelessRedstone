@@ -53,9 +53,9 @@ public class YamlStorage extends StorageConfiguration {
     @Override
     public boolean close() {
         //TODO: See if there is a better way to save active state
-//        for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
-//            setChannel(channel.getName(), channel);
-//        }
+        for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
+            setChannel(channel.getName(), channel);
+        }
 
         return true;
     }

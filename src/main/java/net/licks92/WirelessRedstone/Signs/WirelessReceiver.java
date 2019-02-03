@@ -4,6 +4,8 @@ import net.licks92.WirelessRedstone.CompatMaterial;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -69,23 +71,42 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
         Block block = getLocation().getBlock();
 
-        if (newState) {
-            if (isWallSign()) {
-                if (Utils.isNewMaterialSystem()) {
-                    block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial());
-                    BlockState torch = block.getState();
+        if (isWallSign()) {
+            BlockFace blockFace = null;
+            BlockFace availableBlockFace = getAvailableWallFace(getLocation());
 
-                    RedstoneTorch torchData = new RedstoneTorch();
-                    torchData.setFacingDirection(direction);
-                    torch.setData(torchData);
-                    torch.update();
+            if (block.getRelative(direction.getOppositeFace()).getType() != Material.AIR) {
+                blockFace = direction;
+            } else if (availableBlockFace != null) {
+                blockFace = availableBlockFace;
+            }
+//            WirelessRedstone.getWRLogger().debug("Is solid " + (block.getRelative(direction.getOppositeFace()).getType() != Material.AIR));
+//            WirelessRedstone.getWRLogger().debug("Location " + block.getRelative(direction.getOppositeFace()).getLocation());
+//            WirelessRedstone.getWRLogger().debug("Face " + direction + " Available face " + availableBlockFace);
+
+            if (newState) {
+                if (Utils.isNewMaterialSystem()) {
+                    if (blockFace != null) {
+                        block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial());
+                        BlockState torch = block.getState();
+                        RedstoneTorch torchData = new RedstoneTorch();
+
+                        torchData.setFacingDirection(blockFace);
+                        torch.setData(torchData);
+                        torch.update();
+                    } else {
+                        block.setType(Material.AIR);
+                        WirelessRedstone.getWRLogger().debug("Receiver at " + block.getLocation().toString() + " is in a invalid position!");
+                    }
                 } else {
                     boolean reflectionWorked = false;
                     try {
-                        Class<?> blockClass = Class.forName("org.bukkit.block.Block");
-                        Method setTypeIdAndData = blockClass.getMethod("setTypeIdAndData", Integer.TYPE, Byte.TYPE, Boolean.TYPE);
-                        setTypeIdAndData.invoke(block, 76, Utils.getRawData(true, direction), true);
-                        reflectionWorked = true;
+                        if (blockFace != null) {
+                            Class<?> blockClass = Class.forName("org.bukkit.block.Block");
+                            Method setTypeIdAndData = blockClass.getMethod("setTypeIdAndData", Integer.TYPE, Byte.TYPE, Boolean.TYPE);
+                            setTypeIdAndData.invoke(block, 76, Utils.getRawData(true, blockFace), true);
+                            reflectionWorked = true;
+                        }
                     } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                         WirelessRedstone.getWRLogger().debug("Couldn't pass setTypeIdAndData");
 
@@ -95,33 +116,41 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                     }
 
                     if (!reflectionWorked) {
-                        block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial(), false);
-                        BlockState sign = block.getState();
+                        if (blockFace != null) {
+                            block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial(), true);
+                            BlockState sign = block.getState();
 
-                        sign.setRawData(Utils.getRawData(true, direction));
-                        sign.update();
+                            sign.setRawData(Utils.getRawData(true, direction));
+                            sign.update();
+                        } else {
+                            block.setType(Material.AIR);
+                            WirelessRedstone.getWRLogger().debug("Receiver at " + block.getLocation().toString() + " is in a invalid position!");
+                        }
                     }
                 }
             } else {
-                block.setType(CompatMaterial.REDSTONE_TORCH.getMaterial());
-            }
-        } else {
-            if (isWallSign()) {
                 if (Utils.isNewMaterialSystem()) {
-                    block.setType(CompatMaterial.WALL_SIGN.getMaterial(), false);
-                    BlockState sign = block.getState();
+                    if (blockFace != null) {
+                        block.setType(CompatMaterial.WALL_SIGN.getMaterial(), true);
+                        BlockState sign = block.getState();
+                        org.bukkit.block.data.type.WallSign signData = (org.bukkit.block.data.type.WallSign) sign.getBlockData();
 
-                    org.bukkit.material.Sign signData = new org.bukkit.material.Sign();
-                    signData.setFacingDirection(direction);
-                    sign.setData(signData);
-                    sign.update();
+                        signData.setFacing(blockFace);
+                        sign.setBlockData(signData);
+                        sign.update();
+                    } else {
+                        block.setType(Material.AIR);
+                        WirelessRedstone.getWRLogger().debug("Receiver at " + block.getLocation().toString() + " is in a invalid position!");
+                    }
                 } else {
                     boolean reflectionWorked = false;
                     try {
-                        Class<?> blockClass = Class.forName("org.bukkit.block.Block");
-                        Method setTypeIdAndData = blockClass.getMethod("setTypeIdAndData", Integer.TYPE, Byte.TYPE, Boolean.TYPE);
-                        setTypeIdAndData.invoke(block, 68, Utils.getRawData(false, direction), true);
-                        reflectionWorked = true;
+                        if (blockFace != null) {
+                            Class<?> blockClass = Class.forName("org.bukkit.block.Block");
+                            Method setTypeIdAndData = blockClass.getMethod("setTypeIdAndData", Integer.TYPE, Byte.TYPE, Boolean.TYPE);
+                            setTypeIdAndData.invoke(block, 68, Utils.getRawData(false, blockFace), true);
+                            reflectionWorked = true;
+                        }
                     } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                         WirelessRedstone.getWRLogger().debug("Couldn't pass setTypeIdAndData");
 
@@ -131,23 +160,38 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                     }
 
                     if (!reflectionWorked) {
-                        block.setType(CompatMaterial.WALL_SIGN.getMaterial(), false);
-                        BlockState sign = block.getState();
+                        if (blockFace != null) {
+                            block.setType(CompatMaterial.WALL_SIGN.getMaterial(), true);
+                            BlockState sign = block.getState();
 
-                        sign.setRawData(Utils.getRawData(false, direction));
-                        sign.update();
+                            sign.setRawData(Utils.getRawData(false, direction));
+                            sign.update();
+                        } else {
+                            block.setType(Material.AIR);
+                            WirelessRedstone.getWRLogger().debug("Receiver at " + block.getLocation().toString() + " is in a invalid position!");
+                        }
                     }
                 }
 
                 changeSignContent(block, channelName);
+            }
+        } else {
+            if (newState) {
+                block.setType(CompatMaterial.REDSTONE_TORCH.getMaterial());
             } else {
                 block.setType(CompatMaterial.SIGN.getMaterial());
-
                 BlockState sign = block.getState();
 
-                org.bukkit.material.Sign signData = new org.bukkit.material.Sign();
-                signData.setFacingDirection(direction);
-                sign.setData(signData);
+                if (Utils.isNewMaterialSystem()) {
+                    org.bukkit.block.data.type.Sign signData = (org.bukkit.block.data.type.Sign) sign.getBlockData();
+                    signData.setRotation(direction);
+                    sign.setBlockData(signData);
+                } else {
+                    org.bukkit.material.Sign signData = new org.bukkit.material.Sign();
+                    signData.setFacingDirection(direction);
+                    sign.setData(signData);
+                }
+
                 sign.update();
 
                 changeSignContent(block, channelName);
@@ -165,6 +209,17 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
         sign.setLine(1, channelName);
         sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDefaultType.get(0));
         sign.update();
+    }
+
+    private BlockFace getAvailableWallFace(Location location) {
+        for (BlockFace blockFace : Utils.getAxisBlockFaces(false)) {
+            Block relative = location.getBlock().getRelative(blockFace);
+            if (relative.getType().isSolid()) {
+                return blockFace.getOppositeFace();
+            }
+        }
+
+        return null;
     }
 
     @Override
