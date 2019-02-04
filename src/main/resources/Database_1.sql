@@ -79,7 +79,7 @@ CREATE TABLE [delayer](
   [delay] INTEGER DEFAULT 1000,
   PRIMARY KEY (x, y, z, world),
   FOREIGN KEY(channel_name) REFERENCES channel(name),
-  CHECK (delay >= 20)
+  CHECK (delay >= 50)
 );
 CREATE TABLE [switch](
   [x] INTEGER NOT NULL,
@@ -106,5 +106,5 @@ CREATE TABLE [clock](
   [delay] INTEGER DEFAULT 1000,
   PRIMARY KEY (x, y, z, world),
   FOREIGN KEY(channel_name) REFERENCES channel(name),
-  CHECK (delay >= 20)
+  CHECK (delay >= 50)
 );

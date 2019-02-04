@@ -444,6 +444,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
         db.execSql(sql);
 
         progress = 0;
+        channelIteration = 0;
         for (WirelessChannel channel : channels) {
             if ((int)Math.floor((float)channelIteration / (float)channels.size() * 100) % 5 == 0
                     && (int)Math.floor((float)channelIteration / (float)channels.size() * 100) != progress) {
@@ -559,6 +560,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                     WirelessRedstone.getWRLogger().debug("Inserted receiver " + point.toString() + "|" + channel.getName());
                 }
             }
+            channelIteration++;
         }
     }
 
