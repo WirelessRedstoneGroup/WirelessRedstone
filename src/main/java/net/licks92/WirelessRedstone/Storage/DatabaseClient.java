@@ -68,20 +68,20 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
     @Override
     protected void onUpdate(SQLiteDatabase db, int oldVersion, int newVersion) {
+        WirelessRedstone.getWRLogger().info("Updating SQLite database. This could take a while. As a precaution, a backup will be created.");
         if (WirelessRedstone.getStorage().backupData()) {
             if (oldVersion == 0) {
                 try {
-                    WirelessRedstone.getWRLogger().info("Updating SQLite database. This could take a while. As a precaution, a backup will be created.");
                     performUpdate1(db);
-                    WirelessRedstone.getWRLogger().info("Updating SQLite database done.");
                 } catch (SQLException | IOException e) {
                     e.printStackTrace();
-                    throw new RuntimeException("There was an error while performing update 1.");
+                    throw new RuntimeException("There was an error while performing database update 1.");
                 }
             }
         } else {
-            throw new RuntimeException("There was an error while performing a database update. The channels folder couldn't be accessed.");
+            throw new RuntimeException("There was an error while backing up the database. The channels folder couldn't be accessed.");
         }
+        WirelessRedstone.getWRLogger().info("Updating SQLite database done.");
     }
 
     /**
@@ -245,6 +245,13 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
     protected void recreateDatabase() {
         onCreate(getDatabase());
+    }
+
+    protected void updateSwitch(WirelessReceiverSwitch receiver) {
+        ContentValues values = new ContentValues();
+        values.put("state", receiver.isActive());
+        getDatabase().update("switch", values,
+                "[x]=" + receiver.getX() + " AND [y]=" + receiver.getY() + " AND [z]=" + receiver.getZ() + " AND [world]=" + receiver.getWorld());
     }
 
     private void performUpdate1(SQLiteDatabase db) throws SQLException, IOException {

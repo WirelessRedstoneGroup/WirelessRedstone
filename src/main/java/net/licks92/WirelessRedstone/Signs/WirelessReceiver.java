@@ -86,7 +86,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
             if (newState) {
                 if (Utils.isNewMaterialSystem()) {
                     if (blockFace != null) {
-                        block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial());
+                        block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial(), direction == BlockFace.NORTH);
                         BlockState torch = block.getState();
                         RedstoneWallTorch torchData = (RedstoneWallTorch) block.getBlockData();
 
@@ -130,8 +130,13 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
             } else {
                 if (Utils.isNewMaterialSystem()) {
                     if (blockFace != null) {
-                        block.setType(CompatMaterial.WALL_SIGN.getMaterial(), true);
+                        block.setType(CompatMaterial.WALL_SIGN.getMaterial(), direction == BlockFace.NORTH);
                         BlockState sign = block.getState();
+
+                        if (!(block.getBlockData() instanceof org.bukkit.block.data.type.WallSign)) {
+                            WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " is not a wall sign while it is saved as one.");
+                            return;
+                        }
                         org.bukkit.block.data.type.WallSign signData = (org.bukkit.block.data.type.WallSign) sign.getBlockData();
 
                         signData.setFacing(blockFace);

@@ -79,6 +79,10 @@ public class WirelessChannel implements ConfigurationSerializable {
             return;
         }
 
+        if (time > 0 && time < 50) {
+            throw new IllegalArgumentException("Time must be at least 50ms.");
+        }
+
         if (active) {
             return;
         }
@@ -93,7 +97,9 @@ public class WirelessChannel implements ConfigurationSerializable {
             screen.turnOn();
         }
 
-        if (time > 0) {
+        WirelessRedstone.getStorage().updateSwitchState(this);
+
+        if (time >= 50) {
             Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
                 @Override
                 public void run() {
@@ -146,7 +152,6 @@ public class WirelessChannel implements ConfigurationSerializable {
         for (WirelessScreen screen : getScreens()) {
             screen.turnOff();
         }
-
     }
 
     public void addWirelessPoint(WirelessPoint wirelessPoint) {

@@ -2,6 +2,8 @@ package net.licks92.WirelessRedstone.Storage;
 
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessPoint;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverSwitch;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 
 import java.io.File;
@@ -69,5 +71,14 @@ public class SQLiteStorage extends StorageConfiguration {
         DatabaseClient.getInstance().recreateDatabase();
 
         return super.wipeData();
+    }
+
+    @Override
+    public void updateSwitchState(WirelessChannel channel) {
+        for (WirelessReceiver receiver : channel.getReceivers()) {
+            if (receiver instanceof WirelessReceiverSwitch) {
+                DatabaseClient.getInstance().updateSwitch((WirelessReceiverSwitch) receiver);
+            }
+        }
     }
 }

@@ -28,6 +28,8 @@ public abstract class StorageConfiguration {
 
     protected abstract Collection<WirelessChannel> getAllChannels();
 
+    public abstract void updateSwitchState(WirelessChannel channel);
+
     public boolean createChannel(WirelessChannel channel) {
         WirelessRedstone.getStorageManager().updateList(channel.getName(), channel);
         return true;
