@@ -152,16 +152,11 @@ public class YamlStorage extends StorageConfiguration {
 
     @Override
     public void updateSwitchState(WirelessChannel channel) {
-        boolean containSwitch = false;
         for (WirelessReceiver receiver : channel.getReceivers()) {
             if (receiver instanceof WirelessReceiverSwitch) {
-                containSwitch = true;
+                setChannel(channel.getName(), channel);
                 break;
             }
-        }
-
-        if (containSwitch) {
-            setChannel(channel.getName(), channel);
         }
     }
 
