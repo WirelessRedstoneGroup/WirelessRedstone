@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone.Storage;
 import com.tylersuehr.sql.ContentValues;
 import com.tylersuehr.sql.SQLiteDatabase;
 import com.tylersuehr.sql.SQLiteOpenHelper;
+import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessPoint;
@@ -30,6 +31,17 @@ import java.util.Iterator;
 public class DatabaseClient extends SQLiteOpenHelper {
     private static final String DB_NAME = "WirelessRedstoneDatabase";
     private static final int DB_VERSION = 1;
+
+    private static final String TB_CHANNELS = "channel";
+    private static final String TB_OWNERS = "owner";
+    private static final String TB_TRANSMITTERS = "transmitter";
+    private static final String TB_RECEIVERS = "receiver";
+    private static final String TB_SCREENS = "screen";
+    private static final String TB_INVERTERS = "inverter";
+    private static final String TB_DELAYERS = "delayer";
+    private static final String TB_SWITCH = "switch";
+    private static final String TB_CLOCKS = "clock";
+
     private static volatile DatabaseClient instance;
     private final SQLiteDatabase db;
 
@@ -95,7 +107,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
         Collection<WirelessChannel> channels = new ArrayList<>();
 
         try {
-            ResultSet resultSet = getDatabase().query("channel",null, null, null);
+            ResultSet resultSet = getDatabase().query(TB_CHANNELS, null, null, null);
             while (resultSet.next()) {
                 channels.add(new WirelessChannel(resultSet.getString("name"), resultSet.getBoolean("locked")));
             }
@@ -106,14 +118,14 @@ public class DatabaseClient extends SQLiteOpenHelper {
             while (iterator.hasNext()) {
                 WirelessChannel channel = iterator.next();
 
-                resultSet = getDatabase().query("owner", new String[]{"user"}, "[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_OWNERS, new String[]{"user"}, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     channel.addOwner(resultSet.getString("user"));
                 }
 
                 resultSet.close();
 
-                resultSet = getDatabase().query("transmitter","[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_TRANSMITTERS, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     WirelessPoint point = new WirelessTransmitter(
                             resultSet.getInt("x"),
@@ -130,7 +142,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                 resultSet.close();
 
-                resultSet = getDatabase().query("receiver","[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_RECEIVERS, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     WirelessPoint point = new WirelessReceiver(
                             resultSet.getInt("x"),
@@ -147,7 +159,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                 resultSet.close();
 
-                resultSet = getDatabase().query("screen","[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_SCREENS, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     WirelessPoint point = new WirelessScreen(
                             resultSet.getInt("x"),
@@ -164,7 +176,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                 resultSet.close();
 
-                resultSet = getDatabase().query("inverter","[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_INVERTERS, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     WirelessPoint point = new WirelessReceiverInverter(
                             resultSet.getInt("x"),
@@ -181,7 +193,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                 resultSet.close();
 
-                resultSet = getDatabase().query("delayer","[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_DELAYERS, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     WirelessPoint point = new WirelessReceiverDelayer(
                             resultSet.getInt("x"),
@@ -199,7 +211,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                 resultSet.close();
 
-                resultSet = getDatabase().query("switch","[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_SWITCH, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     WirelessPoint point = new WirelessReceiverSwitch(
                             resultSet.getInt("x"),
@@ -217,7 +229,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                 resultSet.close();
 
-                resultSet = getDatabase().query("clock","[channel_name]='" + channel.getName() + "'", null, null);
+                resultSet = getDatabase().query(TB_CLOCKS, "[channel_name]='" + channel.getName() + "'", null, null);
                 while (resultSet.next()) {
                     WirelessPoint point = new WirelessReceiverClock(
                             resultSet.getInt("x"),
@@ -247,11 +259,87 @@ public class DatabaseClient extends SQLiteOpenHelper {
         onCreate(getDatabase());
     }
 
+    protected boolean insertWirelessPoint(WirelessChannel channel, WirelessPoint point) {
+        if (point == null) {
+            throw new IllegalArgumentException("WirelessPoint can not be null.");
+        }
+
+        ContentValues values = new ContentValues();
+        try {
+            if (!isChannelInDb(channel.getName())) {
+                values.put("name", escape(channel.getName()));
+                values.put("locked", channel.isLocked());
+                getDatabase().insert(TB_CHANNELS, values);
+                WirelessRedstone.getWRLogger().debug("Channel created in database. " + channel.getName());
+            }
+        } catch (SQLException e) {
+            WirelessRedstone.getWRLogger().warning("Database exception, enable debug mode to see the full stacktrace.");
+
+            if (ConfigManager.getConfig().getDebugMode()) {
+                e.printStackTrace();
+            }
+        }
+
+        String table;
+        values = new ContentValues();
+        values.put("x", point.getX());
+        values.put("y", point.getY());
+        values.put("z", point.getZ());
+        values.put("world", point.getWorld());
+        values.put("channel_name", channel.getName());
+        values.put("direction", point.getDirection().toString());
+        values.put("owner", point.getOwner());
+        values.put("is_wallsign", point.isWallSign());
+
+        if (point instanceof WirelessTransmitter) {
+            table = TB_TRANSMITTERS;
+        } else if (point instanceof WirelessScreen) {
+            table = TB_SCREENS;
+        } else if (point instanceof WirelessReceiver) {
+            if (point instanceof WirelessReceiverInverter) {
+                table = TB_INVERTERS;
+            } else if (point instanceof WirelessReceiverDelayer) {
+                table = TB_DELAYERS;
+                values.put("delay", ((WirelessReceiverDelayer) point).getDelay());
+            } else if (point instanceof WirelessReceiverSwitch) {
+                table = TB_SWITCH;
+                values.put("state", ((WirelessReceiverSwitch) point).isActive());
+            } else if (point instanceof WirelessReceiverClock) {
+                table = TB_CLOCKS;
+                values.put("delay", ((WirelessReceiverClock) point).getDelay());
+            } else {
+                table = TB_RECEIVERS;
+            }
+        } else {
+            WirelessRedstone.getWRLogger().debug("Can't add wirelesspoint to database. Couldn't find what type the wirelesspoint is.");
+            WirelessRedstone.getWRLogger().debug(point.toString());
+            return false;
+        }
+
+        getDatabase().insert(table, values);
+        WirelessRedstone.getWRLogger().debug("Placed new WirelessPoint in the database");
+
+        return true;
+    }
+
     protected void updateSwitch(WirelessReceiverSwitch receiver) {
         ContentValues values = new ContentValues();
         values.put("state", receiver.isActive());
-        getDatabase().update("switch", values,
+        getDatabase().update(TB_SWITCH, values,
                 "[x]=" + receiver.getX() + " AND [y]=" + receiver.getY() + " AND [z]=" + receiver.getZ() + " AND [world]=" + receiver.getWorld());
+    }
+
+    protected boolean isChannelInDb(String channelName) throws SQLException {
+        boolean exists = false;
+
+        ResultSet resultSet = getDatabase().query(TB_CHANNELS, "[name]=" + escape(channelName), null, null);
+        while (resultSet.next() && !exists) {
+            exists = true;
+        }
+
+        resultSet.close();
+
+        return exists;
     }
 
     private void performUpdate1(SQLiteDatabase db) throws SQLException, IOException {
@@ -270,9 +358,9 @@ public class DatabaseClient extends SQLiteOpenHelper {
         resultSet.close();
 
         for (String channelName : channelNames) {
-            if ((int)Math.floor((float)channelIteration / (float)channelNames.size() * 100) % 5 == 0
-                    && (int)Math.floor((float)channelIteration / (float)channelNames.size() * 100) != progress) {
-                progress = (int)Math.floor((float)channelIteration / (float)channelNames.size() * 100);
+            if ((int) Math.floor((float) channelIteration / (float) channelNames.size() * 100) % 5 == 0
+                    && (int) Math.floor((float) channelIteration / (float) channelNames.size() * 100) != progress) {
+                progress = (int) Math.floor((float) channelIteration / (float) channelNames.size() * 100);
                 WirelessRedstone.getWRLogger().info("Stage 1/2; Progress: " + progress + "%");
             }
 
@@ -453,23 +541,23 @@ public class DatabaseClient extends SQLiteOpenHelper {
         progress = 0;
         channelIteration = 0;
         for (WirelessChannel channel : channels) {
-            if ((int)Math.floor((float)channelIteration / (float)channels.size() * 100) % 5 == 0
-                    && (int)Math.floor((float)channelIteration / (float)channels.size() * 100) != progress) {
-                progress = (int)Math.floor((float)channelIteration / (float)channels.size() * 100);
+            if ((int) Math.floor((float) channelIteration / (float) channels.size() * 100) % 5 == 0
+                    && (int) Math.floor((float) channelIteration / (float) channels.size() * 100) != progress) {
+                progress = (int) Math.floor((float) channelIteration / (float) channels.size() * 100);
                 WirelessRedstone.getWRLogger().info("Stage 2/2; Progress: " + progress + "%");
             }
 
             ContentValues values = new ContentValues();
             values.put("name", channel.getName());
             values.put("locked", channel.isLocked());
-            db.insert("channel", values);
+            db.insert(TB_CHANNELS, values);
             WirelessRedstone.getWRLogger().debug("Inserted channel " + channel.getName());
 
             for (String owner : channel.getOwners()) {
                 values = new ContentValues();
                 values.put("channel_name", channel.getName());
                 values.put("user", owner);
-                db.insert("owner", values);
+                db.insert(TB_OWNERS, values);
                 WirelessRedstone.getWRLogger().debug("Inserted owner " + owner + "|" + channel.getName());
             }
 
@@ -483,7 +571,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                 values.put("direction", point.getDirection().toString());
                 values.put("owner", point.getOwner());
                 values.put("is_wallsign", point.isWallSign());
-                db.insert("transmitter", values);
+                db.insert(TB_TRANSMITTERS, values);
                 WirelessRedstone.getWRLogger().debug("Inserted transmitter " + point.toString() + "|" + channel.getName());
             }
 
@@ -497,7 +585,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                 values.put("direction", point.getDirection().toString());
                 values.put("owner", point.getOwner());
                 values.put("is_wallsign", point.isWallSign());
-                db.insert("screen", values);
+                db.insert(TB_SCREENS, values);
                 WirelessRedstone.getWRLogger().debug("Inserted screen " + point.toString() + "|" + channel.getName());
             }
 
@@ -512,7 +600,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                     values.put("direction", point.getDirection().toString());
                     values.put("owner", point.getOwner());
                     values.put("is_wallsign", point.isWallSign());
-                    db.insert("inverter", values);
+                    db.insert(TB_INVERTERS, values);
                     WirelessRedstone.getWRLogger().debug("Inserted inverter " + point.toString() + "|" + channel.getName());
                 } else if (point instanceof WirelessReceiverDelayer) {
                     values = new ContentValues();
@@ -525,7 +613,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                     values.put("owner", point.getOwner());
                     values.put("is_wallsign", point.isWallSign());
                     values.put("delay", ((WirelessReceiverDelayer) point).getDelay());
-                    db.insert("delayer", values);
+                    db.insert(TB_DELAYERS, values);
                     WirelessRedstone.getWRLogger().debug("Inserted delayer " + point.toString() + "|" + channel.getName());
                 } else if (point instanceof WirelessReceiverSwitch) {
                     values = new ContentValues();
@@ -538,7 +626,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                     values.put("owner", point.getOwner());
                     values.put("is_wallsign", point.isWallSign());
                     values.put("powered", ((WirelessReceiverSwitch) point).isActive());
-                    db.insert("switch", values);
+                    db.insert(TB_SWITCH, values);
                     WirelessRedstone.getWRLogger().debug("Inserted switch " + point.toString() + "|" + channel.getName());
                 } else if (point instanceof WirelessReceiverClock) {
                     values = new ContentValues();
@@ -551,8 +639,8 @@ public class DatabaseClient extends SQLiteOpenHelper {
                     values.put("owner", point.getOwner());
                     values.put("is_wallsign", point.isWallSign());
                     values.put("delay", ((WirelessReceiverClock) point).getDelay());
+                    db.insert(TB_CLOCKS, values);
                     WirelessRedstone.getWRLogger().debug("Inserted clock " + point.toString() + "|" + channel.getName());
-                    db.insert("clock", values);
                 } else {
                     values = new ContentValues();
                     values.put("x", point.getX());
@@ -563,7 +651,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                     values.put("direction", point.getDirection().toString());
                     values.put("owner", point.getOwner());
                     values.put("is_wallsign", point.isWallSign());
-                    db.insert("receiver", values);
+                    db.insert(TB_RECEIVERS, values);
                     WirelessRedstone.getWRLogger().debug("Inserted receiver " + point.toString() + "|" + channel.getName());
                 }
             }
@@ -593,5 +681,20 @@ public class DatabaseClient extends SQLiteOpenHelper {
         }
 
         return null;
+    }
+
+    private String escape(String str) {
+        if (str == null || str.length() == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        str = str.replace("\\", "\\\\");
+        str = str.replace("'", "\\'");
+        str = str.replace("\0", "\\0");
+        str = str.replace("\n", "\\n");
+        str = str.replace("\r", "\\r");
+        str = str.replace("\"", "\\\"");
+        str = str.replace("\\x1a", "\\Z");
+        return str;
     }
 }

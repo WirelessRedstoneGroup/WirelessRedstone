@@ -48,11 +48,19 @@ public class SQLiteStorage extends StorageConfiguration {
 
     @Override
     public boolean createWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
+        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
+        channel.addWirelessPoint(wirelessPoint);
+
+        DatabaseClient.getInstance().insertWirelessPoint(channel, wirelessPoint);
+
         return super.createWirelessPoint(channelName, wirelessPoint);
     }
 
     @Override
     public boolean removeWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
+        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
+        channel.removeWirelessPoint(wirelessPoint);
+
         return super.removeWirelessPoint(channelName, wirelessPoint);
     }
 

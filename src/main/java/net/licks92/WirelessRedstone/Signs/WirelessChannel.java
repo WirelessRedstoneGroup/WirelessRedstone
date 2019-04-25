@@ -56,6 +56,7 @@ public class WirelessChannel implements ConfigurationSerializable {
     public WirelessChannel(Map<String, Object> map) {
         this.setId((Integer) map.get("id"));
         this.setName((String) map.get("name"));
+        this.active = (Boolean) map.getOrDefault("active", false);
         this.setOwners((List<String>) map.get("owners"));
         this.setReceivers((List<WirelessReceiver>) map.get("receivers"));
         this.setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
@@ -282,6 +283,7 @@ public class WirelessChannel implements ConfigurationSerializable {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", getId());
         map.put("name", getName());
+        map.put("active", isActive());
         map.put("owners", getOwners());
         map.put("receivers", getReceivers());
         map.put("transmitters", getTransmitters());

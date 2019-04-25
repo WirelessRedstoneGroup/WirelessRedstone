@@ -84,7 +84,7 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler
-    public void on(SignChangeEvent event) {
+    public void on(final SignChangeEvent event) {
         SignType signType = Utils.getSignType(event.getLine(0));
         if (signType == null) {
             return;
@@ -120,7 +120,7 @@ public class BlockListener implements Listener {
             return;
         }
 
-        String channelName = event.getLine(1);
+        final String channelName = event.getLine(1);
 
         if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), channelName)) {
             handlePlaceCancelled(event.getBlock());
@@ -154,7 +154,7 @@ public class BlockListener implements Listener {
         }
 
         //TODO: #registerSign Implement error message if failed
-        int finalDelay = delay;
+        final int finalDelay = delay;
         Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -344,6 +344,8 @@ public class BlockListener implements Listener {
     }
 
     private void updateRedstonePower(Sign sign, boolean powered, boolean skipLocation) {
+        WirelessRedstone.getWRLogger().debug("Redstone power update: " + sign.getLocation());
+
         if (Utils.getSignType(sign.getLine(0)) != SignType.TRANSMITTER)
             return;
 
