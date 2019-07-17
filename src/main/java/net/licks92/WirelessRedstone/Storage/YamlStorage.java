@@ -21,11 +21,13 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class YamlStorage extends StorageConfiguration {
 
     private File channelFolder;
+    private final FilenameFilter yamlFilter = (dir, name) -> name.toLowerCase().endsWith(".yml");
 
     public YamlStorage(String channelFolder) {
         this.channelFolder = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
@@ -47,6 +49,12 @@ public class YamlStorage extends StorageConfiguration {
         //TODO: Initstorage
 
         WirelessRedstone.getStorageManager().updateChannels(false);
+
+        StorageType oldStorageType = canConvertFromType();
+        if (oldStorageType != null) {
+            return WirelessRedstone.getStorageManager().moveStorageFromType(oldStorageType);
+        }
+
         return true;
     }
 
@@ -64,7 +72,7 @@ public class YamlStorage extends StorageConfiguration {
     protected Collection<WirelessChannel> getAllChannels() {
         Collection<WirelessChannel> channels = new ArrayList<>();
 
-        for (File f : channelFolder.listFiles(new YamlFilter())) {
+        for (File f : Objects.requireNonNull(channelFolder.listFiles(yamlFilter))) {
             FileConfiguration channelConfig = new YamlConfiguration();
             try {
                 channelConfig.load(f);
@@ -143,7 +151,7 @@ public class YamlStorage extends StorageConfiguration {
 
     @Override
     public boolean wipeData() {
-        for (File f : channelFolder.listFiles(new YamlFilter())) {
+        for (File f : Objects.requireNonNull(channelFolder.listFiles(yamlFilter))) {
             f.delete();
         }
 
@@ -158,6 +166,17 @@ public class YamlStorage extends StorageConfiguration {
                 break;
             }
         }
+    }
+
+    @Override
+    protected StorageType canConvertFromType() {
+        for (File file : Objects.requireNonNull(channelFolder.listFiles())) {
+            if (file.getName().contains(".db")) {
+                return StorageType.SQLITE;
+            }
+        }
+
+        return null;
     }
 
     private boolean setChannel(String channelName, WirelessChannel channel) {
@@ -185,12 +204,5 @@ public class YamlStorage extends StorageConfiguration {
         }
 
         return true;
-    }
-}
-
-class YamlFilter implements FilenameFilter {
-    @Override
-    public boolean accept(final File file, final String name) {
-        return name.contains(".yml");
     }
 }

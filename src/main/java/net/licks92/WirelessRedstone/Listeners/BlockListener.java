@@ -283,36 +283,32 @@ public class BlockListener implements Listener {
             locations.add(block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN).getLocation());
         } else {
             if (Utils.isNewMaterialSystem()) {
-                if (block.getBlockData() != null) {
-                    if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
-                        org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();
-                        BlockFace blockFace = switchBlock.getFacing().getOppositeFace();
+                if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
+                    org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();
+                    BlockFace blockFace = switchBlock.getFacing().getOppositeFace();
 
-                        if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.FLOOR) {
-                            blockFace = BlockFace.DOWN;
-                        } else if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.CEILING) {
-                            blockFace = BlockFace.UP;
-                        }
-
-                        Block relBlock = block.getRelative(blockFace);
-                        for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-                            locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-                        }
-                        locations.add(block.getRelative(blockFace).getRelative(blockFace).getLocation());
+                    if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.FLOOR) {
+                        blockFace = BlockFace.DOWN;
+                    } else if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.CEILING) {
+                        blockFace = BlockFace.UP;
                     }
+
+                    Block relBlock = block.getRelative(blockFace);
+                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+                    }
+                    locations.add(block.getRelative(blockFace).getRelative(blockFace).getLocation());
                 }
             } else {
-                if (block.getState() != null) {
-                    if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
-                            !(block.getState().getData() instanceof TripwireHook)) {
-                        Attachable attachable = (Attachable) block.getState().getData();
+                if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
+                        !(block.getState().getData() instanceof TripwireHook)) {
+                    Attachable attachable = (Attachable) block.getState().getData();
 
-                        Block relBlock = block.getRelative(attachable.getAttachedFace());
-                        for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-                            locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-                        }
-                        locations.add(block.getRelative(attachable.getAttachedFace()).getRelative(attachable.getAttachedFace()).getLocation());
+                    Block relBlock = block.getRelative(attachable.getAttachedFace());
+                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
                     }
+                    locations.add(block.getRelative(attachable.getAttachedFace()).getRelative(attachable.getAttachedFace()).getLocation());
                 }
             }
         }
@@ -339,7 +335,7 @@ public class BlockListener implements Listener {
         block.setType(Material.AIR);
 
         if (ConfigManager.getConfig().getDropSignBroken()) {
-            block.getWorld().dropItem(block.getLocation(), new ItemStack(Material.SIGN));
+            block.getWorld().dropItem(block.getLocation(), new ItemStack(CompatMaterial.SIGN.getMaterial()));
         }
     }
 
@@ -347,9 +343,6 @@ public class BlockListener implements Listener {
         WirelessRedstone.getWRLogger().debug("Redstone power update: " + sign.getLocation());
 
         if (Utils.getSignType(sign.getLine(0)) != SignType.TRANSMITTER)
-            return;
-
-        if (sign.getLine(1) == null)
             return;
 
         if (sign.getLine(1).equalsIgnoreCase(""))

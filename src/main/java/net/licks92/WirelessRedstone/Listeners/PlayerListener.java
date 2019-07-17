@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone.Listeners;
 
+import net.licks92.WirelessRedstone.CompatMaterial;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
@@ -122,7 +123,7 @@ public class PlayerListener implements Listener {
         block.setType(Material.AIR);
 
         if (ConfigManager.getConfig().getDropSignBroken()) {
-            block.getWorld().dropItem(block.getLocation(), new ItemStack(Material.SIGN));
+            block.getWorld().dropItem(block.getLocation(), new ItemStack(CompatMaterial.SIGN.getMaterial()));
         }
     }
 

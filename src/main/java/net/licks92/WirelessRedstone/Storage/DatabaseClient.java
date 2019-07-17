@@ -52,7 +52,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
     }
 
     protected static synchronized DatabaseClient getInstance() {
-        return getInstance(WirelessRedstone.getInstance().getDataFolder() + File.separator + WirelessRedstone.CHANNEL_FOLDER);
+        return instance != null ? instance : getInstance(WirelessRedstone.getInstance().getDataFolder() + File.separator + WirelessRedstone.CHANNEL_FOLDER);
     }
 
     protected static synchronized DatabaseClient getInstance(String channelFolder) {
@@ -332,7 +332,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
     protected boolean isChannelInDb(String channelName) throws SQLException {
         boolean exists = false;
 
-        ResultSet resultSet = getDatabase().query(TB_CHANNELS, "[name]=" + escape(channelName), null, null);
+        ResultSet resultSet = getDatabase().query(TB_CHANNELS, "[name]='" + escape(channelName) + "'", null, null);
         while (resultSet.next() && !exists) {
             exists = true;
         }

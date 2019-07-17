@@ -2,7 +2,6 @@ package net.licks92.WirelessRedstone.Signs;
 
 import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -47,11 +46,7 @@ public class WirelessTransmitter extends WirelessPoint implements ConfigurationS
         if (loc == null)
             return false;
 
-        Block block = loc.getBlock();
-        if (block == null)
-            return false;
-
-        return block.isBlockIndirectlyPowered() || block.isBlockPowered();
+        return loc.getBlock().isBlockIndirectlyPowered() || loc.getBlock().isBlockPowered();
     }
 
     @Override

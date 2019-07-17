@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone.Signs;
 
 import net.licks92.WirelessRedstone.CompatMaterial;
+import net.licks92.WirelessRedstone.CompatSignData;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
@@ -64,10 +65,6 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
             return;
 
         getLocation().getWorld().loadChunk(getLocation().getChunk());
-
-        if (getLocation().getBlock() == null) {
-            return;
-        }
 
         Block block = getLocation().getBlock();
 
@@ -184,19 +181,8 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                 block.setType(CompatMaterial.REDSTONE_TORCH.getMaterial());
             } else {
                 block.setType(CompatMaterial.SIGN.getMaterial());
-                BlockState sign = block.getState();
-
-                if (Utils.isNewMaterialSystem()) {
-                    org.bukkit.block.data.type.Sign signData = (org.bukkit.block.data.type.Sign) sign.getBlockData();
-                    signData.setRotation(direction);
-                    sign.setBlockData(signData);
-                } else {
-                    org.bukkit.material.Sign signData = new org.bukkit.material.Sign();
-                    signData.setFacingDirection(direction);
-                    sign.setData(signData);
-                }
-
-                sign.update();
+                CompatSignData sign = new CompatSignData(block);
+                sign.setRotation(direction);
 
                 changeSignContent(block, channelName);
             }

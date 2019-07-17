@@ -5,11 +5,12 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public enum CompatMaterial {
     REDSTONE_TORCH("REDSTONE_TORCH", "REDSTONE_TORCH_ON"),
     REDSTONE_WALL_TORCH("REDSTONE_WALL_TORCH", "REDSTONE_TORCH_ON"),
-    SIGN("SIGN", "SIGN_POST"),
+    SIGN(new String[]{"OAK_SIGN", "SIGN"}, "SIGN_POST"),
     WALL_SIGN("WALL_SIGN", "WALL_SIGN"),
     COMPARATOR("COMPARATOR", "REDSTONE_COMPARATOR"),
     COMPARATOR_ON("COMPARATOR", "REDSTONE_COMPARATOR_ON"),
@@ -21,6 +22,29 @@ public enum CompatMaterial {
 
     private Material material;
     private List<Material> materials;
+
+    CompatMaterial(String[] newVersions, String oldVersion) {
+        HashMap<String, Material> materialMap = new HashMap<>();
+        for (Material material : Material.values()) {
+            materialMap.put(material.toString(), material);
+        }
+
+        if (Utils.isNewMaterialSystem()) {
+            for (String newVersion : newVersions) {
+                this.material = materialMap.entrySet()
+                        .stream()
+                        .filter( e -> e.getKey().equalsIgnoreCase(newVersion))
+                        .map(Map.Entry::getValue)
+                        .findFirst()
+                        .orElse(null);
+
+                if (this.material != null)
+                    break;
+            }
+        } else {
+            this.material = materialMap.get(oldVersion);
+        }
+    }
 
     CompatMaterial(String newVersion, String oldVersion) {
         HashMap<String, Material> materialMap = new HashMap<>();
@@ -55,7 +79,7 @@ public enum CompatMaterial {
         } else if (materials != null) {
             return materials.get(0);
         } else {
-            return null;
+            throw new IllegalStateException("Material " + this.name() + " couldn't be find. Is this the latest version?");
         }
     }
 

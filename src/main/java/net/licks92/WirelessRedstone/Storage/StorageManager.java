@@ -8,20 +8,28 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class StorageManager {
 
     private ConcurrentHashMap<String, WirelessChannel> allChannels = new ConcurrentHashMap<>();
     private BukkitTask refreshingTask;
+    private StorageType storageType;
     private StorageConfiguration storage;
+    private String channelFolder;
+    private File channelFolderFile;
 
     public StorageManager(StorageType type, String channelFolder) {
-        File channelFolderFile = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
-        channelFolderFile.mkdir();
+        this.storageType = type;
+        this.channelFolder = channelFolder;
+
+        this.channelFolderFile = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
+        this.channelFolderFile.mkdir();
         switch (type) {
             case SQLITE:
                 storage = new SQLiteStorage(channelFolder);
@@ -76,7 +84,7 @@ public class StorageManager {
     }
 
     protected void updateList(String channelName, WirelessChannel channel) {
-        if (channel == null){
+        if (channel == null) {
             allChannels.remove(channelName);
         } else {
             allChannels.put(channelName, channel);
@@ -105,6 +113,44 @@ public class StorageManager {
             collection.addAll(channel.getSigns());
         }
         return collection;
+    }
+
+    protected boolean moveStorageFromType(StorageType storageType) {
+        if (!getStorage().backupData()) {
+            WirelessRedstone.getWRLogger().severe("Porting data to other storage type failed due to a backup problem!");
+            return false;
+        }
+
+        StorageConfiguration storage;
+        if (storageType == StorageType.YAML) {
+            storage = new YamlStorage(channelFolder);
+        } else if (storageType == StorageType.SQLITE) {
+            storage = new SQLiteStorage(channelFolder);
+        } else {
+            return false;
+        }
+
+        Collection<WirelessChannel> channels = storage.getAllChannels();
+        channels.forEach(getStorage()::createChannel);
+        storage.close();
+
+        if (storageType == StorageType.YAML) {
+            final FilenameFilter filter = (dir, name) -> name.toLowerCase().endsWith(".yml");
+
+            for (File f : Objects.requireNonNull(channelFolderFile.listFiles(filter))) {
+                f.delete();
+            }
+        } else {
+            final FilenameFilter filter = (dir, name) -> name.toLowerCase().endsWith(".db");
+
+            for (File f : Objects.requireNonNull(channelFolderFile.listFiles(filter))) {
+                f.delete();
+            }
+        }
+
+        WirelessRedstone.getStorageManager().updateChannels(false);
+
+        return true;
     }
 
 }

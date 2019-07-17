@@ -15,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -96,48 +95,38 @@ public class SignManager {
             location.getBlock().setType(CompatMaterial.SIGN.getMaterial());
         }
 
-        Sign sign = (Sign) location.getBlock().getState();
-        org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.SIGN);
-        signData.setFacingDirection(Utils.yawToFace(location.getYaw()));
-        sign.setData(signData);
-        sign.update();
+        CompatSignData sign = new CompatSignData(location.getBlock());
+        sign.setRotation(Utils.yawToFace(location.getYaw()));
         sign.setLine(1, channelName);
 
         switch (type) {
             case TRANSMITTER:
                 sign.setLine(0, WirelessRedstone.getStringManager().tagsTransmitter.get(0));
-                sign.update();
                 break;
             case SCREEN:
                 sign.setLine(0, WirelessRedstone.getStringManager().tagsScreen.get(0));
-                sign.update();
                 break;
             case RECEIVER:
                 sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
                 sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDefaultType.get(0));
-                sign.update();
                 break;
             case RECEIVER_INVERTER:
                 sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
                 sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverInverterType.get(0));
-                sign.update();
                 break;
             case RECEIVER_SWITCH:
                 sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
                 sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverSwitchType.get(0));
-                sign.update();
                 break;
             case RECEIVER_DELAYER:
                 sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
                 sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDelayerType.get(0));
                 sign.setLine(3, Integer.toString(extraData));
-                sign.update();
                 break;
             case RECEIVER_CLOCK:
                 sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
                 sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverClockType.get(0));
                 sign.setLine(3, Integer.toString(extraData));
-                sign.update();
                 break;
         }
 

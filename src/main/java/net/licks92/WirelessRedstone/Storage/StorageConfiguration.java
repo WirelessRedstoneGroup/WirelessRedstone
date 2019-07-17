@@ -30,6 +30,8 @@ public abstract class StorageConfiguration {
 
     public abstract void updateSwitchState(WirelessChannel channel);
 
+    protected abstract StorageType canConvertFromType();
+
     public boolean createChannel(WirelessChannel channel) {
         WirelessRedstone.getStorageManager().updateList(channel.getName(), channel);
         return true;

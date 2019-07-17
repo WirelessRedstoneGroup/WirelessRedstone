@@ -99,10 +99,6 @@ public class ConfigManager {
         return config.getBoolean(ConfigPaths.UPDATECHECK.getValue(), true);
     }
 
-    public boolean getCancelChunkUnload() {
-        return config.getBoolean(ConfigPaths.CANCELCHUNKUNLOAD.getValue(), true);
-    }
-
     public boolean getVault() {
         return config.getBoolean(ConfigPaths.USEVAULT.getValue(), true);
     }
@@ -121,10 +117,6 @@ public class ConfigManager {
 
     public boolean useORLogic() {
         return !config.getString(ConfigPaths.GATELOGIC.getValue(), "OR").equalsIgnoreCase("IGNORE");
-    }
-
-    public Integer getCancelChunkUnloadRange() {
-        return config.getInt(ConfigPaths.CANCELCHUNKUNLOADRANGE.getValue(), 4);
     }
 
     public Integer getInteractTransmitterTime() {
@@ -154,8 +146,7 @@ public class ConfigManager {
 
     public enum ConfigPaths {
         CONFIGVERSION("ConfigVersion"), DEBUGMODE("DebugMode"), LANGUAGE("Language"), COLORLOGGING("ColourfulLogging"),
-        UPDATECHECK("CheckForUpdates"), CANCELCHUNKUNLOAD("cancelChunkUnloads"),
-        CANCELCHUNKUNLOADRANGE("cancelChunkUnloadRange"), USEVAULT("UseVault"), SILENTMODE("SilentMode"),
+        UPDATECHECK("CheckForUpdates"), USEVAULT("UseVault"), SILENTMODE("SilentMode"),
         INTERACTTRANSMITTERTIME("InteractTransmitterTime"), CACHEREFRESHRATE("CacheRefreshFrequency"),
         GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken"),
         METRICS("Metrics");
