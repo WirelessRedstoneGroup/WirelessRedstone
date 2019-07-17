@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -159,7 +160,9 @@ public class BlockListener implements Listener {
             @Override
             public void run() {
                 Sign sign = (Sign) event.getBlock().getState();
-                BlockFace signDirection = ((Directional) sign.getData()).getFacing();
+                BlockFace signDirection = Utils.isNewMaterialSystem()
+                        ? ((WallSign) sign.getBlockData()).getFacing()
+                        : ((Directional) sign.getData()).getFacing();
 
                 int result = WirelessRedstone.getSignManager().registerSign(
                         channelName,
