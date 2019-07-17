@@ -9,10 +9,6 @@ Do you want to see the plugin in your favourite language / native language?
 It will be possible in the next version. 
 The process is very simple for you and me, you just have to go on [this website](https://www.transifex.com/bart0110/wirelessredstone/), and fill the language of your choice.
 
-## Common problems
-#### Timings on onChunkUnload is high.
-Change ```cancelChunkUnloads``` to ```false``` in the config.
-
 ## Config
 
 | Key                         | Description                                                                                                                                                                                                                                                                                                                                                  |
@@ -22,8 +18,6 @@ Change ```cancelChunkUnloads``` to ```false``` in the config.
 | ColourfulLogging            | Add colours to logging.                                                                                                                                                                                                                                                                                                                                      |
 | CheckForUpdates             | Get a message when an update is available.                                                                                                                                                                                                                                                                                                                    |
 | Metrics                     | Enable anonymous metrics.                                                                                                                                                                                                                                                                                                                                    |
-| cancelChunkUnloads          | Cancel chunk unloading so it is guaranteed all WirlessReceivers can turn into redstone torches and back.                                                                                                                                                                                                                                                     |
-| cancelChunkUnloadRange      | Range of chunks around the WirelessSign which will keep loaded.                                                                                                                                                                                                                                                                                              |
 | SilentMode                  | Disable most of the feedback if the user doesn't have permissions.                                                                                                                                                                                                                                                                                           |
 | DebugMode                   | Print more information to the console.                                                                                                                                                                                                                                                                                                                       |
 | DropSignWhenBroken          | Drop a sign item if a WirelessChannel is destroyed.                                                                                                                                                                                                                                                                                                          |
