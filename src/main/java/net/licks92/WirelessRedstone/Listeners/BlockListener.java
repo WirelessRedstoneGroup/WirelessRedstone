@@ -12,7 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.WallSign;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -160,9 +160,18 @@ public class BlockListener implements Listener {
             @Override
             public void run() {
                 Sign sign = (Sign) event.getBlock().getState();
-                BlockFace signDirection = Utils.isNewMaterialSystem()
-                        ? ((WallSign) sign.getBlockData()).getFacing()
-                        : ((Directional) sign.getData()).getFacing();
+                BlockFace signDirection;
+                if (Utils.isNewMaterialSystem()) {
+                    if (sign.getBlockData() instanceof Rotatable) {
+                        signDirection = ((Rotatable) sign.getBlockData()).getRotation();
+                    } else if (sign.getBlockData() instanceof Directional) {
+                        signDirection = ((Directional) sign.getBlockData()).getFacing();
+                    } else {
+                        throw new IllegalStateException("Couldn't find the right rotation for the sign!");
+                    }
+                } else {
+                    signDirection = ((Directional) sign.getData()).getFacing();
+                }
 
                 int result = WirelessRedstone.getSignManager().registerSign(
                         channelName,
