@@ -5,6 +5,14 @@ import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
+import net.licks92.WirelessRedstone.Signs.SignType;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverClock;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverDelayer;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverInverter;
+import net.licks92.WirelessRedstone.Signs.WirelessReceiverSwitch;
+import net.licks92.WirelessRedstone.Signs.WirelessScreen;
+import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
 import net.licks92.WirelessRedstone.Storage.StorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.String.StringManager;
@@ -13,6 +21,10 @@ import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class WirelessRedstone extends JavaPlugin {
 
@@ -25,6 +37,7 @@ public class WirelessRedstone extends JavaPlugin {
     private static SignManager signManager;
     private static CommandManager commandManager;
     private static AdminCommandManager adminCommandManager;
+    private static Metrics metrics;
 
     private ConfigManager config;
     private WorldEditHooker worldEditHooker;
@@ -69,6 +82,10 @@ public class WirelessRedstone extends JavaPlugin {
 
     public WorldEditHooker getWorldEditHooker() {
         return worldEditHooker;
+    }
+
+    public static Metrics getMetrics() {
+        return metrics;
     }
 
     public void setWorldEditHooker(WorldEditHooker worldEditHooker) {
@@ -126,6 +143,75 @@ public class WirelessRedstone extends JavaPlugin {
         }
 
         fullyLoaded = true;
+
+        metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.AdvancedPie("main_sign_types", new Callable<Map<String, Integer>>() {
+            @Override
+            public Map<String, Integer> call() {
+                Map<String, Integer> valueMap = new HashMap<>();
+                valueMap.put("Transmitters", getSigns(SignType.TRANSMITTER));
+                valueMap.put("Receivers", getSigns(SignType.RECEIVER));
+                valueMap.put("Screens", getSigns(SignType.SCREEN));
+                return valueMap;
+            }
+
+            private int getSigns(SignType type) {
+                if (type == SignType.TRANSMITTER) {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessTransmitter)
+                            .count();
+                } else if (type == SignType.RECEIVER) {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessReceiver)
+                            .count();
+                } else {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessScreen)
+                            .count();
+                }
+            }
+        }));
+
+        metrics.addCustomChart(new Metrics.AdvancedPie("receiver_sign_types", new Callable<Map<String, Integer>>() {
+            @Override
+            public Map<String, Integer> call() {
+                Map<String, Integer> valueMap = new HashMap<>();
+                valueMap.put("Normal", getSigns(SignType.RECEIVER));
+                valueMap.put("Inverter", getSigns(SignType.RECEIVER_INVERTER));
+                valueMap.put("Delayer", getSigns(SignType.RECEIVER_DELAYER));
+                valueMap.put("Clock", getSigns(SignType.RECEIVER_CLOCK));
+                valueMap.put("Switch", getSigns(SignType.RECEIVER_SWITCH));
+                return valueMap;
+            }
+
+            private int getSigns(SignType type) {
+                if (type == SignType.RECEIVER_INVERTER) {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessReceiverInverter)
+                            .count();
+                } else if (type == SignType.RECEIVER_DELAYER) {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessReceiverDelayer)
+                            .count();
+                } else if (type == SignType.RECEIVER_CLOCK) {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessReceiverClock)
+                            .count();
+                } else if (type == SignType.RECEIVER_SWITCH) {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessReceiverSwitch)
+                            .count();
+                } else {
+                    return (int) getStorageManager().getAllSigns().stream()
+                            .filter(point -> point instanceof WirelessReceiver)
+                            .count();
+                }
+            }
+        }));
+
+        metrics.addCustomChart(new Metrics.SimplePie("storage_types", () ->
+                ConfigManager.getConfig().getStorageType().toString()
+        ));
     }
 
     @Override

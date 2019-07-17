@@ -1,4 +1,4 @@
-package org.bstats.bukkit;
+package net.licks92.WirelessRedstone;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
