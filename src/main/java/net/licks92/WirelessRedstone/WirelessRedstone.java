@@ -96,6 +96,7 @@ public class WirelessRedstone extends JavaPlugin {
     public void onEnable() {
         instance = this;
         config = ConfigManager.getConfig();
+        config.update(CHANNEL_FOLDER);
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
         stringManager = new StringManager(config.getLanguage());
 
@@ -144,74 +145,76 @@ public class WirelessRedstone extends JavaPlugin {
 
         fullyLoaded = true;
 
-        metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.AdvancedPie("main_sign_types", new Callable<Map<String, Integer>>() {
-            @Override
-            public Map<String, Integer> call() {
-                Map<String, Integer> valueMap = new HashMap<>();
-                valueMap.put("Transmitters", getSigns(SignType.TRANSMITTER));
-                valueMap.put("Receivers", getSigns(SignType.RECEIVER));
-                valueMap.put("Screens", getSigns(SignType.SCREEN));
-                return valueMap;
-            }
-
-            private int getSigns(SignType type) {
-                if (type == SignType.TRANSMITTER) {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessTransmitter)
-                            .count();
-                } else if (type == SignType.RECEIVER) {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessReceiver)
-                            .count();
-                } else {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessScreen)
-                            .count();
+        if (ConfigManager.getConfig().getMetrics()) {
+            metrics = new Metrics(this);
+            metrics.addCustomChart(new Metrics.AdvancedPie("main_sign_types", new Callable<Map<String, Integer>>() {
+                @Override
+                public Map<String, Integer> call() {
+                    Map<String, Integer> valueMap = new HashMap<>();
+                    valueMap.put("Transmitters", getSigns(SignType.TRANSMITTER));
+                    valueMap.put("Receivers", getSigns(SignType.RECEIVER));
+                    valueMap.put("Screens", getSigns(SignType.SCREEN));
+                    return valueMap;
                 }
-            }
-        }));
 
-        metrics.addCustomChart(new Metrics.AdvancedPie("receiver_sign_types", new Callable<Map<String, Integer>>() {
-            @Override
-            public Map<String, Integer> call() {
-                Map<String, Integer> valueMap = new HashMap<>();
-                valueMap.put("Normal", getSigns(SignType.RECEIVER));
-                valueMap.put("Inverter", getSigns(SignType.RECEIVER_INVERTER));
-                valueMap.put("Delayer", getSigns(SignType.RECEIVER_DELAYER));
-                valueMap.put("Clock", getSigns(SignType.RECEIVER_CLOCK));
-                valueMap.put("Switch", getSigns(SignType.RECEIVER_SWITCH));
-                return valueMap;
-            }
-
-            private int getSigns(SignType type) {
-                if (type == SignType.RECEIVER_INVERTER) {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessReceiverInverter)
-                            .count();
-                } else if (type == SignType.RECEIVER_DELAYER) {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessReceiverDelayer)
-                            .count();
-                } else if (type == SignType.RECEIVER_CLOCK) {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessReceiverClock)
-                            .count();
-                } else if (type == SignType.RECEIVER_SWITCH) {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessReceiverSwitch)
-                            .count();
-                } else {
-                    return (int) getStorageManager().getAllSigns().stream()
-                            .filter(point -> point instanceof WirelessReceiver)
-                            .count();
+                private int getSigns(SignType type) {
+                    if (type == SignType.TRANSMITTER) {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessTransmitter)
+                                .count();
+                    } else if (type == SignType.RECEIVER) {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessReceiver)
+                                .count();
+                    } else {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessScreen)
+                                .count();
+                    }
                 }
-            }
-        }));
+            }));
 
-        metrics.addCustomChart(new Metrics.SimplePie("storage_types", () ->
-                ConfigManager.getConfig().getStorageType().toString()
-        ));
+            metrics.addCustomChart(new Metrics.AdvancedPie("receiver_sign_types", new Callable<Map<String, Integer>>() {
+                @Override
+                public Map<String, Integer> call() {
+                    Map<String, Integer> valueMap = new HashMap<>();
+                    valueMap.put("Normal", getSigns(SignType.RECEIVER));
+                    valueMap.put("Inverter", getSigns(SignType.RECEIVER_INVERTER));
+                    valueMap.put("Delayer", getSigns(SignType.RECEIVER_DELAYER));
+                    valueMap.put("Clock", getSigns(SignType.RECEIVER_CLOCK));
+                    valueMap.put("Switch", getSigns(SignType.RECEIVER_SWITCH));
+                    return valueMap;
+                }
+
+                private int getSigns(SignType type) {
+                    if (type == SignType.RECEIVER_INVERTER) {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessReceiverInverter)
+                                .count();
+                    } else if (type == SignType.RECEIVER_DELAYER) {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessReceiverDelayer)
+                                .count();
+                    } else if (type == SignType.RECEIVER_CLOCK) {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessReceiverClock)
+                                .count();
+                    } else if (type == SignType.RECEIVER_SWITCH) {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessReceiverSwitch)
+                                .count();
+                    } else {
+                        return (int) getStorageManager().getAllSigns().stream()
+                                .filter(point -> point instanceof WirelessReceiver)
+                                .count();
+                    }
+                }
+            }));
+
+            metrics.addCustomChart(new Metrics.SimplePie("storage_types", () ->
+                    ConfigManager.getConfig().getStorageType().toString()
+            ));
+        }
     }
 
     @Override

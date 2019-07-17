@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone;
 
 import net.licks92.WirelessRedstone.Storage.StorageType;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.util.FileUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,6 +74,44 @@ public class ConfigManager {
         config.options().copyDefaults(true);
     }
 
+    public void update(String channelFolder) {
+        switch (getConfigVersion()) {
+            case 1: {
+                File channelFolderFile = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);
+                channelFolderFile.mkdir();
+
+                if (getStorageType() == StorageType.SQLITE
+                        && new File(channelFolderFile + File.separator + "channels.db").exists()
+                        && !(new File(channelFolderFile + File.separator + "WirelessRedstoneDatabase.db").exists())) {
+                    new File(channelFolderFile + File.separator + "WirelessRedstoneDatabase.db").delete();
+                    FileUtil.copy(
+                            new File(channelFolderFile + File.separator + "channels.db"),
+                            new File(channelFolderFile + File.separator + "WirelessRedstoneDatabase.db"));
+                }
+
+                copyDefaults();
+
+                setValue(ConfigManager.ConfigPaths.CONFIGVERSION, 2);
+                setValue(ConfigManager.ConfigPaths.UPDATECHECK, true);
+
+                break;
+            }
+            case 2: {
+                removeValue("cancelChunkUnloads");
+                removeValue("cancelChunkUnloadRange");
+
+                copyDefaults();
+
+                setValue(ConfigManager.ConfigPaths.CONFIGVERSION, 3);
+                setValue(ConfigManager.ConfigPaths.METRICS, true);
+
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
     public void setStorageType(StorageType storageType) {
         config.set(ConfigPaths.SAVEMODE.getValue(), storageType.toString().toUpperCase());
         save();
@@ -80,6 +119,11 @@ public class ConfigManager {
 
     public void setValue(ConfigPaths configPaths, Object object) {
         config.set(configPaths.getValue(), object);
+        save();
+    }
+
+    public void removeValue(String path) {
+        config.set(path, null);
         save();
     }
 
