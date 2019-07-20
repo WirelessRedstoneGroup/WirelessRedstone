@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 
 
 public class ConfigManager {
@@ -32,7 +33,7 @@ public class ConfigManager {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                copyStream(WirelessRedstone.getInstance().getResource("config.yml"), new FileOutputStream(file));
+                copyStream(Objects.requireNonNull(WirelessRedstone.getInstance().getResource("config.yml")), new FileOutputStream(file));
             } catch (final Exception e) {
                 e.printStackTrace();
             }
@@ -91,10 +92,10 @@ public class ConfigManager {
 
                 copyDefaults();
 
-                setValue(ConfigManager.ConfigPaths.CONFIGVERSION, 2);
-                setValue(ConfigManager.ConfigPaths.UPDATECHECK, true);
+                setValue(ConfigPaths.CONFIGVERSION, 2);
+                setValue(ConfigPaths.UPDATECHECK, true);
 
-                break;
+                // no break; because we want the switch to fall through next versions
             }
             case 2: {
                 removeValue("cancelChunkUnloads");
@@ -102,8 +103,16 @@ public class ConfigManager {
 
                 copyDefaults();
 
-                setValue(ConfigManager.ConfigPaths.CONFIGVERSION, 3);
-                setValue(ConfigManager.ConfigPaths.METRICS, true);
+                setValue(ConfigPaths.CONFIGVERSION, 3);
+                setValue(ConfigPaths.METRICS, true);
+
+                // no break; because we want the switch to fall through next versions
+            }
+            case 3: {
+                copyDefaults();
+
+                setValue(ConfigPaths.CONFIGVERSION, 4);
+                setValue(ConfigPaths.SENTRY, true);
 
                 break;
             }
@@ -155,10 +164,6 @@ public class ConfigManager {
         return config.getBoolean(ConfigPaths.DROPSIGNBROKEN.getValue(), true);
     }
 
-    public boolean getMetrics() {
-        return config.getBoolean(ConfigPaths.METRICS.getValue(), true);
-    }
-
     public boolean useORLogic() {
         return !config.getString(ConfigPaths.GATELOGIC.getValue(), "OR").equalsIgnoreCase("IGNORE");
     }
@@ -175,10 +180,17 @@ public class ConfigManager {
         return config.getString(ConfigPaths.LANGUAGE.getValue(), "en");
     }
 
+    public boolean getMetrics() {
+        return config.getBoolean(ConfigPaths.METRICS.getValue(), true);
+    }
+
+    public boolean getSentry() {
+        return config.getBoolean(ConfigPaths.SENTRY.getValue(), true);
+    }
+
     public StorageType getStorageType() {
         switch (config.getString(ConfigPaths.SAVEMODE.getValue(), "YML").toUpperCase()) {
             case "YAML":
-                return StorageType.YAML;
             case "YML":
                 return StorageType.YAML;
             case "SQLITE":
@@ -193,7 +205,7 @@ public class ConfigManager {
         UPDATECHECK("CheckForUpdates"), USEVAULT("UseVault"), SILENTMODE("SilentMode"),
         INTERACTTRANSMITTERTIME("InteractTransmitterTime"), CACHEREFRESHRATE("CacheRefreshFrequency"),
         GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken"),
-        METRICS("Metrics");
+        METRICS("Metrics"), SENTRY("Sentry");
 
         private String name;
 

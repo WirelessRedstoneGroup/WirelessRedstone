@@ -10,8 +10,8 @@ import java.util.Map;
 public enum CompatMaterial {
     REDSTONE_TORCH("REDSTONE_TORCH", "REDSTONE_TORCH_ON"),
     REDSTONE_WALL_TORCH("REDSTONE_WALL_TORCH", "REDSTONE_TORCH_ON"),
-    SIGN(new String[]{"OAK_SIGN", "SIGN"}, "SIGN_POST"),
-    WALL_SIGN(new String[]{"OAK_WALL_SIGN", "WALL_SIGN"}, "WALL_SIGN"),
+    SIGN(new String[]{"OAK_SIGN", "SIGN", "SIGN_POST"}),
+    WALL_SIGN(new String[]{"OAK_WALL_SIGN", "WALL_SIGN", "WALL_SIGN"}),
     COMPARATOR("COMPARATOR", "REDSTONE_COMPARATOR"),
     COMPARATOR_ON("COMPARATOR", "REDSTONE_COMPARATOR_ON"),
     COMPARATOR_OFF("COMPARATOR", "REDSTONE_COMPARATOR_OFF"),
@@ -23,26 +23,22 @@ public enum CompatMaterial {
     private Material material;
     private List<Material> materials;
 
-    CompatMaterial(String[] newVersions, String oldVersion) {
+    CompatMaterial(String[] versions) {
         HashMap<String, Material> materialMap = new HashMap<>();
         for (Material material : Material.values()) {
             materialMap.put(material.toString(), material);
         }
 
-        if (Utils.isNewMaterialSystem()) {
-            for (String newVersion : newVersions) {
-                this.material = materialMap.entrySet()
-                        .stream()
-                        .filter( e -> e.getKey().equalsIgnoreCase(newVersion))
-                        .map(Map.Entry::getValue)
-                        .findFirst()
-                        .orElse(null);
+        for (String newVersion : versions) {
+            this.material = materialMap.entrySet()
+                    .stream()
+                    .filter(e -> e.getKey().equalsIgnoreCase(newVersion))
+                    .map(Map.Entry::getValue)
+                    .findFirst()
+                    .orElse(null);
 
-                if (this.material != null)
-                    break;
-            }
-        } else {
-            this.material = materialMap.get(oldVersion);
+            if (this.material != null)
+                break;
         }
     }
 
@@ -62,7 +58,7 @@ public enum CompatMaterial {
     CompatMaterial(String regex) {
         this.materials = new ArrayList<>();
         for (Material material : Material.values()) {
-            if (material.toString().contains(regex)){
+            if (material.toString().contains(regex)) {
                 this.materials.add(material);
             }
         }

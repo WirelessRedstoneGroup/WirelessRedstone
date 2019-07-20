@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class DatabaseClient extends SQLiteOpenHelper {
     private static final String DB_NAME = "WirelessRedstoneDatabase";
@@ -69,7 +70,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
     @Override
     protected void onCreate(SQLiteDatabase db) {
         try {
-            String sql = IOUtils.toString(WirelessRedstone.getInstance().getResource("Database_1.sql"), StandardCharsets.UTF_8);
+            String sql = IOUtils.toString(WirelessRedstone.getInstance().getResource("database/Database_1.sql"), StandardCharsets.UTF_8);
             db.execSql(sql);
         } catch (IOException e) {
             WirelessRedstone.getWRLogger().info("There was an error while initializing the database.");
@@ -535,7 +536,10 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
         WirelessRedstone.getWRLogger().debug("---------------");
 
-        String sql = IOUtils.toString(WirelessRedstone.getInstance().getResource("Database_1.sql"), StandardCharsets.UTF_8);
+        String sql = IOUtils.toString(
+                Objects.requireNonNull(WirelessRedstone.getInstance().getResource("database/Database_1.sql")),
+                StandardCharsets.UTF_8
+        );
         db.execSql(sql);
 
         progress = 0;

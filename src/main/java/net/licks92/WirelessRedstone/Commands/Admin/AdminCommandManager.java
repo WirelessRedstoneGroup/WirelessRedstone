@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone.Commands.Admin;
 
+import io.sentry.Sentry;
 import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.Commands.WirelessCommandTabCompletion;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -24,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 
 public class AdminCommandManager implements CommandExecutor, TabCompleter {
 
@@ -109,7 +112,17 @@ public class AdminCommandManager implements CommandExecutor, TabCompleter {
             a.remove(0);
             args = a.toArray(new String[a.size()]);
 
-            wanted.onCommand(sender, args);
+            try {
+                wanted.onCommand(sender, args);
+            } catch (RuntimeException ex) {
+                sender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
+
+                CommandException commandException = new CommandException(ex.getMessage(), ex);
+                WirelessRedstone.getInstance().getLogger().log(Level.SEVERE, "An exception was raised", commandException);
+                if (WirelessRedstone.getInstance().isSentryEnabled()) {
+                    Sentry.capture(commandException);
+                }
+            }
         }
 
         return true;

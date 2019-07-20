@@ -40,7 +40,7 @@ public class Help extends WirelessCommand {
         for (int i = 0; i < commandListLength / maxItemsPerPage; i++)
             totalPages++;
 
-        if(commandListLength % maxItemsPerPage == 0)
+        if (commandListLength % maxItemsPerPage == 0)
             totalPages--;
 
         if (page > totalPages) {

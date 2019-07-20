@@ -1,10 +1,13 @@
 package net.licks92.WirelessRedstone;
 
+import io.sentry.Sentry;
 import net.licks92.WirelessRedstone.Commands.Admin.AdminCommandManager;
 import net.licks92.WirelessRedstone.Commands.CommandManager;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
+import net.licks92.WirelessRedstone.Sentry.EventExceptionHandler;
+import net.licks92.WirelessRedstone.Sentry.WirelessRedstoneSentryClientFactory;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiver;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverClock;
@@ -19,11 +22,15 @@ import net.licks92.WirelessRedstone.String.StringManager;
 import net.licks92.WirelessRedstone.String.Strings;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class WirelessRedstone extends JavaPlugin {
@@ -42,6 +49,7 @@ public class WirelessRedstone extends JavaPlugin {
     private ConfigManager config;
     private WorldEditHooker worldEditHooker;
     private boolean fullyLoaded = false;
+    private boolean sentryEnabled = true;
 
 
     public static WirelessRedstone getInstance() {
@@ -80,12 +88,16 @@ public class WirelessRedstone extends JavaPlugin {
         return adminCommandManager;
     }
 
-    public WorldEditHooker getWorldEditHooker() {
-        return worldEditHooker;
-    }
-
     public static Metrics getMetrics() {
         return metrics;
+    }
+
+    public boolean isSentryEnabled() {
+        return sentryEnabled;
+    }
+
+    public WorldEditHooker getWorldEditHooker() {
+        return worldEditHooker;
     }
 
     public void setWorldEditHooker(WorldEditHooker worldEditHooker) {
@@ -97,6 +109,7 @@ public class WirelessRedstone extends JavaPlugin {
         instance = this;
         config = ConfigManager.getConfig();
         config.update(CHANNEL_FOLDER);
+        sentryEnabled = config.getSentry() && !System.getProperty("mc.development").equalsIgnoreCase("FALSE");
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
         stringManager = new StringManager(config.getLanguage());
 
@@ -118,10 +131,48 @@ public class WirelessRedstone extends JavaPlugin {
         commandManager = new CommandManager();
         adminCommandManager = new AdminCommandManager();
 
+        if (sentryEnabled) {
+            YamlConfiguration pluginConfig = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(Objects.requireNonNull(getResource("plugin.yml")))
+            );
+
+            Sentry.init(pluginConfig.getString("Sentry.dsn", ""), new WirelessRedstoneSentryClientFactory());
+            Sentry.getStoredClient().setRelease(pluginConfig.getString("version", "0.0.0"));
+        }
+
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new WorldListener(), this);
-        pm.registerEvents(new BlockListener(), this);
-        pm.registerEvents(new PlayerListener(), this);
+
+        boolean eventCatchingSuccess = true;
+        try {
+            if (sentryEnabled) {
+                EventExceptionHandler eventExceptionHandler = new EventExceptionHandler() {
+                    @Override
+                    public boolean handle(Throwable ex, Event event) {
+                        Sentry.capture(ex);
+                        // getLogger().log(Level.SEVERE, "Error " + ex.getMessage() + " occured for " + event, ex);
+
+                        // Don't pass it on
+                        // return true;
+                        // Use Bukkit's default exception handler
+                        return false;
+                    }
+                };
+
+                EventExceptionHandler.registerEvents(new WorldListener(), this, eventExceptionHandler);
+                EventExceptionHandler.registerEvents(new BlockListener(), this, eventExceptionHandler);
+                EventExceptionHandler.registerEvents(new PlayerListener(), this, eventExceptionHandler);
+            }
+        } catch (RuntimeException ex) {
+            eventCatchingSuccess = false;
+            getWRLogger().warning("Couldn't register events with Sentry catcher.");
+            Sentry.capture(ex);
+        }
+
+        if (!eventCatchingSuccess || !sentryEnabled) {
+            pm.registerEvents(new WorldListener(), this);
+            pm.registerEvents(new BlockListener(), this);
+            pm.registerEvents(new PlayerListener(), this);
+        }
 
         getCommand("wirelessredstone").setExecutor(commandManager);
         getCommand("wr").setExecutor(commandManager);
@@ -236,7 +287,7 @@ public class WirelessRedstone extends JavaPlugin {
 
     /**
      * Re-initialize strings. This can be used to switch languages after a config change.
-     *
+     * <p>
      * Removes reference to stringManager and place a new reference.
      */
     public void resetStrings() {

@@ -6,6 +6,8 @@ authors: [licks92, Bart_0110]
 version: ${project.version}
 description: The reference in long-distance redstone connections! Create your own wifi-redstone network with WirelessRedstone!
 softdepend: [Vault, WorldEdit, Multiverse-Core, MultiWorld]
+sentry:
+  dsn: '${project.sentry.dsn}'
 commands:
   wirelessredstone:
     aliases: [wr, wredstone, wifi]
