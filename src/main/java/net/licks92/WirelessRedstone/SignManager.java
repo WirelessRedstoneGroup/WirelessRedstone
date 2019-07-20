@@ -17,10 +17,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SignManager {
 
@@ -264,13 +264,8 @@ public class SignManager {
      * @return Boolean; Sign registred or not
      */
     public boolean isSignRegistred(Location location) {
-        for (WirelessPoint point : WirelessRedstone.getStorageManager().getAllSigns()) {
-            if (Utils.sameLocation(point.getLocation(), location)) {
-                return true;
-            }
-        }
-
-        return false;
+        return WirelessRedstone.getStorageManager().getAllSigns().stream()
+                .anyMatch(point -> Utils.sameLocation(point.getLocation(), location));
     }
 
     /**
@@ -286,14 +281,10 @@ public class SignManager {
         }
 
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
-        WirelessPoint point = null;
-
-        for (WirelessPoint pointList : channel.getSigns()) {
-            if (Utils.sameLocation(pointList.getLocation(), location)) {
-                point = pointList;
-                break;
-            }
-        }
+        WirelessPoint point = channel.getSigns().stream()
+                .filter(pointList -> Utils.sameLocation(pointList.getLocation(), location))
+                .findFirst()
+                .orElse(null);
 
         if (point == null) {
             return false;
@@ -307,13 +298,9 @@ public class SignManager {
         HashMap<WirelessChannel, Collection<WirelessPoint>> map = new HashMap<>();
 
         for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
-            List<WirelessPoint> points = new ArrayList<>();
-
-            for (WirelessPoint point : channel.getSigns()) {
-                if (Bukkit.getWorld(point.getWorld()) == null) {
-                    points.add(point);
-                }
-            }
+            List<WirelessPoint> points = channel.getSigns().stream()
+                    .filter(point -> Bukkit.getWorld(point.getWorld()) == null)
+                    .collect(Collectors.toList());
 
             if (!points.isEmpty()) {
                 map.put(channel, points);

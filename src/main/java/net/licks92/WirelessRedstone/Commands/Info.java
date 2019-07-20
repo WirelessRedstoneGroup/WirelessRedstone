@@ -19,23 +19,23 @@ public class Info extends WirelessCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if(args.length == 0){
+        if (args.length == 0) {
             Utils.sendFeedback(WirelessRedstone.getStrings().commandTooFewArguments, sender, true);
             return;
         }
 
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(args[0]);
-        if(channel == null){
+        if (channel == null) {
             Utils.sendFeedback(WirelessRedstone.getStrings().channelNotFound, sender, true);
             return;
         }
 
         SignType signType = null;
 
-        if(args.length >= 2)
+        if (args.length >= 2)
             signType = Utils.getType(args[1]);
 
-        if(signType == null){
+        if (signType == null) {
             Utils.sendFeedback(ChatColor.GRAY + "---- " + ChatColor.GREEN + "WirelessChannel " + channel.getName() + ChatColor.GRAY + " ----",
                     sender, false);
             Utils.sendFeedback(ChatColor.GRAY + "Is active: " +
@@ -47,7 +47,7 @@ public class Info extends WirelessCommand {
                     + ChatColor.GRAY + channel.getReceivers().size() + ChatColor.GREEN + " receivers, "
                     + ChatColor.GRAY + channel.getScreens().size() + ChatColor.GREEN + " screens", sender, false);
         } else {
-            if(!(sender instanceof Player)){
+            if (!(sender instanceof Player)) {
                 Utils.sendFeedback(WirelessRedstone.getStrings().commandOnlyInGame, sender, true);
                 return;
             }
@@ -55,13 +55,13 @@ public class Info extends WirelessCommand {
             int index;
             switch (signType) {
                 case TRANSMITTER:
-                    if(channel.getTransmitters().size() == 0){
+                    if (channel.getTransmitters().size() == 0) {
                         Utils.sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, sender, true);
                         return;
                     }
 
                     index = 0;
-                    for(WirelessTransmitter transmitter : channel.getTransmitters()){
+                    for (WirelessTransmitter transmitter : channel.getTransmitters()) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getTeleportString(sender.getName())
                                 .replaceAll("%%HOVERTEXT", "Click me to teleport to the sign location!")
                                 .replaceAll("%%NAME", channel.getName()).replaceAll("%%TYPE", "transmitter")
@@ -72,13 +72,13 @@ public class Info extends WirelessCommand {
                     }
                     break;
                 case RECEIVER:
-                    if(channel.getReceivers().size() == 0){
+                    if (channel.getReceivers().size() == 0) {
                         Utils.sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, sender, true);
                         return;
                     }
 
                     index = 0;
-                    for(WirelessReceiver receiver : channel.getReceivers()){
+                    for (WirelessReceiver receiver : channel.getReceivers()) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getTeleportString(sender.getName())
                                 .replaceAll("%%HOVERTEXT", "Click me to teleport to the sign location!")
                                 .replaceAll("%%NAME", channel.getName()).replaceAll("%%TYPE", "receiver")
@@ -89,13 +89,13 @@ public class Info extends WirelessCommand {
                     }
                     break;
                 case SCREEN:
-                    if(channel.getScreens().size() == 0){
+                    if (channel.getScreens().size() == 0) {
                         Utils.sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, sender, true);
                         return;
                     }
 
                     index = 0;
-                    for(WirelessScreen screen : channel.getScreens()){
+                    for (WirelessScreen screen : channel.getScreens()) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Utils.getTeleportString(sender.getName())
                                 .replaceAll("%%HOVERTEXT", "Click me to teleport to the sign location!")
                                 .replaceAll("%%NAME", channel.getName()).replaceAll("%%TYPE", "screen")

@@ -35,11 +35,13 @@ public class AdminList extends WirelessCommand {
         int maxItemsPerPage = 10;
         int totalPages = 1;
 
-        for (int i = 0; i < channelListLength / maxItemsPerPage; i++)
+        for (int i = 0; i < channelListLength / maxItemsPerPage; i++) {
             totalPages++;
+        }
 
-        if(channelListLength % maxItemsPerPage == 0)
+        if (channelListLength % maxItemsPerPage == 0) {
             totalPages--;
+        }
 
         if (page > totalPages) {
             if (totalPages > 1)
@@ -55,9 +57,9 @@ public class AdminList extends WirelessCommand {
         Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone channels", sender, false);
         Utils.sendFeedback(ChatColor.WHITE + "Page " + page + " of " + totalPages, sender, false);
 
-        if (totalPages == 0)
+        if (totalPages == 0) {
             Utils.sendFeedback(WirelessRedstone.getStrings().commandNoData, sender, true);
-        else {
+        } else {
             for (int i = currentItem; i < (currentItem + maxItemsPerPage); i++) {
                 if (!(i >= channelListLength))
                     Utils.sendCommandFeedback(channelList.get(i), sender, false);

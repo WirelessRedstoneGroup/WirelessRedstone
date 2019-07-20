@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BlockListener implements Listener {
 
@@ -74,7 +75,7 @@ public class BlockListener implements Listener {
             return;
         }
 
-        boolean isPowered = false;
+        boolean isPowered;
         if (Utils.isNewMaterialSystem()) {
             isPowered = ((org.bukkit.block.data.Powerable) event.getBlock().getBlockData()).isPowered();
         } else {
@@ -156,43 +157,40 @@ public class BlockListener implements Listener {
 
         //TODO: #registerSign Implement error message if failed
         final int finalDelay = delay;
-        Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                Sign sign = (Sign) event.getBlock().getState();
-                BlockFace signDirection;
-                if (Utils.isNewMaterialSystem()) {
-                    if (sign.getBlockData() instanceof Rotatable) {
-                        signDirection = ((Rotatable) sign.getBlockData()).getRotation();
-                    } else if (sign.getBlockData() instanceof Directional) {
-                        signDirection = ((Directional) sign.getBlockData()).getFacing();
-                    } else {
-                        throw new IllegalStateException("Couldn't find the right rotation for the sign!");
-                    }
+        Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), () -> {
+            Sign sign = (Sign) event.getBlock().getState();
+            BlockFace signDirection;
+            if (Utils.isNewMaterialSystem()) {
+                if (sign.getBlockData() instanceof Rotatable) {
+                    signDirection = ((Rotatable) sign.getBlockData()).getRotation();
+                } else if (sign.getBlockData() instanceof Directional) {
+                    signDirection = ((Directional) sign.getBlockData()).getFacing();
                 } else {
-                    signDirection = ((Directional) sign.getData()).getFacing();
+                    throw new IllegalStateException("Couldn't find the right rotation for the sign!");
                 }
+            } else {
+                signDirection = ((Directional) sign.getData()).getFacing();
+            }
 
-                int result = WirelessRedstone.getSignManager().registerSign(
-                        channelName,
-                        event.getBlock(),
-                        Utils.getSignType(sign.getLine(0), sign.getLine(2)),
-                        signDirection,
-                        Collections.singletonList(event.getPlayer().getUniqueId().toString()),
-                        finalDelay
-                );
+            int result = WirelessRedstone.getSignManager().registerSign(
+                    channelName,
+                    event.getBlock(),
+                    Utils.getSignType(sign.getLine(0), sign.getLine(2)),
+                    signDirection,
+                    Collections.singletonList(event.getPlayer().getUniqueId().toString()),
+                    finalDelay
+            );
 
-                if (result == 0) {
-                    Utils.sendFeedback(WirelessRedstone.getStrings().channelExtended, event.getPlayer(), false);
-                } else if (result == 1) {
-                    Utils.sendFeedback(WirelessRedstone.getStrings().channelCreated, event.getPlayer(), false);
-                } else if (result == -1) {
-                    handlePlaceCancelled(event.getBlock());
-                    Utils.sendFeedback(WirelessRedstone.getStrings().commandDelayMin, event.getPlayer(), true);
-                } else if (result == -2) {
-                    handlePlaceCancelled(event.getBlock());
-                    Utils.sendFeedback(WirelessRedstone.getStrings().commandIntervalMin, event.getPlayer(), true);
-                }
+            if (result == 0) {
+                Utils.sendFeedback(WirelessRedstone.getStrings().channelExtended, event.getPlayer(), false);
+            } else if (result == 1) {
+                Utils.sendFeedback(WirelessRedstone.getStrings().channelCreated, event.getPlayer(), false);
+            } else if (result == -1) {
+                handlePlaceCancelled(event.getBlock());
+                Utils.sendFeedback(WirelessRedstone.getStrings().commandDelayMin, event.getPlayer(), true);
+            } else if (result == -2) {
+                handlePlaceCancelled(event.getBlock());
+                Utils.sendFeedback(WirelessRedstone.getStrings().commandIntervalMin, event.getPlayer(), true);
             }
         });
     }
@@ -266,14 +264,12 @@ public class BlockListener implements Listener {
                 if (block.getRelative(directional.getFacing().getOppositeFace()).getType().isOccluding() &&
                         !block.getRelative(directional.getFacing().getOppositeFace()).getType().isInteractable()) {
                     Block relBlock = block.getRelative(directional.getFacing().getOppositeFace());
-                    for (BlockFace axisBlockFace : Utils.getAxisBlockFaces()) {
-                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-                    }
-
+                    locations = Utils.getAxisBlockFaces().stream()
+                            .map(axisBlockFace -> relBlock.getRelative(axisBlockFace).getLocation())
+                            .collect(Collectors.toList());
                 }
 
                 locations.add(block.getRelative(directional.getFacing().getOppositeFace()).getRelative(directional.getFacing().getOppositeFace()).getLocation());
-
                 blockFaces = Collections.singletonList(directional.getFacing().getOppositeFace());
             } else {
                 Directional directional = (Directional) block.getState().getData();
@@ -281,14 +277,12 @@ public class BlockListener implements Listener {
                 if (block.getRelative(directional.getFacing()).getType().isOccluding() &&
                         !block.getRelative(directional.getFacing()).getType().isInteractable()) {
                     Block relBlock = block.getRelative(directional.getFacing());
-                    for (BlockFace axisBlockFace : Utils.getAxisBlockFaces()) {
-                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-                    }
-
+                    locations = Utils.getAxisBlockFaces().stream()
+                            .map(axisBlockFace -> relBlock.getRelative(axisBlockFace).getLocation())
+                            .collect(Collectors.toList());
                 }
 
                 locations.add(block.getRelative(directional.getFacing()).getRelative(directional.getFacing()).getLocation());
-
                 blockFaces = Collections.singletonList(directional.getFacing());
             }
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {

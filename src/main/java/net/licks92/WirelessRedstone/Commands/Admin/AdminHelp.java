@@ -39,11 +39,13 @@ public class AdminHelp extends WirelessCommand {
         int maxItemsPerPage = 8;
         int totalPages = 1;
 
-        for (int i = 0; i < commandListLength / maxItemsPerPage; i++)
+        for (int i = 0; i < commandListLength / maxItemsPerPage; i++) {
             totalPages++;
+        }
 
-        if(commandListLength % maxItemsPerPage == 0)
+        if (commandListLength % maxItemsPerPage == 0) {
             totalPages--;
+        }
 
         if (page > totalPages) {
             if (totalPages > 1)
@@ -59,9 +61,9 @@ public class AdminHelp extends WirelessCommand {
         Utils.sendFeedback(ChatColor.WHITE + "WirelessRedstone admin help menu", sender, false);
         Utils.sendFeedback(ChatColor.WHITE + "Page " + page + " of " + totalPages, sender, false);
 
-        if (totalPages == 0)
+        if (totalPages == 0) {
             Utils.sendFeedback(WirelessRedstone.getStrings().commandNoData, sender, true);
-        else {
+        } else {
             for (int i = currentItem; i < (currentItem + maxItemsPerPage); i++) {
                 if (!(i >= commandListLength))
                     Utils.sendCommandFeedback(commandList.get(i), sender, false);

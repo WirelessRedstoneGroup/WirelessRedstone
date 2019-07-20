@@ -31,8 +31,7 @@ public class Teleport extends WirelessCommand {
             return;
         }
 
-        int index = 0;
-
+        int index;
         try {
             index = Integer.parseInt(args[2]);
         } catch (NumberFormatException ex) {

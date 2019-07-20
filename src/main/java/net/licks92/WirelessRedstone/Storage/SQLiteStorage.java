@@ -50,7 +50,8 @@ public class SQLiteStorage extends StorageConfiguration {
 
     @Override
     public boolean createChannel(WirelessChannel channel) {
-        channel.getSigns().forEach(wirelessPoint -> DatabaseClient.getInstance().insertWirelessPoint(channel, wirelessPoint));
+        channel.getSigns()
+                .forEach(wirelessPoint -> DatabaseClient.getInstance().insertWirelessPoint(channel, wirelessPoint));
 
         return super.createChannel(channel);
     }

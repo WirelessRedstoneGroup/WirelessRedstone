@@ -25,8 +25,8 @@ public class Lock extends WirelessCommand {
         }
 
         boolean newState = !channel.isLocked();
-        if(args.length >= 2) {
-            if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false"))
+        if (args.length >= 2) {
+            if (args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false"))
                 newState = args[1].equalsIgnoreCase("true");
         }
 

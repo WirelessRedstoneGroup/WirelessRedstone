@@ -32,13 +32,7 @@ public class AdminWipeData extends WirelessCommand {
             confirmation.add(uuid);
 
             final UUID finalUuid = uuid;
-            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    confirmation.remove(finalUuid);
-                }
-            }, 20 * 15);
-
+            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), () -> confirmation.remove(finalUuid), 20 * 15);
             return;
         }
 

@@ -34,7 +34,7 @@ public class AdminRemoveOwner extends WirelessCommand {
             return;
         }
 
-        if(!channel.getOwners().contains(playerName)){
+        if (!channel.getOwners().contains(playerName)) {
             Utils.sendFeedback(WirelessRedstone.getStrings().channelAlreadyOwner, sender, true);
             return;
         }

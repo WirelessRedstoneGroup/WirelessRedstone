@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @SerializableAs("WirelessChannel")
 public class WirelessChannel implements ConfigurationSerializable {
@@ -90,23 +91,15 @@ public class WirelessChannel implements ConfigurationSerializable {
 
         active = true;
 
-        for (WirelessReceiver receiver : getReceivers()) {
-            receiver.turnOn(name);
-        }
-
-        for (WirelessScreen screen : getScreens()) {
-            screen.turnOn();
-        }
+        getReceivers().forEach(receiver -> receiver.turnOn(name));
+        getScreens().forEach(WirelessScreen::turnOn);
 
         WirelessRedstone.getStorage().updateSwitchState(this);
 
         if (time >= 50) {
-            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    turnOff(null, true);
-                }
-            }, time / 50);
+            Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(),
+                    () -> turnOff(null, true),
+                    time / 50);
         }
     }
 
@@ -146,13 +139,8 @@ public class WirelessChannel implements ConfigurationSerializable {
 
         active = false;
 
-        for (WirelessReceiver receiver : getReceivers()) {
-            receiver.turnOff(name);
-        }
-
-        for (WirelessScreen screen : getScreens()) {
-            screen.turnOff();
-        }
+        getReceivers().forEach(receiver -> receiver.turnOff(name));
+        getScreens().forEach(WirelessScreen::turnOff);
     }
 
     public void addWirelessPoint(WirelessPoint wirelessPoint) {
@@ -199,7 +187,7 @@ public class WirelessChannel implements ConfigurationSerializable {
                         owners.remove(owner);
                     }
                 } else {
-                    owners.add(Bukkit.getPlayer(owner).getUniqueId().toString());
+                    owners.add(Objects.requireNonNull(Bukkit.getPlayer(owner)).getUniqueId().toString());
                     owners.remove(owner);
                 }
             }

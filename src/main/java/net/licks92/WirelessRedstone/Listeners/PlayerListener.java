@@ -27,6 +27,10 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (event.getClickedBlock() == null) {
+            return;
+        }
+
         if (!(event.getClickedBlock().getState() instanceof Sign)) {
             return;
         }

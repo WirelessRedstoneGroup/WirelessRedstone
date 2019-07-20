@@ -3,9 +3,11 @@ package net.licks92.WirelessRedstone;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public enum CompatMaterial {
     REDSTONE_TORCH("REDSTONE_TORCH", "REDSTONE_TORCH_ON"),
@@ -24,10 +26,8 @@ public enum CompatMaterial {
     private List<Material> materials;
 
     CompatMaterial(String[] versions) {
-        HashMap<String, Material> materialMap = new HashMap<>();
-        for (Material material : Material.values()) {
-            materialMap.put(material.toString(), material);
-        }
+        HashMap<String, Material> materialMap = Arrays.stream(Material.values())
+                .collect(Collectors.toMap(Enum::toString, material -> material, (a, b) -> b, HashMap::new));
 
         for (String newVersion : versions) {
             this.material = materialMap.entrySet()
@@ -43,10 +43,8 @@ public enum CompatMaterial {
     }
 
     CompatMaterial(String newVersion, String oldVersion) {
-        HashMap<String, Material> materialMap = new HashMap<>();
-        for (Material material : Material.values()) {
-            materialMap.put(material.toString(), material);
-        }
+        HashMap<String, Material> materialMap = Arrays.stream(Material.values())
+                .collect(Collectors.toMap(Enum::toString, material -> material, (a, b) -> b, HashMap::new));
 
         if (Utils.isNewMaterialSystem()) {
             this.material = materialMap.get(newVersion);
@@ -57,11 +55,9 @@ public enum CompatMaterial {
 
     CompatMaterial(String regex) {
         this.materials = new ArrayList<>();
-        for (Material material : Material.values()) {
-            if (material.toString().contains(regex)) {
-                this.materials.add(material);
-            }
-        }
+        Arrays.stream(Material.values())
+                .filter(material -> material.toString().contains(regex))
+                .forEach(material -> this.materials.add(material));
     }
 
     /**

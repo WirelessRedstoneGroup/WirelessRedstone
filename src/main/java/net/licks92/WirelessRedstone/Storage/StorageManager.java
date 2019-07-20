@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -78,9 +79,7 @@ public class StorageManager {
         allChannels.clear();
         Collection<WirelessChannel> channels = getStorage().getAllChannels();
 
-        for (WirelessChannel channel : channels) {
-            allChannels.put(channel.getName(), channel);
-        }
+        channels.forEach(channel -> allChannels.put(channel.getName(), channel));
     }
 
     protected void updateList(String channelName, WirelessChannel channel) {
@@ -109,9 +108,9 @@ public class StorageManager {
 
     public Collection<WirelessPoint> getAllSigns() {
         List<WirelessPoint> collection = new ArrayList<>();
-        for (WirelessChannel channel : getChannels()) {
-            collection.addAll(channel.getSigns());
-        }
+        getChannels().stream()
+                .map(WirelessChannel::getSigns)
+                .forEach(collection::addAll);
         return collection;
     }
 
@@ -137,15 +136,13 @@ public class StorageManager {
         if (storageType == StorageType.YAML) {
             final FilenameFilter filter = (dir, name) -> name.toLowerCase().endsWith(".yml");
 
-            for (File f : Objects.requireNonNull(channelFolderFile.listFiles(filter))) {
-                f.delete();
-            }
+            Arrays.stream(Objects.requireNonNull(channelFolderFile.listFiles(filter)))
+                    .forEach(File::delete);
         } else {
             final FilenameFilter filter = (dir, name) -> name.toLowerCase().endsWith(".db");
 
-            for (File f : Objects.requireNonNull(channelFolderFile.listFiles(filter))) {
-                f.delete();
-            }
+            Arrays.stream(Objects.requireNonNull(channelFolderFile.listFiles(filter)))
+                    .forEach(File::delete);
         }
 
         WirelessRedstone.getStorageManager().updateChannels(false);

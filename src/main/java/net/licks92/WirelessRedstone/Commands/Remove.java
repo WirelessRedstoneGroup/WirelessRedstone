@@ -21,14 +21,14 @@ public class Remove extends WirelessCommand {
             return;
         }
 
-        if(!hasAccessToChannel(sender, args[0])){
+        if (!hasAccessToChannel(sender, args[0])) {
             Utils.sendFeedback(WirelessRedstone.getStrings().permissionChannelAccess, sender, true);
             return;
         }
 
         boolean removeSigns = false;
-        if(args.length >= 2) {
-            if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false"))
+        if (args.length >= 2) {
+            if (args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false"))
                 removeSigns = args[1].equalsIgnoreCase("true");
         }
 

@@ -66,8 +66,7 @@ public class StringManager {
         if (stream == null)
             stream = plugin.getResource(stringFolder + "strings_en.json");
 
-        Reader reader = null;
-        reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
 
         strings = new Gson().fromJson(reader, Strings.class);
     }

@@ -5,7 +5,6 @@ import net.licks92.WirelessRedstone.Commands.CommandInfo;
 import net.licks92.WirelessRedstone.Commands.WirelessCommand;
 import net.licks92.WirelessRedstone.Commands.WirelessCommandTabCompletion;
 import net.licks92.WirelessRedstone.Signs.SignType;
-import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Storage.StorageType;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
@@ -18,6 +17,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class AdminCommandManager implements CommandExecutor, TabCompleter {
 
@@ -44,7 +45,6 @@ public class AdminCommandManager implements CommandExecutor, TabCompleter {
 //        cmds.add(new AdminRestore());
         cmds.add(new AdminPurge());
         cmds.add(new AdminWipeData());
-//        cmds.add(new AdminUpdateCache());
     }
 
     @Override
@@ -198,15 +198,12 @@ public class AdminCommandManager implements CommandExecutor, TabCompleter {
                 availableCompletions.add(Boolean.TRUE.toString());
                 availableCompletions.add(Boolean.FALSE.toString());
             } else if (tabCompletion[index] == WirelessCommandTabCompletion.PLAYER) {
-                List<String> players = new ArrayList<>();
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    players.add(player.getName());
-                }
-                availableCompletions.addAll(players);
+                availableCompletions.addAll(Bukkit.getOnlinePlayers().stream()
+                        .map(HumanEntity::getName)
+                        .collect(Collectors.toList()));
             } else if (tabCompletion[index] == WirelessCommandTabCompletion.CHANNEL) {
-                for (WirelessChannel channel : WirelessRedstone.getStorageManager().getChannels()) {
-                    availableCompletions.add(channel.getName());
-                }
+                WirelessRedstone.getStorageManager().getChannels()
+                        .forEach(c -> availableCompletions.add(c.getName()));
             } else if (tabCompletion[index] == WirelessCommandTabCompletion.SIGNTYPE) {
                 for (SignType type : SignType.values()) {
                     availableCompletions.add(type.name());
