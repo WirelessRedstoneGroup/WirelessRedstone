@@ -36,4 +36,13 @@
     <build>
         <defaultGoal>clean install</defaultGoal>
     </build>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>13.0</version>
+        </dependency>
+    </dependencies>
 </project>

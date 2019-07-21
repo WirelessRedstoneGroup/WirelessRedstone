@@ -2,6 +2,7 @@ package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.CompatMaterial;
 import net.licks92.WirelessRedstone.ConfigManager;
+import net.licks92.WirelessRedstone.Reflection.InternalProvider;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
@@ -21,13 +22,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Attachable;
-import org.bukkit.material.Directional;
-import org.bukkit.material.Redstone;
-import org.bukkit.material.TripwireHook;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,7 +39,9 @@ public class BlockListener implements Listener {
         }
 
         if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
-            handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, true);
+            handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, false, false); // skipLocation: true
+        } else {
+            handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, false, event.getNewCurrent() == 0);
         }
     }
 
@@ -62,31 +59,21 @@ public class BlockListener implements Listener {
             return;
         }
 
-        //TODO: FIX VERSION ISSUE
-        if (Utils.isNewMaterialSystem()) {
-            if (!(event.getBlock().getBlockData() instanceof org.bukkit.block.data.Powerable)) {
-                return;
-            }
-        } else {
-            if (!(event.getBlock().getState().getData() instanceof Redstone)) {
-                return;
-            }
-        }
-
-        if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
+        if (!InternalProvider.getCompatBlockData().isPowerable(event.getBlock())) {
             return;
         }
 
-        boolean isPowered;
+        // Testing for better performance
+//        if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
+//            return;
+//        }
 
-        //TODO: FIX VERSION ISSUE
-        if (Utils.isNewMaterialSystem()) {
-            isPowered = ((org.bukkit.block.data.Powerable) event.getBlock().getBlockData()).isPowered();
-        } else {
-            isPowered = ((Redstone) event.getBlock().getState().getData()).isPowered();
+        boolean isPowered = InternalProvider.getCompatBlockData().isPowered(event.getBlock());
+
+        // Testing to handle only dispowering or all events
+        if (!isPowered) {
+            handleRedstoneEvent(event.getBlock(), false, false, false);
         }
-
-        handleRedstoneEvent(event.getBlock(), isPowered, false);
     }
 
     @EventHandler
@@ -163,20 +150,7 @@ public class BlockListener implements Listener {
         final int finalDelay = delay;
         Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), () -> {
             Sign sign = (Sign) event.getBlock().getState();
-            BlockFace signDirection;
-
-            //TODO: FIX VERSION ISSUE
-            if (Utils.isNewMaterialSystem()) {
-                if (sign.getBlockData() instanceof org.bukkit.block.data.Rotatable) {
-                    signDirection = ((org.bukkit.block.data.Rotatable) sign.getBlockData()).getRotation();
-                } else if (sign.getBlockData() instanceof Directional) {
-                    signDirection = ((Directional) sign.getBlockData()).getFacing();
-                } else {
-                    throw new IllegalStateException("Couldn't find the right rotation for the sign!");
-                }
-            } else {
-                signDirection = ((Directional) sign.getData()).getFacing();
-            }
+            BlockFace signDirection = InternalProvider.getCompatBlockData().getSignRotation(event.getBlock());
 
             int result = WirelessRedstone.getSignManager().registerSign(
                     channelName,
@@ -204,14 +178,14 @@ public class BlockListener implements Listener {
     @EventHandler
     public void on(BlockPlaceEvent event) {
         if (event.getBlock().getType() == Material.REDSTONE_BLOCK || event.getBlock().getType() == CompatMaterial.REDSTONE_TORCH.getMaterial()) {
-            handleRedstoneEvent(event.getBlock(), true, false);
+            handleRedstoneEvent(event.getBlock(), true, false, false);
         }
     }
 
     @EventHandler
     public void on(BlockBreakEvent event) {
         if (event.getBlock().getType() == Material.REDSTONE_BLOCK || event.getBlock().getType() == CompatMaterial.REDSTONE_TORCH.getMaterial()) {
-            handleRedstoneEvent(event.getBlock(), false, true);
+            handleRedstoneEvent(event.getBlock(), false, true, false);
         }
 
         if (event.getBlock().getState() instanceof Sign) {
@@ -257,7 +231,7 @@ public class BlockListener implements Listener {
         }
     }
 
-    private void handleRedstoneEvent(Block block, boolean powered, boolean skipLocation) {
+    private void handleRedstoneEvent(Block block, boolean powered, boolean skipLocation, boolean useScheduler) {
         Collection<BlockFace> blockFaces = Utils.getAxisBlockFaces();
         List<Location> locations = new ArrayList<>();
         Material type = block.getType();
@@ -266,89 +240,79 @@ public class BlockListener implements Listener {
                 type == CompatMaterial.REPEATER_OFF.getMaterial() || type == CompatMaterial.COMPARATOR.getMaterial() ||
                 type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
 
-            //TODO: FIX VERSION ISSUE
             if (Utils.isNewMaterialSystem()) {
-                org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
+//                org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
+                BlockFace direction = InternalProvider.getCompatBlockData().getDirectionalFacing(block);
 
-                if (block.getRelative(directional.getFacing().getOppositeFace()).getType().isOccluding() &&
-                        !block.getRelative(directional.getFacing().getOppositeFace()).getType().isInteractable()) {
-                    Block relBlock = block.getRelative(directional.getFacing().getOppositeFace());
+                if (block.getRelative(direction.getOppositeFace()).getType().isOccluding() &&
+                        !block.getRelative(direction.getOppositeFace()).getType().isInteractable()) {
+                    Block relBlock = block.getRelative(direction.getOppositeFace());
                     locations = Utils.getAxisBlockFaces().stream()
                             .map(axisBlockFace -> relBlock.getRelative(axisBlockFace).getLocation())
                             .collect(Collectors.toList());
                 }
 
-                locations.add(block.getRelative(directional.getFacing().getOppositeFace()).getRelative(directional.getFacing().getOppositeFace()).getLocation());
-                blockFaces = Collections.singletonList(directional.getFacing().getOppositeFace());
+                locations.add(block.getRelative(direction.getOppositeFace()).getRelative(direction.getOppositeFace()).getLocation());
+                blockFaces = Collections.singletonList(direction.getOppositeFace());
             } else {
-                Directional directional = (Directional) block.getState().getData();
+//                Directional directional = (Directional) block.getState().getData();
+                BlockFace direction = InternalProvider.getCompatBlockData().getDirectionalFacing(block);
 
-                //TODO: FIX VERSION ISSUE
-                boolean isInteractable = false;
-                if (Utils.isNewMaterialSystem()) {
-                    isInteractable = block.getRelative(directional.getFacing()).getType().isInteractable();
-                } else {
-                    try {
-                        if (block.getRelative(directional.getFacing()).getType() != null) {
-                            Class<?> blockClass = Class.forName("org.bukkit.block.Block");
-                            Method setTypeIdAndData = blockClass.getMethod("isInteractable");
-                            isInteractable = (Boolean) setTypeIdAndData.invoke(block.getRelative(directional.getFacing()).getType());
-                        }
-                    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                        WirelessRedstone.getWRLogger().debug("Couldn't pass isInteractable");
-
-                        if (ConfigManager.getConfig().getDebugMode()) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (block.getRelative(directional.getFacing()).getType().isOccluding() &&
-                        !isInteractable) {
-                    Block relBlock = block.getRelative(directional.getFacing());
+                if (block.getRelative(direction).getType().isOccluding()) {
+                    Block relBlock = block.getRelative(direction);
                     locations = Utils.getAxisBlockFaces().stream()
                             .map(axisBlockFace -> relBlock.getRelative(axisBlockFace).getLocation())
                             .collect(Collectors.toList());
                 }
 
-                locations.add(block.getRelative(directional.getFacing()).getRelative(directional.getFacing()).getLocation());
-                blockFaces = Collections.singletonList(directional.getFacing());
+                locations.add(block.getRelative(direction).getRelative(direction).getLocation());
+                blockFaces = Collections.singletonList(direction);
             }
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL
                 || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
             locations.add(block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN).getLocation());
         } else {
+            if (InternalProvider.getCompatBlockData().isRedstoneSwitch(block)) {
+                BlockFace direction = InternalProvider.getCompatBlockData().getDirectionalFacing(block).getOppositeFace();
+
+                Block relBlock = block.getRelative(direction);
+                for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+                    locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+                }
+
+                locations.add(block.getRelative(direction).getRelative(direction).getLocation());
+            }
 
             //TODO: FIX VERSION ISSUE
-            if (Utils.isNewMaterialSystem()) {
-                if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
-                    org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();
-                    BlockFace blockFace = switchBlock.getFacing().getOppositeFace();
-
-                    if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.FLOOR) {
-                        blockFace = BlockFace.DOWN;
-                    } else if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.CEILING) {
-                        blockFace = BlockFace.UP;
-                    }
-
-                    Block relBlock = block.getRelative(blockFace);
-                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-                    }
-                    locations.add(block.getRelative(blockFace).getRelative(blockFace).getLocation());
-                }
-            } else {
-                if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
-                        !(block.getState().getData() instanceof TripwireHook)) {
-                    Attachable attachable = (Attachable) block.getState().getData();
-
-                    Block relBlock = block.getRelative(attachable.getAttachedFace());
-                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-                    }
-                    locations.add(block.getRelative(attachable.getAttachedFace()).getRelative(attachable.getAttachedFace()).getLocation());
-                }
-            }
+//            if (Utils.isNewMaterialSystem()) {
+//                if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
+//                    org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();
+//                    BlockFace blockFace = switchBlock.getFacing().getOppositeFace();
+//
+//                    if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.FLOOR) {
+//                        blockFace = BlockFace.DOWN;
+//                    } else if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.CEILING) {
+//                        blockFace = BlockFace.UP;
+//                    }
+//
+//                    Block relBlock = block.getRelative(blockFace);
+//                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+//                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+//                    }
+//                    locations.add(block.getRelative(blockFace).getRelative(blockFace).getLocation());
+//                }
+//            } else {
+//                if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
+//                        !(block.getState().getData() instanceof TripwireHook)) {
+//                    Attachable attachable = (Attachable) block.getState().getData();
+//
+//                    Block relBlock = block.getRelative(attachable.getAttachedFace());
+//                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+//                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
+//                    }
+//                    locations.add(block.getRelative(attachable.getAttachedFace()).getRelative(attachable.getAttachedFace()).getLocation());
+//                }
+//            }
         }
 
         for (BlockFace blockFace : blockFaces) {
@@ -364,7 +328,12 @@ public class BlockListener implements Listener {
                 }
 
                 Sign sign = (Sign) location.getBlock().getState();
-                updateRedstonePower(sign, powered, skipLocation);
+
+                if (useScheduler) {
+                    Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), () -> updateRedstonePower(sign, powered, skipLocation));
+                } else {
+                    updateRedstonePower(sign, powered, skipLocation);
+                }
             }
         }
     }
@@ -378,7 +347,7 @@ public class BlockListener implements Listener {
     }
 
     private void updateRedstonePower(Sign sign, boolean powered, boolean skipLocation) {
-        WirelessRedstone.getWRLogger().debug("Redstone power update: " + sign.getLocation());
+        WirelessRedstone.getWRLogger().debug("Redstone power update (" + powered + "): " + sign.getLocation());
 
         if (Utils.getSignType(sign.getLine(0)) != SignType.TRANSMITTER)
             return;

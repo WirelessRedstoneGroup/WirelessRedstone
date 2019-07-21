@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone;
 
+import net.licks92.WirelessRedstone.Reflection.InternalProvider;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -21,21 +22,7 @@ public class CompatSignData {
     }
 
     public void setRotation(BlockFace face) {
-        //TODO: FIX VERSION ISSUE
-
-        if (Utils.isNewMaterialSystem()) {
-            if (block.getBlockData() instanceof org.bukkit.block.data.Rotatable) {
-                org.bukkit.block.data.Rotatable blockData = ((org.bukkit.block.data.Rotatable) block.getBlockData());
-                blockData.setRotation(face);
-                block.setBlockData(blockData);
-            }
-        } else if (block.getState() instanceof Sign) {
-            Sign sign = (Sign) block.getState();
-            org.bukkit.material.Sign signData = new org.bukkit.material.Sign(CompatMaterial.SIGN.getMaterial());
-            signData.setFacingDirection(face);
-            sign.setData(signData);
-            sign.update();
-        }
+        InternalProvider.getCompatBlockData().setSignRotation(block, face);
     }
 
 }
