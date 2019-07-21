@@ -136,7 +136,9 @@ public class WirelessRedstone extends JavaPlugin {
                     new InputStreamReader(Objects.requireNonNull(getResource("plugin.yml")))
             );
 
-            Sentry.init(pluginConfig.getString("Sentry.dsn", ""), new WirelessRedstoneSentryClientFactory());
+            getWRLogger().debug("Sentry dsn: " + pluginConfig.getString("sentry.dsn", ""));
+
+            Sentry.init(pluginConfig.getString("sentry.dsn", ""), new WirelessRedstoneSentryClientFactory());
             Sentry.getStoredClient().setRelease(pluginConfig.getString("version", "0.0.0"));
         }
 
