@@ -80,6 +80,8 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 //            WirelessRedstone.getWRLogger().debug("Face " + direction + " Available face " + availableBlockFace);
 
             if (newState) {
+
+                //TODO: FIX VERSION ISSUE
                 if (Utils.isNewMaterialSystem()) {
                     if (blockFace != null) {
                         block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial(), direction == BlockFace.NORTH);
@@ -124,6 +126,8 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                     }
                 }
             } else {
+
+                //TODO: FIX VERSION ISSUE
                 if (Utils.isNewMaterialSystem()) {
                     if (blockFace != null) {
                         block.setType(CompatMaterial.WALL_SIGN.getMaterial(), direction == BlockFace.NORTH);

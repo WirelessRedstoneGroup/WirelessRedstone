@@ -15,20 +15,6 @@
         <version>${revision}</version>
     </parent>
 
-    <repositories>
-        <!-- Repo for access to CraftBukkit -->
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-        </repository>
-
-        <!-- Repo for WorldEdit intergration -->
-        <repository>
-            <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/repo/</url>
-        </repository>
-    </repositories>
-
     <!-- Build -->
     <build>
         <!-- Resources (the filtering allows us to use project properties in plugin.yml) -->
@@ -44,7 +30,6 @@
                 </includes>
             </resource>
         </resources>
-        <defaultGoal>clean install</defaultGoal>
     </build>
 
     <dependencies>
@@ -95,4 +80,18 @@
             <version>1.7.25</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <!-- Repo for access to CraftBukkit -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+
+        <!-- Repo for WorldEdit intergration -->
+        <repository>
+            <id>sk89q-repo</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
+    </repositories>
 </project>

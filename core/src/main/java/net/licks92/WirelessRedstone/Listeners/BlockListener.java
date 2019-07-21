@@ -62,6 +62,7 @@ public class BlockListener implements Listener {
             return;
         }
 
+        //TODO: FIX VERSION ISSUE
         if (Utils.isNewMaterialSystem()) {
             if (!(event.getBlock().getBlockData() instanceof org.bukkit.block.data.Powerable)) {
                 return;
@@ -77,6 +78,8 @@ public class BlockListener implements Listener {
         }
 
         boolean isPowered;
+
+        //TODO: FIX VERSION ISSUE
         if (Utils.isNewMaterialSystem()) {
             isPowered = ((org.bukkit.block.data.Powerable) event.getBlock().getBlockData()).isPowered();
         } else {
@@ -161,6 +164,8 @@ public class BlockListener implements Listener {
         Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), () -> {
             Sign sign = (Sign) event.getBlock().getState();
             BlockFace signDirection;
+
+            //TODO: FIX VERSION ISSUE
             if (Utils.isNewMaterialSystem()) {
                 if (sign.getBlockData() instanceof org.bukkit.block.data.Rotatable) {
                     signDirection = ((org.bukkit.block.data.Rotatable) sign.getBlockData()).getRotation();
@@ -260,6 +265,8 @@ public class BlockListener implements Listener {
         if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() ||
                 type == CompatMaterial.REPEATER_OFF.getMaterial() || type == CompatMaterial.COMPARATOR.getMaterial() ||
                 type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
+
+            //TODO: FIX VERSION ISSUE
             if (Utils.isNewMaterialSystem()) {
                 org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
 
@@ -276,6 +283,7 @@ public class BlockListener implements Listener {
             } else {
                 Directional directional = (Directional) block.getState().getData();
 
+                //TODO: FIX VERSION ISSUE
                 boolean isInteractable = false;
                 if (Utils.isNewMaterialSystem()) {
                     isInteractable = block.getRelative(directional.getFacing()).getType().isInteractable();
@@ -310,6 +318,8 @@ public class BlockListener implements Listener {
                 || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
             locations.add(block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN).getLocation());
         } else {
+
+            //TODO: FIX VERSION ISSUE
             if (Utils.isNewMaterialSystem()) {
                 if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
                     org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();

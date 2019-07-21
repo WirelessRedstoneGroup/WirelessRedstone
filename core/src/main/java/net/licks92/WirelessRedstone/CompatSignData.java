@@ -21,6 +21,8 @@ public class CompatSignData {
     }
 
     public void setRotation(BlockFace face) {
+        //TODO: FIX VERSION ISSUE
+
         if (Utils.isNewMaterialSystem()) {
             if (block.getBlockData() instanceof org.bukkit.block.data.Rotatable) {
                 org.bukkit.block.data.Rotatable blockData = ((org.bukkit.block.data.Rotatable) block.getBlockData());

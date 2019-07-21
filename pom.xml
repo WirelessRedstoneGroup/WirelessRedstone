@@ -28,6 +28,12 @@
 
     <modules>
         <module>core</module>
-        <module>dist</module>
+        <module>spigot_1_8</module>
+        <module>spigot_1_13</module>
+       <module>dist</module>
     </modules>
+
+    <build>
+        <defaultGoal>clean install</defaultGoal>
+    </build>
 </project>

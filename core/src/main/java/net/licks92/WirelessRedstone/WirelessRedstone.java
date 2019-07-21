@@ -38,7 +38,7 @@ public class WirelessRedstone extends JavaPlugin {
     public static final String CHANNEL_FOLDER = "channels";
 
     private static WirelessRedstone instance;
-    private static WRLogger WRLogger;
+    private static net.licks92.WirelessRedstone.WRLogger WRLogger;
     private static StringManager stringManager;
     private static StorageManager storageManager;
     private static SignManager signManager;
