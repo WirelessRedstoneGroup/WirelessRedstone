@@ -222,7 +222,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                             resultSet.getInt("is_wallsign") != 0,
                             BlockFace.valueOf(resultSet.getString("direction")),
                             resultSet.getString("owner"),
-                            resultSet.getBoolean("state")
+                            resultSet.getBoolean("powered")
                     );
                     channel.addWirelessPoint(point);
                     WirelessRedstone.getWRLogger().debug("Switch found: " + point);
@@ -325,7 +325,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
     protected void updateSwitch(WirelessReceiverSwitch receiver) {
         ContentValues values = new ContentValues();
-        values.put("state", receiver.isActive());
+        values.put("powered", receiver.isActive());
         getDatabase().update(TB_SWITCH, values,
                 "[x]=" + receiver.getX() + " AND [y]=" + receiver.getY() + " AND [z]=" + receiver.getZ() + " AND [world]=" + receiver.getWorld());
     }
@@ -508,7 +508,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                     continue;
                                 }
 
-                                point = new WirelessReceiverDelayer(
+                                point = new WirelessReceiverClock(
                                         resultSet.getInt("x"),
                                         resultSet.getInt("y"),
                                         resultSet.getInt("z"),

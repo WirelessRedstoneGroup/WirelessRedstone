@@ -84,6 +84,13 @@ final class SQLBuilder {
             sb.append((i > 0) ? "," : "");
             if (o instanceof String) {
                 sb.append("'").append(o).append("'");
+            } else if (o instanceof Boolean) {
+                Boolean b = (Boolean) o;
+                if (b) {
+                    sb.append("1");
+                } else {
+                    sb.append("0");
+                }
             } else {
                 sb.append(o);
             }
@@ -108,6 +115,13 @@ final class SQLBuilder {
 
             if (values.get(col) instanceof String) {
                 sb.append("'").append(values.get(col)).append("'");
+            } else if (values.get(col) instanceof Boolean) {
+                Boolean b = (Boolean) values.get(col);
+                if (b) {
+                    sb.append("1");
+                } else {
+                    sb.append("0");
+                }
             } else {
                 sb.append(values.get(col));
             }

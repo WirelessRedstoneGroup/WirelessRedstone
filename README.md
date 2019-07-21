@@ -10,7 +10,7 @@ It will be possible in the next version.
 The process is very simple for you and me, you just have to go on [this website](https://www.transifex.com/bart0110/wirelessredstone/), and fill the language of your choice.
 
 ### Metrics
-[bStats](https://bstats.org/plugin/bukkit/WirelessRedstone)
+[MCStats < v4.0.0](http://mcstats.org/plugin/WirelessRedstone) | [bStats >= v4.0.0](https://bstats.org/plugin/bukkit/WirelessRedstone)
 
 ### Sentry
 This plugin uses [Sentry](https://sentry.io/) to quickly investigate plugin errors/exceptions. You can disable this in the config. 
