@@ -4,10 +4,6 @@
 ## WirelessRedstone
 Welcome on the official page of the Wireless Redstone plugin. [Spigot page.](https://www.spigotmc.org/resources/wirelessredstone.8251/)
 
-## Maven
-Maven >3.5.0 is required to build this plugin due to the revision tag.
-[https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067](https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067)
-
 ### Translation
 Do you want to see the plugin in your favourite language / native language? 
 It will be possible in the next version. 
@@ -18,6 +14,10 @@ The process is very simple for you and me, you just have to go on [this website]
 
 ### Sentry
 This plugin uses [Sentry](https://sentry.io/) to quickly investigate plugin errors/exceptions. You can disable this in the config. 
+
+## Maven
+Maven >3.5.0 is required to build this plugin due to the revision tag.
+[https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067](https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067)
 
 ## Config
 
