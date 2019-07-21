@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,6 +26,8 @@ import org.bukkit.material.Directional;
 import org.bukkit.material.Redstone;
 import org.bukkit.material.TripwireHook;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -161,8 +162,8 @@ public class BlockListener implements Listener {
             Sign sign = (Sign) event.getBlock().getState();
             BlockFace signDirection;
             if (Utils.isNewMaterialSystem()) {
-                if (sign.getBlockData() instanceof Rotatable) {
-                    signDirection = ((Rotatable) sign.getBlockData()).getRotation();
+                if (sign.getBlockData() instanceof org.bukkit.block.data.Rotatable) {
+                    signDirection = ((org.bukkit.block.data.Rotatable) sign.getBlockData()).getRotation();
                 } else if (sign.getBlockData() instanceof Directional) {
                     signDirection = ((Directional) sign.getBlockData()).getFacing();
                 } else {
@@ -256,8 +257,9 @@ public class BlockListener implements Listener {
         List<Location> locations = new ArrayList<>();
         Material type = block.getType();
 
-        if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() || type == CompatMaterial.REPEATER_OFF.getMaterial() ||
-                type == CompatMaterial.COMPARATOR.getMaterial() || type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
+        if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() ||
+                type == CompatMaterial.REPEATER_OFF.getMaterial() || type == CompatMaterial.COMPARATOR.getMaterial() ||
+                type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
             if (Utils.isNewMaterialSystem()) {
                 org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
 
@@ -274,8 +276,27 @@ public class BlockListener implements Listener {
             } else {
                 Directional directional = (Directional) block.getState().getData();
 
+                boolean isInteractable = false;
+                if (Utils.isNewMaterialSystem()) {
+                    isInteractable = block.getRelative(directional.getFacing()).getType().isInteractable();
+                } else {
+                    try {
+                        if (block.getRelative(directional.getFacing()).getType() != null) {
+                            Class<?> blockClass = Class.forName("org.bukkit.block.Block");
+                            Method setTypeIdAndData = blockClass.getMethod("isInteractable");
+                            isInteractable = (Boolean) setTypeIdAndData.invoke(block.getRelative(directional.getFacing()).getType());
+                        }
+                    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        WirelessRedstone.getWRLogger().debug("Couldn't pass isInteractable");
+
+                        if (ConfigManager.getConfig().getDebugMode()) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 if (block.getRelative(directional.getFacing()).getType().isOccluding() &&
-                        !block.getRelative(directional.getFacing()).getType().isInteractable()) {
+                        !isInteractable) {
                     Block relBlock = block.getRelative(directional.getFacing());
                     locations = Utils.getAxisBlockFaces().stream()
                             .map(axisBlockFace -> relBlock.getRelative(axisBlockFace).getLocation())
@@ -285,7 +306,8 @@ public class BlockListener implements Listener {
                 locations.add(block.getRelative(directional.getFacing()).getRelative(directional.getFacing()).getLocation());
                 blockFaces = Collections.singletonList(directional.getFacing());
             }
-        } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
+        } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL
+                || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
             locations.add(block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN).getLocation());
         } else {
             if (Utils.isNewMaterialSystem()) {

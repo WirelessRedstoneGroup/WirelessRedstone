@@ -11,7 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.RedstoneWallTorch;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -85,7 +84,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                     if (blockFace != null) {
                         block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial(), direction == BlockFace.NORTH);
                         BlockState torch = block.getState();
-                        RedstoneWallTorch torchData = (RedstoneWallTorch) block.getBlockData();
+                        org.bukkit.block.data.type.RedstoneWallTorch torchData = (org.bukkit.block.data.type.RedstoneWallTorch) block.getBlockData();
 
                         torchData.setFacing(blockFace);
                         torch.setBlockData(torchData);
