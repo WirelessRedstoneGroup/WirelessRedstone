@@ -273,7 +273,7 @@ public class BlockListener implements Listener {
             locations.add(block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN).getLocation());
         } else {
             if (InternalProvider.getCompatBlockData().isRedstoneSwitch(block)) {
-                BlockFace direction = InternalProvider.getCompatBlockData().getDirectionalFacing(block).getOppositeFace();
+                BlockFace direction = InternalProvider.getCompatBlockData().getRedstoneSwitchFacing(block);
 
                 Block relBlock = block.getRelative(direction);
                 for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
@@ -347,7 +347,9 @@ public class BlockListener implements Listener {
     }
 
     private void updateRedstonePower(Sign sign, boolean powered, boolean skipLocation) {
-        WirelessRedstone.getWRLogger().debug("Redstone power update (" + powered + "): " + sign.getLocation());
+        if ("TRUE".equalsIgnoreCase(System.getProperty("mc.development"))) {
+            WirelessRedstone.getWRLogger().debug("Redstone power update (" + powered + "): " + sign.getLocation());
+        }
 
         if (Utils.getSignType(sign.getLine(0)) != SignType.TRANSMITTER)
             return;

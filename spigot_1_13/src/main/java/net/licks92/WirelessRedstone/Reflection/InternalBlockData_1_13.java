@@ -66,6 +66,25 @@ public class InternalBlockData_1_13 implements InternalBlockData {
     }
 
     @Override
+    public BlockFace getRedstoneSwitchFacing(@NotNull Block block) {
+        Objects.requireNonNull(block, "Block cannot be NULL");
+
+        if (!(block.getBlockData() instanceof Switch)) {
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.type.Switch");
+        }
+
+        Switch redstoneSwitch = (Switch) block.getBlockData();
+
+        if (redstoneSwitch.getFace() == Switch.Face.CEILING) {
+            return BlockFace.UP;
+        } else if (redstoneSwitch.getFace() == Switch.Face.FLOOR) {
+            return BlockFace.DOWN;
+        }
+
+        return getDirectionalFacing(block).getOppositeFace();
+    }
+
+    @Override
     public void setRedstoneWallTorch(@NotNull Block block, @NotNull BlockFace blockFace, @Nullable BlockFace storedDirection) {
         Objects.requireNonNull(block, "Block cannot be NULL");
 

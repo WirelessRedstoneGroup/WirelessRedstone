@@ -61,6 +61,17 @@ public class InternalBlockData_1_8 implements InternalBlockData {
     }
 
     @Override
+    public BlockFace getRedstoneSwitchFacing(@NotNull Block block) {
+        Objects.requireNonNull(block, "Block cannot be NULL");
+
+        if (!(block.getState().getData() instanceof Attachable)) {
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.material.Attachable");
+        }
+
+        return ((Attachable) block.getState().getData()).getAttachedFace();
+    }
+
+    @Override
     public void setRedstoneWallTorch(@NotNull Block block, @NotNull BlockFace blockFace, @Nullable BlockFace storedDirection) {
         Objects.requireNonNull(block, "Block cannot be NULL");
 

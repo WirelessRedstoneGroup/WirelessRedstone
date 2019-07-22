@@ -17,6 +17,8 @@ public interface InternalBlockData {
 
     BlockFace getDirectionalFacing(@NotNull Block block);
 
+    BlockFace getRedstoneSwitchFacing(@NotNull Block block);
+
     void setRedstoneWallTorch(@NotNull Block block, @NotNull BlockFace blockFace, @Nullable BlockFace storedDirection);
 
     void setSignWall(@NotNull Block block, @NotNull BlockFace blockFace, @Nullable BlockFace storedDirection);

@@ -109,7 +109,7 @@ public class WirelessRedstone extends JavaPlugin {
         instance = this;
         config = ConfigManager.getConfig();
         config.update(CHANNEL_FOLDER);
-        sentryEnabled = config.getSentry() && !"FALSE".equalsIgnoreCase(System.getProperty("mc.development"));
+        sentryEnabled = config.getSentry() && !"TRUE".equalsIgnoreCase(System.getProperty("mc.development"));
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
         stringManager = new StringManager(config.getLanguage());
 
