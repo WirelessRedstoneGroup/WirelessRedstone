@@ -72,10 +72,10 @@ public class DatabaseClient extends SQLiteOpenHelper {
         try {
             String sql = IOUtils.toString(WirelessRedstone.getInstance().getResource("database/Database_1.sql"), StandardCharsets.UTF_8);
             db.execSql(sql);
-        } catch (IOException e) {
+        } catch (IOException ex) {
             WirelessRedstone.getWRLogger().info("There was an error while initializing the database.");
 
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -86,8 +86,8 @@ public class DatabaseClient extends SQLiteOpenHelper {
             if (oldVersion == 0) {
                 try {
                     performUpdate1(db);
-                } catch (SQLException | IOException e) {
-                    e.printStackTrace();
+                } catch (SQLException | IOException ex) {
+                    ex.printStackTrace();
                     throw new RuntimeException("There was an error while performing database update 1.");
                 }
             }
@@ -248,10 +248,10 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
                 resultSet.close();
             }
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             WirelessRedstone.getWRLogger().severe("Couldn't retrieve channels from the database!");
 
-            e.printStackTrace();
+            ex.printStackTrace();
         }
         return channels;
     }
@@ -273,11 +273,11 @@ public class DatabaseClient extends SQLiteOpenHelper {
                 getDatabase().insert(TB_CHANNELS, values);
                 WirelessRedstone.getWRLogger().debug("Channel created in database. " + channel.getName());
             }
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             WirelessRedstone.getWRLogger().warning("Database exception, enable debug mode to see the full stacktrace.");
 
             if (ConfigManager.getConfig().getDebugMode()) {
-                e.printStackTrace();
+                ex.printStackTrace();
             }
         }
 

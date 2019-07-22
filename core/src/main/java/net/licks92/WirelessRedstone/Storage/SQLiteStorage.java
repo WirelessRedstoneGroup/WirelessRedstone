@@ -30,9 +30,9 @@ public class SQLiteStorage extends StorageConfiguration {
             }
 
             return true;
-        } catch (RuntimeException e) {
+        } catch (RuntimeException ex) {
             WirelessRedstone.getWRLogger().severe("There was an error accessing the database!");
-            e.printStackTrace();
+            ex.printStackTrace();
             return false;
         }
     }

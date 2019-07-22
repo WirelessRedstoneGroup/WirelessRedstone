@@ -34,8 +34,8 @@ public class ConfigManager {
             try {
                 file.createNewFile();
                 copyStream(Objects.requireNonNull(WirelessRedstone.getInstance().getResource("config.yml")), new FileOutputStream(file));
-            } catch (final Exception e) {
-                e.printStackTrace();
+            } catch (final Exception ex) {
+                ex.printStackTrace();
             }
         }
 
@@ -62,8 +62,8 @@ public class ConfigManager {
     public void save() {
         try {
             config.save(file);
-        } catch (final Exception e) {
-            e.printStackTrace();
+        } catch (final Exception ex) {
+            ex.printStackTrace();
         }
     }
 

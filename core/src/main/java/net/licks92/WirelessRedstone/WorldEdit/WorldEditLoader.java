@@ -29,8 +29,8 @@ public class WorldEditLoader {
             } else {
                 WirelessRedstone.getWRLogger().warning("Error while hooking worldedit. Invalid WorldEdit version.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

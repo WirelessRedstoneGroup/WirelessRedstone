@@ -76,8 +76,8 @@ public class YamlStorage extends StorageConfiguration {
             FileConfiguration channelConfig = new YamlConfiguration();
             try {
                 channelConfig.load(f);
-            } catch (InvalidConfigurationException | IOException e) {
-                e.printStackTrace();
+            } catch (InvalidConfigurationException | IOException ex) {
+                ex.printStackTrace();
             }
 
             String channelName;
@@ -190,16 +190,16 @@ public class YamlStorage extends StorageConfiguration {
             channelConfig.load(channelFile);
         } catch (FileNotFoundException e) {
             return false;
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
+        } catch (IOException | InvalidConfigurationException ex) {
+            ex.printStackTrace();
         }
 
         channelConfig.set(channelName, channel);
 
         try {
             channelConfig.save(new File(channelFolder, channelName + ".yml"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
             return false;
         }
 

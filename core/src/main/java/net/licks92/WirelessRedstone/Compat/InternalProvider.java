@@ -24,9 +24,9 @@ public class InternalProvider {
 
         try {
             compatBlockData = (InternalBlockData) Class.forName(selfPackage + "." + className).newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             WirelessRedstone.getWRLogger().severe("Couldn't find a suitable InternalBlockData");
-            e.printStackTrace();
+            ex.printStackTrace();
         }
 
         return compatBlockData;
@@ -49,9 +49,9 @@ public class InternalProvider {
 
         try {
             compatWorldEditHooker = (InternalWorldEditHooker) Class.forName(selfPackage + "." + className).newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             WirelessRedstone.getWRLogger().severe("Couldn't find a suitable InternalWorldEditHooker");
-            e.printStackTrace();
+            ex.printStackTrace();
         }
 
         return compatWorldEditHooker;

@@ -32,8 +32,8 @@ public class InternalWorldEditHooker_7 implements InternalWorldEditHooker {
                     WirelessRedstone.getWRLogger().severe("Error while hooking worldedit");
                 }
             }, 0L);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -45,8 +45,8 @@ public class InternalWorldEditHooker_7 implements InternalWorldEditHooker {
             } catch (Exception e) {
                 WirelessRedstone.getWRLogger().severe("Error while unhooking worldedit");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }
