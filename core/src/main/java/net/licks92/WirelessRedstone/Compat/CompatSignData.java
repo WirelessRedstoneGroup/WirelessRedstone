@@ -1,6 +1,5 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.Compat;
 
-import net.licks92.WirelessRedstone.Reflection.InternalProvider;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;

@@ -1,8 +1,8 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.CompatMaterial;
-import net.licks92.WirelessRedstone.CompatSignData;
-import net.licks92.WirelessRedstone.Reflection.InternalProvider;
+import net.licks92.WirelessRedstone.Compat.CompatMaterial;
+import net.licks92.WirelessRedstone.Compat.CompatSignData;
+import net.licks92.WirelessRedstone.Compat.InternalProvider;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Location;

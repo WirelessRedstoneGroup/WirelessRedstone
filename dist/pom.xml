@@ -88,10 +88,20 @@
             <artifactId>WirelessRedstone-spigot_1_8</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
         <dependency>
             <groupId>net.licks92</groupId>
             <artifactId>WirelessRedstone-spigot_1_13</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.licks92</groupId>
+            <artifactId>WirelessRedstone-worldedit_6</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.licks92</groupId>
+            <artifactId>WirelessRedstone-worldedit_7</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

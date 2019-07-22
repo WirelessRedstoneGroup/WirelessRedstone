@@ -1,6 +1,6 @@
 package net.licks92.WirelessRedstone.Listeners;
 
-import net.licks92.WirelessRedstone.CompatMaterial;
+import net.licks92.WirelessRedstone.Compat.CompatMaterial;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;

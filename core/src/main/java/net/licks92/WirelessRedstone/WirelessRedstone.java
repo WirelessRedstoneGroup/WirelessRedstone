@@ -3,6 +3,7 @@ package net.licks92.WirelessRedstone;
 import io.sentry.Sentry;
 import net.licks92.WirelessRedstone.Commands.Admin.AdminCommandManager;
 import net.licks92.WirelessRedstone.Commands.CommandManager;
+import net.licks92.WirelessRedstone.Compat.InternalWorldEditHooker;
 import net.licks92.WirelessRedstone.Listeners.BlockListener;
 import net.licks92.WirelessRedstone.Listeners.PlayerListener;
 import net.licks92.WirelessRedstone.Listeners.WorldListener;
@@ -20,7 +21,6 @@ import net.licks92.WirelessRedstone.Storage.StorageConfiguration;
 import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.String.StringManager;
 import net.licks92.WirelessRedstone.String.Strings;
-import net.licks92.WirelessRedstone.WorldEdit.WorldEditHooker;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
@@ -47,7 +47,7 @@ public class WirelessRedstone extends JavaPlugin {
     private static Metrics metrics;
 
     private ConfigManager config;
-    private WorldEditHooker worldEditHooker;
+    private InternalWorldEditHooker worldEditHooker;
     private boolean fullyLoaded = false;
     private boolean sentryEnabled = true;
 
@@ -96,11 +96,11 @@ public class WirelessRedstone extends JavaPlugin {
         return sentryEnabled;
     }
 
-    public WorldEditHooker getWorldEditHooker() {
+    public InternalWorldEditHooker getWorldEditHooker() {
         return worldEditHooker;
     }
 
-    public void setWorldEditHooker(WorldEditHooker worldEditHooker) {
+    public void setWorldEditHooker(InternalWorldEditHooker worldEditHooker) {
         this.worldEditHooker = worldEditHooker;
     }
 
@@ -274,6 +274,10 @@ public class WirelessRedstone extends JavaPlugin {
     public void onDisable() {
         if (fullyLoaded) {
             getStorage().close();
+        }
+
+        if (worldEditHooker != null) {
+            worldEditHooker.unRegister();
         }
 
         fullyLoaded = false;

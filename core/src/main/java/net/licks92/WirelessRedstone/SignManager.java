@@ -1,5 +1,7 @@
 package net.licks92.WirelessRedstone;
 
+import net.licks92.WirelessRedstone.Compat.CompatMaterial;
+import net.licks92.WirelessRedstone.Compat.CompatSignData;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessPoint;
@@ -15,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -266,6 +269,28 @@ public class SignManager {
     public boolean isSignRegistred(Location location) {
         return WirelessRedstone.getStorageManager().getAllSigns().stream()
                 .anyMatch(point -> Utils.sameLocation(point.getLocation(), location));
+    }
+
+    public boolean isWirelessRedstoneSign(Block block) {
+        if (!(block.getState() instanceof Sign)) {
+            return false;
+        }
+
+        Sign sign = (Sign) block.getState();
+
+        if (Utils.getSignType(sign.getLine(0)) == null || sign.getLine(1).equalsIgnoreCase("")) {
+            return false;
+        }
+
+        return isSignRegistred(block.getLocation());
+    }
+
+    public WirelessChannel getSignChannel(Location location) {
+        return WirelessRedstone.getStorageManager().getChannels().stream()
+                .filter(channel -> channel.getSigns().stream()
+                        .anyMatch(point -> Utils.sameLocation(point.getLocation(), location)))
+                .findFirst()
+                .orElse(null);
     }
 
     /**

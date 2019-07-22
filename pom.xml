@@ -21,15 +21,19 @@
 
         <project.mcversion>1.14.3</project.mcversion>
         <project.cbversion>${project.mcversion}-R0.1-SNAPSHOT</project.cbversion>
-        <project.weversion>6.1.4-SNAPSHOT</project.weversion>
 
         <project.sentry.dsn>https://7c45ccc4745f428f81d577b15c84b840@sentry.io/1509557</project.sentry.dsn>
     </properties>
 
     <modules>
         <module>core</module>
+
         <module>spigot_1_8</module>
         <module>spigot_1_13</module>
+
+        <module>worldedit_6</module>
+        <module>worldedit_7</module>
+
        <module>dist</module>
     </modules>
 

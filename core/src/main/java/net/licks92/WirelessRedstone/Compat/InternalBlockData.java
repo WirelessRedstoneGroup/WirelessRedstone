@@ -1,4 +1,4 @@
-package net.licks92.WirelessRedstone.Reflection;
+package net.licks92.WirelessRedstone.Compat;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

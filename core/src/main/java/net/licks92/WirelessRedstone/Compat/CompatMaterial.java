@@ -1,5 +1,6 @@
-package net.licks92.WirelessRedstone;
+package net.licks92.WirelessRedstone.Compat;
 
+import net.licks92.WirelessRedstone.Utils;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
