@@ -35,6 +35,7 @@
   "commandNoNumber": "Das ist keine Zahl.",
   "commandSignNotFound": "Schild nicht gefunden.",
   "commandInvalidSignLocation": "Kann kein Schild an deinem Standort erstellen.",
+  "commandInvalidLocation": "Location is invalid.",
   "commandActivated": "Kanal ist erfolgreich aktiviert.",
   "commandIncorrectSignType": "Falscher Schild-Typ.",
   "commandActivationMin": "Die Aktivierungszeit muss mindestens 50 ms betragen.",

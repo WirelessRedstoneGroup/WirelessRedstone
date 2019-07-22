@@ -35,6 +35,7 @@
   "commandNoNumber": "這不是一個數值",
   "commandSignNotFound": "告示牌不存在",
   "commandInvalidSignLocation": "此位置不能建立告示牌",
+  "commandInvalidLocation": "Location is invalid.",
   "commandActivated": "頻道己啟動",
   "commandIncorrectSignType": "錯誤告示牌類型",
   "commandActivationMin": "啟動時間必須少於50毫秒",
@@ -63,5 +64,5 @@
   "permissionDestroySign": "You are not allowed to destroy this sign.",
 
   "newUpdate": "There is an update available! You can download version %%NEWVERSION over here: %%URL",
-  "changelog": "Changelog"
+  "changelog": "變更日誌"
 }

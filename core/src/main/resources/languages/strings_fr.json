@@ -35,6 +35,7 @@
   "commandNoNumber": "Ce n'est pas un nombre.",
   "commandSignNotFound": "Panneau non trouvé.",
   "commandInvalidSignLocation": "Nous ne pouvons pas créer de panneau à cet endroit. ",
+  "commandInvalidLocation": "Location is invalid.",
   "commandActivated": "La chaîne a été activée avec succès.",
   "commandIncorrectSignType": "Type de panneau incorrect.",
   "commandActivationMin": "Le temps d'activation doit au moins être de 50 ms.",

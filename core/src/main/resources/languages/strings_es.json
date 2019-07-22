@@ -35,6 +35,7 @@
   "commandNoNumber": "Esto no es un numero.",
   "commandSignNotFound": "El cartel no pudo ser encontrado.",
   "commandInvalidSignLocation": "No se puede crear un cartel en tu ubicacion.",
+  "commandInvalidLocation": "Location is invalid.",
   "commandActivated": "Canal activado exitosamente!",
   "commandIncorrectSignType": "Tipo de cartel incorrecto.",
   "commandActivationMin": "La activacion debe ser por lo menos de 50 ms.",

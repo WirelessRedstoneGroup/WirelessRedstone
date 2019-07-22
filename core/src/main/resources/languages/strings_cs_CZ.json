@@ -35,6 +35,7 @@
   "commandNoNumber": "That is not a number.",
   "commandSignNotFound": "Sign not found.",
   "commandInvalidSignLocation": "Cannot create sign on your location.",
+  "commandInvalidLocation": "Location is invalid.",
   "commandActivated": "Channel is successfully activated.",
   "commandIncorrectSignType": "Incorrect sign type.",
   "commandActivationMin": "The activation time must be at least 50 ms.",

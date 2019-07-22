@@ -35,6 +35,7 @@
   "commandNoNumber": "Questo non è un numero",
   "commandSignNotFound": "Segnale non trovato",
   "commandInvalidSignLocation": "Impossibile creare il segnale sulla tua posizione",
+  "commandInvalidLocation": "Location is invalid.",
   "commandActivated": "Il canale è stato attivato con successo",
   "commandIncorrectSignType": "Tipo di segno errato",
   "commandActivationMin": "Il tempo di attivazione deve essere di almeno 50 ms",

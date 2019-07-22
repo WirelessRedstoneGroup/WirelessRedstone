@@ -35,6 +35,7 @@
   "commandNoNumber": "Это не число.",
   "commandSignNotFound": "Табличка не найдена.",
   "commandInvalidSignLocation": "Невозможно создать табличку на вашем местоположении.",
+  "commandInvalidLocation": "Location is invalid.",
   "commandActivated": "Канал успешно активирован.",
   "commandIncorrectSignType": "Неверный тип таблички.",
   "commandActivationMin": "Время активации должно быть не менее 50 мс.",
