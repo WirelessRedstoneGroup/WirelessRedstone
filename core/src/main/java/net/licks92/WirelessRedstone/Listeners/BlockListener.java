@@ -282,37 +282,6 @@ public class BlockListener implements Listener {
 
                 locations.add(block.getRelative(direction).getRelative(direction).getLocation());
             }
-
-            //TODO: FIX VERSION ISSUE
-//            if (Utils.isNewMaterialSystem()) {
-//                if (block.getBlockData() instanceof org.bukkit.block.data.type.Switch) {
-//                    org.bukkit.block.data.type.Switch switchBlock = (org.bukkit.block.data.type.Switch) block.getBlockData();
-//                    BlockFace blockFace = switchBlock.getFacing().getOppositeFace();
-//
-//                    if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.FLOOR) {
-//                        blockFace = BlockFace.DOWN;
-//                    } else if (switchBlock.getFace() == org.bukkit.block.data.type.Switch.Face.CEILING) {
-//                        blockFace = BlockFace.UP;
-//                    }
-//
-//                    Block relBlock = block.getRelative(blockFace);
-//                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-//                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-//                    }
-//                    locations.add(block.getRelative(blockFace).getRelative(blockFace).getLocation());
-//                }
-//            } else {
-//                if (block.getState().getData() instanceof Attachable && block.getState().getData() instanceof Redstone &&
-//                        !(block.getState().getData() instanceof TripwireHook)) {
-//                    Attachable attachable = (Attachable) block.getState().getData();
-//
-//                    Block relBlock = block.getRelative(attachable.getAttachedFace());
-//                    for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-//                        locations.add(relBlock.getRelative(axisBlockFace).getLocation());
-//                    }
-//                    locations.add(block.getRelative(attachable.getAttachedFace()).getRelative(attachable.getAttachedFace()).getLocation());
-//                }
-//            }
         }
 
         for (BlockFace blockFace : blockFaces) {
@@ -365,7 +334,7 @@ public class BlockListener implements Listener {
         if (powered) {
             channel.turnOn();
         } else {
-            channel.turnOff(skipLocation ? sign.getLocation() : null, false);
+            channel.turnOff(skipLocation ? sign.getLocation() : null);
         }
     }
 

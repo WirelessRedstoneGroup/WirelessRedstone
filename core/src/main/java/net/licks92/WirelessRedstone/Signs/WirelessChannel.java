@@ -108,8 +108,8 @@ public class WirelessChannel implements ConfigurationSerializable {
         }
     }
 
-    public void turnOff() {
-        turnOff(null, false);
+    public void turnOff(Location loc) {
+        turnOff(loc, false);
     }
 
     public void turnOff(Location loc, boolean force) {
