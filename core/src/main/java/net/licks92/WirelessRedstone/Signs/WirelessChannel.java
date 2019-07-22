@@ -76,6 +76,11 @@ public class WirelessChannel implements ConfigurationSerializable {
     }
 
     public void turnOn(int time) {
+        WirelessRedstone.getWRLogger().debug("Channel#turnOn() WirelessChannel{" +
+                "name='" + name + '\'' +
+                ", active=" + active +
+                "}");
+
         if (isLocked()) {
             WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn on because locked.");
             return;
@@ -124,9 +129,16 @@ public class WirelessChannel implements ConfigurationSerializable {
 
                 if (transmitter.isPowered()) {
                     canTurnOff = false;
+                    break;
                 }
             }
         }
+
+        WirelessRedstone.getWRLogger().debug("Channel#turnOff() WirelessChannel{" +
+                "name='" + name + '\'' +
+                ", active=" + active +
+                ", canTurnOff=" + canTurnOff +
+                "}");
 
         if (!canTurnOff) {
             active = true;

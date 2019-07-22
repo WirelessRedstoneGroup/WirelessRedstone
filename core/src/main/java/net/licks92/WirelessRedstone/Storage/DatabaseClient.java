@@ -70,7 +70,10 @@ public class DatabaseClient extends SQLiteOpenHelper {
     @Override
     protected void onCreate(SQLiteDatabase db) {
         try {
-            String sql = IOUtils.toString(WirelessRedstone.getInstance().getResource("database/Database_1.sql"), StandardCharsets.UTF_8);
+            String sql = IOUtils.toString(
+                    Objects.requireNonNull(WirelessRedstone.getInstance().getResource("database/Database_1.sql")),
+                    StandardCharsets.UTF_8
+            );
             db.execSql(sql);
         } catch (IOException ex) {
             WirelessRedstone.getWRLogger().info("There was an error while initializing the database.");

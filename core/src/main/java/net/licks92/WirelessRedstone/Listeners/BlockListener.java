@@ -72,7 +72,7 @@ public class BlockListener implements Listener {
 
         // Testing to handle only dispowering or all events
         if (!isPowered) {
-            handleRedstoneEvent(event.getBlock(), false, false, false);
+            handleRedstoneEvent(event.getBlock(), isPowered, false, false);
         }
     }
 
