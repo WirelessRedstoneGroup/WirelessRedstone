@@ -63,8 +63,9 @@ public class StringManager {
 
         InputStream stream = plugin.getResource(stringFolder + "strings_" + language + ".json");
 
-        if (stream == null)
+        if (stream == null) {
             stream = plugin.getResource(stringFolder + "strings_en.json");
+        }
 
         Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
 

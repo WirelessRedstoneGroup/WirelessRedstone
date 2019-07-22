@@ -38,6 +38,7 @@ public class Strings {
     public String commandNoNumber;
     public String commandSignNotFound;
     public String commandInvalidSignLocation;
+    public String commandInvalidLocation;
     public String commandActivated;
     public String commandIncorrectSignType;
     public String commandActivationMin;

@@ -46,36 +46,58 @@ public class Teleport extends WirelessCommand {
             case "TRANSMITTERS":
             case "T":
                 try {
+                    if (channel.getTransmitters().get(index).getWorld() == null) {
+                        Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
+                        return;
+                    }
+
                     Location locTransmitter = channel.getTransmitters().get(index).getLocation().add(0.5, 0, 0.5);
+
                     locTransmitter.setYaw(player.getLocation().getYaw());
                     locTransmitter.setPitch(player.getLocation().getPitch());
                     player.teleport(locTransmitter);
                 } catch (IndexOutOfBoundsException ex) {
                     Utils.sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, player, true);
+                } catch (IllegalArgumentException ex) {
+                    Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
                 }
                 break;
             case "RECEIVER":
             case "RECEIVERS":
             case "R":
                 try {
+                    if (channel.getTransmitters().get(index).getWorld() == null) {
+                        Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
+                        return;
+                    }
+
                     Location locReceiver = channel.getReceivers().get(index).getLocation().add(0.5, 0, 0.5);
                     locReceiver.setYaw(player.getLocation().getYaw());
                     locReceiver.setPitch(player.getLocation().getPitch());
                     player.teleport(locReceiver);
                 } catch (IndexOutOfBoundsException ex) {
                     Utils.sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, player, true);
+                } catch (IllegalArgumentException ex) {
+                    Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
                 }
                 break;
             case "SCREEN":
             case "SCREENS":
             case "S":
                 try {
+                    if (channel.getTransmitters().get(index).getWorld() == null) {
+                        Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
+                        return;
+                    }
+
                     Location locScreen = channel.getScreens().get(index).getLocation().add(0.5, 0, 0.5);
                     locScreen.setYaw(player.getLocation().getYaw());
                     locScreen.setPitch(player.getLocation().getPitch());
                     player.teleport(locScreen);
                 } catch (IndexOutOfBoundsException ex) {
                     Utils.sendFeedback(WirelessRedstone.getStrings().commandSignNotFound, player, true);
+                } catch (IllegalArgumentException ex) {
+                    Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
                 }
                 break;
         }

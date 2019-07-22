@@ -35,6 +35,7 @@
   "commandNoNumber": "Dat is geen nummer.",
   "commandSignNotFound": "Bord niet gevonden.",
   "commandInvalidSignLocation": "Kan geen bord maken op jouw locatie.",
+  "commandInvalidLocation": "De locatie is ongeldig.",
   "commandActivated": "Kanaal succesvol geactiveerd.",
   "commandIncorrectSignType": "Incorrect bord type.",
   "commandActivationMin": "De activatietijd moet minimaal 50 ms zijn.",
