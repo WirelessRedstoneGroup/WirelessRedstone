@@ -365,7 +365,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
             if ((int) Math.floor((float) channelIteration / (float) channelNames.size() * 100) % 5 == 0
                     && (int) Math.floor((float) channelIteration / (float) channelNames.size() * 100) != progress) {
                 progress = (int) Math.floor((float) channelIteration / (float) channelNames.size() * 100);
-                WirelessRedstone.getWRLogger().info("Stage 1/2; Progress: " + progress + "%");
+                WirelessRedstone.getWRLogger().info("Database upgrade stage 1/2; Progress: " + progress + "%");
             }
 
             WirelessChannel channel = null;
@@ -551,7 +551,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
             if ((int) Math.floor((float) channelIteration / (float) channels.size() * 100) % 5 == 0
                     && (int) Math.floor((float) channelIteration / (float) channels.size() * 100) != progress) {
                 progress = (int) Math.floor((float) channelIteration / (float) channels.size() * 100);
-                WirelessRedstone.getWRLogger().info("Stage 2/2; Progress: " + progress + "%");
+                WirelessRedstone.getWRLogger().info("Database upgrade stage 2/2; Progress: " + progress + "%");
             }
 
             ContentValues values = new ContentValues();
