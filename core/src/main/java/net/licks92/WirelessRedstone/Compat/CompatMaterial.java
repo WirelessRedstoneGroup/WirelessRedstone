@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public enum CompatMaterial {
     REDSTONE_TORCH("REDSTONE_TORCH", "REDSTONE_TORCH_ON"),
     REDSTONE_WALL_TORCH("REDSTONE_WALL_TORCH", "REDSTONE_TORCH_ON"),
-    SIGN(new String[]{"OAK_SIGN", "SIGN", "SIGN_POST"}),
-    WALL_SIGN(new String[]{"OAK_WALL_SIGN", "WALL_SIGN", "WALL_SIGN"}),
+    SIGN(new String[]{"OAK_SIGN", "SIGN"}, "SIGN_POST"),
+    WALL_SIGN(new String[]{"OAK_WALL_SIGN", "WALL_SIGN"}),
     COMPARATOR("COMPARATOR", "REDSTONE_COMPARATOR"),
     COMPARATOR_ON("COMPARATOR", "REDSTONE_COMPARATOR_ON"),
     COMPARATOR_OFF("COMPARATOR", "REDSTONE_COMPARATOR_OFF"),
@@ -27,19 +27,28 @@ public enum CompatMaterial {
     private List<Material> materials;
 
     CompatMaterial(String[] versions) {
+        this(versions, null);
+    }
+
+    CompatMaterial(String[] versions, String oldVersion) {
         HashMap<String, Material> materialMap = Arrays.stream(Material.values())
                 .collect(Collectors.toMap(Enum::toString, material -> material, (a, b) -> b, HashMap::new));
 
-        for (String newVersion : versions) {
-            this.material = materialMap.entrySet()
-                    .stream()
-                    .filter(e -> e.getKey().equalsIgnoreCase(newVersion))
-                    .map(Map.Entry::getValue)
-                    .findFirst()
-                    .orElse(null);
+        if (Utils.isNewMaterialSystem() || oldVersion == null) {
+            for (String newVersion : versions) {
+                this.material = materialMap.entrySet()
+                        .stream()
+                        .filter(e -> e.getKey().equalsIgnoreCase(newVersion))
+                        .map(Map.Entry::getValue)
+                        .findFirst()
+                        .orElse(null);
 
-            if (this.material != null)
-                break;
+                if (this.material != null) {
+                    break;
+                }
+            }
+        } else {
+            this.material = materialMap.get(oldVersion);
         }
     }
 
