@@ -37,6 +37,7 @@
                                     <include>io.sentry:*</include>
                                     <include>com.fasterxml.jackson.core:*</include>
                                     <include>org.slf4j:*</include>
+                                    <include>com.github.zafarkhaja:java-semver</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

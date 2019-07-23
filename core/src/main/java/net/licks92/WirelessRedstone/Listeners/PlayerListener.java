@@ -2,8 +2,10 @@ package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.Compat.CompatMaterial;
 import net.licks92.WirelessRedstone.ConfigManager;
+import net.licks92.WirelessRedstone.Permissions;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
+import net.licks92.WirelessRedstone.UpdateChecker;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Material;
@@ -14,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Directional;
 
@@ -121,6 +124,29 @@ public class PlayerListener implements Listener {
             handlePlaceCancelled(event.getClickedBlock());
             Utils.sendFeedback(WirelessRedstone.getStrings().commandIntervalMin, event.getPlayer(), true);
         }
+    }
+
+    @EventHandler
+    public void on(PlayerJoinEvent event) {
+        if (!event.getPlayer().hasPermission(Permissions.isWirelessAdmin)) {
+            return;
+        }
+
+        UpdateChecker updateChecker = UpdateChecker.init(WirelessRedstone.getInstance());
+
+        if (updateChecker.getLastResult() == null) {
+            return;
+        }
+
+        if (!updateChecker.getLastResult().updateAvailable()) {
+            return;
+        }
+
+        Utils.sendFeedback(WirelessRedstone.getStrings().newUpdate
+                .replaceAll("%%NEWVERSION", updateChecker.getLastResult().getNewestVersion())
+                .replaceAll("%%URL", updateChecker.getLastResult().getUrl()), event.getPlayer(), false);
+        updateChecker.getLastResult().getChangelog()
+                .forEach(change -> Utils.sendFeedback(" - " + change, event.getPlayer(), false));
     }
 
     private void handlePlaceCancelled(Block block) {

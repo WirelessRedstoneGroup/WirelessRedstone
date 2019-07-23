@@ -21,7 +21,7 @@ public class SQLiteStorage extends StorageConfiguration {
     @Override
     public boolean initStorage() {
         try {
-            DatabaseClient.getInstance(channelFolder.toString());
+            DatabaseClient.init(channelFolder.toString());
             WirelessRedstone.getStorageManager().updateChannels(false);
 
             StorageType oldStorageType = canConvertFromType();

@@ -22,6 +22,7 @@ import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.String.StringManager;
 import net.licks92.WirelessRedstone.String.Strings;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
@@ -48,7 +49,7 @@ public class WirelessRedstone extends JavaPlugin {
 
     private ConfigManager config;
     private InternalWorldEditHooker worldEditHooker;
-    private boolean fullyLoaded = false;
+    private boolean storageLoaded = false;
     private boolean sentryEnabled = true;
 
 
@@ -107,6 +108,14 @@ public class WirelessRedstone extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        if (!Utils.isCompatible()) {
+            WRLogger.severe("**********");
+            WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
+            WRLogger.severe("**********");
+            getPluginLoader().disablePlugin(this);
+        }
+
         config = ConfigManager.getConfig();
         config.update(CHANNEL_FOLDER);
         sentryEnabled = config.getSentry() && !"TRUE".equalsIgnoreCase(System.getProperty("mc.development"));
@@ -120,12 +129,7 @@ public class WirelessRedstone extends JavaPlugin {
             return;
         }
 
-        if (!Utils.isCompatible()) {
-            WRLogger.severe("**********");
-            WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
-            WRLogger.severe("**********");
-            getPluginLoader().disablePlugin(this);
-        }
+        storageLoaded = true;
 
         signManager = new SignManager();
         commandManager = new CommandManager();
@@ -196,9 +200,7 @@ public class WirelessRedstone extends JavaPlugin {
             new WorldEditLoader();
         }
 
-        fullyLoaded = true;
-
-        if (ConfigManager.getConfig().getMetrics()) {
+        if (config.getMetrics()) {
             metrics = new Metrics(this);
             metrics.addCustomChart(new Metrics.AdvancedPie("main_sign_types", new Callable<Map<String, Integer>>() {
                 @Override
@@ -268,11 +270,21 @@ public class WirelessRedstone extends JavaPlugin {
                     ConfigManager.getConfig().getStorageType().toString()
             ));
         }
+
+        if (config.getUpdateCheck()) {
+            UpdateChecker.init(this).requestUpdateCheck().whenComplete((updateResult, throwable) -> {
+                if (updateResult.updateAvailable()) {
+                    Bukkit.getScheduler().runTask(this, () -> getWRLogger().info(getStrings().newUpdate
+                            .replaceAll("%%NEWVERSION", updateResult.getNewestVersion())
+                            .replaceAll("%%URL", updateResult.getUrl())));
+                }
+            });
+        }
     }
 
     @Override
     public void onDisable() {
-        if (fullyLoaded) {
+        if (storageLoaded) {
             getStorage().close();
         }
 
@@ -280,7 +292,7 @@ public class WirelessRedstone extends JavaPlugin {
             worldEditHooker.unRegister();
         }
 
-        fullyLoaded = false;
+        storageLoaded = false;
         adminCommandManager = null;
         commandManager = null;
         signManager = null;

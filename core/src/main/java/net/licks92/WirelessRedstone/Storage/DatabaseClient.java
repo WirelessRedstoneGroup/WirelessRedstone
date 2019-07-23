@@ -53,14 +53,16 @@ public class DatabaseClient extends SQLiteOpenHelper {
     }
 
     protected static synchronized DatabaseClient getInstance() {
-        return instance != null ? instance : getInstance(WirelessRedstone.getInstance().getDataFolder() + File.separator + WirelessRedstone.CHANNEL_FOLDER);
+        if (instance == null) {
+            throw new IllegalStateException("DatabaseClient hasn't been initialized");
+        }
+
+        return instance;
     }
 
-    protected static synchronized DatabaseClient getInstance(String channelFolder) {
+    protected static synchronized DatabaseClient init(String channelFolder) {
         if (instance == null) {
-            if (channelFolder == null) {
-                throw new IllegalArgumentException("Channel folder can't be null");
-            }
+            Objects.requireNonNull(channelFolder, "Channel folder can't be null");
 
             instance = new DatabaseClient(channelFolder);
         }
