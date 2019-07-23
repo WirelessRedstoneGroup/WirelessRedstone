@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone.Listeners;
 
 import net.licks92.WirelessRedstone.Compat.CompatMaterial;
+import net.licks92.WirelessRedstone.Compat.InternalProvider;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Permissions;
 import net.licks92.WirelessRedstone.Signs.SignType;
@@ -103,7 +104,13 @@ public class PlayerListener implements Listener {
             }
         }
 
-        BlockFace signDirection = ((Directional) sign.getData()).getFacing();
+        BlockFace signDirection;
+
+        if (sign.getData() instanceof Directional) {
+            signDirection = ((Directional) sign.getData()).getFacing();
+        } else {
+            signDirection = InternalProvider.getCompatBlockData().getDirectionalFacing(sign.getBlock());
+        }
 
         int result = WirelessRedstone.getSignManager().registerSign(
                 sign.getLine(1),

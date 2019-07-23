@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone.Compat;
 
 import net.licks92.WirelessRedstone.Utils;
+import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -54,7 +55,7 @@ public class InternalBlockData_1_8 implements InternalBlockData {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
         if (!(block.getState().getData() instanceof Directional)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.material.Directional");
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.material.Directional " + block.getState().getData().getClass());
         }
 
         return ((Directional) block.getState().getData()).getFacing();
@@ -65,7 +66,7 @@ public class InternalBlockData_1_8 implements InternalBlockData {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
         if (!(block.getState().getData() instanceof Attachable)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.material.Attachable");
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.material.Attachable found " + block.getState().getData().getClass());
         }
 
         return ((Attachable) block.getState().getData()).getAttachedFace();
@@ -88,6 +89,11 @@ public class InternalBlockData_1_8 implements InternalBlockData {
     @Override
     public void setSignRotation(@NotNull Block block, @NotNull BlockFace blockFace) {
         Objects.requireNonNull(block, "Block cannot be NULL");
+
+        if (!(block.getState() instanceof Sign)) {
+            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign.");
+            return;
+        }
 
         Sign sign = (Sign) block.getState();
         org.bukkit.material.Sign signData = new org.bukkit.material.Sign(Material.SIGN_POST);

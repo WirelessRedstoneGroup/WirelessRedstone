@@ -143,22 +143,7 @@ public class WirelessRedstone extends JavaPlugin {
             getWRLogger().debug("Sentry dsn: " + pluginConfig.getString("sentry.dsn", ""));
 
             Sentry.init(pluginConfig.getString("sentry.dsn", ""), new WirelessRedstoneSentryClientFactory());
-            Sentry.getStoredClient().setRelease(pluginConfig.getString("version", "0.0.0"));
-
-            String version = Bukkit.getBukkitVersion();
-            if (version.contains("-")) {
-                version = version.split("-")[0];
-            }
-
-            String serverImplementation = "Spigot";
-            if (Bukkit.getVersion().contains("Paper")) {
-                serverImplementation = "Paper";
-            } else if (Bukkit.getVersion().contains("Taco")) {
-                serverImplementation = "TacoSpigot";
-            }
-
-            Sentry.getStoredClient().addExtra("MC_version", version);
-            Sentry.getStoredClient().addExtra("MC_implementation", serverImplementation);
+            resetSentryContext();
         }
 
         PluginManager pm = getServer().getPluginManager();
@@ -316,6 +301,27 @@ public class WirelessRedstone extends JavaPlugin {
         config = null;
         WRLogger = null;
         instance = null;
+    }
+
+    public void resetSentryContext() {
+        Sentry.clearContext();
+
+        Sentry.getStoredClient().setRelease(getDescription().getVersion());
+
+        String version = Bukkit.getBukkitVersion();
+        if (version.contains("-")) {
+            version = version.split("-")[0];
+        }
+
+        String serverImplementation = "Spigot";
+        if (Bukkit.getVersion().contains("Paper")) {
+            serverImplementation = "Paper";
+        } else if (Bukkit.getVersion().contains("Taco")) {
+            serverImplementation = "TacoSpigot";
+        }
+
+        Sentry.getStoredClient().addTag("MC_version", version);
+        Sentry.getStoredClient().addTag("MC_implementation", serverImplementation);
     }
 
     /**

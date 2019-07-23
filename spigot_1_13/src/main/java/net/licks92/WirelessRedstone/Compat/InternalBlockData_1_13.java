@@ -47,7 +47,7 @@ public class InternalBlockData_1_13 implements InternalBlockData {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
         if (!(block.getBlockData() instanceof Rotatable)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Rotatable");
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Rotatable found " + block.getBlockData().getClass());
         }
 
         return ((Rotatable) block.getBlockData()).getRotation();
@@ -58,7 +58,7 @@ public class InternalBlockData_1_13 implements InternalBlockData {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
         if (!(block.getBlockData() instanceof Directional)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Directional");
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Directional found " + block.getBlockData().getClass());
         }
 
         return ((Directional) block.getBlockData()).getFacing();
@@ -69,7 +69,7 @@ public class InternalBlockData_1_13 implements InternalBlockData {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
         if (!(block.getBlockData() instanceof Switch)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.type.Switch");
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.type.Switch found " + block.getBlockData().getClass());
         }
 
         Switch redstoneSwitch = (Switch) block.getBlockData();
