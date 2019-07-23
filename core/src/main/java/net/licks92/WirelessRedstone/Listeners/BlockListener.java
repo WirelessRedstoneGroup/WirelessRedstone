@@ -34,12 +34,19 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void on(BlockRedstoneEvent event) {
-        if (event.getNewCurrent() < event.getOldCurrent() && event.getNewCurrent() != 0) {
-            return;
-        }
-
         if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
-            handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, false, false); // skipLocation: true
+            if (event.getNewCurrent() < event.getOldCurrent() && event.getNewCurrent() != 0) {
+                return;
+            }
+
+            boolean skipLocation = false;
+            if (Utils.isNewMaterialSystem()) {
+                if (event.getOldCurrent() < 15) {
+                    skipLocation = true;
+                }
+            }
+
+            handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, skipLocation, false); // skipLocation: true
         } else {
             handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, false, event.getNewCurrent() == 0);
         }
