@@ -8,6 +8,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.UpdateChecker;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -142,11 +143,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        Utils.sendFeedback(WirelessRedstone.getStrings().newUpdate
-                .replaceAll("%%NEWVERSION", updateChecker.getLastResult().getNewestVersion())
-                .replaceAll("%%URL", updateChecker.getLastResult().getUrl()), event.getPlayer(), false);
-        updateChecker.getLastResult().getChangelog()
-                .forEach(change -> Utils.sendFeedback(" - " + change, event.getPlayer(), false));
+        Bukkit.getScheduler().runTaskLater(WirelessRedstone.getInstance(),
+                () -> Utils.sendFeedback(WirelessRedstone.getStrings().newUpdate
+                        .replaceAll("%%NEWVERSION", updateChecker.getLastResult().getNewestVersion())
+                        .replaceAll("%%URL", updateChecker.getLastResult().getUrl()), event.getPlayer(), false),
+                1L);
     }
 
     private void handlePlaceCancelled(Block block) {
