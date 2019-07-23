@@ -144,6 +144,21 @@ public class WirelessRedstone extends JavaPlugin {
 
             Sentry.init(pluginConfig.getString("sentry.dsn", ""), new WirelessRedstoneSentryClientFactory());
             Sentry.getStoredClient().setRelease(pluginConfig.getString("version", "0.0.0"));
+
+            String version = Bukkit.getBukkitVersion();
+            if (version.contains("-")) {
+                version = version.split("-")[0];
+            }
+
+            String serverImplementation = "Spigot";
+            if (Bukkit.getVersion().contains("Paper")) {
+                serverImplementation = "Paper";
+            } else if (Bukkit.getVersion().contains("Taco")) {
+                serverImplementation = "TacoSpigot";
+            }
+
+            Sentry.getStoredClient().addExtra("MC_version", version);
+            Sentry.getStoredClient().addExtra("MC_implementation", serverImplementation);
         }
 
         PluginManager pm = getServer().getPluginManager();
