@@ -284,18 +284,18 @@ public class Utils {
      * @return SignType
      */
     public static SignType getSignType(String firstLine, String secondLine) {
-        if (WirelessRedstone.getStringManager().tagsTransmitter.contains(firstLine)) {
+        if (WirelessRedstone.getStringManager().tagsTransmitter.contains(firstLine.toLowerCase())) {
             return SignType.TRANSMITTER;
-        } else if (WirelessRedstone.getStringManager().tagsScreen.contains(firstLine)) {
+        } else if (WirelessRedstone.getStringManager().tagsScreen.contains(firstLine.toLowerCase())) {
             return SignType.SCREEN;
-        } else if (WirelessRedstone.getStringManager().tagsReceiver.contains(firstLine)) {
-            if (WirelessRedstone.getStringManager().tagsReceiverInverterType.contains(secondLine)) {
+        } else if (WirelessRedstone.getStringManager().tagsReceiver.contains(firstLine.toLowerCase())) {
+            if (WirelessRedstone.getStringManager().tagsReceiverInverterType.contains(secondLine.toLowerCase())) {
                 return SignType.RECEIVER_INVERTER;
-            } else if (WirelessRedstone.getStringManager().tagsReceiverSwitchType.contains(secondLine)) {
+            } else if (WirelessRedstone.getStringManager().tagsReceiverSwitchType.contains(secondLine.toLowerCase())) {
                 return SignType.RECEIVER_SWITCH;
-            } else if (WirelessRedstone.getStringManager().tagsReceiverClockType.contains(secondLine)) {
+            } else if (WirelessRedstone.getStringManager().tagsReceiverClockType.contains(secondLine.toLowerCase())) {
                 return SignType.RECEIVER_CLOCK;
-            } else if (WirelessRedstone.getStringManager().tagsReceiverDelayerType.contains(secondLine)) {
+            } else if (WirelessRedstone.getStringManager().tagsReceiverDelayerType.contains(secondLine.toLowerCase())) {
                 return SignType.RECEIVER_DELAYER;
             }
 
