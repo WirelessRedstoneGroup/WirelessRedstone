@@ -9,9 +9,9 @@ assignees: ''
 
 ## Bug report
 
-**I'm using version:** *insert version*  
-**I'm on Minecraft:** *insert version*  
-**I'm running:** *Bukkit/Spigot/Paper*
+**I'm using version:** insert version
+**I'm on Minecraft:** insert version
+**I'm running:** Bukkit/Spigot/Paper
 
 **Seen results:**  
 Tell use what happened
