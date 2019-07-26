@@ -11,16 +11,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class UpdateChecker {
 
     private static final String USER_AGENT = "WirelessRedstone-update-checker";
-    private static final String UPDATE_URL = "https://wirelessredstonegroup.github.io/WirelessRedstoneUpdate/update.json";
+    private static final String UPDATE_URL = "https://wirelessredstonegroup.github.io/WirelessRedstoneUpdate/update2.json";
 
     private static UpdateChecker instance;
 
@@ -71,8 +71,9 @@ public class UpdateChecker {
                 String updateUrl = updateObject.getAsJsonObject("spigot")
                         .get("downloadUrl").getAsString();
 
-                List<String> changelog = Arrays.stream(updateObject.get("changelog").getAsString().split("#"))
-                        .filter(change -> change.trim().length() > 0)
+                List<String> changelog = IntStream
+                        .range(0, updateObject.getAsJsonArray("changelog").size())
+                        .mapToObj(i ->  updateObject.getAsJsonArray("changelog").get(i).getAsString())
                         .collect(Collectors.toList());
 
                 return newest.greaterThan(current) ? new UpdateResult(UpdateReason.NEW_UPDATE, newest.toString(), updateUrl, changelog) :
