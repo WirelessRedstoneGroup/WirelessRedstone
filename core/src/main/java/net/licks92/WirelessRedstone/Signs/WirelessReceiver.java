@@ -104,6 +104,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
     public void changeSignContent(Block block, String channelName) {
         if (!(block.getState() instanceof Sign)) {
+            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign.");
             return;
         }
 
