@@ -1,5 +1,6 @@
 package net.licks92.WirelessRedstone;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 
@@ -32,7 +33,8 @@ public class WRLogger {
      * @param msg Message
      */
     public void info(String msg) {
-        console.sendMessage(prefix + " " + msg);
+        if (color) console.sendMessage(prefix + " " + msg);
+        else Bukkit.getLogger().info(msg);
     }
 
     /**
@@ -43,7 +45,7 @@ public class WRLogger {
     public void debug(String msg) {
         if (debug) {
             if (color) console.sendMessage(prefix + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + msg);
-            else console.sendMessage(prefix + "[Debug] " + msg);
+            else Bukkit.getLogger().info("[Debug] " + msg);
         }
     }
 
@@ -54,7 +56,7 @@ public class WRLogger {
      */
     public void severe(String msg) {
         if (color) console.sendMessage(prefix + ChatColor.DARK_RED + "[SEVERE] " + ChatColor.RESET + msg);
-        else console.sendMessage(prefix + "[SEVERE] " + msg);
+        else Bukkit.getLogger().severe("[SEVERE] " + msg);
     }
 
     /**
@@ -63,8 +65,8 @@ public class WRLogger {
      * @param msg Message
      */
     public void warning(String msg) {
-        if (color) console.sendMessage(prefix + ChatColor.RED + "[WARNING] " + ChatColor.RESET + msg);
-        else console.sendMessage(prefix + "[WARNING] " + msg);
+        if (color) console.sendMessage(prefix + ChatColor.YELLOW + "[WARNING] " + ChatColor.RESET + msg);
+        else Bukkit.getLogger().severe("[WARNING] " + msg);
     }
 
 }
