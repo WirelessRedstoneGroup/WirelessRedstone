@@ -45,7 +45,7 @@ public class WRLogger {
     public void debug(String msg) {
         if (debug) {
             if (color) console.sendMessage(prefix + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + msg);
-            else Bukkit.getLogger().info("[Debug] " + msg);
+            else Bukkit.getLogger().info(prefix + "[Debug] " + msg);
         }
     }
 
@@ -56,7 +56,7 @@ public class WRLogger {
      */
     public void severe(String msg) {
         if (color) console.sendMessage(prefix + ChatColor.DARK_RED + "[SEVERE] " + ChatColor.RESET + msg);
-        else Bukkit.getLogger().severe("[SEVERE] " + msg);
+        else Bukkit.getLogger().severe(prefix + " " + msg);
     }
 
     /**
@@ -66,7 +66,7 @@ public class WRLogger {
      */
     public void warning(String msg) {
         if (color) console.sendMessage(prefix + ChatColor.YELLOW + "[WARNING] " + ChatColor.RESET + msg);
-        else Bukkit.getLogger().severe("[WARNING] " + msg);
+        else Bukkit.getLogger().warning(prefix + " " + msg);
     }
 
 }
