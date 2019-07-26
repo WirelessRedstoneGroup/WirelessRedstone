@@ -32,7 +32,8 @@ public class WirelessReceiverInverter extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName) {
         if (!(block.getState() instanceof Sign)) {
-            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign.");
+            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign. " +
+                    "Is the sign at a valid location?");
             return;
         }
 
@@ -40,7 +41,7 @@ public class WirelessReceiverInverter extends WirelessReceiver {
         sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
         sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverInverterType.get(0));
-        sign.update(true);
+        sign.update();
     }
 
     @Override

@@ -81,7 +81,7 @@ public enum CompatMaterial {
         } else if (materials != null) {
             return materials.get(0);
         } else {
-            throw new IllegalStateException("Material " + this.name() + " couldn't be find. Is this the latest version?");
+            throw new IllegalStateException("Material " + this.name() + " couldn't be find. Is this the latest WirelessRedstone version?");
         }
     }
 

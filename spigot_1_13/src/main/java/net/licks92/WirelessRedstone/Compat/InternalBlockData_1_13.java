@@ -46,11 +46,16 @@ public class InternalBlockData_1_13 implements InternalBlockData {
     public BlockFace getSignRotation(@NotNull Block block) {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
-        if (!(block.getBlockData() instanceof Rotatable)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Rotatable found " + block.getBlockData().getClass());
+        if (block.getBlockData() instanceof Rotatable) {
+            Rotatable blockData = ((Rotatable) block.getBlockData());
+            return blockData.getRotation();
+        } else if (block.getBlockData() instanceof Directional) {
+            Directional blockData = ((Directional) block.getBlockData());
+            return blockData.getFacing();
+        } else {
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Rotatable or org.bukkit.block.data.Directional found "
+                    + block.getBlockData().getClass());
         }
-
-        return ((Rotatable) block.getBlockData()).getRotation();
     }
 
     @Override
@@ -118,12 +123,17 @@ public class InternalBlockData_1_13 implements InternalBlockData {
     public void setSignRotation(@NotNull Block block, @NotNull BlockFace blockFace) {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
-        if (!(block.getBlockData() instanceof Rotatable)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Rotatable");
+        if (block.getBlockData() instanceof Rotatable) {
+            Rotatable blockData = ((Rotatable) block.getBlockData());
+            blockData.setRotation(blockFace);
+            block.setBlockData(blockData);
+        } else if (block.getBlockData() instanceof Directional) {
+            Directional blockData = ((Directional) block.getBlockData());
+            blockData.setFacing(blockFace);
+            block.setBlockData(blockData);
+        } else {
+            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.Rotatable or org.bukkit.block.data.Directional found "
+                    + block.getBlockData().getClass());
         }
-
-        Rotatable blockData = ((Rotatable) block.getBlockData());
-        blockData.setRotation(blockFace);
-        block.setBlockData(blockData);
     }
 }

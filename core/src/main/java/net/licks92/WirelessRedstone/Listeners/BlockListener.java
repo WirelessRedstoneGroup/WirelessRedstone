@@ -156,6 +156,10 @@ public class BlockListener implements Listener {
         //TODO: #registerSign Implement error message if failed
         final int finalDelay = delay;
         Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), () -> {
+            if (!(event.getBlock().getState() instanceof Sign)) {
+                return;
+            }
+
             Sign sign = (Sign) event.getBlock().getState();
             BlockFace signDirection = InternalProvider.getCompatBlockData().getSignRotation(event.getBlock());
 

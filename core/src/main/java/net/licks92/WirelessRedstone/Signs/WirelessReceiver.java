@@ -75,7 +75,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
             if (blockFace == null) {
                 block.setType(Material.AIR);
-                WirelessRedstone.getWRLogger().debug("Receiver at " + block.getLocation().toString() + " is in a invalid position!");
+                WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " is in a invalid position!");
                 return;
             }
 
@@ -104,7 +104,8 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
     public void changeSignContent(Block block, String channelName) {
         if (!(block.getState() instanceof Sign)) {
-            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign.");
+            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign. " +
+                    "Is the sign at a valid location?");
             return;
         }
 

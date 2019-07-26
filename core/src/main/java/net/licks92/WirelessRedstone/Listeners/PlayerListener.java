@@ -20,7 +20,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Directional;
 
 import java.util.Collections;
 
@@ -104,13 +103,7 @@ public class PlayerListener implements Listener {
             }
         }
 
-        BlockFace signDirection;
-
-        if (sign.getData() instanceof Directional) {
-            signDirection = ((Directional) sign.getData()).getFacing();
-        } else {
-            signDirection = InternalProvider.getCompatBlockData().getDirectionalFacing(sign.getBlock());
-        }
+        BlockFace signDirection = InternalProvider.getCompatBlockData().getSignRotation(sign.getBlock());
 
         int result = WirelessRedstone.getSignManager().registerSign(
                 sign.getLine(1),

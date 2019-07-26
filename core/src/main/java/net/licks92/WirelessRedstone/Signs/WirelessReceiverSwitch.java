@@ -44,11 +44,17 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
 
     @Override
     public void changeSignContent(Block block, String channelName) {
+        if (!(block.getState() instanceof Sign)) {
+            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign. " +
+                    "Is the sign at a valid location?");
+            return;
+        }
+
         Sign sign = (Sign) block.getState();
         sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
         sign.setLine(1, channelName);
         sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverSwitchType.get(0));
-        sign.update(true);
+        sign.update();
     }
 
     public boolean isActive() {
@@ -62,4 +68,17 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
         return map;
     }
 
+    @Override
+    public String toString() {
+        return "WirelessReceiverSwitch{" +
+                "isActive=" + isActive +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", owner='" + owner + '\'' +
+                ", world='" + world + '\'' +
+                ", direction=" + direction +
+                ", isWallSign=" + isWallSign +
+                '}';
+    }
 }
