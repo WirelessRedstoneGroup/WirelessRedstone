@@ -91,7 +91,7 @@ public class UpdateChecker {
         return lastResult;
     }
 
-    public static enum UpdateReason {
+    public enum UpdateReason {
         NEW_UPDATE, UP_TO_DATE, COULD_NOT_CONNECT, INVALID_JSON;
     }
 

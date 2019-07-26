@@ -207,9 +207,9 @@ public class ConfigManager {
         GATELOGIC("gateLogic"), SAVEMODE("saveOption"), DROPSIGNBROKEN("DropSignWhenBroken"),
         METRICS("Metrics"), SENTRY("Sentry");
 
-        private String name;
+        private final String name;
 
-        private ConfigPaths(String name) {
+        ConfigPaths(String name) {
             this.name = name;
         }
 

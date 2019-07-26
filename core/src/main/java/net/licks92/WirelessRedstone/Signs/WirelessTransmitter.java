@@ -31,7 +31,7 @@ public class WirelessTransmitter extends WirelessPoint implements ConfigurationS
         z = (Integer) map.get("z");
 
         try {
-            direction = (BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase());
+            direction = BlockFace.valueOf(map.get("direction").toString().toUpperCase());
         } catch (IllegalArgumentException e) {
             try {
                 int directionInt = Integer.parseInt(map.get("direction").toString());

@@ -28,7 +28,7 @@ public abstract class EventExceptionHandler {
          * Represents an event executor that does nothing. This is not really necessary in the current
          * implementation of CraftBukkit, but we will take no chances.
          */
-        private static EventExecutor NULL_EXECUTOR = (listener, event) -> {
+        private static final EventExecutor NULL_EXECUTOR = (listener, event) -> {
             // Do nothing
         };
 

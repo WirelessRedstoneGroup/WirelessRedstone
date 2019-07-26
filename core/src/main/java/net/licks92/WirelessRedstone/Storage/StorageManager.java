@@ -18,12 +18,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class StorageManager {
 
-    private ConcurrentHashMap<String, WirelessChannel> allChannels = new ConcurrentHashMap<>();
-    private BukkitTask refreshingTask;
-    private StorageType storageType;
-    private StorageConfiguration storage;
-    private String channelFolder;
-    private File channelFolderFile;
+    private final ConcurrentHashMap<String, WirelessChannel> allChannels = new ConcurrentHashMap<>();
+    private final BukkitTask refreshingTask;
+    private final StorageType storageType;
+    private final StorageConfiguration storage;
+    private final String channelFolder;
+    private final File channelFolderFile;
 
     public StorageManager(StorageType type, String channelFolder) {
         this.storageType = type;
@@ -65,11 +65,7 @@ public class StorageManager {
 
     public void updateChannels(boolean async) {
         if (async) {
-            Bukkit.getServer().getScheduler().runTaskAsynchronously(WirelessRedstone.getInstance(), new Runnable() {
-                public void run() {
-                    updateList();
-                }
-            });
+            Bukkit.getServer().getScheduler().runTaskAsynchronously(WirelessRedstone.getInstance(), this::updateList);
         } else {
             updateList();
         }

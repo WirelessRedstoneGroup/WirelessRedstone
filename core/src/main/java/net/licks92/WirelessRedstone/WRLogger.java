@@ -5,10 +5,10 @@ import org.bukkit.command.ConsoleCommandSender;
 
 public class WRLogger {
 
-    private ConsoleCommandSender console;
-    private String prefix;
-    private boolean debug;
-    private boolean color;
+    private final ConsoleCommandSender console;
+    private final String prefix;
+    private final boolean debug;
+    private final boolean color;
 
     /**
      * Creates an instance of WRLogger.

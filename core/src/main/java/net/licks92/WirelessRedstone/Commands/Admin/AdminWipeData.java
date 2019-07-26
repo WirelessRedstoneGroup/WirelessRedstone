@@ -16,7 +16,7 @@ import java.util.UUID;
         permission = "wipeData", canUseInConsole = true, canUseInCommandBlock = false)
 public class AdminWipeData extends WirelessCommand {
 
-    private ArrayList<UUID> confirmation = new ArrayList<>();
+    private final ArrayList<UUID> confirmation = new ArrayList<>();
 
     @Override
     public void onCommand(final CommandSender sender, String[] args) {

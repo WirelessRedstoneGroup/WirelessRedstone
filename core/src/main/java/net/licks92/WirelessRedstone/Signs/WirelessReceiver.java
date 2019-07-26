@@ -38,7 +38,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
         z = (Integer) map.get("z");
 
         try {
-            direction = (BlockFace) BlockFace.valueOf(map.get("direction").toString().toUpperCase());
+            direction = BlockFace.valueOf(map.get("direction").toString().toUpperCase());
         } catch (IllegalArgumentException e) {
             try {
                 int directionInt = Integer.parseInt(map.get("direction").toString());
@@ -57,8 +57,13 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
     }
 
     protected void changeState(boolean newState, String channelName) {
-        if (getLocation() == null)
+        if (getLocation() == null) {
             return;
+        }
+
+        if (getLocation().getWorld() == null) {
+            return;
+        }
 
         getLocation().getWorld().loadChunk(getLocation().getChunk());
 

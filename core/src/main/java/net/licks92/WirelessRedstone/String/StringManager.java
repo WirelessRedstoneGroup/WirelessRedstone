@@ -13,16 +13,16 @@ import java.util.List;
 public class StringManager {
 
     private final String stringFolder = "languages/";
-    private Strings strings;
+    private final Strings strings;
 
-    public List<String> tagsTransmitter;
-    public List<String> tagsReceiver;
-    public List<String> tagsScreen;
-    public List<String> tagsReceiverDefaultType;
-    public List<String> tagsReceiverInverterType;
-    public List<String> tagsReceiverDelayerType;
-    public List<String> tagsReceiverClockType;
-    public List<String> tagsReceiverSwitchType;
+    public final List<String> tagsTransmitter;
+    public final List<String> tagsReceiver;
+    public final List<String> tagsScreen;
+    public final List<String> tagsReceiverDefaultType;
+    public final List<String> tagsReceiverInverterType;
+    public final List<String> tagsReceiverDelayerType;
+    public final List<String> tagsReceiverClockType;
+    public final List<String> tagsReceiverSwitchType;
 
     public StringManager(String language) {
         tagsTransmitter = new ArrayList<>();

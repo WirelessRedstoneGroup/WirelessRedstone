@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class CommandManager implements CommandExecutor, TabCompleter {
 
-    private ArrayList<WirelessCommand> cmds;
+    private final ArrayList<WirelessCommand> cmds;
 
     public CommandManager() {
         cmds = new ArrayList<>();
@@ -105,7 +105,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
             Vector<String> a = new Vector<String>(Arrays.asList(args));
             a.remove(0);
-            args = a.toArray(new String[a.size()]);
+            args = a.toArray(new String[0]);
 
             try {
                 wanted.onCommand(sender, args);

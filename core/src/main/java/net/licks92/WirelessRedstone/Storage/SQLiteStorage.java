@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class SQLiteStorage extends StorageConfiguration {
 
-    private File channelFolder;
+    private final File channelFolder;
 
     public SQLiteStorage(String channelFolder) {
         this.channelFolder = new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder);

@@ -6,7 +6,7 @@ import org.bukkit.block.Sign;
 
 public class CompatSignData {
 
-    private Block block;
+    private final Block block;
 
     public CompatSignData(Block block) {
         this.block = block;

@@ -13,7 +13,7 @@ import java.util.Map;
 @SerializableAs("WirelessReceiverClock")
 public class WirelessReceiverClock extends WirelessReceiver {
 
-    private int delay;
+    private final int delay;
     private int bukkitTaskId = -1;
 
     public WirelessReceiverClock(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner, int delay) {

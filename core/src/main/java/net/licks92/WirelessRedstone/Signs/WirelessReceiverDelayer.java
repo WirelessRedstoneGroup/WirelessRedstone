@@ -12,7 +12,7 @@ import java.util.Map;
 @SerializableAs("WirelessReceiverDelayer")
 public class WirelessReceiverDelayer extends WirelessReceiver {
 
-    private int delay;
+    private final int delay;
 
     public WirelessReceiverDelayer(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner, int delay) {
         super(x, y, z, world, isWallSign, direction, owner);

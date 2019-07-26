@@ -26,7 +26,7 @@ import java.util.Objects;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class YamlStorage extends StorageConfiguration {
 
-    private File channelFolder;
+    private final File channelFolder;
     private final FilenameFilter yamlFilter = (dir, name) -> name.toLowerCase().endsWith(".yml");
 
     public YamlStorage(String channelFolder) {

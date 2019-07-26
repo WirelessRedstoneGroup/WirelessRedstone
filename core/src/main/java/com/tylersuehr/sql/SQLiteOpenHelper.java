@@ -65,9 +65,9 @@ public abstract class SQLiteOpenHelper implements Closeable {
     /* Stores reference to the SQLite database instance */
     private SQLiteDatabase database;
     /* Stores version of the SQLite database */
-    private int version;
+    private final int version;
     /* Stores name of the SQLite database */
-    private String name;
+    private final String name;
 
 
     public SQLiteOpenHelper(final String dbName, final int version) {
