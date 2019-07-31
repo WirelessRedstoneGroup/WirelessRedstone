@@ -39,7 +39,7 @@ Maven >3.5.0 is required to build this plugin due to the revision tag.
 
 ## License
 
-WirelessRedstone is released under the [GPLv3](LICENSE).
+WirelessRedstone is released under the [GPLv3](LICENSE.txt).
 
 ```
 Copyright (C) 2016  WirelessRedstoneGroup
