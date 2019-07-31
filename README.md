@@ -2,40 +2,40 @@
 [![Build Status](https://travis-ci.org/WirelessRedstoneGroup/WirelessRedstone.svg?branch=master)](https://travis-ci.org/WirelessRedstoneGroup/WirelessRedstone)
 
 ## WirelessRedstone
-Welcome on the official page of the Wireless Redstone plugin
+Welcome on the official page of the Wireless Redstone plugin. [Spigot page.](https://www.spigotmc.org/resources/wirelessredstone.8251/)
 
 ### Translation
-Do you want to see the plugin in your favorite language / native language? 
+Do you want to see the plugin in your favourite language / native language? 
 It will be possible in the next version. 
-The process is very simple for you and me, you just have to go on [this website](https://www.transifex.com/bart0110/wirelessredstone/), and fill the language of your choice. :simple_smile:
+The process is very simple for you and me, you just have to go on [this website](https://www.transifex.com/bart0110/wirelessredstone/), and fill the language of your choice.
 
-### Upcomming features
+### Metrics
+[MCStats < v4.0.0](http://mcstats.org/plugin/WirelessRedstone) | [bStats >= v4.0.0](https://bstats.org/plugin/bukkit/WirelessRedstone)
 
-- [ ] MySQL
+### Sentry
+This plugin uses [Sentry](https://sentry.io/) to quickly investigate plugin errors/exceptions. You can disable this in the config. 
 
-### Development
+## Maven
+Maven >3.5.0 is required to build this plugin due to the revision tag.
+[https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067](https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067)
 
-- [ ] Debug everything
-- [x] Configuration
-- [x] Logger
-- [x] String loader
-- [x] Sign logic
-- [x] WorldEdit
-- [x] Listeners
-- [x] Commands
-- [x] Admin commands
-- [x] Metrics
-- [x] Permissions
-- [x] Updater
-- [ ] Add remaining strings to the stringloader
-- [ ] Documentation
-- [X] Add database support from 2.X
+## Config
 
-#### Storage
-- [x] Yaml
-- [X] SQLite
-- [ ] MySQL
-
+| Key                         | Description                                                                                                                                                                                                                                                                                                                                                  |
+|-------------------------    |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    |
+| ConfigVersion               | You should NOT change this value yourself!                                                                                                                                                                                                                                                                                                                   |
+| Language                    | Change the language of the plugin. It falls back to English if the language is not found. For more info see the Translate section.                                                                                                                                                                                                                           |
+| ColourfulLogging            | Add colours to logging.                                                                                                                                                                                                                                                                                                                                      |
+| CheckForUpdates             | Get a message when an update is available.                                                                                                                                                                                                                                                                                                                   |
+| Metrics                     | Enable anonymous metrics.                                                                                                                                                                                                                                                                                                                                    |
+| Sentry                      | Enable Sentry services. This service automatically sends exceptions to a central server to quickly investigate problems.                                                                                                                                                                                                                                     |
+| SilentMode                  | Disable most of the feedback if the user doesn't have permissions.                                                                                                                                                                                                                                                                                           |
+| DebugMode                   | Print more information to the console.                                                                                                                                                                                                                                                                                                                       |
+| DropSignWhenBroken          | Drop a sign item if a WirelessChannel is destroyed.                                                                                                                                                                                                                                                                                                          |
+| InteractTransmitterTime     | Amount of time (in milliseconds) a WirelessChannel will be active if there's an interaction with a transmitter.                                                                                                                                                                                                                                              |
+| CacheRefreshFrequency       | Frequency (in seconds) of refreshing the database. You should leave this to the default value.                                                                                                                                                                                                                                                               |
+| gateLogic                   | The logic of the transmitters;  OR: If one of the transmitters is powered the channel will be activated. All transmitters must be off to power the channel down.  IGNORE: If one of the transmitters is powered the channel will be activated. If a transmitter is no longer powered the channel will be deactivated ignoring other transmitters.            |
+| saveOption                  | Save WirelessRedstone data in YML or SQLITE.                                                                                                                                                                                                                                                                                                                 |
 
 ## License
 
@@ -76,4 +76,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-```

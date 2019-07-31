@@ -1,0 +1,149 @@
+name: WirelessRedstone
+main: net.licks92.WirelessRedstone.WirelessRedstone
+api-version: 1.13
+website: http://dev.bukkit.org/server-mods/wireless-redstone/
+authors: [licks92, Bart_0110]
+version: ${project.version}
+description: The reference in long-distance redstone connections! Create your own wifi-redstone network with WirelessRedstone!
+softdepend: [Vault, WorldEdit, Multiverse-Core, MultiWorld]
+sentry:
+  dsn: '${project.sentry.dsn}'
+commands:
+  wirelessredstone:
+    aliases: [wr, wredstone, wifi]
+    description: WirelessRedstone menu
+    usage: |
+      Example: /<command> help
+  wrt:
+    description: Creates a transmitter sign with given channel
+    usage: |
+      Example: /<command> channel
+  wrr:
+    description: Creates a receiver sign with given channel
+    usage: |
+      Example: /<command> channel
+  wrs:
+    description: Creates a screen sign with given channel
+    usage: |
+      Example: /<command> channel
+  wradmin:
+    aliases: [wra]
+    description: WirelessRedstone Admin command
+    usage: |
+      Example: /<command> help
+permissions:
+  wirelessredstone.*:
+    description: Gives access to all Wireless Redstone commands
+    children:
+      wirelessredstone.create.*: true
+      wirelessredstone.remove.*: true
+      wirelessredstone.commands.*: true
+      wirelessredstone.admin.*: true
+  wirelessredstone.create.*:
+    description: Allows you to create any sign
+    children:
+      wirelessredstone.create.transmitter: true
+      wirelessredstone.create.receiver: true
+      wirelessredstone.create.screen: true
+  wirelessredstone.remove.*:
+    description: Allows you to remove any sign
+    children:
+      wirelessredstone.remove.transmitter: true
+      wirelessredstone.remove.receiver: true
+      wirelessredstone.remove.screen: true
+  wirelessredstone.commands.*:
+    description: Gives you access to all commands
+    children:
+      wirelessredstone.commands.removechannel: true
+      wirelessredstone.commands.info: true
+      wirelessredstone.commands.list: true
+      wirelessredstone.commands.help: true
+      wirelessredstone.commands.lock: true
+      wirelessredstone.commands.activate: true
+      wirelessredstone.commands.version: true
+      wirelessredstone.commands.tp: true
+  wirelessredstone.admin.*:
+    description: Gives you access to all Admin commands
+    children:
+      wirelessredstone.admin.isAdmin: true
+      wirelessredstone.admin.addOwner: true
+      wirelessredstone.admin.removeOwner: true
+      wirelessredstone.admin.wipeData: true
+      wirelessredstone.admin.backupdata: true
+      wirelessredstone.admin.convertdata: true
+      wirelessredstone.admin.purgedata: true
+      wirelessredstone.admin.restoredata: true
+      wirelessredstone.admin.updatecache: true
+      wirelessredstone.admin.changelanguage: true
+  wirelessredstone.create.transmitter:
+    description: Allows you to create a transmitter
+    default: op
+  wirelessredstone.create.receiver:
+    description: Allows you to create a receiver
+    default: op
+  wirelessredstone.create.screen:
+    description: Allows you to create a screen
+    default: op
+  wirelessredstone.remove.transmitter:
+    description: Allows you to remove a transmitter
+    default: op
+  wirelessredstone.remove.receiver:
+    description: Allows you to remove a receiver
+    default: op
+  wirelessredstone.remove.screen:
+    description: Allows you to remove a screen
+    default: op
+  wirelessredstone.commands.removechannel:
+    description: Allows you to remove a channel, only if you're an owner.
+    default: op
+  wirelessredstone.commands.info:
+    description: Allows you to see informations about a channel.
+    default: op
+  wirelessredstone.commands.list:
+    description: Allows you see the list of the channel that you're the owner.
+    default: op
+  wirelessredstone.commands.lock:
+    description: Allow you to lock / unlock a channel.
+    default: op
+  wirelessredstone.commands.help:
+    description: Allows you see the WirelessRedstone help.
+    default: op
+  wirelessredstone.commands.activate:
+    description: Allows you to temporarily turn on a channel.
+    default: op
+  wirelessredstone.commands.version:
+    description: Allows you to see which version of WirelessRedstone is installed.
+    default: op
+  wirelessredstone.commands.tp:
+    description: Allows you to teleport to a channel sign.
+    default: op
+  wirelessredstone.admin.isAdmin:
+    description: If you have this node, you're an owner of every channel.
+    default: op
+  wirelessredstone.admin.addOwner:
+    description: Allows you to add an owner to a channel.
+    default: op
+  wirelessredstone.admin.removeOwner:
+    description: Allows you to remove an owner from a channel.
+    default: op
+  wirelessredstone.admin.wipeData:
+    description: Allows you to wipe all the database.
+    default: op
+  wirelessredstone.admin.backupdata:
+    description: Allows you to backup the database.
+    default: op
+  wirelessredstone.admin.convertdata:
+    description: Allows you to convert the database.
+    default: op
+  wirelessredstone.admin.purgedata:
+    description: Allows you to purge the database.
+    default: op
+  wirelessredstone.admin.restoredata:
+    description: Allows you to restore the database from the latest backup.
+    default: op
+  wirelessredstone.admin.updatecache:
+    description: Allows you to update the global cache.
+    default: op
+  wirelessredstone.admin.changelanguage:
+    description: Allows you to change the language in-game.
+    default: op

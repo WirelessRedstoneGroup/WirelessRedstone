@@ -1,135 +1,54 @@
-<?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>WirelessRedstone</name>
     <groupId>net.licks92</groupId>
-    <artifactId>WirelessRedstone</artifactId>
-    <version>3.0.6-beta.1</version>
-    <url>http://dev.bukkit.org/server-mods/wireless-redstone/</url>
-    <description>Wireless Redstone plugin for bukkit.</description>
+    <artifactId>WirelessRedstone-parent</artifactId>
+    <version>${revision}</version>
+    <name>WirelessRedstone</name>
+
+    <packaging>pom</packaging>
+    <description>WirelessRedstone plugin for bukkit! Make bigger circuits with less wires!</description>
+
+    <properties>
+        <revision>4.0.0</revision>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+
+        <project.mcversion>1.14.3</project.mcversion>
+        <project.cbversion>${project.mcversion}-R0.1-SNAPSHOT</project.cbversion>
+        <project.semverversion>0.9.0</project.semverversion>
+
+        <project.sentry.version>1.7.23</project.sentry.version>
+        <project.sentry.dsn>https://7c45ccc4745f428f81d577b15c84b840@sentry.io/1509557</project.sentry.dsn>
+    </properties>
+
+    <modules>
+        <module>core</module>
+
+        <module>spigot_1_8</module>
+        <module>spigot_1_13</module>
+
+        <module>worldedit_6</module>
+        <module>worldedit_7</module>
+
+       <module>dist</module>
+    </modules>
 
     <build>
-        <!-- Resources (the filtering allows us to use project properties in plugin.yml) -->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
-                    <include>languages/*</include>
-                </includes>
-            </resource>
-        </resources>
         <defaultGoal>clean install</defaultGoal>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <fork>true</fork>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>com.vdurmont:semver4j</include>
-                        </includes>
-                    </artifactSet>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.coderplus.maven.plugins</groupId>
-                <artifactId>copy-rename-maven-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-file</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <sourceFile>${basedir}/target/WirelessRedstone-${project.version}.jar</sourceFile>
-                            <destinationFile>${basedir}/target/WirelessRedstone.jar</destinationFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
     </build>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <scope>compile</scope>
-            <version>1.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit-bukkit</artifactId>
-            <version>6.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vdurmont</groupId>
-            <artifactId>semver4j</artifactId>
-            <version>2.0.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.15.1</version>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>13.0</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>Bukkit</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/repo/</url>
-        </repository>
-        <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
-        </repository>
-        <repository>
-            <id>sqlite-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/releases/</url>
-        </repository>
-    </repositories>
 </project>
