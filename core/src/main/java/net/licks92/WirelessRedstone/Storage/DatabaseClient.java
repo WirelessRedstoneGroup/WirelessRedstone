@@ -270,6 +270,19 @@ public class DatabaseClient extends SQLiteOpenHelper {
             throw new IllegalArgumentException("WirelessPoint can not be null.");
         }
 
+        try {
+            if (isWirelessPointInDb(point)) {
+                WirelessRedstone.getWRLogger().warning("WirelesPoint " + point + " is a duplicate in the storage. Skipping saving the WirelessPoint");
+                return false;
+            }
+        } catch (SQLException ex) {
+            WirelessRedstone.getWRLogger().warning("Database exception, enable debug mode to see the full stacktrace.");
+
+            if (ConfigManager.getConfig().getDebugMode()) {
+                ex.printStackTrace();
+            }
+        }
+
         ContentValues values = new ContentValues();
         try {
             if (!isChannelInDb(channel.getName())) {
@@ -309,7 +322,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                 values.put("delay", ((WirelessReceiverDelayer) point).getDelay());
             } else if (point instanceof WirelessReceiverSwitch) {
                 table = TB_SWITCH;
-                values.put("state", ((WirelessReceiverSwitch) point).isActive());
+                values.put("powered", ((WirelessReceiverSwitch) point).isActive());
             } else if (point instanceof WirelessReceiverClock) {
                 table = TB_CLOCKS;
                 values.put("delay", ((WirelessReceiverClock) point).getDelay());
@@ -339,6 +352,44 @@ public class DatabaseClient extends SQLiteOpenHelper {
         boolean exists = false;
 
         ResultSet resultSet = getDatabase().query(TB_CHANNELS, "[name]='" + escape(channelName) + "'", null, null);
+        while (resultSet.next() && !exists) {
+            exists = true;
+        }
+
+        resultSet.close();
+
+        return exists;
+    }
+
+    protected boolean isWirelessPointInDb(WirelessPoint point) throws SQLException {
+        boolean exists = false;
+        String table;
+
+        if (point instanceof WirelessTransmitter) {
+            table = TB_TRANSMITTERS;
+        } else if (point instanceof WirelessScreen) {
+            table = TB_SCREENS;
+        } else if (point instanceof WirelessReceiver) {
+            if (point instanceof WirelessReceiverInverter) {
+                table = TB_INVERTERS;
+            } else if (point instanceof WirelessReceiverDelayer) {
+                table = TB_DELAYERS;
+            } else if (point instanceof WirelessReceiverSwitch) {
+                table = TB_SWITCH;
+            } else if (point instanceof WirelessReceiverClock) {
+                table = TB_CLOCKS;
+            } else {
+                table = TB_RECEIVERS;
+            }
+        } else {
+            WirelessRedstone.getWRLogger().debug("Can't find wirelesspoint in database. Couldn't find what type the wirelesspoint is.");
+            WirelessRedstone.getWRLogger().debug(point.toString());
+            return false;
+        }
+
+        ResultSet resultSet = getDatabase().query(table,
+                "[x]=" + point.getX() + " AND [y]=" + point.getY() + " AND [z]=" + point.getZ() + " AND [world]=" + point.getWorld(),
+                null, null);
         while (resultSet.next() && !exists) {
             exists = true;
         }

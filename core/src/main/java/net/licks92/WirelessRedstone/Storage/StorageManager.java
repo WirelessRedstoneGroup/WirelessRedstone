@@ -121,6 +121,7 @@ public class StorageManager {
             storage = new YamlStorage(channelFolder);
         } else if (storageType == StorageType.SQLITE) {
             storage = new SQLiteStorage(channelFolder);
+            DatabaseClient.init(new File(WirelessRedstone.getInstance().getDataFolder(), channelFolder).toString());
         } else {
             return false;
         }

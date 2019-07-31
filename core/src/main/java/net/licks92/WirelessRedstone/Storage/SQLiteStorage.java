@@ -51,7 +51,7 @@ public class SQLiteStorage extends StorageConfiguration {
     @Override
     public boolean createChannel(WirelessChannel channel) {
         channel.getSigns()
-                .forEach(wirelessPoint -> DatabaseClient.getInstance().insertWirelessPoint(channel, wirelessPoint));
+                .forEach(wirelessPoint -> createWirelessPoint(channel, wirelessPoint));
 
         return super.createChannel(channel);
     }
@@ -64,6 +64,11 @@ public class SQLiteStorage extends StorageConfiguration {
         DatabaseClient.getInstance().insertWirelessPoint(channel, wirelessPoint);
 
         return super.createWirelessPoint(channelName, wirelessPoint);
+    }
+
+    private void createWirelessPoint(WirelessChannel channel, WirelessPoint wirelessPoint) {
+        DatabaseClient.getInstance().insertWirelessPoint(channel, wirelessPoint);
+        WirelessRedstone.getStorageManager().updateList(channel.getName(), channel);
     }
 
     @Override
