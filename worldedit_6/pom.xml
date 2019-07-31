@@ -70,5 +70,10 @@
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
+
+        <repository>
+            <id>bart-0110-repo</id>
+            <url>https://bart-0110.github.io/mc-maven/</url>
+        </repository>
     </repositories>
 </project>
