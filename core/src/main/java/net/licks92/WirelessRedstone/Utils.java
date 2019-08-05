@@ -315,6 +315,12 @@ public class Utils {
      * @return Boolean
      */
     public static boolean sameLocation(Location loc1, Location loc2) {
+        if (loc1 == null || loc2 == null) {
+            return false;
+        } else if (loc1.getWorld() == null || loc2.getWorld() == null) {
+            return false;
+        }
+
         return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ() &&
                 loc1.getWorld().getName().equalsIgnoreCase(loc2.getWorld().getName());
     }
