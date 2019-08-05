@@ -15,6 +15,6 @@ public class WirelessRedstoneSentryClientFactory extends DefaultSentryClientFact
 
     @Override
     protected Collection<String> getInAppFrames(Dsn dsn) {
-        return Arrays.asList("net.licks92.WirelessRedstone", "org.bukkit", "org.spigotmc");
+        return Arrays.asList("net.licks92.wirelessredstone", "org.bukkit", "org.spigotmc");
     }
 }
