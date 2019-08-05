@@ -23,7 +23,7 @@
  */
 
 package com.tylersuehr.sql;
-import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.wirelessredstone.WirelessRedstone;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
