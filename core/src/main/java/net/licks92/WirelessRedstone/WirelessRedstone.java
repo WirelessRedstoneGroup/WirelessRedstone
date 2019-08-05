@@ -22,6 +22,7 @@ import net.licks92.WirelessRedstone.Storage.StorageManager;
 import net.licks92.WirelessRedstone.String.StringManager;
 import net.licks92.WirelessRedstone.String.Strings;
 import net.licks92.WirelessRedstone.WorldEdit.WorldEditLoader;
+import net.licks92.WirelessRedstone.materiallib.MaterialLib;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
@@ -115,6 +116,8 @@ public class WirelessRedstone extends JavaPlugin {
             WRLogger.severe("**********");
             getPluginLoader().disablePlugin(this);
         }
+
+        new MaterialLib(this).initialize();
 
         config = ConfigManager.getConfig();
         config.update(CHANNEL_FOLDER);

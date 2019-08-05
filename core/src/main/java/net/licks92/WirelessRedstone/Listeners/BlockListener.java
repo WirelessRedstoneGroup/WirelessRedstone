@@ -1,12 +1,12 @@
 package net.licks92.WirelessRedstone.Listeners;
 
-import net.licks92.WirelessRedstone.Compat.CompatMaterial;
 import net.licks92.WirelessRedstone.Compat.InternalProvider;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.materiallib.data.CrossMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -188,14 +188,14 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void on(BlockPlaceEvent event) {
-        if (event.getBlock().getType() == Material.REDSTONE_BLOCK || event.getBlock().getType() == CompatMaterial.REDSTONE_TORCH.getMaterial()) {
+        if (event.getBlock().getType() == Material.REDSTONE_BLOCK || CrossMaterial.REDSTONE_TORCH.equals(event.getBlock().getType())) {
             handleRedstoneEvent(event.getBlock(), true, false, false);
         }
     }
 
     @EventHandler
     public void on(BlockBreakEvent event) {
-        if (event.getBlock().getType() == Material.REDSTONE_BLOCK || event.getBlock().getType() == CompatMaterial.REDSTONE_TORCH.getMaterial()) {
+        if (event.getBlock().getType() == Material.REDSTONE_BLOCK || CrossMaterial.REDSTONE_TORCH.equals(event.getBlock().getType())) {
             handleRedstoneEvent(event.getBlock(), false, true, false);
         }
 
@@ -247,10 +247,8 @@ public class BlockListener implements Listener {
         List<Location> locations = new ArrayList<>();
         Material type = block.getType();
 
-        if (type == CompatMaterial.REPEATER.getMaterial() || type == CompatMaterial.REPEATER_ON.getMaterial() ||
-                type == CompatMaterial.REPEATER_OFF.getMaterial() || type == CompatMaterial.COMPARATOR.getMaterial() ||
-                type == CompatMaterial.COMPARATOR_ON.getMaterial() || type == CompatMaterial.COMPARATOR_OFF.getMaterial()) {
-
+        if (CrossMaterial.REPEATER.equals(type) || CrossMaterial.REPEATER_ON.equals(type) || CrossMaterial.REPEATER_OFF.equals(type) ||
+                CrossMaterial.COMPARATOR.equals(type) || CrossMaterial.COMPARATOR_ON.equals(type) || CrossMaterial.COMPARATOR_OFF.equals(type)) {
             if (Utils.isNewMaterialSystem()) {
 //                org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
                 BlockFace direction = InternalProvider.getCompatBlockData().getDirectionalFacing(block);
@@ -280,7 +278,7 @@ public class BlockListener implements Listener {
                 blockFaces = Collections.singletonList(direction);
             }
         } else if (type == Material.DAYLIGHT_DETECTOR || type == Material.DETECTOR_RAIL
-                || CompatMaterial.IS_PREASURE_PLATE.isMaterial(type)) {
+                || type.name().toUpperCase().endsWith("_PLATE")) {
             locations.add(block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN).getLocation());
         } else {
             if (InternalProvider.getCompatBlockData().isRedstoneSwitch(block)) {
@@ -322,7 +320,8 @@ public class BlockListener implements Listener {
         block.setType(Material.AIR);
 
         if (ConfigManager.getConfig().getDropSignBroken()) {
-            block.getWorld().dropItem(block.getLocation(), new ItemStack(CompatMaterial.SIGN.getMaterial()));
+            CrossMaterial.SIGN.getHandle()
+                    .ifPresent(materialHandler -> block.getWorld().dropItem(block.getLocation(), new ItemStack(materialHandler.getType())));
         }
     }
 

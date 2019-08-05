@@ -1,6 +1,7 @@
 package net.licks92.WirelessRedstone.Compat;
 
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.materiallib.data.CrossMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -92,7 +93,7 @@ public class InternalBlockData_1_13 implements InternalBlockData {
     public void setRedstoneWallTorch(@NotNull Block block, @NotNull BlockFace blockFace, @Nullable BlockFace storedDirection) {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
-        block.setType(CompatMaterial.REDSTONE_WALL_TORCH.getMaterial(), storedDirection == BlockFace.NORTH);
+        CrossMaterial.REDSTONE_WALL_TORCH.setMaterial(block, storedDirection == BlockFace.NORTH);
         BlockState torch = block.getState();
         RedstoneWallTorch torchData = (RedstoneWallTorch) block.getBlockData();
 
@@ -105,7 +106,7 @@ public class InternalBlockData_1_13 implements InternalBlockData {
     public void setSignWall(@NotNull Block block, @NotNull BlockFace blockFace, @Nullable BlockFace storedDirection) {
         Objects.requireNonNull(block, "Block cannot be NULL");
 
-        block.setType(CompatMaterial.WALL_SIGN.getMaterial(), storedDirection == BlockFace.NORTH);
+        CrossMaterial.WALL_SIGN.setMaterial(block, storedDirection == BlockFace.NORTH);
         BlockState sign = block.getState();
 
         if (!(block.getBlockData() instanceof WallSign)) {

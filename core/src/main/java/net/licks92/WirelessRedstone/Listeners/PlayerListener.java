@@ -1,6 +1,5 @@
 package net.licks92.WirelessRedstone.Listeners;
 
-import net.licks92.WirelessRedstone.Compat.CompatMaterial;
 import net.licks92.WirelessRedstone.Compat.InternalProvider;
 import net.licks92.WirelessRedstone.ConfigManager;
 import net.licks92.WirelessRedstone.Permissions;
@@ -9,6 +8,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.UpdateChecker;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.materiallib.data.CrossMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -154,7 +154,8 @@ public class PlayerListener implements Listener {
         block.setType(Material.AIR);
 
         if (ConfigManager.getConfig().getDropSignBroken()) {
-            block.getWorld().dropItem(block.getLocation(), new ItemStack(CompatMaterial.SIGN.getMaterial()));
+            CrossMaterial.SIGN.getHandle()
+                    .ifPresent(materialHandler -> block.getWorld().dropItem(block.getLocation(), new ItemStack(materialHandler.getType())));
         }
     }
 

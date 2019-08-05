@@ -1,10 +1,9 @@
 package net.licks92.WirelessRedstone.Signs;
 
-import net.licks92.WirelessRedstone.Compat.CompatMaterial;
-import net.licks92.WirelessRedstone.Compat.CompatSignData;
 import net.licks92.WirelessRedstone.Compat.InternalProvider;
 import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
+import net.licks92.WirelessRedstone.materiallib.data.CrossMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -103,17 +102,18 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
             }
         } else {
             if (newState) {
-                block.setType(CompatMaterial.REDSTONE_TORCH.getMaterial());
+
+                CrossMaterial.REDSTONE_TORCH.setMaterial(block);
             } else {
-                block.setType(CompatMaterial.SIGN.getMaterial());
+                CrossMaterial.SIGN.setMaterial(block);
+
                 if (!(block.getState() instanceof Sign)) {
                     WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " is not a Sign but the plugin does expect it to be a Sign. " +
                             "Is the sign at a valid location?");
                     return;
                 }
 
-                CompatSignData sign = new CompatSignData(block);
-                sign.setRotation(direction);
+                InternalProvider.getCompatBlockData().setSignRotation(block, direction);
                 changeSignContent(block, channelName);
             }
         }

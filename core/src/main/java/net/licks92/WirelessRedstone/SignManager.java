@@ -1,7 +1,6 @@
 package net.licks92.WirelessRedstone;
 
-import net.licks92.WirelessRedstone.Compat.CompatMaterial;
-import net.licks92.WirelessRedstone.Compat.CompatSignData;
+import net.licks92.WirelessRedstone.Compat.InternalProvider;
 import net.licks92.WirelessRedstone.Signs.SignType;
 import net.licks92.WirelessRedstone.Signs.WirelessChannel;
 import net.licks92.WirelessRedstone.Signs.WirelessPoint;
@@ -12,6 +11,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverSwitch;
 import net.licks92.WirelessRedstone.Signs.WirelessScreen;
 import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
+import net.licks92.WirelessRedstone.materiallib.data.CrossMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +31,7 @@ public class SignManager {
      * Check if the player has access to a WirelessChannel.<br>
      * Player passed if the player is OP, has isAdmin permission or is an owner of the channel.
      *
-     * @param player Player
+     * @param player      Player
      * @param channelName WirelessChannel name
      * @return If the player has access
      */
@@ -48,7 +48,7 @@ public class SignManager {
     /**
      * Check if the player has the permissions to place a sign.
      *
-     * @param player Player
+     * @param player   Player
      * @param signType SignType
      * @return Boolean
      */
@@ -71,8 +71,8 @@ public class SignManager {
      * Extra data for certain receivers is set at 0.
      *
      * @param channelName WirelessChannel name
-     * @param location Location of the sign
-     * @param type SignType
+     * @param location    Location of the sign
+     * @param type        SignType
      * @return Boolean; Success or failure
      */
     public boolean placeSign(String channelName, Location location, SignType type) {
@@ -83,9 +83,9 @@ public class SignManager {
      * Place a sign with the correct sign lines at a location.
      *
      * @param channelName WirelessChannel name
-     * @param location Location of the sign
-     * @param type SignType
-     * @param extraData Extra data needed for certain receivers
+     * @param location    Location of the sign
+     * @param type        SignType
+     * @param extraData   Extra data needed for certain receivers
      * @return Boolean; Success or failure
      */
     public boolean placeSign(String channelName, Location location, SignType type, int extraData) {
@@ -93,13 +93,16 @@ public class SignManager {
             return false;
         }
 
-        if (!(location.getBlock().getType() == CompatMaterial.SIGN.getMaterial()
-                || location.getBlock().getType() == CompatMaterial.WALL_SIGN.getMaterial())) {
-            location.getBlock().setType(CompatMaterial.SIGN.getMaterial());
+        if (!(CrossMaterial.SIGN.equals(location.getBlock().getType()) || CrossMaterial.WALL_SIGN.equals(location.getBlock().getType()))) {
+            CrossMaterial.SIGN.setMaterial(location.getBlock());
         }
 
-        CompatSignData sign = new CompatSignData(location.getBlock());
-        sign.setRotation(Utils.yawToFace(location.getYaw()));
+        if (!(location.getBlock().getState() instanceof Sign)) {
+            return false;
+        }
+
+        Sign sign = (Sign) location.getBlock().getState();
+        InternalProvider.getCompatBlockData().setSignRotation(location.getBlock(), Utils.yawToFace(location.getYaw()));
         sign.setLine(1, channelName);
 
         switch (type) {
@@ -140,21 +143,21 @@ public class SignManager {
      * Save a WirelessRedstone sign to the database.
      *
      * @param channelName Name of the WirelessRedstone channel
-     * @param block Place where the block is located
-     * @param type What WirelessPoint type
-     * @param direction Which direction is the sign facing
-     * @param owners All the owners of the channel
-     * @param delay Amount of delay for clock & delayer; this can be 0 if it is not one of these types
+     * @param block       Place where the block is located
+     * @param type        What WirelessPoint type
+     * @param direction   Which direction is the sign facing
+     * @param owners      All the owners of the channel
+     * @param delay       Amount of delay for clock & delayer; this can be 0 if it is not one of these types
      * @return Return value<br>
-     *      0 - Success; extended a channel
-     *      1 - Success; created a channel
-     *     -1 - Failure; Delayer delay must be >= 50
-     *     -2 - Failure; Clock delay must be >= 50
+     * 0 - Success; extended a channel
+     * 1 - Success; created a channel
+     * -1 - Failure; Delayer delay must be >= 50
+     * -2 - Failure; Clock delay must be >= 50
      */
     public int registerSign(String channelName, Block block, SignType type, BlockFace direction, List<String> owners, int delay) {
         int result = 0;
 
-        if (type == SignType.RECEIVER_DELAYER){
+        if (type == SignType.RECEIVER_DELAYER) {
             if (delay < 50) {
                 result = -1;
                 return result;
@@ -171,16 +174,16 @@ public class SignManager {
             WirelessRedstone.getStorage().createChannel(new WirelessChannel(channelName, owners));
         }
 
-        boolean isWallSign = block.getType() == CompatMaterial.WALL_SIGN.getMaterial();
+        boolean isWallSign = CrossMaterial.WALL_SIGN.equals(block.getType());
 
         WirelessPoint point = null;
         switch (type) {
             case TRANSMITTER:
                 point = new WirelessTransmitter(
-                        block.getLocation().getBlockX(), 
-                        block.getLocation().getBlockY(), 
-                        block.getLocation().getBlockZ(), 
-                        block.getLocation().getWorld().getName(), 
+                        block.getLocation().getBlockX(),
+                        block.getLocation().getBlockY(),
+                        block.getLocation().getBlockZ(),
+                        block.getLocation().getWorld().getName(),
                         isWallSign,
                         direction,
                         owners.get(0)
@@ -261,6 +264,32 @@ public class SignManager {
     }
 
     /**
+     * Remove a sign from the database based on a location.
+     *
+     * @param channelName WirelessChannel name
+     * @param location    Location of the sign
+     * @return Boolean; Success or failure (channel/sign not found)
+     */
+    public boolean removeSign(String channelName, Location location) {
+        if (WirelessRedstone.getStorageManager().getChannel(channelName) == null) {
+            return false;
+        }
+
+        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
+        WirelessPoint point = channel.getSigns().stream()
+                .filter(pointList -> Utils.sameLocation(pointList.getLocation(), location))
+                .findFirst()
+                .orElse(null);
+
+        if (point == null) {
+            return false;
+        }
+
+        WirelessRedstone.getStorage().removeWirelessPoint(channelName, point);
+        return true;
+    }
+
+    /**
      * Check if a sign is registred at a location.
      *
      * @param location Location of the sign
@@ -283,40 +312,6 @@ public class SignManager {
         }
 
         return isSignRegistred(block.getLocation());
-    }
-
-    public WirelessChannel getSignChannel(Location location) {
-        return WirelessRedstone.getStorageManager().getChannels().stream()
-                .filter(channel -> channel.getSigns().stream()
-                        .anyMatch(point -> Utils.sameLocation(point.getLocation(), location)))
-                .findFirst()
-                .orElse(null);
-    }
-
-    /**
-     * Remove a sign from the database based on a location.
-     *
-     * @param channelName WirelessChannel name
-     * @param location Location of the sign
-     * @return Boolean; Success or failure (channel/sign not found)
-     */
-    public boolean removeSign(String channelName, Location location) {
-        if (WirelessRedstone.getStorageManager().getChannel(channelName) == null) {
-            return false;
-        }
-
-        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
-        WirelessPoint point = channel.getSigns().stream()
-                .filter(pointList -> Utils.sameLocation(pointList.getLocation(), location))
-                .findFirst()
-                .orElse(null);
-
-        if (point == null) {
-            return false;
-        }
-
-        WirelessRedstone.getStorage().removeWirelessPoint(channelName, point);
-        return true;
     }
 
     public HashMap<WirelessChannel, Collection<WirelessPoint>> getAllInvalidPoints() {
