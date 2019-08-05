@@ -38,7 +38,7 @@ public enum CrossMaterial {
     ),
 
     REDSTONE_WALL_TORCH(
-            between("REDSTONE_TORCH_ON", ServerVersion.V1_8, ServerVersion.V1_12_2),
+            until("REDSTONE_TORCH_ON", ServerVersion.V1_12_2),
             since("REDSTONE_WALL_TORCH", ServerVersion.V1_13)
     ),
 
