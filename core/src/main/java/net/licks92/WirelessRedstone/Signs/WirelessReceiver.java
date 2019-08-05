@@ -84,6 +84,13 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                 return;
             }
 
+            if (!Utils.getAxisBlockFaces(false).contains(blockFace)) {
+                block.setType(Material.AIR);
+                WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " has an invalid BlockFace! " +
+                        "The BlockFace needs to be one of these values values=[north, south, west, east]");
+                return;
+            }
+
 //            WirelessRedstone.getWRLogger().debug("Is solid " + (block.getRelative(direction.getOppositeFace()).getType() != Material.AIR));
 //            WirelessRedstone.getWRLogger().debug("Location " + block.getRelative(direction.getOppositeFace()).getLocation());
 //            WirelessRedstone.getWRLogger().debug("Face " + direction + " Available face " + availableBlockFace);
@@ -99,9 +106,14 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
                 block.setType(CompatMaterial.REDSTONE_TORCH.getMaterial());
             } else {
                 block.setType(CompatMaterial.SIGN.getMaterial());
+                if (!(block.getState() instanceof Sign)) {
+                    WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign. " +
+                            "Is the sign at a valid location?");
+                    return;
+                }
+
                 CompatSignData sign = new CompatSignData(block);
                 sign.setRotation(direction);
-
                 changeSignContent(block, channelName);
             }
         }

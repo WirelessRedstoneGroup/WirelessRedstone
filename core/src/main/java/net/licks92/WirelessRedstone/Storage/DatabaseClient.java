@@ -14,6 +14,7 @@ import net.licks92.WirelessRedstone.Signs.WirelessReceiverInverter;
 import net.licks92.WirelessRedstone.Signs.WirelessReceiverSwitch;
 import net.licks92.WirelessRedstone.Signs.WirelessScreen;
 import net.licks92.WirelessRedstone.Signs.WirelessTransmitter;
+import net.licks92.WirelessRedstone.Utils;
 import net.licks92.WirelessRedstone.WirelessRedstone;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.block.BlockFace;
@@ -466,7 +467,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getInt("z"),
                                         resultSet.getString("world"),
                                         resultSet.getInt("isWallSign") != 0,
-                                        BlockFace.valueOf(resultSet.getString("direction")),
+                                        getBlockFaceOldDatabase(resultSet),
                                         resultSet.getString("signOwner")
                                 );
                                 channel.addWirelessPoint(point);
@@ -480,7 +481,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getInt("z"),
                                         resultSet.getString("world"),
                                         resultSet.getInt("isWallSign") != 0,
-                                        BlockFace.valueOf(resultSet.getString("direction")),
+                                        getBlockFaceOldDatabase(resultSet),
                                         resultSet.getString("signOwner")
                                 );
                                 channel.addWirelessPoint(point);
@@ -494,7 +495,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getInt("z"),
                                         resultSet.getString("world"),
                                         resultSet.getInt("isWallSign") != 0,
-                                        BlockFace.valueOf(resultSet.getString("direction")),
+                                        getBlockFaceOldDatabase(resultSet),
                                         resultSet.getString("signOwner")
                                 );
                                 channel.addWirelessPoint(point);
@@ -508,7 +509,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getInt("z"),
                                         resultSet.getString("world"),
                                         resultSet.getInt("isWallSign") != 0,
-                                        BlockFace.valueOf(resultSet.getString("direction")),
+                                        getBlockFaceOldDatabase(resultSet),
                                         resultSet.getString("signOwner")
                                 );
                                 channel.addWirelessPoint(point);
@@ -530,7 +531,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getInt("z"),
                                         resultSet.getString("world"),
                                         resultSet.getInt("isWallSign") != 0,
-                                        BlockFace.valueOf(resultSet.getString("direction")),
+                                        getBlockFaceOldDatabase(resultSet),
                                         resultSet.getString("signOwner"),
                                         delay
                                 );
@@ -549,7 +550,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getInt("z"),
                                         resultSet.getString("world"),
                                         resultSet.getInt("isWallSign") != 0,
-                                        BlockFace.valueOf(resultSet.getString("direction")),
+                                        getBlockFaceOldDatabase(resultSet),
                                         resultSet.getString("signOwner"),
                                         state
                                 );
@@ -570,7 +571,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
                                         resultSet.getInt("z"),
                                         resultSet.getString("world"),
                                         resultSet.getInt("isWallSign") != 0,
-                                        BlockFace.valueOf(resultSet.getString("direction")),
+                                        getBlockFaceOldDatabase(resultSet),
                                         resultSet.getString("signOwner"),
                                         delay
                                 );
@@ -741,6 +742,18 @@ public class DatabaseClient extends SQLiteOpenHelper {
         }
 
         return null;
+    }
+
+    private BlockFace getBlockFaceOldDatabase(ResultSet resultSet) throws SQLException {
+        Object directionObject = resultSet.getObject("direction");
+
+        if (directionObject instanceof Integer) {
+            return Utils.getBlockFace(false, (int) directionObject);
+        } else if (directionObject instanceof String) {
+            return BlockFace.valueOf(directionObject.toString().toUpperCase());
+        } else {
+            throw new IllegalArgumentException("Direction (" + directionObject + ") row inside database isn't parsable.");
+        }
     }
 
     private String escape(String str) {

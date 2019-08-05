@@ -111,7 +111,7 @@ public class Utils {
      * @return BlockFace
      */
     public static BlockFace getBlockFace(boolean isWallSign, int direction) {
-        BlockFace blockFace = BlockFace.SELF;
+        BlockFace blockFace;
 
         if (isWallSign) {
             if (direction == 2) {
@@ -158,6 +158,8 @@ public class Utils {
                 blockFace = BlockFace.SOUTH_EAST;
             } else if (direction == 15) {
                 blockFace = BlockFace.SOUTH_SOUTH_EAST;
+            } else {
+                blockFace = BlockFace.SOUTH;
             }
         }
 
