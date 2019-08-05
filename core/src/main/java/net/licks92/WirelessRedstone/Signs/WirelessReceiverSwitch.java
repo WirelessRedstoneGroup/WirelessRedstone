@@ -45,7 +45,7 @@ public class WirelessReceiverSwitch extends WirelessReceiver {
     @Override
     public void changeSignContent(Block block, String channelName) {
         if (!(block.getState() instanceof Sign)) {
-            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign. " +
+            WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " is not a Sign but the plugin does expect it to be a Sign. " +
                     "Is the sign at a valid location?");
             return;
         }

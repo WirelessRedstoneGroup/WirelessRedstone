@@ -80,13 +80,13 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
             if (blockFace == null) {
                 block.setType(Material.AIR);
-                WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " is in a invalid position!");
+                WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " is in a invalid position!");
                 return;
             }
 
             if (!Utils.getAxisBlockFaces(false).contains(blockFace)) {
                 block.setType(Material.AIR);
-                WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " has an invalid BlockFace! " +
+                WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " has an invalid BlockFace! " +
                         "The BlockFace needs to be one of these values values=[north, south, west, east]");
                 return;
             }
@@ -107,7 +107,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
             } else {
                 block.setType(CompatMaterial.SIGN.getMaterial());
                 if (!(block.getState() instanceof Sign)) {
-                    WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign. " +
+                    WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " is not a Sign but the plugin does expect it to be a Sign. " +
                             "Is the sign at a valid location?");
                     return;
                 }
@@ -121,7 +121,7 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
 
     public void changeSignContent(Block block, String channelName) {
         if (!(block.getState() instanceof Sign)) {
-            WirelessRedstone.getWRLogger().warning("Block at " + block.getLocation() + " is not a Sign but the plugin does expect it to be a Sign. " +
+            WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " is not a Sign but the plugin does expect it to be a Sign. " +
                     "Is the sign at a valid location?");
             return;
         }
