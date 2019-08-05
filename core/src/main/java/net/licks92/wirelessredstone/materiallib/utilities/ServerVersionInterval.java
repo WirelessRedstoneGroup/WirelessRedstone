@@ -14,7 +14,7 @@ public class ServerVersionInterval {
         if (highBound == null) {
             highBound = ServerVersion.NEWER;
         }
-        if(lowBound.getOrder() > highBound.getOrder()) {
+        if (lowBound.getOrder() > highBound.getOrder()) {
             throw new IllegalArgumentException("The lowBound can't be higher than the highBound!");
         }
         this.lowBound = lowBound;

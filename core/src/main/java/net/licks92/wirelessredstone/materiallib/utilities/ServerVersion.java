@@ -26,10 +26,10 @@ public enum ServerVersion {
     }
 
     public int getOrder() {
-        if(this == OLDER) {
+        if (this == OLDER) {
             return -1;
         }
-        if(this == NEWER) {
+        if (this == NEWER) {
             return Integer.MAX_VALUE;
         }
         return ordinal();
