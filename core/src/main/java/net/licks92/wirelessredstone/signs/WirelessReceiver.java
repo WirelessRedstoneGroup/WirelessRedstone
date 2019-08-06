@@ -1,8 +1,8 @@
 package net.licks92.wirelessredstone.signs;
 
-import net.licks92.wirelessredstone.compat.InternalProvider;
 import net.licks92.wirelessredstone.Utils;
 import net.licks92.wirelessredstone.WirelessRedstone;
+import net.licks92.wirelessredstone.compat.InternalProvider;
 import net.licks92.wirelessredstone.materiallib.data.CrossMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,6 +12,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +66,6 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
         }
 
         getLocation().getWorld().loadChunk(getLocation().getChunk());
-
         Block block = getLocation().getBlock();
 
         if (isWallSign()) {
@@ -102,10 +102,15 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
             }
         } else {
             if (newState) {
-
                 CrossMaterial.REDSTONE_TORCH.setMaterial(block);
             } else {
                 CrossMaterial.SIGN.setMaterial(block);
+
+                if (Arrays.asList(BlockFace.UP, BlockFace.DOWN).contains(direction)) {
+                    WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " has an invalid BlockFace! " +
+                            "The BlockFace values=[up, down] are invalid, using default BlockFace");
+                    return;
+                }
 
                 if (!(block.getState() instanceof Sign)) {
                     WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " is not a Sign but the plugin does expect it to be a Sign. " +
