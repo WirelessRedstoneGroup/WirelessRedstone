@@ -106,19 +106,19 @@ public class WirelessReceiver extends WirelessPoint implements ConfigurationSeri
             } else {
                 CrossMaterial.SIGN.setMaterial(block);
 
-                if (Arrays.asList(BlockFace.UP, BlockFace.DOWN).contains(direction)) {
-                    WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " has an invalid BlockFace! " +
-                            "The BlockFace values=[up, down] are invalid, using default BlockFace");
-                    return;
-                }
-
                 if (!(block.getState() instanceof Sign)) {
                     WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " is not a Sign but the plugin does expect it to be a Sign. " +
                             "Is the sign at a valid location?");
                     return;
                 }
 
-                InternalProvider.getCompatBlockData().setSignRotation(block, direction);
+                if (Arrays.asList(BlockFace.UP, BlockFace.DOWN).contains(direction)) {
+                    WirelessRedstone.getWRLogger().warning("Receiver " + toString() + " has an invalid BlockFace! " +
+                            "The BlockFace values=[up, down] are invalid, using default BlockFace");
+                } else {
+                    InternalProvider.getCompatBlockData().setSignRotation(block, direction);
+                }
+
                 changeSignContent(block, channelName);
             }
         }
