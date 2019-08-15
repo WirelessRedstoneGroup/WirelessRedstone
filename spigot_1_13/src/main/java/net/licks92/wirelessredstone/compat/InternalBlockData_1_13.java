@@ -95,6 +95,13 @@ public class InternalBlockData_1_13 implements InternalBlockData {
 
         CrossMaterial.REDSTONE_WALL_TORCH.setMaterial(block, storedDirection == BlockFace.NORTH);
         BlockState torch = block.getState();
+
+        if (!(torch instanceof RedstoneWallTorch)) {
+            WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " cannot be set to a redstone wall torch. " +
+                    "Is it in a valid location?");
+            return;
+        }
+
         RedstoneWallTorch torchData = (RedstoneWallTorch) block.getBlockData();
 
         torchData.setFacing(blockFace);
@@ -110,7 +117,8 @@ public class InternalBlockData_1_13 implements InternalBlockData {
         BlockState sign = block.getState();
 
         if (!(block.getBlockData() instanceof WallSign)) {
-            WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " is not a wall sign while it is saved as one.");
+            WirelessRedstone.getWRLogger().warning("Receiver at " + block.getLocation().toString() + " cannot be set to a wallsign. " +
+                    "Is it in a valid location?");
             return;
         }
 

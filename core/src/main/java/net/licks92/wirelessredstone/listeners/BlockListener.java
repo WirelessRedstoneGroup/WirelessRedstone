@@ -1,12 +1,12 @@
 package net.licks92.wirelessredstone.listeners;
 
-import net.licks92.wirelessredstone.compat.InternalProvider;
 import net.licks92.wirelessredstone.ConfigManager;
-import net.licks92.wirelessredstone.signs.SignType;
-import net.licks92.wirelessredstone.signs.WirelessChannel;
 import net.licks92.wirelessredstone.Utils;
 import net.licks92.wirelessredstone.WirelessRedstone;
+import net.licks92.wirelessredstone.compat.InternalProvider;
 import net.licks92.wirelessredstone.materiallib.data.CrossMaterial;
+import net.licks92.wirelessredstone.signs.SignType;
+import net.licks92.wirelessredstone.signs.WirelessChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -197,6 +197,11 @@ public class BlockListener implements Listener {
     public void on(BlockBreakEvent event) {
         if (event.getBlock().getType() == Material.REDSTONE_BLOCK || CrossMaterial.REDSTONE_TORCH.equals(event.getBlock().getType())) {
             handleRedstoneEvent(event.getBlock(), false, true, false);
+        }
+
+        // MC <= 1.12 #getBlock can be NULL
+        if (event.getBlock() == null) {
+            return;
         }
 
         if (event.getBlock().getState() instanceof Sign) {

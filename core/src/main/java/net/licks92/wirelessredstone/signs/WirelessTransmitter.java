@@ -43,8 +43,14 @@ public class WirelessTransmitter extends WirelessPoint implements ConfigurationS
 
     public boolean isPowered() {
         Location loc = getLocation();
-        if (loc == null)
+        if (loc == null) {
             return false;
+        }
+
+        // MC <= 1.12 #getBlock can be NULL
+        if (loc.getBlock() == null) {
+            return false;
+        }
 
         return loc.getBlock().isBlockIndirectlyPowered() || loc.getBlock().isBlockPowered();
     }
