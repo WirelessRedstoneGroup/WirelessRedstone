@@ -4,6 +4,8 @@ import com.tylersuehr.sql.ContentValues;
 import com.tylersuehr.sql.SQLiteDatabase;
 import com.tylersuehr.sql.SQLiteOpenHelper;
 import net.licks92.wirelessredstone.ConfigManager;
+import net.licks92.wirelessredstone.Utils;
+import net.licks92.wirelessredstone.WirelessRedstone;
 import net.licks92.wirelessredstone.signs.SignType;
 import net.licks92.wirelessredstone.signs.WirelessChannel;
 import net.licks92.wirelessredstone.signs.WirelessPoint;
@@ -14,13 +16,12 @@ import net.licks92.wirelessredstone.signs.WirelessReceiverInverter;
 import net.licks92.wirelessredstone.signs.WirelessReceiverSwitch;
 import net.licks92.wirelessredstone.signs.WirelessScreen;
 import net.licks92.wirelessredstone.signs.WirelessTransmitter;
-import net.licks92.wirelessredstone.Utils;
-import net.licks92.wirelessredstone.WirelessRedstone;
-import org.apache.commons.io.IOUtils;
 import org.bukkit.block.BlockFace;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DatabaseClient extends SQLiteOpenHelper {
     private static final String DB_NAME = "WirelessRedstoneDatabase";
@@ -72,11 +74,10 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
     @Override
     protected void onCreate(SQLiteDatabase db) {
-        try {
-            String sql = IOUtils.toString(
-                    Objects.requireNonNull(WirelessRedstone.getInstance().getResource("database/Database_1.sql")),
-                    StandardCharsets.UTF_8
-            );
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                Objects.requireNonNull(WirelessRedstone.getInstance().getResource("database/Database_1.sql")),
+                StandardCharsets.UTF_8))) {
+            String sql = br.lines().collect(Collectors.joining(System.lineSeparator()));;
             db.execSql(sql);
         } catch (IOException ex) {
             WirelessRedstone.getWRLogger().info("There was an error while initializing the database.");
@@ -346,7 +347,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("powered", receiver.isActive());
         getDatabase().update(TB_SWITCH, values,
-                "[x]=" + receiver.getX() + " AND [y]=" + receiver.getY() + " AND [z]=" + receiver.getZ() + " AND [world]=" + receiver.getWorld());
+                "[x]=" + receiver.getX() + " AND [y]=" + receiver.getY() + " AND [z]=" + receiver.getZ() + " AND [world]='" + receiver.getWorld() + "'");
     }
 
     protected boolean isChannelInDb(String channelName) throws SQLException {
@@ -389,7 +390,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
         }
 
         ResultSet resultSet = getDatabase().query(table,
-                "[x]=" + point.getX() + " AND [y]=" + point.getY() + " AND [z]=" + point.getZ() + " AND [world]=" + point.getWorld(),
+                "[x]=" + point.getX() + " AND [y]=" + point.getY() + " AND [z]=" + point.getZ() + " AND [world]='" + point.getWorld() + "'",
                 null, null);
         while (resultSet.next() && !exists) {
             exists = true;
@@ -593,11 +594,7 @@ public class DatabaseClient extends SQLiteOpenHelper {
 
         WirelessRedstone.getWRLogger().debug("---------------");
 
-        String sql = IOUtils.toString(
-                Objects.requireNonNull(WirelessRedstone.getInstance().getResource("database/Database_1.sql")),
-                StandardCharsets.UTF_8
-        );
-        db.execSql(sql);
+        onCreate(db);
 
         progress = 0;
         channelIteration = 0;
