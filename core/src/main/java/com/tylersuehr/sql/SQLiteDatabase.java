@@ -23,6 +23,7 @@
  */
 
 package com.tylersuehr.sql;
+import net.licks92.wirelessredstone.ConfigManager;
 import net.licks92.wirelessredstone.WirelessRedstone;
 
 import java.sql.Connection;
@@ -132,7 +133,13 @@ public final class SQLiteDatabase extends SQLiteCloseable {
             this.statement.executeUpdate(SQL);
             this.connection.commit();
         } catch (SQLException ex) {
-            logException(ex);
+            if (WirelessRedstone.getInstance() != null) {
+                if (ConfigManager.getConfig().getDebugMode()) {
+                    logException(ex);
+                }
+            } else {
+                logException(ex);
+            }
         } finally {
             releaseReference();
         }
