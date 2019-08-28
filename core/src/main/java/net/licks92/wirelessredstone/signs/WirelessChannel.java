@@ -157,11 +157,17 @@ public class WirelessChannel implements ConfigurationSerializable {
 
     public void addWirelessPoint(WirelessPoint wirelessPoint) {
         if (wirelessPoint instanceof WirelessTransmitter) {
-            transmitters.add((WirelessTransmitter) wirelessPoint);
+            if (!transmitters.contains(wirelessPoint)) {
+                transmitters.add((WirelessTransmitter) wirelessPoint);
+            }
         } else if (wirelessPoint instanceof WirelessScreen) {
-            screens.add((WirelessScreen) wirelessPoint);
+            if (!screens.contains(wirelessPoint)) {
+                screens.add((WirelessScreen) wirelessPoint);
+            }
         } else if (wirelessPoint instanceof WirelessReceiver) {
-            receivers.add((WirelessReceiver) wirelessPoint);
+            if (!receivers.contains(wirelessPoint)) {
+                receivers.add((WirelessReceiver) wirelessPoint);
+            }
         }
 
         //TODO: Maybe add owner from wirelesspoint to list of owners

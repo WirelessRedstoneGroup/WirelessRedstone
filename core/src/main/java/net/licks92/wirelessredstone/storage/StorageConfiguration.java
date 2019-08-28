@@ -1,8 +1,8 @@
 package net.licks92.wirelessredstone.storage;
 
+import net.licks92.wirelessredstone.WirelessRedstone;
 import net.licks92.wirelessredstone.signs.WirelessChannel;
 import net.licks92.wirelessredstone.signs.WirelessPoint;
-import net.licks92.wirelessredstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,7 +40,7 @@ public abstract class StorageConfiguration {
     public boolean createWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
         //TODO: Investigate if this duplicates the wirelesspoint into the channel
-//        channel.addWirelessPoint(wirelessPoint);
+        channel.addWirelessPoint(wirelessPoint);
         WirelessRedstone.getStorageManager().updateList(channelName, channel);
         return true;
     }
@@ -48,7 +48,7 @@ public abstract class StorageConfiguration {
     public boolean removeWirelessPoint(String channelName, WirelessPoint wirelessPoint) {
         WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(channelName);
         //TODO: Investigate if this duplicates the wirelesspoint into the channel
-//        channel.removeWirelessPoint(wirelessPoint);
+        channel.removeWirelessPoint(wirelessPoint);
 
         if (channel.isEmpty()) {
             WirelessRedstone.getStorage().removeChannel(channelName, false);
