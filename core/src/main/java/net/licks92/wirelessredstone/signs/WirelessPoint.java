@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 
+import java.util.Objects;
+
 public abstract class WirelessPoint {
 
     int x, y, z;
@@ -82,5 +84,19 @@ public abstract class WirelessPoint {
                 ", direction=" + direction +
                 ", isWallSign=" + isWallSign +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WirelessPoint that = (WirelessPoint) o;
+
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+        if (!Objects.equals(owner, that.owner)) return false;
+        return Objects.equals(world, that.world);
     }
 }
