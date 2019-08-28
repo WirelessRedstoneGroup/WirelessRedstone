@@ -1,6 +1,7 @@
 package net.licks92.wirelessredstone;
 
 import net.licks92.wirelessredstone.compat.InternalProvider;
+import net.licks92.wirelessredstone.materiallib.data.CrossMaterial;
 import net.licks92.wirelessredstone.signs.SignType;
 import net.licks92.wirelessredstone.signs.WirelessChannel;
 import net.licks92.wirelessredstone.signs.WirelessPoint;
@@ -11,7 +12,6 @@ import net.licks92.wirelessredstone.signs.WirelessReceiverInverter;
 import net.licks92.wirelessredstone.signs.WirelessReceiverSwitch;
 import net.licks92.wirelessredstone.signs.WirelessScreen;
 import net.licks92.wirelessredstone.signs.WirelessTransmitter;
-import net.licks92.wirelessredstone.materiallib.data.CrossMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -89,20 +89,20 @@ public class SignManager {
      * @return Boolean; Success or failure
      */
     public boolean placeSign(String channelName, Location location, SignType type, int extraData) {
-        if (location.getBlock().getType() != Material.AIR) {
+        Block block = location.getBlock();
+        if (block.getType() != Material.AIR) {
             return false;
         }
 
-        if (!(CrossMaterial.SIGN.equals(location.getBlock().getType()) || CrossMaterial.WALL_SIGN.equals(location.getBlock().getType()))) {
-            CrossMaterial.SIGN.setMaterial(location.getBlock());
+        if (!(CrossMaterial.SIGN.equals(block.getType()) || CrossMaterial.WALL_SIGN.equals(block.getType()))) {
+            block = CrossMaterial.SIGN.setMaterial(block);
         }
 
         if (!(location.getBlock().getState() instanceof Sign)) {
             return false;
         }
 
-        Sign sign = (Sign) location.getBlock().getState();
-        InternalProvider.getCompatBlockData().setSignRotation(location.getBlock(), Utils.yawToFace(location.getYaw()));
+        Sign sign = (Sign) block.getState();
         sign.setLine(1, channelName);
 
         switch (type) {
@@ -136,6 +136,8 @@ public class SignManager {
                 break;
         }
 
+        sign.update();
+        InternalProvider.getCompatBlockData().setSignRotation(block, Utils.yawToFace(location.getYaw()));
         return true;
     }
 

@@ -1,8 +1,8 @@
 package net.licks92.wirelessredstone.commands;
 
-import net.licks92.wirelessredstone.signs.WirelessChannel;
 import net.licks92.wirelessredstone.Utils;
 import net.licks92.wirelessredstone.WirelessRedstone;
+import net.licks92.wirelessredstone.signs.WirelessChannel;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -66,12 +66,13 @@ public class Teleport extends WirelessCommand {
             case "RECEIVERS":
             case "R":
                 try {
-                    if (channel.getTransmitters().get(index).getWorld() == null) {
+                    if (channel.getReceivers().get(index).getWorld() == null) {
                         Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
                         return;
                     }
 
                     Location locReceiver = channel.getReceivers().get(index).getLocation().add(0.5, 0, 0.5);
+
                     locReceiver.setYaw(player.getLocation().getYaw());
                     locReceiver.setPitch(player.getLocation().getPitch());
                     player.teleport(locReceiver);
@@ -85,12 +86,13 @@ public class Teleport extends WirelessCommand {
             case "SCREENS":
             case "S":
                 try {
-                    if (channel.getTransmitters().get(index).getWorld() == null) {
+                    if (channel.getScreens().get(index).getWorld() == null) {
                         Utils.sendFeedback(WirelessRedstone.getStrings().commandInvalidLocation, player, true);
                         return;
                     }
 
                     Location locScreen = channel.getScreens().get(index).getLocation().add(0.5, 0, 0.5);
+
                     locScreen.setYaw(player.getLocation().getYaw());
                     locScreen.setPitch(player.getLocation().getPitch());
                     player.teleport(locScreen);
