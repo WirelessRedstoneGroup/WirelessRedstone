@@ -290,7 +290,7 @@ public class BlockListener implements Listener {
                 BlockFace direction = InternalProvider.getCompatBlockData().getRedstoneSwitchFacing(block);
 
                 Block relBlock = block.getRelative(direction);
-                for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+                for (BlockFace axisBlockFace : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN)) {
                     locations.add(relBlock.getRelative(axisBlockFace).getLocation());
                 }
 
