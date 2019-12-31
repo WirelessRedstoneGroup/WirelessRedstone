@@ -3,6 +3,8 @@
 
 ## WirelessRedstone
 Welcome on the official page of the Wireless Redstone plugin. [Spigot page.](https://www.spigotmc.org/resources/wirelessredstone.8251/)
+![This plugin is no longer maintained](https://i.imgur.com/06ydeF5.png)
+
 
 ### Translation
 Do you want to see the plugin in your favourite language / native language? 
