@@ -16,14 +16,14 @@
         <revision>4.0.4</revision>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
 
-        <project.mcversion>1.14.3</project.mcversion>
+        <project.mcversion>1.20.6</project.mcversion>
         <project.cbversion>${project.mcversion}-R0.1-SNAPSHOT</project.cbversion>
-        <project.semverversion>0.9.0</project.semverversion>
+        <project.semverversion>0.10.2</project.semverversion>
 
-        <project.sentry.version>1.7.23</project.sentry.version>
+        <project.sentry.version>8.3.0</project.sentry.version>
         <project.sentry.dsn>https://7c45ccc4745f428f81d577b15c84b840@sentry.io/1509557</project.sentry.dsn>
     </properties>
 
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>13.0</version>
+            <version>26.0.2</version>
         </dependency>
     </dependencies>
 </project>

@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
         }
 
         Sign sign = (Sign) event.getClickedBlock().getState();
-        SignType signType = Utils.getSignType(sign.getLine(0));
+        SignType signType = Utils.getType(sign.getLine(0), sign.getLine(2));
         if (signType == null) {
             return;
         }
@@ -67,7 +67,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        signType = Utils.getSignType(sign.getLine(0), sign.getLine(2));
+        signType = Utils.getType(sign.getLine(0), sign.getLine(2));
 
         if (sign.getLine(1).equalsIgnoreCase("")) {
             handlePlaceCancelled(event.getClickedBlock());
@@ -108,7 +108,7 @@ public class PlayerListener implements Listener {
         int result = WirelessRedstone.getSignManager().registerSign(
                 sign.getLine(1),
                 event.getClickedBlock(),
-                Utils.getSignType(sign.getLine(0), sign.getLine(2)),
+                Utils.getType(sign.getLine(0), sign.getLine(2)),
                 signDirection,
                 Collections.singletonList(event.getPlayer().getUniqueId().toString()),
                 delay

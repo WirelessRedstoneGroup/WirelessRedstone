@@ -9,7 +9,10 @@ public abstract class WirelessCommand {
     public abstract void onCommand(CommandSender sender, String[] args);
 
     public boolean hasAccessToChannel(CommandSender sender, String channelName) {
-        return !(sender instanceof Player) || WirelessRedstone.getSignManager().hasAccessToChannel((Player) sender, channelName); //If it's console or commandBlock, it has access to channel.
+        if (sender instanceof Player) {
+            WirelessRedstone.getSignManager().hasAccessToChannel((Player) sender, channelName);
+        }
+        return true; //If it's console or commandBlock, it has access to channel.
     }
 
 }

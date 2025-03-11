@@ -33,7 +33,7 @@ public class Info extends WirelessCommand {
         SignType signType = null;
 
         if (args.length >= 2)
-            signType = Utils.getType(args[1]);
+            signType = Utils.getType(args[1], sign.getLine(2));
 
         if (signType == null) {
             Utils.sendFeedback(ChatColor.GRAY + "---- " + ChatColor.GREEN + "WirelessChannel " + channel.getName() + ChatColor.GRAY + " ----",

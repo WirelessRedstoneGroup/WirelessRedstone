@@ -23,13 +23,13 @@ public class Create extends WirelessCommand {
             return;
         }
 
-        if (Utils.getType(args[1]) == null) {
+        if (Utils.getType(args[1], sign.getLine(2)) == null) {
             Utils.sendFeedback(WirelessRedstone.getStrings().commandIncorrectSignType, sender, true);
             return;
         }
 
         String cname = args[0];
-        SignType type = Utils.getType(args[1]);
+        SignType type = Utils.getType(args[1], sign.getLine(2));
 
         if (type == null) {
             Utils.sendFeedback(WirelessRedstone.getStrings().commandIncorrectSignType, sender, true);

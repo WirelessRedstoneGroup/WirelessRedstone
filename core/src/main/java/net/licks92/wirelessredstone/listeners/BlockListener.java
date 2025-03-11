@@ -85,7 +85,7 @@ public class BlockListener implements Listener {
 
     @EventHandler
     public void on(final SignChangeEvent event) {
-        SignType signType = Utils.getSignType(event.getLine(0));
+        SignType signType = Utils.getType(event.getLine(0), sign.getLine(2));
         if (signType == null) {
             return;
         }
@@ -112,7 +112,7 @@ public class BlockListener implements Listener {
             return;
         }
 
-        signType = Utils.getSignType(event.getLine(0), event.getLine(2));
+        signType = Utils.getType(event.getLine(0), event.getLine(2));
 
         if (event.getLine(1).equalsIgnoreCase("")) {
             handlePlaceCancelled(event.getBlock());
@@ -156,17 +156,16 @@ public class BlockListener implements Listener {
         //TODO: #registerSign Implement error message if failed
         final int finalDelay = delay;
         Bukkit.getScheduler().runTask(WirelessRedstone.getInstance(), () -> {
-            if (!(event.getBlock().getState() instanceof Sign)) {
+            if (!(event.getBlock().getState() instanceof Sign sign)) {
                 return;
             }
 
-            Sign sign = (Sign) event.getBlock().getState();
             BlockFace signDirection = InternalProvider.getCompatBlockData().getSignRotation(event.getBlock());
 
             int result = WirelessRedstone.getSignManager().registerSign(
                     channelName,
                     event.getBlock(),
-                    Utils.getSignType(sign.getLine(0), sign.getLine(2)),
+                    Utils.getType(sign.getLine(0), sign.getLine(2)),
                     signDirection,
                     Collections.singletonList(event.getPlayer().getUniqueId().toString()),
                     finalDelay
@@ -207,7 +206,7 @@ public class BlockListener implements Listener {
         if (event.getBlock().getState() instanceof Sign) {
             Sign sign = (Sign) event.getBlock().getState();
 
-            SignType signType = Utils.getSignType(sign.getLine(0));
+            SignType signType = Utils.getType(sign.getLine(0), sign.getLine(2));
             if (signType == null) {
                 return;
             }
@@ -335,7 +334,7 @@ public class BlockListener implements Listener {
             WirelessRedstone.getWRLogger().debug("Redstone power update (" + powered + "): " + sign.getLocation());
         }
 
-        if (Utils.getSignType(sign.getLine(0)) != SignType.TRANSMITTER)
+        if (Utils.getType(sign.getLine(0), sign.getLine(2)) != SignType.TRANSMITTER)
             return;
 
         if (sign.getLine(1).equalsIgnoreCase(""))

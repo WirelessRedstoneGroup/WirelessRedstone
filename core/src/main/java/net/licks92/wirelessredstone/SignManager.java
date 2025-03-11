@@ -309,7 +309,7 @@ public class SignManager {
 
         Sign sign = (Sign) block.getState();
 
-        if (Utils.getSignType(sign.getLine(0)) == null || sign.getLine(1).equalsIgnoreCase("")) {
+        if (Utils.getType(sign.getLine(0), sign.getLine(2)) == null || sign.getLine(1).equalsIgnoreCase("")) {
             return false;
         }
 
